@@ -39,7 +39,7 @@ const pages = {
       {
         id: 'insurance',
         title: 'Insurance',
-        type: 'item',
+        type: 'collapse',
         url: '/insurance',
         icon: icons.InsuranceIcon,
       },

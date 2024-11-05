@@ -1,6 +1,8 @@
-import { CheckCircleTwoTone } from '@mui/icons-material';
-import { Box, Button, Card, IconButton, Stack, styled, Typography } from '@mui/material';
+import { CheckCircleTwoTone, EditNotifications, ExpandLess, ExpandMore, KeyboardArrowDown } from '@mui/icons-material';
+import { Box, Button, Card, Fade, IconButton, Menu, MenuItem, Stack, styled, Typography } from '@mui/material';
+import { fontWeight } from '@mui/system';
 import Dot from 'components/@extended/Dot';
+import { useState } from 'react';
 
 const rows = [
     {
@@ -63,6 +65,24 @@ const StyledButton = styled(Button)(({ theme }) => ({
     },
 }));
 
+const StyledMenu = styled(Menu)(({ theme }) => ({
+    '& .MuiPaper-root': {               // Target the menu's paper (content) area
+        borderRadius: '8px',
+        backgroundColor: theme.palette.secondary.light,  // Background color for the menu content only
+        boxShadow: theme.shadows[2],                    // Subtle box shadow
+    },
+    color: theme.palette.secondary.main,
+    boxShadow: theme.shadows[2],   // Subtle box shadow
+    '& .MuiMenuItem-root': {
+        fontSize: '0.875rem',
+        fontWeight: '600',
+        borderBottom: `1px solid ${theme.palette.common.white}`, // White divider
+        '&:last-child': {
+            borderBottom: 'none', // Remove divider for the last item
+        },
+    },
+}));
+
 export const ColorRow = ({ bgcolor, title, data, dark, main, borderRadius = '15px', status = '', property = '' }) => {
     return (
         <Card sx={{ '&.MuiPaper-root': { borderRadius, boxShadow: '0 0 !important' } }}>
@@ -107,8 +127,10 @@ export const ColorRow = ({ bgcolor, title, data, dark, main, borderRadius = '15p
         </Card >
     );
 }
-const TableHeader = () => (
-    <Box
+const TableHeader = ({ open, handleClick }) => {
+
+
+    return (<Box
         sx={{
             display: 'flex',
             alignItems: 'center',
@@ -119,25 +141,37 @@ const TableHeader = () => (
     >
         <Typography variant="subtitle1" color="#323C4D" sx={{ flexBasis: '80%', textAlign: 'left' }}>
         </Typography>
-        <Typography variant="subtitle1" color="#323C4D" sx={{ flexBasis: '20%', textAlign: 'center' }}>
+        <Button size='large' sx={{ flexBasis: '20%', textAlign: 'center' }} onClick={handleClick} endIcon={open ? <ExpandLess color={'secondary'} fontSize='medium' /> : <ExpandMore color={'secondary'} fontSize='medium' />} disableRipple disableElevation disableFocusRipple color="#323C4D" >
             Status
-        </Typography>
-        <Typography variant="subtitle1" color="#323C4D" sx={{ flexBasis: '20%', textAlign: 'center' }}>
+        </Button>
+        <Typography variant="h6" color="#323C4D" sx={{ flexBasis: '20%', textAlign: 'center' }}>
             Property
         </Typography>
         <Box sx={{ flexBasis: '11%' }} />
-        <Typography variant="subtitle1" color="#323C4D" sx={{ flexBasis: '10%', textAlign: 'right' }}>
+        <Typography variant="h6" color="#323C4D" sx={{ flexBasis: '10%', textAlign: 'right' }}>
             Action
         </Typography>
         <Box sx={{ flexBasis: '3%' }} />
 
     </Box>
-);
+    )
+};
 const TaskTable = () => {
-    return (
+    const [anchorEl, setAnchorEl] = useState(null);
 
-        <Stack spacing={2} sx={{ mt: 1 }}>
-            <TableHeader />
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+
+
+    return (
+        <Stack sx={{ mt: 1 }}>
+            <TableHeader open={open} handleClick={handleClick} handleClose={handleClose} />
             <Box sx={{ overflow: "auto", height: "15rem", p: 2 }}>
                 <Stack rowGap={1.5} >
 
@@ -158,6 +192,32 @@ const TaskTable = () => {
                     })}
                 </Stack>
             </Box>
+            <StyledMenu
+
+                sx={{ borderRadius: '5px', boxShadow: "none" }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                TransitionComponent={Fade}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+
+            >
+                <MenuItem onClick={handleClose} >   <Stack direction="row" alignItems="center" spacing={1}>
+                    <Dot color="error" />
+                    <span>Todo</span>
+                </Stack></MenuItem>
+                <MenuItem onClick={handleClose}>   <Stack direction="row" alignItems="center" spacing={1}>
+                    <Dot color="warning" />
+                    <span>Inprogress</span>
+                </Stack></MenuItem>
+            </StyledMenu>
         </Stack >
     )
 

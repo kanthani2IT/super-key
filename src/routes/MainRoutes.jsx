@@ -31,7 +31,7 @@ const MainRoutes = {
       element: <Color />
     },
     {
-      path: 'dashboard',
+      path: 'home',
       element: <DashboardDefault />
 
 

@@ -118,7 +118,7 @@ const LoginPage = () => {
       });
       // Navigate after password reset
     } else if (next && passwordValidation()) {
-      navigate('/dashboard'); // Navigate on successful login
+      navigate('/home'); // Navigate on successful login
     }
   };
 
