@@ -99,7 +99,7 @@ const LoginPage = () => {
   };
 
   const resetPassword = () => {
-    navigate('/changePassword/reset');
+    navigate('/changePassword/forget');
   };
 
   const handleSubmit = (e) => {
