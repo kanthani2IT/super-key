@@ -39,7 +39,7 @@ export default function NavGroup({ item }) {
             {/* <Typography variant="subtitle2" color="textSecondary">
               {item.title}
             </Typography> */}
-          </Box>
+          </ Box>
         )
       }
       sx={{ mb: drawerOpen ? 1.5 : 0, py: 0, zIndex: 0 }}

@@ -1,9 +1,4 @@
-// assets
-import { SettingOutlined } from '@ant-design/icons';
-import {
-  Timeline,
-  VerifiedUserOutlined
-} from '@mui/icons-material';
+
 import AnalyticsIcon from 'assets/images/icons/NavIcons/AnalyticsIcon';
 import ClaimsIcon from 'assets/images/icons/NavIcons/ClaimsIcon';
 import DocumentIcon from 'assets/images/icons/NavIcons/DocumentIcon';

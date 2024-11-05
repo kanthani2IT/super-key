@@ -10,7 +10,6 @@ export default function Dot({ color, size, variant, sx }) {
   const theme = useTheme();
   const colors = getColors(theme, color || 'primary');
   const { main } = colors;
-  console.log(colors)
   return (
     <>
       <FiberManualRecordIcon sx={{ color: main }} fontSize='small' />

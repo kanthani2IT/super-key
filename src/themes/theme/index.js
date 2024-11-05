@@ -19,9 +19,9 @@ export default function Theme(colors) {
     A200: grey[12],
     A400: grey[13],
     A700: grey[14],
-    A800: grey[16]
+    A800: grey[16],
   };
-  const contrastText = '#fff';
+  const contrastText = "#fff";
 
   return {
     primary: {
@@ -35,8 +35,7 @@ export default function Theme(colors) {
       700: blue[7],
       darker: blue[8],
       900: blue[9],
-
-      contrastText
+      contrastText,
     },
     secondary: {
       lighter: greyColors[100],
@@ -52,15 +51,15 @@ export default function Theme(colors) {
       A100: greyColors[0],
       A200: greyColors.A400,
       A300: greyColors.A700,
-      contrastText: greyColors[0]
+      contrastText: greyColors[0],
     },
     error: {
-      lighter: '#FDEFEF',
+      lighter: "#FDEFEF",
       light: red[2],
       main: red[4],
       dark: red[7],
       darker: red[9],
-      contrastText
+      contrastText,
     },
     warning: {
       lighter: gold[0],
@@ -68,7 +67,7 @@ export default function Theme(colors) {
       main: gold[5],
       dark: gold[7],
       darker: gold[9],
-      contrastText: greyColors[100]
+      contrastText: greyColors[100],
     },
     info: {
       lighter: cyan[0],
@@ -76,16 +75,16 @@ export default function Theme(colors) {
       main: cyan[5],
       dark: cyan[7],
       darker: cyan[9],
-      contrastText
+      contrastText,
     },
     success: {
-      lighter: '#278B5C1A',
-      light: '#bee4d3',
-      main: '#278B5C',
+      lighter: "#278B5C1A",
+      light: "#bee4d3",
+      main: "#278B5C",
       dark: green[7],
       darker: green[9],
-      contrastText
+      contrastText,
     },
-    grey: greyColors
+    grey: greyColors,
   };
 }

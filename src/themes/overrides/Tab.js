@@ -1,3 +1,6 @@
+// material-ui
+import { alpha } from "@mui/material/styles";
+
 // ==============================|| OVERRIDES - TAB ||============================== //
 
 export default function Tab(theme) {
@@ -9,22 +12,22 @@ export default function Tab(theme) {
           color: theme.palette.text.main,
           borderRadius: 4,
 
-          '&:hover': {
-            color: theme.palette.success.dark
+          "&:hover": {
+            color: theme.palette.success.dark,
           },
-          '&:focus-visible': {
+          "&:focus-visible": {
             borderRadius: 4,
             outline: `2px solid ${theme.palette.success.dark}`,
-            outlineOffset: -3
+            outlineOffset: -3,
           },
-          '&.Mui-selected': {
-            color: theme.palette.text.success
-          }
-        }
+          "&.Mui-selected": {
+            color: theme.palette.text.success,
+          },
+        },
       },
       defaultProps: {
-        disableRipple: true // Disable the ripple effect
-      }
-    }
+        disableRipple: true, // Disable the ripple effect
+      },
+    },
   };
 }
