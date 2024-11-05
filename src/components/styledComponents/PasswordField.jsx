@@ -1,9 +1,10 @@
 // Login.js
 import { TextField } from '@mui/material';
 
-const PasswordField = ({ label, name, value, onChange, error, helperText }) => {
+const PasswordField = ({ color = 'primary', label, name, value, onChange, error, helperText }) => {
   return (
     <TextField
+      color={color}
       label={label}
       name={name}
       type="password"

@@ -1,7 +1,7 @@
 // LoginWrapper.js
 import { Box, Typography } from '@mui/material';
 import LoginLogo from 'assets/images/login/login.png';
-import CompanyLogo from 'assets/images/login/loginLogo.svg';
+import CompanyLogo from 'assets/images/login/logo.png';
 import {
   CompanyLogoContainer,
   ContentContainer,

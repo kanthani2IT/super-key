@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 // material-ui
 import { ButtonBase } from '@mui/material';
 import Stack from '@mui/material/Stack';
-import Logo from '../logo/logo.png'
+import Logo from 'assets/images/login/logo.png';
 
 // project import
 import config from 'config';
