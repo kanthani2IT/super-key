@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 // project import
 import DrawerHeaderStyled from './DrawerHeaderStyled';
 import Logo from 'components/logo';
-import { IconButton, Typography } from '@mui/material';
-import { useGetMenuMaster } from 'api/menu';
-import { useMemo } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+
 
 // ==============================|| DRAWER HEADER ||============================== //
 

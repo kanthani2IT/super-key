@@ -5,9 +5,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
 // assets
-import { useTheme } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
-import { TextField } from '@mui/material';
 // ==============================|| HEADER CONTENT - SEARCH ||============================== //
 
 export default function Search() {

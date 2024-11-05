@@ -35,7 +35,6 @@ const pages = {
 
         type: "item",
 
-        target: true
       },
       {
         id: 'insurance',
@@ -43,7 +42,6 @@ const pages = {
         type: 'item',
         url: '/insurance',
         icon: icons.InsuranceIcon,
-        target: true
       },
       {
         id: 'claims-management',
@@ -51,7 +49,6 @@ const pages = {
         url: '/claims-management',
         type: "item",
         icon: icons.ClaimsIcon,
-        target: true
       },
       {
         id: 'documents-repository',
@@ -59,7 +56,6 @@ const pages = {
         url: '/documents-repository',
         type: "item",
         icon: icons.DocumentIcon,
-        target: true
       },
       {
         id: 'payments',
@@ -67,7 +63,7 @@ const pages = {
         url: '/payments',
         icon: icons.PaymentIcon,
         type: "item",
-        target: true,
+
         badge: 2
       },
       {
@@ -76,7 +72,6 @@ const pages = {
         url: '/analytics',
         icon: icons.AnalyticsIcon,
         type: "item",
-        target: true
       },
       {
         id: 'settings',

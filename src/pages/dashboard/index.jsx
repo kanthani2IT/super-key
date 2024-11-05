@@ -55,7 +55,6 @@ export default function DashboardDefault() {
         </MainCard>
 
       </Grid>
-      {/* row 3 */}
       <Grid size={{ xs: 12, md: 6, lg: 6 }} >
         <Grid container rowSpacing={2} columnSpacing={2}>
           <Grid size={{ xs: 12 }}>

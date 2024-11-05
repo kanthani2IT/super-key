@@ -5,7 +5,7 @@ import { forwardRef, useEffect } from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Link, useLocation, matchPath } from 'react-router-dom';
+import { Link, matchPath, useLocation } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -16,11 +16,9 @@ import { handlerActiveItem, useGetMenuMaster } from 'api/menu';
 
 export default function NavItem({ item, level }) {
   const theme = useTheme();
-
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
   const openItem = menuMaster.openedItem;
-
   let itemTarget = '_self';
   if (item.target) {
     itemTarget = '_blank';
@@ -33,7 +31,7 @@ export default function NavItem({ item, level }) {
   const textColor = theme.palette.common.black;
   const iconSelectedColor = theme.palette.text.success;
   const { pathname } = useLocation();
-  const isSelected = !!matchPath({ path: item.url, end: false }, pathname) || openItem === item.id;
+  const isSelected = !!matchPath({ path: item.url, end: false }, pathname)
   const Icon = item.icon;
   const itemIcon = item.icon ? <Icon fill={isSelected ? iconSelectedColor : textColor
   } /> : false;
@@ -41,9 +39,7 @@ export default function NavItem({ item, level }) {
   // active menu item on page load
   useEffect(() => {
     if (pathname === item.url) handlerActiveItem(item.id);
-    // eslint-disable-next-line
   }, [pathname]);
-
 
   return (
 

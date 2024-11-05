@@ -50,6 +50,7 @@ export default function MainDrawer({ window }) {
               borderRightColor: 'divider',
               backgroundImage: 'none',
               boxShadow: 'inherit',
+              background: '#e9f3ee',
             }
           }}
         >

@@ -1,5 +1,4 @@
 // assets
-import { HomeOutlined } from '@ant-design/icons';
 import HomeIcon from 'assets/images/icons/NavIcons/HomeIcon';
 
 // icons
@@ -20,7 +19,6 @@ const dashboard = {
       type: 'item',
       url: '/dashboard',
       icon: icons.HomeIcon,
-
       breadcrumbs: false
     }
   ]
