@@ -1,14 +1,16 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import LoginLogo from 'assets/images/login/login.png';
 import CompanyLogo from 'assets/images/login/loginLogo.svg';
-import Login from '../login/login';
+import LoginWrapper from 'pages/login/LoginWrapper';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
-  PASSWORD_CHANGE_TEXTS,
   CREDENTIAL_ERRORS,
+  PASSWORD_CHANGE_TEXTS,
   PASSWORD_REGEX
 } from '../../utils/loginUtils'; // Import constants
-import LoginWrapper from 'pages/login/LoginWrapper';
+import Login from '../login/login';
+
+import { useGetQuery } from 'hooks/useLogin';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -124,6 +126,11 @@ const LoginPage = () => {
 
   const isPasswordReset = next && userCredentials.resetPassword;
   const isLoginButton = next && !userCredentials.resetPassword;
+
+
+
+  const value = useGetQuery()
+
 
   return (
     <div>
