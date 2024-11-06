@@ -14,7 +14,8 @@ export const CREDENTIAL_ERRORS = {
   confirmPasswordRequired: 'Please confirm your password',
   passwordsDoNotMatch: 'Passwords do not match',
   emailRequired: 'Email ID is required',
-  emailInvalid: 'Invalid email format'
+  emailInvalid: 'Invalid email format',
+  token:"Token is required"
 };
 // Regular expression for password validation
 export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;

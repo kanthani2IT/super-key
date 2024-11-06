@@ -1,51 +1,60 @@
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import PasswordChange from './ForgetPassword';
-import { PASSWORD_CHANGE_TEXTS, CREDENTIAL_ERRORS, PASSWORD_REGEX } from '../../utils/loginUtils'; // Importing static data, errors, and regex
-import LoginWrapper from './LoginWrapper';
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useAuthCookies } from "utils/cookie";
+import { useNewPassword, useResetPassword } from "hooks/useLogin";
+import {
+  CREDENTIAL_ERRORS,
+  PASSWORD_CHANGE_TEXTS,
+  PASSWORD_REGEX,
+} from "../../utils/loginUtils"; // Importing static data, errors, and regex
+import PasswordChange from "./ForgetPassword";
+import LoginWrapper from "./LoginWrapper";
+
+const initialState = {
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: "",
+  token: "",
+};
 
 const ChangePassword = () => {
-  const navigate = useNavigate();
   const { id } = useParams(); // Access the URL parameter (taskId)
+  const newPasswordMutation = useNewPassword();
+  const resetPasswordMutation = useResetPassword();
+  const { getCookie } = useAuthCookies();
 
-  const [userCredentials, setUserCredentials] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-  });
+  const [userCredentials, setUserCredentials] = useState(initialState);
 
-  const [errors, setErrors] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-  });
+  const [errors, setErrors] = useState(initialState);
 
   const onChangeCredential = (event) => {
     const { name, value } = event.target;
     setUserCredentials((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: '' // Clear error when user types
+      [name]: "", // Clear error when user types
     }));
   };
 
   const validatePasswords = () => {
     let isValid = true;
-    const validationErrors = {
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: ''
-    };
+    const validationErrors = initialState;
 
-    if (id === 'reset') {
+    if (id === "reset") {
       if (!userCredentials.currentPassword.trim()) {
-        validationErrors.currentPassword = CREDENTIAL_ERRORS.currentPasswordRequired;
+        validationErrors.currentPassword =
+          CREDENTIAL_ERRORS.currentPasswordRequired;
         isValid = false;
       } else if (!PASSWORD_REGEX.test(userCredentials.currentPassword)) {
         validationErrors.currentPassword = CREDENTIAL_ERRORS.passwordInvalid;
+        isValid = false;
+      }
+    } else {
+      if (!userCredentials.token.trim()) {
+        validationErrors.token = CREDENTIAL_ERRORS.token;
         isValid = false;
       }
     }
@@ -59,9 +68,12 @@ const ChangePassword = () => {
     }
 
     if (!userCredentials.confirmPassword.trim()) {
-      validationErrors.confirmPassword = CREDENTIAL_ERRORS.confirmPasswordRequired;
+      validationErrors.confirmPassword =
+        CREDENTIAL_ERRORS.confirmPasswordRequired;
       isValid = false;
-    } else if (userCredentials.confirmPassword !== userCredentials.newPassword) {
+    } else if (
+      userCredentials.confirmPassword !== userCredentials.newPassword
+    ) {
       validationErrors.confirmPassword = CREDENTIAL_ERRORS.passwordsDoNotMatch;
       isValid = false;
     }
@@ -74,13 +86,17 @@ const ChangePassword = () => {
     e.preventDefault();
 
     if (validatePasswords()) {
-      // Reset user credentials and navigate to login
-      setUserCredentials({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      });
-      navigate('/login');
+      const token = getCookie("token");
+      if (id == "reset") {
+        delete userCredentials.token;
+        newPasswordMutation.mutate(userCredentials);
+      } else {
+        let payload = {
+          password: userCredentials.newPassword,
+          token: userCredentials.token,
+        };
+        resetPasswordMutation.mutate(payload);
+      }
     }
   };
 

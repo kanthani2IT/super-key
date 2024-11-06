@@ -3,12 +3,12 @@ import { useCookies } from "react-cookie";
 export const useAuthCookies = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
-  const getCookie = () => {
-    return cookies.user;
+  const getCookie = (key="") => {
+    return cookies[key];
   };
 
-  const setAuthCookie = (token) => {
-    setCookie("user", token, { path: "/" });
+  const setAuthCookie = ( key, value) => {
+    setCookie(key, value, { path: "/" });
   };
 
   const removeAuthCookie = () => {

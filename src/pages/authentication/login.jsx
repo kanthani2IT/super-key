@@ -8,9 +8,9 @@ import {
   PASSWORD_CHANGE_TEXTS,
   PASSWORD_REGEX
 } from '../../utils/loginUtils'; // Import constants
-import Login from '../login/login';
+import Login from '../login/loginContent';
 
-import { useGetQuery } from 'hooks/useLogin';
+import { useGetQuery, useLoginUser, useRequestReset } from 'hooks/useLogin';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -99,11 +99,13 @@ const LoginPage = () => {
     setErrors(newErrors);
     return isValid;
   };
-
+  const loginMutation=useLoginUser()
+  const resetMutation=useRequestReset()
   const resetPassword = () => {
+    resetMutation.mutate(userCredentials.mailId)
     navigate('/changePassword/forget');
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -120,7 +122,13 @@ const LoginPage = () => {
       });
       // Navigate after password reset
     } else if (next && passwordValidation()) {
-      navigate('/home'); // Navigate on successful login
+      let credentialData={
+        username:userCredentials.mailId,
+        password:userCredentials.password
+      }
+      
+      loginMutation.mutate(credentialData)
+      // navigate('/home'); // Navigate on successful login
     }
   };
 
