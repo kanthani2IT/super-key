@@ -9,12 +9,14 @@ import {
   PASSWORD_REGEX
 } from '../../utils/loginUtils'; // Import constants
 import Login from '../login/loginContent';
-
-import { useGetQuery, useLoginUser, useRequestReset } from 'hooks/useLogin';
+import { useIsEmailEnabled, useLoginUser, useRequestReset } from 'hooks/useLogin';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-
+  const [next, setNext] = useState(false);
+  const loginMutation=useLoginUser()
+  const resetMutation=useRequestReset()
+  const emailMutation=useIsEmailEnabled({setNext})
   const [userCredentials, setUserCredentials] = useState({
     mailId: '',
     password: '',
@@ -30,7 +32,9 @@ const LoginPage = () => {
     confirmPassword: ''
   });
 
-  const [next, setNext] = useState(false);
+  
+  const isPasswordReset = next && userCredentials.resetPassword;
+  const isLoginButton = next && !userCredentials.resetPassword;
 
   const mailValidation = () => {
     let isValid = true;
@@ -99,18 +103,19 @@ const LoginPage = () => {
     setErrors(newErrors);
     return isValid;
   };
-  const loginMutation=useLoginUser()
-  const resetMutation=useRequestReset()
+  
   const resetPassword = () => {
     resetMutation.mutate(userCredentials.mailId)
-    navigate('/changePassword/forget');
+    navigate('/changePassword/forget', {state:{email:userCredentials.mailId}});
   };
   
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!next && mailValidation()) {
-      setNext(true); // Move to password step
+
+      emailMutation.mutate(userCredentials.mailId)
+      // setNext(true); // Move to password step
     } else if (userCredentials.resetPassword && validatePasswords()) {
       setNext(false);
       setUserCredentials({
@@ -120,25 +125,14 @@ const LoginPage = () => {
         newPassword: '',
         confirmPassword: ''
       });
-      // Navigate after password reset
     } else if (next && passwordValidation()) {
       let credentialData={
-        username:userCredentials.mailId,
+        email:userCredentials.mailId,
         password:userCredentials.password
       }
-      
       loginMutation.mutate(credentialData)
-      // navigate('/home'); // Navigate on successful login
     }
   };
-
-  const isPasswordReset = next && userCredentials.resetPassword;
-  const isLoginButton = next && !userCredentials.resetPassword;
-
-
-
-  const value = useGetQuery()
-
 
   return (
     <div>

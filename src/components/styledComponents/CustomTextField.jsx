@@ -1,13 +1,13 @@
-// EmailField.js
+// TextField.js
 import { TextField } from '@mui/material';
 
-const EmailField = ({ color = 'primary', label = "Email ID", name = "mailId", value, onChange, error, helperText }) => {
+const CustomTextField = ({type="text", color = 'primary', label = "Email ID", name = "mailId", value, onChange, error, helperText }) => {
   return (
     <TextField
       color={color}
       label={label}
       name={name}
-      type="email"
+      type={type}
       fullWidth
       margin="normal"
       variant="standard"
@@ -19,4 +19,4 @@ const EmailField = ({ color = 'primary', label = "Email ID", name = "mailId", va
   );
 };
 
-export default EmailField;
+export default CustomTextField;

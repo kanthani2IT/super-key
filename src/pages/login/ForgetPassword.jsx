@@ -8,7 +8,7 @@ const PasswordChange = ({
 }) => {
   return (
     <>
-      {taskId === "reset" ? (
+      {taskId === "reset" && (
         <PasswordField
           label="Current Password"
           name="currentPassword"
@@ -16,15 +16,6 @@ const PasswordChange = ({
           onChange={onChangeCredential}
           error={errors.currentPassword}
           helperText={errors.currentPassword}
-        />
-      ) : (
-        <PasswordField
-          label="Token"
-          name="token"
-          value={userCredentials.token}
-          onChange={onChangeCredential}
-          error={errors.token}
-          helperText={errors.token}
         />
       )}
 

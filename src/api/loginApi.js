@@ -19,6 +19,7 @@ const userLogin = async (credentialData) => {
   });
   return reponse;
 };
+
 const requestReset = async (email) => {
   const reponse = await http({
     method: "POST",
@@ -26,6 +27,7 @@ const requestReset = async (email) => {
   });
   return reponse;
 };
+
 const resetPassword = async (resetData) => {
   const reponse = await http({
     method: "POST",
@@ -34,6 +36,7 @@ const resetPassword = async (resetData) => {
   });
   return reponse;
 };
+
 const newPassword = async (newPasswordData) => {
   const reponse = await http({
     method: "POST",
@@ -43,4 +46,12 @@ const newPassword = async (newPasswordData) => {
   return reponse;
 };
 
-export const loginApi = { getUserData,userLogin,newPassword,resetPassword,requestReset };
+const isEmailEnabled = async (emailEnabled) => {
+  const reponse = await http({
+    method: "GET",
+    url: LOGIN.enableMailChecking(emailEnabled),
+  });
+  return reponse;
+};
+
+export const loginApi = { getUserData,userLogin,newPassword,resetPassword,requestReset,isEmailEnabled };

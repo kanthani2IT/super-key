@@ -1,7 +1,6 @@
+import { useNewPassword, useResetPassword } from "hooks/useLogin";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAuthCookies } from "utils/cookie";
-import { useNewPassword, useResetPassword } from "hooks/useLogin";
 import {
   CREDENTIAL_ERRORS,
   PASSWORD_CHANGE_TEXTS,
@@ -9,22 +8,20 @@ import {
 } from "../../utils/loginUtils"; // Importing static data, errors, and regex
 import PasswordChange from "./ForgetPassword";
 import LoginWrapper from "./LoginWrapper";
-
+import { useAuthCookies } from "utils/cookie";
 const initialState = {
   currentPassword: "",
   newPassword: "",
   confirmPassword: "",
-  token: "",
 };
 
 const ChangePassword = () => {
   const { id } = useParams(); // Access the URL parameter (taskId)
   const newPasswordMutation = useNewPassword();
   const resetPasswordMutation = useResetPassword();
-  const { getCookie } = useAuthCookies();
-
+  const {getCookie}=useAuthCookies()
+  const user=getCookie("user")
   const [userCredentials, setUserCredentials] = useState(initialState);
-
   const [errors, setErrors] = useState(initialState);
 
   const onChangeCredential = (event) => {
@@ -52,12 +49,7 @@ const ChangePassword = () => {
         validationErrors.currentPassword = CREDENTIAL_ERRORS.passwordInvalid;
         isValid = false;
       }
-    } else {
-      if (!userCredentials.token.trim()) {
-        validationErrors.token = CREDENTIAL_ERRORS.token;
-        isValid = false;
-      }
-    }
+    } 
 
     if (!userCredentials.newPassword.trim()) {
       validationErrors.newPassword = CREDENTIAL_ERRORS.newPasswordRequired;
@@ -86,14 +78,16 @@ const ChangePassword = () => {
     e.preventDefault();
 
     if (validatePasswords()) {
-      const token = getCookie("token");
       if (id == "reset") {
-        delete userCredentials.token;
-        newPasswordMutation.mutate(userCredentials);
+        let payload={
+          email:user.email,
+          password:userCredentials.currentPassword,
+          newPassword:userCredentials.newPassword,
+        }
+        newPasswordMutation.mutate(payload);
       } else {
         let payload = {
           password: userCredentials.newPassword,
-          token: userCredentials.token,
         };
         resetPasswordMutation.mutate(payload);
       }

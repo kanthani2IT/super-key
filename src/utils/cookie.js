@@ -11,8 +11,8 @@ export const useAuthCookies = () => {
     setCookie(key, value, { path: "/" });
   };
 
-  const removeAuthCookie = () => {
-    removeCookie("user", { path: "/" });
+  const removeAuthCookie = (key) => {
+    removeCookie(key, { path: "/" });
   };
 
   return { getCookie, setAuthCookie, removeAuthCookie };
