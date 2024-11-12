@@ -52,7 +52,7 @@ const getStatus = (status) => {
     return color
 }
 
-const StyledButton = styled(Button)(({ theme }) => ({
+export const StyledButton = styled(Button)(({ theme }) => ({
     borderRadius: '0.625rem', // Setting border radius
     border: `0.5px solid ${theme.palette.primary.main}`, // Border style
     background: ' #FFF', // Background color

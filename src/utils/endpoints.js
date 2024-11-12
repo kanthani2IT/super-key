@@ -4,7 +4,10 @@ const LOGIN = {
   requestReset:(email)=>`/api/auth/request-reset?email=${email}`,
   resetPassword:"/api/auth/resetPassword",
   newPassword:"/api/auth/setNewPassword",
-  enableMailChecking:(email)=>`/api/auth/email?email=${email}`
+  enableMailChecking:(email)=>`/api/auth/email?email=${email}`,
 };
+const ONBOARD={
+  getUsers:"/api/veruna/users"
+}
 
-export { LOGIN };
+export { LOGIN,ONBOARD };

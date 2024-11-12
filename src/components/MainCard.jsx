@@ -9,6 +9,7 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import { ExpandAltOutlined } from '@ant-design/icons';
+import { Chip, Grid2, Stack } from '@mui/material';
 
 // header style
 const headerSX = {
@@ -29,6 +30,8 @@ function MainCard(
     shadow,
     sx = {},
     title,
+    count,
+    secondaryAction,
     ...others
   },
   ref
@@ -59,7 +62,21 @@ function MainCard(
         ...sx
       }}
     >
-      {title && <CardHeader sx={headerSX} title={<Typography variant="h3">{title}</Typography>} action={secondary && <Typography component={Link} to="/register" variant="body1" sx={{ textDecoration: 'none' }} color="primary">
+
+      {title && <CardHeader sx={headerSX} title={<Stack flexDirection={"row"} alignItems={"center"}><Typography variant="h3">{title}</Typography>
+      {count && (
+            
+              <Chip
+                variant="combined"
+                color={"success"}
+                // icon={isLoss ? <FallOutlined style={iconSX} /> : <RiseOutlined style={iconSX} />}
+                label={`${count}`}
+                sx={{ ml: 2}}
+                size="small"
+              />
+            
+          )}
+      </Stack>} action={secondary && <Typography variant="body1" sx={{ textDecoration: 'none', cursor:"pointer" }} color="primary" onClick={secondaryAction&&secondaryAction}>
         <ExpandAltOutlined style={{ marginRight: 2 }} fontSize="medium" />   {secondary}
       </Typography>} />}
 

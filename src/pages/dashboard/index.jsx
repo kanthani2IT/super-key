@@ -12,6 +12,9 @@ import { useState } from 'react';
 import RenewalPieChart from './RenewalPieChart';
 import TaskTable from './TaskTable';
 import MainTabs from 'components/MainTabs';
+import { useGetUsers } from 'hooks/useOnboard';
+import UserTable from './UserTable';
+import { Modal } from '@mui/material';
 
 // avatar style
 const avatarSX = {
@@ -36,10 +39,14 @@ const tabs = [{ label: 'Active Task', value: "active" }, { label: 'Completed', v
 export default function DashboardDefault() {
 
   const [selectedTab, setSelectedTab] = useState(tabs[0].value)
-
+const [open, setOpen]=useState(false)
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
+  const handleClose=()=>{
+    setOpen(false)
+  }
+  const {data}=useGetUsers()
   return (
     <Grid container rowSpacing={3} columnSpacing={2}>
 
@@ -59,10 +66,10 @@ export default function DashboardDefault() {
         <Grid container rowSpacing={2} columnSpacing={2}>
           <Grid size={{ xs: 12 }}>
 
-            <MainCard title='Communities' secondary={'Full View'}    >
+            <MainCard title='Communities' secondary={'Full View'}   secondaryAction={()=>setOpen(true)} >
               <Stack spacing={2} >
-                <Typography variant='h6' >Communities Managed</Typography>
-                <Typography variant='subtitle2' color='success' >25</Typography>
+                <Typography variant='h6' >Community Users</Typography>
+                <Typography variant='subtitle2' color='success' >{data.data.totalSize||0}</Typography>
               </Stack>
             </MainCard>
           </Grid>
@@ -97,6 +104,25 @@ export default function DashboardDefault() {
           </Grid>
         </MainCard>
       </Grid>
+      <Modal
+      
+  open={open}
+  onClose={handleClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+  sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+>
+      <Grid size={{ xs: 8 }}>
+        <MainCard title={'Community Users'}count={data?.data?.totalSize} >
+        
+          <UserTable/>
+        </MainCard>
+      </Grid>
+      </Modal>
       <Grid size={{ xs: 12 }}>
         <MainCard title={'Task Assigned'} secondary={'Full View'} >
           <MainTabs handleChange={handleChange} value={selectedTab} tabs={tabs} />
