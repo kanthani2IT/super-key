@@ -69,7 +69,7 @@ const [open, setOpen]=useState(false)
             <MainCard title='Communities' secondary={'Full View'}   secondaryAction={()=>setOpen(true)} >
               <Stack spacing={2} >
                 <Typography variant='h6' >Community Users</Typography>
-                <Typography variant='subtitle2' color='success' >{data.data.totalSize||0}</Typography>
+                <Typography variant='subtitle2' color='success' >{data?.data?.totalSize||0}</Typography>
               </Stack>
             </MainCard>
           </Grid>
