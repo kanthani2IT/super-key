@@ -8,12 +8,12 @@ import { MESSAGE, SEVERITY } from "utils/message";
 export const useGetQuery = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["login"],
-    queryFn: api.login.getUserData, 
+    queryFn: api.login.getUserData,
     onSuccess: (data) => {
-      console.log(data); 
+      console.log(data);
     },
     onError: (error) => {
-      console.error(error); 
+      console.error(error);
     },
   });
 
@@ -23,43 +23,44 @@ export const useGetQuery = () => {
 
 export const useLoginUser = () => {
   const navigate = useNavigate();
-  const {setAuthCookie}=useAuthCookies()
-  const { updateSnackbar } = useSnackbar();  // Get the updateSnackbar function
+  const { setAuthCookie } = useAuthCookies();
+  const { updateSnackbar } = useSnackbar(); // Get the updateSnackbar function
 
-  const {mutate,isSuccess, isError,error}= useMutation({
+  const { mutate, isSuccess, isError, error } = useMutation({
     mutationKey: ["login"],
     mutationFn: (credentialData) => api.login.userLogin(credentialData), // Pass `credentialData` to `mutate`
     onSuccess: (response) => {
-      setAuthCookie("token", response.data.token)
-      navigate('/home');
+      setAuthCookie("token", response.data.token);
+      navigate("/home");
       updateSnackbar({
-        message:MESSAGE.loginSuccess,
-        severity:SEVERITY.success
+        message: MESSAGE.loginSuccess,
+        severity: SEVERITY.success,
       });
     },
     onError: (error) => {
       updateSnackbar({
-        message:error.response.data.token,
-        severity:SEVERITY.error
+        message: error.response.data.token,
+        severity: SEVERITY.error,
       });
-      console.error(error); 
+      console.error(error);
     },
-    
   });
-  const message=isSuccess?MESSAGE.loginSuccess:error?.response?.data?.token
-  return {mutate,isSuccess,isError,message}
+  const message = isSuccess
+    ? MESSAGE.loginSuccess
+    : error?.response?.data?.token;
+  return { mutate, isSuccess, isError, message };
 };
 
 export const useRequestReset = () => {
-  const { updateSnackbar } = useSnackbar();  // Get the updateSnackbar function
-  const {mutate}= useMutation({
+  const { updateSnackbar } = useSnackbar(); // Get the updateSnackbar function
+  const { mutate } = useMutation({
     mutationKey: ["login"],
     mutationFn: (mailId) => api.login.requestReset(mailId), // Pass `credentialData` to `mutate`
     onSuccess: (data) => {
-      navigate('/login');
+      navigate("/login");
       updateSnackbar({
-        message:data.data.token,
-        severity:SEVERITY.success
+        message: data.data.token,
+        severity: SEVERITY.success,
       });
     },
     onError: (error) => {
@@ -68,82 +69,82 @@ export const useRequestReset = () => {
       //   message:error.response.data.token,
       //   severity:SEVERITY.error
       // });
-      console.error(error); 
+      console.error(error);
     },
   });
-  return {mutate}
+  return { mutate };
 };
 
 export const useResetPassword = () => {
   const navigate = useNavigate();
-  const { updateSnackbar } = useSnackbar();  // Get the updateSnackbar function
-  const {mutate}= useMutation({
+  const { updateSnackbar } = useSnackbar(); // Get the updateSnackbar function
+  const { mutate } = useMutation({
     mutationKey: ["login"],
     mutationFn: (resetData) => api.login.resetPassword(resetData), // Pass `credentialData` to `mutate`
     onSuccess: (data) => {
-     navigate('/login');
-     updateSnackbar({
-      message:data.data.token,
-      severity:SEVERITY.success
-    });
+      navigate("/login");
+      updateSnackbar({
+        message: data.data.token,
+        severity: SEVERITY.success,
+      });
     },
     onError: (error) => {
       updateSnackbar({
-        message:error.response.data.token,
-        severity:SEVERITY.error
+        message: error.response.data.token,
+        severity: SEVERITY.error,
       });
     },
   });
-  return {mutate}
+  return { mutate };
 };
 
 export const useNewPassword = () => {
   const navigate = useNavigate();
-  const { updateSnackbar } = useSnackbar();  // Get the updateSnackbar function
-  const {mutate}= useMutation({
+  const { updateSnackbar } = useSnackbar(); // Get the updateSnackbar function
+  const { mutate } = useMutation({
     mutationKey: ["login"],
     mutationFn: (newPasswordData) => api.login.newPassword(newPasswordData), // Pass `credentialData` to `mutate`
     onSuccess: (data) => {
-      navigate('/login');
+      navigate("/login");
       updateSnackbar({
-        message:data.data.token,
-        severity:SEVERITY.success
+        message: data.data.token,
+        severity: SEVERITY.success,
       });
     },
     onError: (error) => {
       updateSnackbar({
-        message:error.response.data.token||"Something went wrong",
-        severity:SEVERITY.error
+        message: error.response.data.token || "Something went wrong",
+        severity: SEVERITY.error,
       });
     },
   });
-  return {mutate}
+  return { mutate };
 };
 
-export const useIsEmailEnabled = ({setNext}) => {
+export const useIsEmailEnabled = ({ setNext }) => {
   const navigate = useNavigate();
-  const {setAuthCookie,removeAuthCookie}=useAuthCookies()
-  const { updateSnackbar } = useSnackbar();  // Get the updateSnackbar function
-  const {mutate}= useMutation({
+  const { setAuthCookie, removeAuthCookie } = useAuthCookies();
+  const { updateSnackbar } = useSnackbar(); // Get the updateSnackbar function
+  const { mutate } = useMutation({
     mutationKey: ["login"],
     mutationFn: (emailEnabled) => api.login.isEmailEnabled(emailEnabled), // Pass `credentialData` to `mutate`
     onSuccess: (data) => {
-      if(data.data.enabled){
-        setNext(true)
-      }else{
-        navigate("/changePassword/reset",{state:data.data})
-        setNext("Email page")
+      if (data.data.enabled) {
+        setNext(true);
+      } else {
+        navigate("/changePassword/reset", { state: data.data });
+        setNext("Email page");
       }
-      setAuthCookie("user", data.data)
+      setAuthCookie("user", data.data);
     },
     onError: (error) => {
-      setNext(false)
+      setNext(false);
       updateSnackbar({
-        message:error.response.data.email,
-        severity:SEVERITY.error
+        message: error.response.data.email,
+        severity: SEVERITY.error,
       });
-      removeAuthCookie("user")
+      removeAuthCookie("user");
     },
   });
-  return {mutate}
+  return { mutate };
 };

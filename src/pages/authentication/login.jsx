@@ -10,13 +10,14 @@ import {
 } from '../../utils/loginUtils'; // Import constants
 import Login from '../login/loginContent';
 import { useIsEmailEnabled, useLoginUser, useRequestReset } from 'hooks/useLogin';
+import { useGlobalStore } from 'store/store';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [next, setNext] = useState(false);
-  const loginMutation=useLoginUser()
-  const resetMutation=useRequestReset()
-  const emailMutation=useIsEmailEnabled({setNext})
+  const loginMutation = useLoginUser()
+  const resetMutation = useRequestReset()
+  const emailMutation = useIsEmailEnabled({ setNext })
   const [userCredentials, setUserCredentials] = useState({
     mailId: '',
     password: '',
@@ -32,7 +33,7 @@ const LoginPage = () => {
     confirmPassword: ''
   });
 
-  
+
   const isPasswordReset = next && userCredentials.resetPassword;
   const isLoginButton = next && !userCredentials.resetPassword;
 
@@ -103,15 +104,15 @@ const LoginPage = () => {
     setErrors(newErrors);
     return isValid;
   };
-  
+
   const resetPassword = () => {
     resetMutation.mutate(userCredentials.mailId)
-    navigate('/changePassword/forget', {state:{email:userCredentials.mailId}});
+    navigate('/changePassword/forget', { state: { email: userCredentials.mailId } });
   };
-  
+  const { login } = useGlobalStore()
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!next && mailValidation()) {
 
       emailMutation.mutate(userCredentials.mailId)
@@ -126,11 +127,16 @@ const LoginPage = () => {
         confirmPassword: ''
       });
     } else if (next && passwordValidation()) {
-      let credentialData={
-        email:userCredentials.mailId,
-        password:userCredentials.password
+      let credentialData = {
+        email: userCredentials.mailId,
+        password: userCredentials.password
       }
+
+      //api
       loginMutation.mutate(credentialData)
+
+      //store
+      login(credentialData.email)
     }
   };
 

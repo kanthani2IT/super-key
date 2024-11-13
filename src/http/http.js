@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import privateAxios from "./interceptor/privateAxios";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 const http = axios.create({
@@ -7,27 +7,9 @@ const http = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  // withCredentials: true, -- todo
 });
 
-// const setupAuthInterceptor = (navigate) => {
-//   logoutOn401(http, navigate);
-// };
-
-// const useAuthInterceptor = () => {
-//   const navigate = useNavigate();
-//   setupAuthInterceptor(navigate);
-// };
-
-// useAuthInterceptor();
-
+// Add interceptors for error handling and token management
+// privateAxios(http);
 export default http;
-
-const getData = async ({ queryKey }) => {
-  console.log(queryKey);
-
-  const reponse = await http({
-    method: "GET",
-    url: "",
-  });
-  return reponse;
-};

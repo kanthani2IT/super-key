@@ -7,14 +7,15 @@ import Typography from '@mui/material/Typography';
 import MainCard from 'components/MainCard';
 
 // assets
+import { Modal } from '@mui/material';
+import MainTabs from 'components/MainTabs';
+import { useGetUsers } from 'hooks/useOnboard';
 import { ColorBox } from 'pages/component-overview/color';
 import { useState } from 'react';
 import RenewalPieChart from './RenewalPieChart';
 import TaskTable from './TaskTable';
-import MainTabs from 'components/MainTabs';
-import { useGetUsers } from 'hooks/useOnboard';
 import UserTable from './UserTable';
-import { Modal } from '@mui/material';
+import { useAuthCookies } from 'utils/cookie';
 
 // avatar style
 const avatarSX = {
@@ -39,14 +40,17 @@ const tabs = [{ label: 'Active Task', value: "active" }, { label: 'Completed', v
 export default function DashboardDefault() {
 
   const [selectedTab, setSelectedTab] = useState(tabs[0].value)
-const [open, setOpen]=useState(false)
+
+
+  const [open, setOpen] = useState(false)
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
-  const handleClose=()=>{
+  const handleClose = () => {
     setOpen(false)
   }
-  const {data}=useGetUsers()
+  const { data, isLoading } = useGetUsers()
+  console.log(data)
   return (
     <Grid container rowSpacing={3} columnSpacing={2}>
 
@@ -66,10 +70,10 @@ const [open, setOpen]=useState(false)
         <Grid container rowSpacing={2} columnSpacing={2}>
           <Grid size={{ xs: 12 }}>
 
-            <MainCard title='Communities' secondary={'Full View'}   secondaryAction={()=>setOpen(true)} >
+            <MainCard title='Communities' secondary={'Full View'} secondaryAction={() => setOpen(true)} >
               <Stack spacing={2} >
                 <Typography variant='h6' >Community Users</Typography>
-                <Typography variant='subtitle2' color='success' >{data?.data?.totalSize||0}</Typography>
+                <Typography variant='subtitle2' color='success' >{data?.data?.length || 0}</Typography>
               </Stack>
             </MainCard>
           </Grid>
@@ -105,23 +109,23 @@ const [open, setOpen]=useState(false)
         </MainCard>
       </Grid>
       <Modal
-      
-  open={open}
-  onClose={handleClose}
-  aria-labelledby="modal-modal-title"
-  aria-describedby="modal-modal-description"
-  sx={{
+
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
->
-      <Grid size={{ xs: 8 }}>
-        <MainCard title={'Community Users'}count={data?.data?.totalSize} >
-        
-          <UserTable/>
-        </MainCard>
-      </Grid>
+      >
+        <Grid size={{ xs: 8 }}>
+          <MainCard title={'Community Users'} count={data?.data?.length} >
+
+            <UserTable tableData={data?.data} isLoading={isLoading} />
+          </MainCard>
+        </Grid>
       </Modal>
       <Grid size={{ xs: 12 }}>
         <MainCard title={'Task Assigned'} secondary={'Full View'} >
