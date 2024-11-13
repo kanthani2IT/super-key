@@ -14,8 +14,8 @@ export default function Typography(fontFamily) {
       lineHeight: 1.21,
     },
     h2: {
-      fontWeight: 600,
-      fontSize: "1.875rem",
+      fontWeight: 700,
+      fontSize: "1.475rem",
       lineHeight: 1.27,
     },
     h3: {

@@ -1,5 +1,5 @@
 import { Link } from '@mui/material';
-import CustomTextField from 'components/styledComponents/CustomTextField';
+import AppTextField from 'components/styledComponents/AppTextField';
 import PasswordField from 'components/styledComponents/PasswordField.jsx';
 
 // Login Form Component
@@ -24,7 +24,7 @@ const LoginForm = ({ userCredentials, onChangeCredential, errors, next, resetPas
   }
 
   return (
-    <CustomTextField
+    <AppTextField
       value={userCredentials.mailId}
       onChange={onChangeCredential}
       error={errors.mailId}

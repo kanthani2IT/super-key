@@ -43,6 +43,7 @@ export default function Palette(mode, presetColor) {
         primary: "#323C4D",
         success: paletteColor.success.main,
         secondary: paletteColor.grey[500],
+        grey: "#5B738B",
         disabled: paletteColor.grey[400],
       },
       action: {

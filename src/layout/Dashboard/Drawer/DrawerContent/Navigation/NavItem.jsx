@@ -6,9 +6,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import { Collapse } from '@mui/material';
+import { Collapse, List } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useGetMenuMaster } from 'api/menu';
+import styled from '@emotion/styled';
 
 export default function NavItem({ item, level, collapse = false, handleActiveItem, activeNav }) {
   const theme = useTheme();
@@ -24,7 +25,7 @@ export default function NavItem({ item, level, collapse = false, handleActiveIte
 
   const textColor = theme.palette.common.black;
   const iconSelectedColor = theme.palette.text.success;
-  const isSelected = activeNav;
+  const isSelected = collapse ? activeNav.includes(item.url) : activeNav == item.url;
   const Icon = item.icon;
   const itemIcon = item.icon ? <Icon fill={isSelected ? iconSelectedColor : textColor} /> : null;
   const handleCollapseMenu = (open) => {
@@ -33,47 +34,64 @@ export default function NavItem({ item, level, collapse = false, handleActiveIte
       handleActiveItem(pathname)
     }
   }
-  const handleMenuClick = () => {
-    handleActiveItem(item.url);
-    if (collapse) handleCollapseMenu(!collapseOpen);
-  };
+  const handleMenuClick = (url) => {
 
+    if (collapse) { handleCollapseMenu(!collapseOpen); } else {
+      handleActiveItem(url);
+    }
+  };
+  const handleSubmenuClick = (url) => {
+    handleActiveItem(url);
+  }
+
+
+  const StyledListItemButton = styled(ListItemButton)(({ theme, drawerOpen, level }) => ({
+    margin: '5%',
+    gap: 2,
+    zIndex: 1201,
+    paddingLeft: drawerOpen ? `${level * 28}px` : theme.spacing(1.5),
+    paddingY: !drawerOpen && level === 1 ? theme.spacing(1.25) : theme.spacing(1),
+    ...(drawerOpen && {
+      '&:hover': {
+        backgroundColor: theme.palette.success.light,
+        borderRadius: '0.625rem',
+      },
+      '&.Mui-selected': {
+        backgroundColor: theme.palette.success.light,
+        borderRadius: '0.625rem',
+        color: theme.palette.primary.main, // Replace `iconSelectedColor` with the correct color
+        '&:hover': {
+          color: theme.palette.primary.main, // Replace `iconSelectedColor` with the correct color
+          backgroundColor: theme.palette.success.light,
+        },
+      },
+    }),
+    ...(!drawerOpen && {
+      '&:hover': { backgroundColor: 'transparent' },
+      '&.Mui-selected': {
+        '&:hover': { backgroundColor: 'transparent' },
+        backgroundColor: 'transparent',
+      },
+    }),
+  }));
+
+
+  const StyledCollapse = styled(Collapse)(({ theme }) => ({
+    margin: '5%',
+    gap: theme.spacing(1),
+    paddingLeft: theme.spacing(1.5),
+    borderRadius: '10px',
+    backgroundColor: theme.palette.grey[100],
+    border: `1px solid ${theme.palette.success.main}`,
+  }));
   return (
     <>
-      <ListItemButton
+      <StyledListItemButton
         {...listItemProps}
         disabled={item.disabled}
-        onClick={handleMenuClick}
+        onClick={() => handleMenuClick(item.url)}
         selected={isSelected}
-        sx={{
-          margin: "5%",
-          gap: 2,
-          zIndex: 1201,
-          pl: drawerOpen ? `${level * 28}px` : 1.5,
-          py: !drawerOpen && level === 1 ? 1.25 : 1,
-          ...(drawerOpen && {
-            '&:hover': {
-              bgcolor: 'success.light',
-              borderRadius: "0.625rem",
-            },
-            '&.Mui-selected': {
-              bgcolor: 'success.light',
-              borderRadius: "0.625rem",
-              color: iconSelectedColor,
-              '&:hover': {
-                color: iconSelectedColor,
-                bgcolor: 'success.light'
-              }
-            }
-          }),
-          ...(!drawerOpen && {
-            '&:hover': { bgcolor: 'transparent' },
-            '&.Mui-selected': {
-              '&:hover': { bgcolor: 'transparent' },
-              bgcolor: 'transparent'
-            }
-          })
-        }}
+
       >
         {itemIcon && (
           <ListItemIcon
@@ -105,12 +123,22 @@ export default function NavItem({ item, level, collapse = false, handleActiveIte
           />
         )}
         {collapse && (collapseOpen ? <ExpandLess color={isSelected ? iconSelectedColor : 'secondary'} fontSize='small' /> : <ExpandMore color={isSelected ? iconSelectedColor : 'secondary'} fontSize='small' />)}
-      </ListItemButton>
+      </StyledListItemButton>
       {collapse && (
-        <Collapse in={collapseOpen} timeout="auto" unmountOnExit>
-          {/* Render nested items here if necessary */}
-        </Collapse>
+        <StyledCollapse in={collapseOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {item?.subMenu?.map((subItem, index) => (
+              <NavItem key={item.subItem} item={subItem} handleActiveItem={
+                () => handleSubmenuClick(subItem.url)
+              }
+                activeNav={activeNav}
+              />
+
+            ))}
+          </List>
+        </StyledCollapse>
       )}
+
     </>
   );
 }

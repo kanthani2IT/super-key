@@ -1,7 +1,7 @@
 // TextField.js
 import { TextField } from '@mui/material';
 
-const CustomTextField = ({type="text", color = 'primary', label = "Email ID", name = "mailId", value, onChange, error, helperText }) => {
+const AppTextField = ({ type = "text", color = 'primary', label = "Email ID", name = "mailId", value, onChange, error, helperText }) => {
   return (
     <TextField
       color={color}
@@ -19,4 +19,4 @@ const CustomTextField = ({type="text", color = 'primary', label = "Email ID", na
   );
 };
 
-export default CustomTextField;
+export default AppTextField;

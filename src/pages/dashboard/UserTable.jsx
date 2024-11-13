@@ -1,11 +1,7 @@
-import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
-import { useGetUsers } from 'hooks/useOnboard';
-import Button from 'themes/overrides/Button';
-import { StyledButton } from './TaskTable';
-import { Typography } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import Loader from 'components/Loader';
+import { StyledButton } from './TaskTable';
 
 const columns = [
   {
