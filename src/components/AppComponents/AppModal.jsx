@@ -1,7 +1,7 @@
 import { Fade, Modal, Paper } from '@mui/material'
 import React from 'react'
 
-const AppModal = ({ open, onClose, children }) => {
+const AppModal = ({ open, onClose, children, height = '70vh', width = "700px", noPadding = false }) => {
     return (
         <Modal sx={{
             display: 'flex',
@@ -25,7 +25,7 @@ const AppModal = ({ open, onClose, children }) => {
         >
             <Fade in={open}>
 
-                <Paper sx={{ width: "695px", height: "70vh", px: '3%', py: '1.5%', borderRadius: '10px' }}>
+                <Paper sx={{ width, height, px: '1%', py: '1.5%', borderRadius: '10px' }}>
 
                     {children}
                 </Paper>

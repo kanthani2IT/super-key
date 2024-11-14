@@ -25,7 +25,7 @@ export default function Theme(colors) {
 
   return {
     primary: {
-      lighter: blue[0],
+      lighter: "#F7F9FB",
       100: blue[1],
       200: blue[2],
       light: blue[3],
@@ -71,9 +71,9 @@ export default function Theme(colors) {
     },
     info: {
       lighter: cyan[0],
-      light: cyan[3],
-      main: cyan[5],
-      dark: cyan[7],
+      light: "#DCEDFF",
+      main: "#2954E1",
+      dark: "#2954E1",
       darker: cyan[9],
       contrastText,
     },

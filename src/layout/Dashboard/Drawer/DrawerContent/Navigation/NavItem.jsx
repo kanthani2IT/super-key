@@ -11,7 +11,7 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useGetMenuMaster } from 'api/menu';
 import styled from '@emotion/styled';
 
-export default function NavItem({ item, level, collapse = false, handleActiveItem, activeNav }) {
+export default function NavItem({ subItem = false, item, level, collapse = false, handleActiveItem, activeNav }) {
   const theme = useTheme();
   const { menuMaster } = useGetMenuMaster();
   const [collapseOpen, setCollapseOpen] = useState(false);
@@ -45,41 +45,40 @@ export default function NavItem({ item, level, collapse = false, handleActiveIte
   }
 
 
-  const StyledListItemButton = styled(ListItemButton)(({ theme, drawerOpen, level }) => ({
+  const StyledListItemButton = styled(ListItemButton)(({ theme, drawerOpen, level, subItem }) => ({
     margin: '5%',
     gap: 2,
     zIndex: 1201,
     paddingLeft: drawerOpen ? `${level * 28}px` : theme.spacing(1.5),
     paddingY: !drawerOpen && level === 1 ? theme.spacing(1.25) : theme.spacing(1),
-    ...(drawerOpen && {
+    // ...(drawerOpen && {
+    '&:hover': {
+      backgroundColor: theme.palette.success.light,
+      borderRadius: '0.625rem',
+    },
+    '&.Mui-selected': {
+      backgroundColor: theme.palette.success.light,
+      borderRadius: '0.625rem',
+      color: theme.palette.primary.main,
       '&:hover': {
+        color: theme.palette.primary.main,
         backgroundColor: theme.palette.success.light,
-        borderRadius: '0.625rem',
       },
-      '&.Mui-selected': {
-        backgroundColor: theme.palette.success.light,
-        borderRadius: '0.625rem',
-        color: theme.palette.primary.main, // Replace `iconSelectedColor` with the correct color
-        '&:hover': {
-          color: theme.palette.primary.main, // Replace `iconSelectedColor` with the correct color
-          backgroundColor: theme.palette.success.light,
-        },
-      },
-    }),
-    ...(!drawerOpen && {
-      '&:hover': { backgroundColor: 'transparent' },
-      '&.Mui-selected': {
-        '&:hover': { backgroundColor: 'transparent' },
-        backgroundColor: 'transparent',
-      },
-    }),
+    },
+    // }),
+    // ...(!drawerOpen && {
+    //   '&:hover': { backgroundColor: 'transparent' },
+    //   '&.Mui-selected': {
+    //     '&:hover': { backgroundColor: 'transparent' },
+    //     backgroundColor: 'transparent',
+    //   },
+    // }),
   }));
 
-
   const StyledCollapse = styled(Collapse)(({ theme }) => ({
-    margin: '5%',
-    gap: theme.spacing(1),
-    paddingLeft: theme.spacing(1.5),
+    margin: '4%',
+    gap: theme.spacing(0.5),
+    // paddingLeft: theme.spacing(1.5),
     borderRadius: '10px',
     backgroundColor: theme.palette.grey[100],
     border: `1px solid ${theme.palette.success.main}`,
@@ -91,6 +90,7 @@ export default function NavItem({ item, level, collapse = false, handleActiveIte
         disabled={item.disabled}
         onClick={() => handleMenuClick(item.url)}
         selected={isSelected}
+        subItem
 
       >
         {itemIcon && (
@@ -101,6 +101,7 @@ export default function NavItem({ item, level, collapse = false, handleActiveIte
                 borderRadius: 1.5,
                 width: 36,
                 height: 36,
+
                 justifyContent: 'center',
                 '&:hover': { bgcolor: 'success.light' },
               }),
@@ -122,13 +123,13 @@ export default function NavItem({ item, level, collapse = false, handleActiveIte
             }
           />
         )}
-        {collapse && (collapseOpen ? <ExpandLess color={isSelected ? iconSelectedColor : 'secondary'} fontSize='small' /> : <ExpandMore color={isSelected ? iconSelectedColor : 'secondary'} fontSize='small' />)}
+        {((drawerOpen || (!drawerOpen && level !== 1)) && collapse) && (collapseOpen ? <ExpandLess color={isSelected ? 'success' : 'secondary'} fontSize='small' /> : <ExpandMore color={isSelected ? 'success' : 'secondary'} fontSize='small' />)}
       </StyledListItemButton>
       {collapse && (
         <StyledCollapse in={collapseOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {item?.subMenu?.map((subItem, index) => (
-              <NavItem key={item.subItem} item={subItem} handleActiveItem={
+              <NavItem subItem={true} key={item.subItem} item={subItem} handleActiveItem={
                 () => handleSubmenuClick(subItem.url)
               }
                 activeNav={activeNav}

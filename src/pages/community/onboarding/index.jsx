@@ -117,6 +117,7 @@ const index = () => {
                 </Grid>
                 <Grid item>
                     <Button
+                        color="info"
                         startIcon={<AddCircle />}
                         variant="contained"
                         onClick={handleOpen}
@@ -152,13 +153,13 @@ const index = () => {
                     <CardActions>
                         <AppRowBox>
                             {activeStep ? (
-                                <Button onClick={handleBack} variant="outlined" size="large">
+                                <Button color="info" onClick={handleBack} variant="outlined" size="large">
                                     Back
                                 </Button>
                             ) : (
                                 <div></div>
                             )}
-                            <Button onClick={handleNext} variant="contained" size="large">
+                            <Button color="info" onClick={handleNext} variant="contained" size="large">
                                 {nextLabel}
                             </Button>
                         </AppRowBox>
