@@ -17,8 +17,8 @@ const { id } = useParams();
       name: 'password',
       type: 'password',
       label: 'Current Password',
-      placeholder: 'Enter password',
-      validation: PASSWORD_VALIDATION,
+      placeholder: 'Enter Current password',
+      validation: PASSWORD_VALIDATION({name:"Current "}),
       hide: id === "forgot",
     },
     {
@@ -27,7 +27,7 @@ const { id } = useParams();
       type: 'password',
       label: 'New Password',
       placeholder: 'Enter new password',
-      validation: PASSWORD_VALIDATION,
+      validation: PASSWORD_VALIDATION({name:"New "}),
     },
     {
       id: 'confirmPassword-reset',
