@@ -23,6 +23,7 @@ export default function NavGroup({ item }) {
     setActiveNav(nav);
   };
 
+
   const navCollapse = item.children?.map((menuItem) => {
     switch (menuItem.type) {
       case 'collapse':
@@ -33,7 +34,7 @@ export default function NavGroup({ item }) {
             level={1}
             collapse
             handleActiveItem={handleActiveItem}
-            activeNav={activeNav === menuItem.url}
+            activeNav={activeNav}
           />
         );
       case 'item':
@@ -43,7 +44,7 @@ export default function NavGroup({ item }) {
             item={menuItem}
             level={1}
             handleActiveItem={handleActiveItem}
-            activeNav={activeNav === menuItem.url}
+            activeNav={activeNav}
           />
         );
       default:

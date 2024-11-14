@@ -28,6 +28,41 @@ const pages = {
   children:
     [
       {
+        id: 'community',
+        title: 'Community',
+        url: '/community',
+        icon: icons.PropertyIcon,
+
+        type: "collapse",
+        subMenu: [{
+          id: 'communities',
+          title: 'Communities',
+          url: '/community-onboarding',
+          type: "item",
+          // icon: icons.HelpIcon,
+        }, , {
+          id: 'documents',
+          title: 'Documents',
+          url: '/community-documents',
+          type: "item",
+          // icon: icons.HelpIcon,
+        },
+        {
+          id: 'assets',
+          title: 'Assets',
+          url: '/community-assets',
+          type: "item",
+          // icon: icons.HelpIcon,
+        },
+        {
+          id: 'hoa',
+          title: 'HOA',
+          url: '/community-hoa',
+          type: "item",
+          // icon: icons.HelpIcon,
+        }]
+
+      }, {
         id: 'property',
         title: 'Property',
         url: '/property',

@@ -2,7 +2,7 @@
 import { TextField } from '@mui/material';
 import { BootstrapInput } from './CustomField';
 
-const CustomTextField = ({type="text", color = 'primary', label = "Email ID", name = "mailId", value, onChange, error, helperText }) => {
+const AppTextField = ({ type = "text", color = 'primary', label = "Email ID", name = "mailId", value, onChange, error, helperText }) => {
   return (
     <BootstrapInput
       color={color}
@@ -20,4 +20,4 @@ const CustomTextField = ({type="text", color = 'primary', label = "Email ID", na
   );
 };
 
-export default CustomTextField;
+export default AppTextField;

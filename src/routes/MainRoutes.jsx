@@ -10,7 +10,7 @@ const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/index')));
 
 // render - sample page
-const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
+const Community = Loadable(lazy(() => import('pages/community/onboarding/index')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -18,18 +18,7 @@ const MainRoutes = {
   path: '/',
   element: <Dashboard />,
   children: [
-    {
-      path: "/property",
-      element: <DashboardDefault />
-    },
-    {
-      path: "/insurance",
-      element: <DashboardDefault />
-    },
-    {
-      path: 'color',
-      element: <Color />
-    },
+
     {
       path: 'home',
       element: <DashboardDefault />
@@ -37,8 +26,12 @@ const MainRoutes = {
 
     },
     {
-      path: 'sample-page',
-      element: <SamplePage />
+      path: 'community-onboarding',
+      element: <Community />
+    },
+    {
+      path: 'community-assets',
+      element: <Community />
     },
     {
       path: 'shadow',

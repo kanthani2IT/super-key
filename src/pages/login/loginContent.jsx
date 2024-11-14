@@ -1,7 +1,7 @@
 import { Link } from '@mui/material';
-import { BootstrapInput } from 'components/styledComponents/CustomField';
-import CustomTextField from 'components/styledComponents/CustomTextField';
 import PasswordField from 'components/styledComponents/PasswordField.jsx';
+import AppTextField from 'components/AppComponents/AppTextField';
+import { BootstrapInput } from 'components/AppComponents/CustomField';
 
 // Login Form Component
 const LoginForm = ({ userCredentials, onChangeCredential, errors, next, resetPassword }) => {
@@ -26,15 +26,15 @@ const LoginForm = ({ userCredentials, onChangeCredential, errors, next, resetPas
 
   return (
     <>
- <BootstrapInput defaultValue="react-bootstrap" id="bootstrap-input" />
- <CustomTextField
-      value={userCredentials.mailId}
-      onChange={onChangeCredential}
-      error={errors.mailId}
-      helperText={errors.mailId}
-    />
+      <BootstrapInput defaultValue="react-bootstrap" id="bootstrap-input" />
+      <AppTextField
+        value={userCredentials.mailId}
+        onChange={onChangeCredential}
+        error={errors.mailId}
+        helperText={errors.mailId}
+      />
     </>
-    
+
   );
 };
 

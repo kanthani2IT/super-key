@@ -10,29 +10,29 @@ import { Formik } from 'formik';
 
 // project imports
 import AnimateButton from 'components/@extended/AnimateButton';
-import { FormTextField } from 'components/styledComponents/FormTextField';
+import { FormTextField } from 'components/AppComponents/FormTextField';
 import { useLoginUser } from 'hooks/useLogin';
 import { useAuthCookies } from 'utils/cookie';
 import { createValidationSchema } from 'utils/loginUtils';
 
 
 export default function AuthLogin(props) {
-  const {fieldsConfig}=props
+  const { fieldsConfig } = props
   const [checked, setChecked] = useState(false);
-  const loginMutation=useLoginUser()
-  const {getCookie}=useAuthCookies()
-  const user=getCookie("superkey")
+  const loginMutation = useLoginUser()
+  const { getCookie } = useAuthCookies()
+  const user = getCookie("superkey")
   const validationSchema = createValidationSchema(fieldsConfig);
   const handleFormSubmit = (values, { setSubmitting }) => {
     setSubmitting(false);
-    loginMutation.mutate({values, checked})
+    loginMutation.mutate({ values, checked })
   };
 
   return (
     <Formik
       initialValues={{
-        email: user.email,
-        password: user.password,
+        email: user?.email,
+        password: user?.password,
       }}
       validationSchema={validationSchema}
       onSubmit={handleFormSubmit}

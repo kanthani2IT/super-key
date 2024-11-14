@@ -9,16 +9,16 @@ import { Formik } from 'formik';
 
 // project imports
 import AnimateButton from 'components/@extended/AnimateButton';
-import { FormTextField } from 'components/styledComponents/FormTextField';
+import { FormTextField } from 'components/AppComponents/FormTextField';
 import { useNewPassword, useResetPassword } from 'hooks/useLogin';
 import { useAuthCookies } from 'utils/cookie';
 import { createValidationSchema } from 'utils/loginUtils';
 
 export default function ResetPassword(props) {
-  const {fieldsConfig}=props
-  const { id } = useParams(); 
-  const {getCookie}=useAuthCookies()
-  const user=getCookie("superkey")
+  const { fieldsConfig } = props
+  const { id } = useParams();
+  const { getCookie } = useAuthCookies()
+  const user = getCookie("superkey")
   const newPasswordMutation = useNewPassword();
   const resetPasswordMutation = useResetPassword();
   const validationSchema = createValidationSchema(fieldsConfig);
@@ -26,18 +26,18 @@ export default function ResetPassword(props) {
   const handleFormSubmit = (values, { setSubmitting }) => {
     setSubmitting(false);
     if (id == "change") {
-    let payload={
-      email:values.email,
-      password:values.password,
-      newPassword:values.newPassword,
-    }
-    newPasswordMutation.mutate(payload);
+      let payload = {
+        email: values.email,
+        password: values.password,
+        newPassword: values.newPassword,
+      }
+      newPasswordMutation.mutate(payload);
     } else {
-    let payload = {
-      password: values.newPassword,
-    };
-    resetPasswordMutation.mutate(payload);
-  }
+      let payload = {
+        password: values.newPassword,
+      };
+      resetPasswordMutation.mutate(payload);
+    }
   };
 
   return (
@@ -45,8 +45,8 @@ export default function ResetPassword(props) {
       initialValues={{
         email: user.email,
         password: '',
-        newPassword:'',
-        confirmPassword:'',
+        newPassword: '',
+        confirmPassword: '',
       }}
       validationSchema={validationSchema}
       validateOnChange={false}  // Disable validation on field change

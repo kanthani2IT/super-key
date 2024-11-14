@@ -1,11 +1,8 @@
-import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
-import { useGetUsers } from 'hooks/useOnboard';
-import Button from 'themes/overrides/Button';
-import { StyledButton } from './TaskTable';
-import { Typography } from '@mui/material';
+import { DataGrid, GridOverlay } from '@mui/x-data-grid';
 import Loader from 'components/Loader';
+import { StyledButton } from './TaskTable';
+import { Box, Typography } from '@mui/material';
 
 const columns = [
   {
@@ -42,10 +39,10 @@ const columns = [
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-export default function UserTable({ tableData, isLoading }) {
-  console.log(isLoading)
+
+export default function UserTable({ tableData, isLoading, height = 400 }) {
   return (
-    <Paper sx={{ height: 400, width: '100%' }}>
+    <Paper sx={{ height, width: '100%' }}>
       {isLoading ? <Loader /> :
         <DataGrid
           rows={tableData || []}
@@ -54,6 +51,7 @@ export default function UserTable({ tableData, isLoading }) {
           pageSizeOptions={[5, 10]}
           checkboxSelection
           sx={{ border: 0 }}
+
         />}
     </Paper>
   );
