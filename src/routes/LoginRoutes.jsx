@@ -5,6 +5,7 @@ import { Navigate } from 'react-router-dom';
 import Loadable from 'components/Loadable';
 import MinimalLayout from 'layout/MinimalLayout';
 import ChangePassword from 'pages/login/ChangePassword';
+import Reset from 'pages/authentication/reset';
 
 // render - login
 const AuthLogin = Loadable(lazy(() => import('pages/authentication/login')));
@@ -31,6 +32,10 @@ const LoginRoutes = {
     {
       path: '/changePassword/:id',
       element: <ChangePassword />
+    },
+    {
+      path: '/reset/:id',
+      element: <Reset />
     }
   ]
 };

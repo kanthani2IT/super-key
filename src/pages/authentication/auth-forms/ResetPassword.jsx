@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 // material-ui
-import { Button, Checkbox, FormControlLabel, FormHelperText, Grid, Link, Stack, Typography } from '@mui/material';
+import { Button, FormHelperText, Grid } from '@mui/material';
 
 // third party
 import { Formik } from 'formik';
@@ -11,33 +10,50 @@ import { Formik } from 'formik';
 // project imports
 import AnimateButton from 'components/@extended/AnimateButton';
 import { FormTextField } from 'components/styledComponents/FormTextField';
-import { useLoginUser } from 'hooks/useLogin';
+import { useNewPassword, useResetPassword } from 'hooks/useLogin';
 import { useAuthCookies } from 'utils/cookie';
 import { createValidationSchema } from 'utils/loginUtils';
 
-
-export default function AuthLogin(props) {
+export default function ResetPassword(props) {
   const {fieldsConfig}=props
-  const [checked, setChecked] = useState(false);
-  const loginMutation=useLoginUser()
+  const { id } = useParams(); 
   const {getCookie}=useAuthCookies()
   const user=getCookie("superkey")
+  const newPasswordMutation = useNewPassword();
+  const resetPasswordMutation = useResetPassword();
   const validationSchema = createValidationSchema(fieldsConfig);
+
   const handleFormSubmit = (values, { setSubmitting }) => {
     setSubmitting(false);
-    loginMutation.mutate({values, checked})
+    if (id == "change") {
+    let payload={
+      email:values.email,
+      password:values.password,
+      newPassword:values.newPassword,
+    }
+    newPasswordMutation.mutate(payload);
+    } else {
+    let payload = {
+      password: values.newPassword,
+    };
+    resetPasswordMutation.mutate(payload);
+  }
   };
 
   return (
     <Formik
       initialValues={{
         email: user.email,
-        password: user.password,
+        password: '',
+        newPassword:'',
+        confirmPassword:'',
       }}
       validationSchema={validationSchema}
+      validateOnChange={false}  // Disable validation on field change
+      validateOnBlur={false}    // Disable validation on field blur
       onSubmit={handleFormSubmit}
     >
-      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, values }) => (
         <form noValidate onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             {fieldsConfig.map((field) => (
@@ -51,26 +67,10 @@ export default function AuthLogin(props) {
                   handleChange={handleChange}
                   placeholder={field.placeholder}
                   label={field.label}
-                  touched={touched[field.name]}
                   error={errors[field.name]}
                 />
               </Grid>
             ))}
-
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checked}
-                    onChange={(event) => setChecked(event.target.checked)}
-                    name="checked"
-                    color="primary"
-                    size="small"
-                  />
-                }
-                label={<Typography variant="h7" color="#5B738B" fontSize="0.75rem">Remember Password</Typography>}
-              />
-            </Grid>
 
             {errors.submit && (
               <Grid item xs={12}>
@@ -81,18 +81,9 @@ export default function AuthLogin(props) {
             <Grid item xs={12}>
               <AnimateButton>
                 <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                  Login
+                  Reset Password
                 </Button>
               </AnimateButton>
-            </Grid>
-
-            <Grid item xs={12} sx={{ mt: -1 }}>
-              <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                <Typography variant="h7" color="#5B738B" fontSize="0.75rem">Forgot Password?</Typography>
-                <Link variant="h7" component={RouterLink} color="red" fontWeight={600} to="/reset/forgot">
-                  Reset Password
-                </Link>
-              </Stack>
             </Grid>
           </Grid>
         </form>
@@ -101,6 +92,6 @@ export default function AuthLogin(props) {
   );
 }
 
-AuthLogin.propTypes = {
+ResetPassword.propTypes = {
   isDemo: PropTypes.bool
 };

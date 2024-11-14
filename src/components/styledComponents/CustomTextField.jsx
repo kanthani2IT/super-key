@@ -1,9 +1,10 @@
 // TextField.js
 import { TextField } from '@mui/material';
+import { BootstrapInput } from './CustomField';
 
 const CustomTextField = ({type="text", color = 'primary', label = "Email ID", name = "mailId", value, onChange, error, helperText }) => {
   return (
-    <TextField
+    <BootstrapInput
       color={color}
       label={label}
       name={name}

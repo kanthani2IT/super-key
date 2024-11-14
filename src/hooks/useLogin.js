@@ -28,20 +28,31 @@ export const useLoginUser = () => {
 
   const {mutate,isSuccess, isError,error}= useMutation({
     mutationKey: ["login"],
-    mutationFn: (credentialData) => api.login.userLogin(credentialData), // Pass `credentialData` to `mutate`
-    onSuccess: (response) => {
-      setAuthCookie("token", response.data.token)
-      navigate('/home');
-      updateSnackbar({
-        message:MESSAGE.loginSuccess,
-        severity:SEVERITY.success
-      });
+    mutationFn: ({values}) => api.login.userLogin(values), // Pass `credentialData` to `mutate`
+    onSuccess: (data, {values, checked}) => {
+      if(data.data.token=="Please set you own password."){
+        navigate("/reset/change",{state:{email:data.data.email}})
+      }else{
+        setAuthCookie("token", data.data.token)
+        navigate('/home');
+        updateSnackbar({
+          message:MESSAGE.loginSuccess,
+          severity:SEVERITY.success
+        });}
+      if(checked){
+        setAuthCookie("superkey", values)}
+        
     },
     onError: (error) => {
       updateSnackbar({
         message:error.response.data.token,
         severity:SEVERITY.error
       });
+      
+        
+        
+      
+      setAuthCookie("user", data.data)
       console.error(error); 
     },
     
@@ -128,10 +139,10 @@ export const useIsEmailEnabled = ({setNext}) => {
     mutationKey: ["login"],
     mutationFn: (emailEnabled) => api.login.isEmailEnabled(emailEnabled), // Pass `credentialData` to `mutate`
     onSuccess: (data) => {
-      if(data.data.enabled){
+      if(data.data.token=="Please set you own password."){
         setNext(true)
       }else{
-        navigate("/changePassword/reset",{state:data.data})
+        navigate("/reset/change",{state:data.data})
         setNext("Email page")
       }
       setAuthCookie("user", data.data)

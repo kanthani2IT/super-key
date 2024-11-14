@@ -27,7 +27,7 @@ export default function ProfileTab() {
 
   return (
     <List component="nav" sx={{ p: 0, '& .MuiListItemIcon-root': { minWidth: 32 } }}>
-      <ListItemButton selected={selectedIndex === 0}  onClick={()=>{Navigate("/changePassword/reset")}}>
+      <ListItemButton selected={selectedIndex === 0}  onClick={()=>{Navigate("/reset/change")}}>
         <ListItemIcon>
           <EditOutlined />
         </ListItemIcon>

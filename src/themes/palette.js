@@ -50,8 +50,8 @@ export default function Palette(mode, presetColor) {
       },
       divider: paletteColor.grey[200],
       background: {
-        paper: "#F7F9FB",
-        default: "#fff",
+        paper: "#fff",
+        default: "#F7F9FB",
       },
     },
   });
