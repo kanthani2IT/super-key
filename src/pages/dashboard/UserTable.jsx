@@ -8,18 +8,23 @@ import { Typography } from '@mui/material';
 import Loader from 'components/Loader';
 
 const columns = [
-  { field: 'Id', headerName: 'ID', width: 250, renderCell:(data)=>
-    <b>{data.row.Id}</b>
+  {
+    field: 'id', headerName: 'ID', width: 250, renderCell: (data) =>
+      <b>{data.row.id}</b>
   },
-  { field: 'Name', headerName: 'Name', width: 300,renderCell:(data)=>
-    <b>{data.row.Name}</b> },
-  { field: 'Email', headerName: 'Email ID', width: 300,renderCell:(data)=>
-    <b>{data.row.Email}</b> },
+  {
+    field: 'name', headerName: 'Name', width: 300, renderCell: (data) =>
+      <b>{data.row.name}</b>
+  },
+  {
+    field: 'email', headerName: 'Email ID', width: 300, renderCell: (data) =>
+      <b>{data.row.email}</b>
+  },
   {
     field: 'action',
     headerName: 'Action',
     width: 100,
-    headerAlign:"center",
+    headerAlign: "center",
     sortable: false,
     renderCell: (params) => (
       <StyledButton
@@ -37,20 +42,19 @@ const columns = [
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-export default function UserTable() {
-    const {data, isLoading}=useGetUsers()
+export default function UserTable({ tableData, isLoading }) {
+  console.log(isLoading)
   return (
     <Paper sx={{ height: 400, width: '100%' }}>
-    {isLoading?<Loader/>:
-      <DataGrid
-        rows={data.data.records||[]}
-        columns={columns}
-        initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-        getRowId={(row) => row.Id}
-        sx={{ border: 0 }}
-      />}
+      {isLoading ? <Loader /> :
+        <DataGrid
+          rows={tableData || []}
+          columns={columns}
+          initialState={{ pagination: { paginationModel } }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+          sx={{ border: 0 }}
+        />}
     </Paper>
   );
 }

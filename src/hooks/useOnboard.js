@@ -1,19 +1,15 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { api } from "api";
-import { useSnackbar } from "components/styledComponents/SnackBarProvider";
-import { useNavigate } from "react-router";
-import { useAuthCookies } from "utils/cookie";
-import { MESSAGE, SEVERITY } from "utils/message";
 
 export const useGetUsers = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["login"],
-    queryFn: api.onboard.getUsersData, 
+    queryFn: api.onboard.getUsersData,
     onSuccess: (data) => {
-      console.log(data); 
+      console.log(data);
     },
     onError: (error) => {
-      console.error(error); 
+      console.error(error);
     },
   });
 
@@ -42,11 +38,10 @@ export const useGetUsers = () => {
 //         message:error.response.data.token,
 //         severity:SEVERITY.error
 //       });
-//       console.error(error); 
+//       console.error(error);
 //     },
-    
+
 //   });
 //   const message=isSuccess?MESSAGE.loginSuccess:error?.response?.data?.token
 //   return {mutate,isSuccess,isError,message}
 // };
-
