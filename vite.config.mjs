@@ -1,4 +1,3 @@
-// https://github.com/vitejs/vite/discussions/3448
 import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -26,15 +25,13 @@ export default defineConfig({
     ]
   },
   server: {
-    // this ensures that the browser opens upon server start
+    host: '0.0.0.0', // make the server accessible externally
     open: true,
-    // this sets a default port to 3000
     port: 3000
   },
   preview: {
-    // this ensures that the browser opens upon preview start
+    host: '0.0.0.0', // make the preview accessible externally
     open: true,
-    // this sets a default port to 3000
     port: 3000
   }
 });
