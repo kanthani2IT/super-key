@@ -22,7 +22,7 @@ const { id } = useParams();
       hide: id === "forgot",
     },
     {
-      id: 'password-reset',
+      id: 'newPassword-reset',
       name: 'newPassword',
       type: 'password',
       label: 'New Password',
@@ -30,7 +30,7 @@ const { id } = useParams();
       validation: PASSWORD_VALIDATION,
     },
     {
-      id: 'password-reset',
+      id: 'confirmPassword-reset',
       name: 'confirmPassword',
       type: 'password',
       label: 'Confirm Password',
