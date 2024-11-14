@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "api";
-import { useSnackbar } from "components/styledComponents/SnackBarProvider";
+import { useSnackbar } from "components/AppComponents/SnackBarProvider";
 import { useNavigate } from "react-router";
 import { useAuthCookies } from "utils/cookie";
 import { MESSAGE, SEVERITY } from "utils/message";

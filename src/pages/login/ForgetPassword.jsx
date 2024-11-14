@@ -1,4 +1,4 @@
-import PasswordField from "components/styledComponents/PasswordField.jsx";
+import PasswordField from "components/AppComponents/PasswordField.jsx";
 
 const PasswordChange = ({
   userCredentials,
