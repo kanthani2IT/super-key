@@ -36,7 +36,7 @@ const CommunityAddress = () => {
             <Grid item size={{ xs: 9 }}>
                 <Image src={mapImg} alt='map' />
             </Grid>
-            <Grid item size={{ xs: 9 }}>
+            <Grid item >
                 <Stack spacing={4}>
                     <StyledTypography variant="h4">What is the address of your Community ?</StyledTypography>
                     <AppDropDown onChange={handleChange} searchString={address.searchTerm} value={address.value} options={options} />

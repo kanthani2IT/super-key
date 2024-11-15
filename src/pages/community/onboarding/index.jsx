@@ -1,23 +1,18 @@
-import { AddCircle, Clear } from "@mui/icons-material";
+import { AddCircle } from "@mui/icons-material";
 import {
     Button,
-    Card,
-    CardActions,
-    CardContent,
-    CardHeader,
     Grid2 as Grid,
-    IconButton,
-    Stack,
-    Typography,
+    Typography
 } from "@mui/material";
 import AppModal from "components/AppComponents/AppModal";
-import { useState } from "react";
-import CommunityAddress from "./CommunityAddress";
 import AppRowBox from "components/AppComponents/AppRowBox";
+import UserTable from "pages/dashboard/UserTable";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import AddNewCommunity from "./AddNewCommunity";
 import CommunityName from "./CommunituyName";
-import { useLocation, useNavigate } from "react-router";
-import UserTable from "pages/dashboard/UserTable";
+import CommunityAddress from "./CommunityAddress";
+import CommunityDetails from "./CommunityDetails";
 
 const onBoardingStepper = [
     {
@@ -32,8 +27,16 @@ const onBoardingStepper = [
         title: "Community Name",
         component: (props) => <CommunityName {...props} />,
     },
+    {
+        title: "Community Details",
+        component: (props) => <CommunityDetails {...props} />,
+    },
 ];
-
+const defaultValue = {
+    onBoardingType: "single",
+    activeStep: 0,
+    modalOpen: false
+}
 const index = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -46,7 +49,7 @@ const index = () => {
     const [activeStep, setActiveStep] = useState(currentStep);
     const [open, setOpen] = useState(modalOpen);
     const [onBoardingType, setOnboardingType] = useState(
-        currentOnboradingType || "single"
+        currentOnboradingType || defaultValue.onBoardingType
     );
 
     const nextLabel =
@@ -67,8 +70,11 @@ const index = () => {
 
     const handleClose = () => {
         setActiveStep(0);
-        setOnboardingType(0);
-
+        setOnboardingType(defaultValue.onBoardingType);
+        navigate({
+            pathname: location.pathname,
+            search: "",
+        });
         setOpen(false);
     };
 
@@ -102,7 +108,21 @@ const index = () => {
             setActiveStep((prevStep) => prevStep - 1);
         }
     };
-
+    const footer = () => {
+        return (
+            <AppRowBox>
+                {activeStep ? (
+                    <Button color="info" onClick={handleBack} variant="outlined" size="large">
+                        Back
+                    </Button>
+                ) : (
+                    <div></div>
+                )}
+                <Button color="info" onClick={handleNext} variant="contained" size="large">
+                    {nextLabel}
+                </Button>
+            </AppRowBox>)
+    }
     return (
         <Grid container sx={{ mt: 2 }} spacing={4}>
             <Grid
@@ -130,43 +150,15 @@ const index = () => {
                 <UserTable height={'80vh'} />
             </Grid>
 
-            <AppModal open={open} onClose={handleClose}>
-                <Card
-                    sx={{ display: "flex", flexDirection: "column", height: "100%" }}
-                    elevation={0}
-                >
-                    <CardHeader
-                        title={
-                            <Stack alignItems={"center"}>
-                                <Typography variant="h2">
-                                    {onBoardingStepper[activeStep].title}
-                                </Typography>
-                            </Stack>
-                        }
-                    />
-                    <CardContent sx={{ flex: "1 0 70%", overflowY: "auto" }}>
-                        {onBoardingStepper[activeStep].component({
-                            setOnboardingType,
-                            onBoardingType,
-                        })}
-                    </CardContent>
-                    <CardActions>
-                        <AppRowBox>
-                            {activeStep ? (
-                                <Button color="info" onClick={handleBack} variant="outlined" size="large">
-                                    Back
-                                </Button>
-                            ) : (
-                                <div></div>
-                            )}
-                            <Button color="info" onClick={handleNext} variant="contained" size="large">
-                                {nextLabel}
-                            </Button>
-                        </AppRowBox>
-                    </CardActions>
-                </Card>
+            <AppModal open={open} onClose={handleClose} enableCard title={onBoardingStepper[activeStep].title} footer={footer()}>
+
+                {onBoardingStepper[activeStep].component({
+                    setOnboardingType,
+                    onBoardingType,
+                })}
+
             </AppModal>
-        </Grid>
+        </Grid >
     );
 };
 

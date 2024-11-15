@@ -43,7 +43,7 @@ const CommunityName = () => {
 
     return (
         <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
-            <Grid item size={{ xs: 9 }}>
+            <Grid item >
                 <Stack spacing={4}>
                     <StyledTypography variant="h4">What is the name of your community?</StyledTypography>
                     <AppDropDown onChange={handleChange} searchString={name.searchTerm} value={name.value} placeholder={'Search your Community'} options={options} />
