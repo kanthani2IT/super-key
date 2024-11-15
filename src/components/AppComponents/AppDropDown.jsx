@@ -37,7 +37,7 @@ const OptionComponent = ({ label, props }) => {
     )
 }
 
-const AppAutocompleteComponent = ({ onChange, searchString, value, placeholder, options }) => {
+const AppAutocompleteComponent = ({ onChange, searchString, value, placeholder, options, error }) => {
     const [open, setOpen] = useState(false)
     const handleSearchChange = (event) => {
         const search = event.target.value;
@@ -122,7 +122,6 @@ const AppAutocompleteComponent = ({ onChange, searchString, value, placeholder, 
             )}
             renderInput={(params) => (
                 <TextField
-
                     {...params}
                     label=""
                     variant="outlined"
@@ -131,6 +130,8 @@ const AppAutocompleteComponent = ({ onChange, searchString, value, placeholder, 
                         onChange('searchTerm', ''); // Clear search term on blur if dropdown closed without a selection
                     }}
                     onChange={handleSearchChange}
+                    error={Boolean(error)}
+                    helperText={error}
 
                 />
             )}

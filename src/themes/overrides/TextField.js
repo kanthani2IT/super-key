@@ -3,10 +3,11 @@ export default function TextField() {
     MuiTextField: {
       styleOverrides: {
         root: {
-          background: "#F7F9FB",
           borderRadius: "4px",
           "& .MuiOutlinedInput-root": {
-            // padding: "6px 10px",
+            background: "#F7F9FB",
+
+            padding: "3px 10px",
             // borderRadius: "8px",
             "& fieldset": {
               borderColor: "#c0c0c0",
@@ -16,14 +17,16 @@ export default function TextField() {
             },
           },
           "& .MuiInputBase-input": {
-            padding: "8px 0",
-            fontWeight: "600",
+            padding: "7px 0",
+            fontWeight: "400",
             fontSize: "1rem",
             borderRadius: "8px",
 
             "&::placeholder": {
               color: "#757575", // Placeholder color
-              //   opacity: 0.5, // Full opacity for placeholder
+              opacity: 0.5,
+              fontWeight: "400",
+              fontSize: "0.9rem",
             },
           },
         },

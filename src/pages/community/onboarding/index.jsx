@@ -6,30 +6,102 @@ import {
 } from "@mui/material";
 import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
+import { useFormik } from "formik";
 import UserTable from "pages/dashboard/UserTable";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import * as Yup from 'yup';
 import AddNewCommunity from "./AddNewCommunity";
 import CommunityName from "./CommunituyName";
 import CommunityAddress from "./CommunityAddress";
 import CommunityDetails from "./CommunityDetails";
 
+const initialValues = {
+    onBoardingType: "single",
+    communityAddress: "",
+    communityName: "",
+    communityManager: {
+        name: '',
+        email: '',
+        mobile: '',
+        address: ""
+    },
+    projectManager: {
+        name: '',
+        email: '',
+        mobile: '',
+        address: ""
+    },
+
+
+}
+
+
 const onBoardingStepper = [
     {
         title: "Add New Community",
         component: (props) => <AddNewCommunity {...props} />,
+        initialValues: {
+            onBoardingType: "single"
+        }
     },
     {
         title: "Community Address",
         component: (props) => <CommunityAddress {...props} />,
+        initialValues: {
+            communityAddress: ""
+        },
+        initialValidationSchema: {
+            communityAddress: Yup.string().required('Community Address is required'),
+
+        }
     },
     {
         title: "Community Name",
         component: (props) => <CommunityName {...props} />,
+        initialValues: {
+            communityName: ""
+        },
+        initialValidationSchema: {
+            communityName: Yup.string().required('Community Name is required'),
+
+        }
     },
     {
         title: "Community Details",
         component: (props) => <CommunityDetails {...props} />,
+        initialValues: {
+            communityManager: {
+                name: '',
+                email: '',
+                mobile: '',
+                address: ""
+            },
+            projectManager: {
+                name: '',
+                email: '',
+                mobile: '',
+                address: ""
+            },
+        },
+        initialValidationSchema: {
+            communityManager: Yup.object().shape({
+                name: Yup.string().required('Name is required'),
+                email: Yup.string().email('Invalid email format').required('Email is required'),
+                mobile: Yup.string()
+                    .matches(/^[0-9]{10}$/, 'Invalid mobile number format')
+                    .required('Mobile number is required'),
+                address: Yup.string().required('Address is required'),
+            }),
+            projectManager: Yup.object().shape({
+                name: Yup.string().required('Name is required'),
+                email: Yup.string().email('Invalid email format').required('Email is required'),
+                mobile: Yup.string()
+                    .matches(/^[0-9]{10}$/, 'Invalid mobile number format')
+                    .required('Mobile number is required'),
+                address: Yup.string().required('Address is required'),
+            }),
+        }
     },
 ];
 const defaultValue = {
@@ -51,6 +123,11 @@ const index = () => {
     const [onBoardingType, setOnboardingType] = useState(
         currentOnboradingType || defaultValue.onBoardingType
     );
+    const [validationSchema, setValidationSchema] = useState(onBoardingStepper[activeStep]?.initialValidationSchema || null);
+    const [community, setCommunity] = useState({
+        manager: true,
+        projectManager: true,
+    })
 
     const nextLabel =
         activeStep == onBoardingStepper?.length - 1 ? "Done" : "Next";
@@ -98,6 +175,7 @@ const index = () => {
         }
         if (activeStep < onBoardingStepper.length - 1) {
             handleQueryParams(activeStep + 1);
+            setValidationSchema(onBoardingStepper[activeStep + 1]?.initialValidationSchema || null)
             setActiveStep((prevStep) => prevStep + 1);
         }
     };
@@ -105,9 +183,35 @@ const index = () => {
     const handleBack = () => {
         if (activeStep > 0) {
             handleQueryParams(activeStep - 1);
+            setValidationSchema(onBoardingStepper[activeStep - 1]?.initialValidationSchema || null)
             setActiveStep((prevStep) => prevStep - 1);
+
         }
     };
+
+    const handleCommunityDetails = (key, value) => {
+        const initialValidationSchema = onBoardingStepper[activeStep]?.initialValidationSchema
+        setCommunity({ ...community, [key]: value === 'true' })
+
+        if (key === 'manager') {
+            setValidationSchema((prevSchema) => {
+                const updatedSchema = { ...prevSchema };
+                value !== 'true' ? delete updatedSchema.communityManager : updatedSchema.communityManager = initialValidationSchema.communityManager
+                return updatedSchema;
+            });
+        }
+
+        if (key === 'projectManager') {
+            setValidationSchema((prevSchema) => {
+                const updatedSchema = { ...prevSchema };
+                value !== 'true' ? delete updatedSchema.projectManager : updatedSchema.projectManager = initialValidationSchema.communityManager
+                return updatedSchema;
+            });
+        }
+    }
+
+
+
     const footer = () => {
         return (
             <AppRowBox>
@@ -118,11 +222,26 @@ const index = () => {
                 ) : (
                     <div></div>
                 )}
-                <Button color="info" onClick={handleNext} variant="contained" size="large">
+                <Button color="info" type="submit" onClick={handleSubmit} // Trigger Formik handleSubmit here
+                    variant="contained" size="large">
                     {nextLabel}
                 </Button>
             </AppRowBox>)
     }
+
+
+    const formik = useFormik({
+        initialValues: initialValues,
+        validationSchema: validationSchema ? Yup.object().shape(
+            validationSchema
+        ) : null,
+        enableReinitialize: true,
+        onSubmit: (values) => {
+            handleNext(values);
+            console.log(values);
+        }
+    });
+    const { values, errors, touched, setFieldValue, handleSubmit, handleChange } = formik;
     return (
         <Grid container sx={{ mt: 2 }} spacing={4}>
             <Grid
@@ -151,11 +270,20 @@ const index = () => {
             </Grid>
 
             <AppModal open={open} onClose={handleClose} enableCard title={onBoardingStepper[activeStep].title} footer={footer()}>
+                <form onSubmit={handleSubmit}>
 
-                {onBoardingStepper[activeStep].component({
-                    setOnboardingType,
-                    onBoardingType,
-                })}
+                    {onBoardingStepper[activeStep].component({
+                        setOnboardingType,
+                        onBoardingType,
+                        handleCommunityDetails,
+                        values,
+                        errors,
+                        touched,
+                        setFieldValue,
+                        handleChange,
+                        community,
+                    })}
+                </form>
 
             </AppModal>
         </Grid >
