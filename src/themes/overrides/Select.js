@@ -14,7 +14,7 @@ export default function Select() {
             },
           },
           "& .MuiInputBase-input": {
-            padding: "8px 0",
+            // padding: "8px 0",
             fontWeight: "600",
             fontSize: "1rem",
             "&::placeholder": {

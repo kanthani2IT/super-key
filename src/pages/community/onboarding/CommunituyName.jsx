@@ -20,11 +20,12 @@ const options = [
 
 
 
-const CommunityName = () => {
+const CommunityName = ({ setFieldValue, values, errors,
+    touched, }) => {
 
     const [name, setName] = useState({
         searchTerm: null,
-        value: null,
+        value: values?.communityName || null,
     })
     const handleChange = (key = 'searchTerm', value = null, reset = false) => {
         if (!reset) {
@@ -32,11 +33,16 @@ const CommunityName = () => {
                 ...prevAdd,
                 [key]: value
             }))
+            if (key == 'value') {
+                setFieldValue('communityName', value)
+            }
         } else {
             setName({
                 searchTerm: '',
                 value: null,
             })
+            setFieldValue('communityName', value)
+
         }
     }
 
@@ -46,7 +52,7 @@ const CommunityName = () => {
             <Grid item >
                 <Stack spacing={4}>
                     <StyledTypography variant="h4">What is the name of your community?</StyledTypography>
-                    <AppDropDown onChange={handleChange} searchString={name.searchTerm} value={name.value} placeholder={'Search your Community'} options={options} />
+                    <AppDropDown error={touched.communityName && errors.communityName} onChange={handleChange} searchString={name.searchTerm} value={name.value} placeholder={'Search your Community'} options={options} />
                 </Stack>
 
             </Grid>
