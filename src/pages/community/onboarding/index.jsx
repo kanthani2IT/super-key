@@ -101,8 +101,12 @@ const onBoardingStepper = [
                     .required('Mobile number is required'),
                 address: Yup.string().required('Address is required'),
             }),
-        }
+        },
+
     },
+    {
+        title: "Done",
+    }
 ];
 const defaultValue = {
     onBoardingType: "single",
@@ -271,9 +275,9 @@ const index = () => {
                 <UserTable height={'80vh'} />
             </Grid>
 
-            <AppModal open={open} onClose={handleClose} enableCard title={onBoardingStepper[activeStep].title} footer={footer()} steps={onBoardingStepper}>
+            <AppModal open={open} onClose={handleClose} enableCard title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={footer()} steps={onBoardingStepper}>
 
-                {onBoardingStepper[activeStep].component({
+                {onBoardingStepper[activeStep]?.component && onBoardingStepper[activeStep]?.component({
                     setOnboardingType,
                     onBoardingType,
                     formValues: values,

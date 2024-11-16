@@ -12,14 +12,14 @@ import {
 
 const CustomConnector = styled(StepConnector)(({ theme }) => ({
     '& .MuiStepConnector-line': {
-        height: 7,
+        height: 9,
         border: 0,
         borderRadius: 10,
         backgroundColor: '#B0B0B0',
     },
     '&.Mui-active, &.Mui-completed': {
         '& .MuiStepConnector-line': {
-            backgroundColor: '#278B5C',
+            backgroundColor: theme.palette.success.dark,
         },
     },
 }));
@@ -32,12 +32,8 @@ const CustomStepIcon = () => null;
 
 const AppStepper = ({ activeStep, steps }) => {
 
-
-
-
-
     return (
-        <Box>
+        <Box sx={{ width: "100%" }}>
             <Stepper
                 activeStep={activeStep}
                 alternativeLabel
@@ -54,9 +50,9 @@ const AppStepper = ({ activeStep, steps }) => {
                                 />
                             )}
                         >
-                            <Typography variant="body2" sx={{ mt: 1 }}>
+                            {/* <Typography variant="body2" >
                                 {steps.title}
-                            </Typography>
+                            </Typography> */}
                         </StepLabel>
                     </Step>
                 ))}

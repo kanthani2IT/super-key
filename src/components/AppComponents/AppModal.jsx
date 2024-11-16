@@ -3,7 +3,7 @@ import { borderTop } from '@mui/system'
 import React from 'react'
 import AppStepper from './AppStepper'
 
-const AppModal = ({ open, onClose, children, height = '80vh', width = "700px", noPadding = false, enableCard = false, title, footer, steps }) => {
+const AppModal = ({ open, onClose, children, height = '80vh', width = "700px", noPadding = false, enableCard = false, title, footer, steps, activeStep }) => {
     return (
         <Modal
 
@@ -35,11 +35,11 @@ const AppModal = ({ open, onClose, children, height = '80vh', width = "700px", n
                                     <Typography variant="h2">
                                         {title}
                                     </Typography>
-                                    <AppStepper activeStep={2} steps={steps} />
+                                    {steps && <AppStepper activeStep={activeStep} steps={steps} />}
                                 </Stack>
                             }
                         />}
-                        <CardContent sx={{ flex: "1 0 80%", overflowY: "auto", marginBottom: 2, borderBottom: "0.5px solid #0000001a", borderTop: "0.5px solid #0000000a", borderRadius: "8px" }}>
+                        <CardContent sx={{ flex: "1 0 80%", overflowY: "auto", marginTop: 2, marginBottom: 2, borderBottom: "0.5px solid #0000001a", borderTop: "0.5px solid #0000000a", borderRadius: "8px" }}>
                             {children}
                         </CardContent>
                         {footer && <CardActions xs={{ borderTop: "2px solid black" }}>
