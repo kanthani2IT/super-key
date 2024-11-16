@@ -8,7 +8,7 @@ import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
 import { useFormik } from "formik";
 import UserTable from "pages/dashboard/UserTable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import * as Yup from 'yup';
 import AddNewCommunity from "./AddNewCommunity";
@@ -128,7 +128,6 @@ const index = () => {
         manager: true,
         projectManager: true,
     })
-
     const nextLabel =
         activeStep == onBoardingStepper?.length - 1 ? "Done" : "Next";
 
@@ -153,6 +152,7 @@ const index = () => {
             search: "",
         });
         setOpen(false);
+        setValidationSchema(null)
     };
 
     const handleQueryParams = (step) => {
@@ -222,7 +222,7 @@ const index = () => {
                 ) : (
                     <div></div>
                 )}
-                <Button color="info" type="submit" onClick={handleSubmit} // Trigger Formik handleSubmit here
+                <Button color="info" type="submit" onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
                     variant="contained" size="large">
                     {nextLabel}
                 </Button>
@@ -238,10 +238,12 @@ const index = () => {
         enableReinitialize: true,
         onSubmit: (values) => {
             handleNext(values);
+            setTouched({});
             console.log(values);
         }
     });
-    const { values, errors, touched, setFieldValue, handleSubmit, handleChange } = formik;
+    const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors } = formik;
+
     return (
         <Grid container sx={{ mt: 2 }} spacing={4}>
             <Grid
@@ -269,21 +271,20 @@ const index = () => {
                 <UserTable height={'80vh'} />
             </Grid>
 
-            <AppModal open={open} onClose={handleClose} enableCard title={onBoardingStepper[activeStep].title} footer={footer()}>
-                <form onSubmit={handleSubmit}>
+            <AppModal open={open} onClose={handleClose} enableCard title={onBoardingStepper[activeStep].title} footer={footer()} steps={onBoardingStepper}>
 
-                    {onBoardingStepper[activeStep].component({
-                        setOnboardingType,
-                        onBoardingType,
-                        handleCommunityDetails,
-                        values,
-                        errors,
-                        touched,
-                        setFieldValue,
-                        handleChange,
-                        community,
-                    })}
-                </form>
+                {onBoardingStepper[activeStep].component({
+                    setOnboardingType,
+                    onBoardingType,
+                    formValues: values,
+                    errors,
+                    touched,
+                    setFieldValue,
+                    setValues,
+                    handleChange,
+                    community,
+                    handleCommunityDetails
+                })}
 
             </AppModal>
         </Grid >

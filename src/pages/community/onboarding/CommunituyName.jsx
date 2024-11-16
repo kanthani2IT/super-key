@@ -20,12 +20,12 @@ const options = [
 
 
 
-const CommunityName = ({ setFieldValue, value, errors,
+const CommunityName = ({ setFieldValue, values, errors,
     touched, }) => {
 
     const [name, setName] = useState({
         searchTerm: null,
-        value: value || null,
+        value: values?.communityName || null,
     })
     const handleChange = (key = 'searchTerm', value = null, reset = false) => {
         if (!reset) {

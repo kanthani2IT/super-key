@@ -1,92 +1,58 @@
-import { Autocomplete, Divider, FormControlLabel, Grid2 as Grid, Radio, RadioGroup, Select, Stack, TextField, Typography } from '@mui/material';
+import { Autocomplete, Divider, FormControlLabel, Grid2 as Grid, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material';
 import { StyledTypography } from 'components/StyledComponents';
-import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cManagers } from 'utils/constants';
-import * as Yup from 'yup';
 
-const initialValues = {
-    communityManager: {
-        name: '',
-        email: '',
-        mobile: '',
-        address: ""
-    },
-    projectManager: {
-        name: '',
-        email: '',
-        mobile: '',
-        address: ""
-    },
 
-}
-
-const initialValidationSchema = {
-    communityManager: Yup.object().shape({
-        name: Yup.string().required('Name is required'),
-        email: Yup.string().email('Invalid email format').required('Email is required'),
-        mobile: Yup.string()
-            .matches(/^[0-9]{10}$/, 'Invalid mobile number format')
-            .required('Mobile number is required'),
-        address: Yup.string().required('Address is required'),
-    }),
-    projectManager: Yup.object().shape({
-        name: Yup.string().required('Name is required'),
-        email: Yup.string().email('Invalid email format').required('Email is required'),
-        mobile: Yup.string()
-            .matches(/^[0-9]{10}$/, 'Invalid mobile number format')
-            .required('Mobile number is required'),
-        address: Yup.string().required('Address is required'),
-    }),
-}
-const CommunityDetails = ({ handleCommunityDetails,
-    values,
+const CommunityDetails = ({
+    formValues,
     errors,
     touched,
     setFieldValue,
-    handleChange, community }) => {
-    // const [validationSchema, setValidationSchema] = useState({
-    //     ...initialValidationSchema
-    // });
-    // const [community, setCommunity] = useState({
-    //     manager: true,
-    //     projectManager: true,
-    // })
-    // const handleCommunityDetails = (key, value) => {
-    //     setCommunity({ ...community, [key]: value === 'true' })
+    community, handleCommunityDetails }) => {
 
-    //     if (key === 'manager') {
-    //         setValidationSchema((prevSchema) => {
-    //             const updatedSchema = { ...prevSchema };
-    //             value !== 'true' ? delete updatedSchema.communityManager : updatedSchema.communityManager = initialValidationSchema.communityManager
-    //             return updatedSchema;
-    //         });
-    //     }
+    const { communityManager, projectManager } = formValues
 
-    //     if (key === 'projectManager') {
-    //         setValidationSchema((prevSchema) => {
-    //             const updatedSchema = { ...prevSchema };
-    //             value !== 'true' ? delete updatedSchema.projectManager : updatedSchema.projectManager = initialValidationSchema.communityManager
-    //             return updatedSchema;
-    //         });
-    //     }
-    // }
+    const [values, setValues] = useState({
+        communityManager: {
+            name: '',
+            email: '',
+            mobile: '',
+            address: ""
+        },
+        projectManager: {
+            name: '',
+            email: '',
+            mobile: '',
+            address: ""
+        },
+    })
 
-    // const formik = useFormik({
-    //     initialValues: initialValues,
-    //     validationSchema: Yup.object().shape(
-    //         validationSchema
-    //     ),
-    //     enableReinitialize: true,
-    //     onSubmit: (values) => {
-    //         console.log(values);
-    //     }
-    // });
-    // const { values, errors, touched, setFieldValue, handleSubmit, handleChange } = formik;
+    useEffect(() => {
+        setValues({ communityManager, projectManager })
+    }, [])
+
+    const handleChange = (event) => {
+        const { name, value } = event.target
+        const [id, key] = name.split('.')
+        setValues(prevState => ({
+            ...prevState,
+            [id]: {
+                ...prevState[id],
+                [key]: value
+            }
+        }))
+    }
+
+
+    const handleBlur = (event) => {
+        const { name, value } = event.target
+        console.log(name, value)
+        setFieldValue(name, value);
+    };
+
+
     return (
-
-
-        // <form onSubmit={handleSubmit}>
         <Grid container spacing={4} >
 
             <Grid item container size={{ xs: 12 }} rowSpacing={3} >
@@ -138,10 +104,12 @@ const CommunityDetails = ({ handleCommunityDetails,
                                     }
                                     return option.name;
                                 }}
-                                value={values.communityManager?.name || ''}
+                                value={communityManager?.name || ''}
                                 onChange={(event, value) => {
+
                                     setFieldValue("communityManager.name", value ? value.name : '');
                                 }}
+
                                 renderInput={(params) => (
                                     <TextField
                                         required
@@ -160,11 +128,13 @@ const CommunityDetails = ({ handleCommunityDetails,
                             <StyledTypography variant="h5">Email</StyledTypography>
                             <TextField
                                 required
+                                id='communityManager'
                                 placeholder='communityManager@gmail.com'
                                 fullWidth
                                 name="communityManager.email"
                                 value={values.communityManager?.email}
-                                onChange={handleChange}
+                                onChange={(event) => handleChange(event)}
+                                onBlur={handleBlur}
                                 error={Boolean(touched.communityManager?.email && errors.communityManager?.email)}
                                 helperText={touched.communityManager?.email && errors.communityManager?.email}
                             />
@@ -179,8 +149,9 @@ const CommunityDetails = ({ handleCommunityDetails,
                                 required
                                 fullWidth
                                 name="communityManager.mobile"
-                                value={values.communityManage?.mobile}
-                                onChange={handleChange}
+                                value={values.communityManager?.mobile}
+                                onChange={(event) => handleChange(event)}
+                                onBlur={handleBlur}
                                 error={Boolean(touched.communityManager?.mobile && errors.communityManager?.mobile)}
                                 helperText={touched.communityManager?.mobile && errors.communityManager?.mobile}
                             />
@@ -197,7 +168,8 @@ const CommunityDetails = ({ handleCommunityDetails,
                                 multiline
                                 name="communityManager.address"
                                 value={values.communityManager.address}
-                                onChange={handleChange}
+                                onChange={(event) => handleChange(event)}
+                                onBlur={handleBlur}
                                 error={Boolean(touched.communityManager?.address && errors.communityManager?.address)}
                                 helperText={touched.communityManager?.address && errors.communityManager?.address}
                             />
@@ -263,7 +235,7 @@ const CommunityDetails = ({ handleCommunityDetails,
                                     // Regular option
                                     return option.name;
                                 }}
-                                value={values.projectManager.name || ''} // Only use the name here
+                                value={projectManager.name || ''} // Only use the name here
                                 onChange={(event, value) => {
                                     setFieldValue("projectManager.name", value ? value.name : '');
                                 }}
@@ -289,7 +261,8 @@ const CommunityDetails = ({ handleCommunityDetails,
                                 fullWidth
                                 name="projectManager.email"
                                 value={values.projectManager.email}
-                                onChange={handleChange}
+                                onChange={(event) => handleChange(event)}
+                                onBlur={handleBlur}
                                 error={Boolean(touched.projectManager?.email && errors.projectManager?.email)}
                                 helperText={touched.projectManager?.email && errors.projectManager?.email}
                             />
@@ -305,7 +278,8 @@ const CommunityDetails = ({ handleCommunityDetails,
                                 required
                                 name="projectManager.mobile"
                                 value={values.projectManager.mobile}
-                                onChange={handleChange}
+                                onChange={(event) => handleChange(event)}
+                                onBlur={handleBlur}
                                 error={Boolean(touched.projectManager?.mobile && errors.projectManager?.mobile)}
                                 helperText={touched.projectManager?.mobile && errors.projectManager?.mobile}
                             />
@@ -321,7 +295,8 @@ const CommunityDetails = ({ handleCommunityDetails,
                                 required
                                 name="projectManager.address"
                                 value={values.projectManager.address}
-                                onChange={handleChange}
+                                onChange={(event) => handleChange(event)}
+                                onBlur={handleBlur}
                                 error={Boolean(touched.projectManager?.address && errors.projectManager?.address)}
                                 helperText={touched.projectManager?.address && errors.projectManager?.address}
                                 multiline
@@ -332,7 +307,6 @@ const CommunityDetails = ({ handleCommunityDetails,
 
             </Grid>
         </Grid>
-        // </form>
 
 
     )

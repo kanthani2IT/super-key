@@ -10,11 +10,11 @@ const options = [
     { label: "India, Phoenix", value: "LA" },
 ];
 
-const CommunityAddress = ({ setFieldValue, value, touched, errors }) => {
+const CommunityAddress = ({ setFieldValue, values, touched, errors }) => {
 
     const [address, setAddress] = useState({
         searchTerm: null,
-        value: value || null,
+        value: values?.communityAddress || null,
     })
     const handleAddressChange = (key = 'searchTerm', value = null, reset = false) => {
         if (!reset) {
@@ -33,7 +33,7 @@ const CommunityAddress = ({ setFieldValue, value, touched, errors }) => {
             setFieldValue('communityAddress', null)
         }
     }
-
+    console.log(values)
     return (
         <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
             <Grid item size={{ xs: 9 }}>

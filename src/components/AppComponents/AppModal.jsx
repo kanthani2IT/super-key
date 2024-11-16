@@ -1,8 +1,9 @@
 import { Card, CardActions, CardContent, CardHeader, Fade, Modal, Paper, Stack, Typography } from '@mui/material'
 import { borderTop } from '@mui/system'
 import React from 'react'
+import AppStepper from './AppStepper'
 
-const AppModal = ({ open, onClose, children, height = '80vh', width = "700px", noPadding = false, enableCard = false, title, footer }) => {
+const AppModal = ({ open, onClose, children, height = '80vh', width = "700px", noPadding = false, enableCard = false, title, footer, steps }) => {
     return (
         <Modal
 
@@ -34,6 +35,7 @@ const AppModal = ({ open, onClose, children, height = '80vh', width = "700px", n
                                     <Typography variant="h2">
                                         {title}
                                     </Typography>
+                                    <AppStepper activeStep={2} steps={steps} />
                                 </Stack>
                             }
                         />}
