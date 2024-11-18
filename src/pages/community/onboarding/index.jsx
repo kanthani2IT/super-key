@@ -113,7 +113,7 @@ const defaultValue = {
     activeStep: 0,
     modalOpen: false
 }
-const index = () => {
+const CommunityOnboarding = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -295,4 +295,4 @@ const index = () => {
     );
 };
 
-export default index;
+export default CommunityOnboarding;

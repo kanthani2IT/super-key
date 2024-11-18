@@ -47,7 +47,6 @@ const CommunityDetails = ({
 
     const handleBlur = (event) => {
         const { name, value } = event.target
-        console.log(name, value)
         setFieldValue(name, value);
     };
 

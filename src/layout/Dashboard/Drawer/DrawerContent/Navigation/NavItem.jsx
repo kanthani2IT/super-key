@@ -96,7 +96,7 @@ export default function NavItem({ subItem = false, item, level, collapse = false
         {itemIcon && (
           <ListItemIcon
             sx={{
-              minWidth: 28,
+              minWidth: '17%',
               ...(!drawerOpen && {
                 borderRadius: 1.5,
                 width: 36,
