@@ -50,9 +50,7 @@ const AppStepper = ({ activeStep, steps }) => {
                                 />
                             )}
                         >
-                            {/* <Typography variant="body2" >
-                                {steps.title}
-                            </Typography> */}
+
                         </StepLabel>
                     </Step>
                 ))}

@@ -42,7 +42,7 @@ export default function Palette(mode, presetColor) {
       text: {
         primary: "#323C4D",
         success: paletteColor.success.main,
-        secondary: paletteColor.grey[500],
+        secondary: paletteColor.main,
         grey: "#5B738B",
         disabled: paletteColor.grey[400],
       },
@@ -52,7 +52,7 @@ export default function Palette(mode, presetColor) {
       divider: paletteColor.grey[200],
       background: {
         paper: "#fff",
-        default: "#F7F9FB",
+        default: "#fff",
       },
     },
   });

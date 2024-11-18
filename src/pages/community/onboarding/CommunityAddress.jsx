@@ -37,7 +37,7 @@ const CommunityAddress = ({ setFieldValue, values, touched, errors }) => {
     return (
         <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
             <Grid item size={{ xs: 9 }}>
-                <Image src={mapImg} alt='map' />
+                <Image height={'20vh'} src={mapImg} alt='map' />
             </Grid>
             <Grid item >
                 <Stack spacing={4}>
