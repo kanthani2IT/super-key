@@ -10,36 +10,39 @@ const options = [
     { label: "India, Phoenix", value: "LA" },
 ];
 
-const CommunityAddress = () => {
+const CommunityAddress = ({ setFieldValue, values, touched, errors }) => {
 
     const [address, setAddress] = useState({
         searchTerm: null,
-        value: null,
+        value: values?.communityAddress || null,
     })
-    const handleChange = (key = 'searchTerm', value = null, reset = false) => {
+    const handleAddressChange = (key = 'searchTerm', value = null, reset = false) => {
         if (!reset) {
             setAddress(prevAdd => ({
                 ...prevAdd,
                 [key]: value
             }))
+            if (key == 'value') {
+                setFieldValue('communityAddress', value)
+            }
         } else {
             setAddress({
                 searchTerm: '',
                 value: null,
             })
+            setFieldValue('communityAddress', null)
         }
     }
-
-
+    console.log(values)
     return (
         <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
             <Grid item size={{ xs: 9 }}>
                 <Image src={mapImg} alt='map' />
             </Grid>
-            <Grid item size={{ xs: 9 }}>
+            <Grid item >
                 <Stack spacing={4}>
                     <StyledTypography variant="h4">What is the address of your Community ?</StyledTypography>
-                    <AppDropDown onChange={handleChange} searchString={address.searchTerm} value={address.value} options={options} />
+                    <AppDropDown error={touched.communityAddress && errors.communityAddress} onChange={handleAddressChange} searchString={address.searchTerm} value={address.value} options={options} />
                 </Stack>
 
             </Grid>

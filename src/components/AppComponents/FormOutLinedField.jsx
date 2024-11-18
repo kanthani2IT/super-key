@@ -7,7 +7,7 @@ import { FormHelperText, IconButton, InputAdornment, OutlinedInput, Stack, Typog
 
 // ============================|| REUSABLE FORM FIELD COMPONENT ||============================ //
 
-export const FormTextField = ({
+export const FormOutLinedField = ({
   id,
   type,
   name,
@@ -69,3 +69,5 @@ export const FormTextField = ({
     </Stack>
   );
 };
+
+
