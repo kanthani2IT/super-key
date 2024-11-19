@@ -11,7 +11,7 @@ const AppRowBox = ({ justifyContent = 'space-between', width = '100%', children 
                 justifyContent: justifyContent,
                 alignItems: 'center',
                 width: width,
-
+                padding: 0.5
             }}
         >
             {children}

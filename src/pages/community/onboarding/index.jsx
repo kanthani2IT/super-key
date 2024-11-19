@@ -8,7 +8,7 @@ import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
 import { useFormik } from "formik";
 import UserTable from "pages/dashboard/UserTable";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import * as Yup from 'yup';
 import AddNewCommunity from "./AddNewCommunity";
@@ -249,7 +249,7 @@ const CommunityOnboarding = () => {
     const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors } = formik;
 
     return (
-        <Grid container sx={{ mt: 2 }} spacing={4}>
+        <Grid container spacing={4}>
             <Grid
                 item
                 size={{ xs: 12 }}

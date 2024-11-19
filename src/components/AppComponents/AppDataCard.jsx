@@ -1,28 +1,29 @@
-import EmailIcon from '@mui/icons-material/Email';
-import { Card, CardActions, CardHeader, Grid2 as Grid, IconButton, Typography } from '@mui/material';
-import AppToolTip from './AppToolTip';
+import styled from '@emotion/styled';
+import { Card, CardActions, CardHeader, Grid2 as Grid, IconButton, Stack, Typography } from '@mui/material';
 import MailIcon from 'assets/images/icons/MailIcon';
+import AppToolTip from './AppToolTip';
+import AppRowBox from './AppRowBox';
+import { ArticleOutlined } from '@mui/icons-material';
 
-const DataCard = ({ title, count }) => {
-    const limitedString = title?.length < 20 ? title : title.substring(0, 20) + '...'
+const StyledDataCard = styled(Card)(({ fullWidth = false }) => ({
+    borderRadius: 5,
+    maxWidth: fullWidth ? "100%" : "200px",
+    minWidth: fullWidth ? "100%" : "200px",
+    boxShadow: 'none',
+    backgroundColor: '#F0F0F2',
+    '&:hover': {
+        border: '0.2px solid',
+        borderColor: 'divider',
+    },
+}))
+
+const DataCard = ({ item, title, count, fullWidth, actionTitle, handleClick }) => {
+    const limitedString = !actionTitle ? title?.length < 20 ? title : title.substring(0, 20) + '...' : ""
     return (
-        <AppToolTip title={title}>
+        <AppToolTip title={!title && title}>
 
-            <Card
-                sx={{
-                    borderRadius: 2,
-                    maxWidth: "200px",
-                    minWidth: "200px",
-                    boxShadow: 'none',
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    backgroundColor: '#f5f5f5',
-                    '&:hover': {
-                        borderColor: 'secondary.main',
-                    },
-                }}
-            >
-                <CardHeader
+            <StyledDataCard fullWidth={fullWidth}>
+                {!actionTitle && <CardHeader
                     title={
                         <Typography variant="subtitle1" noWrap >
                             {limitedString}
@@ -34,31 +35,37 @@ const DataCard = ({ title, count }) => {
                         </Typography>
                     }
                     sx={{ paddingBottom: 1 }}
-                />
+                />}
                 <CardActions
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                    }}
-                >
 
-                    <IconButton>
-                        <MailIcon />
-                    </IconButton>
+                >
+                    <AppRowBox>
+
+                        {actionTitle ? <Stack direction={'coloumn'} columnGap={1} alignItems={'center'}>
+                            <ArticleOutlined color='secondary' />
+                            <Typography variant="h6" >
+                                {title}
+                            </Typography>
+
+                        </Stack> : <div></div>}
+                        <IconButton onClick={() => handleClick(item)} disableRipple >
+                            <MailIcon />
+                        </IconButton>
+                    </AppRowBox>
                 </CardActions>
-            </Card>
+            </StyledDataCard>
         </AppToolTip>
 
     );
 };
 
-const CardGrid = ({ data }) => {
+const CardGrid = ({ data, fullWidth, actionTitle, handleClick }) => {
 
     return (
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
             {data.map((item, index) => (
-                <Grid item key={index}>
-                    <DataCard title={item.title} count={item.count} />
+                <Grid size={fullWidth && { xs: 12, md: 6, lg: 6 }} item key={index}>
+                    <DataCard item={item} handleClick={handleClick} actionTitle={actionTitle} fullWidth={fullWidth} title={item.title} count={item.count} />
                 </Grid>
             ))}
         </Grid>
