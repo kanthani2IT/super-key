@@ -1,12 +1,9 @@
 {
-  "name": "mantis-free-react-admin-template",
+  "name": "SuperKey",
   "version": "1.4.0",
   "private": true,
-  "homepage": "https://mantisdashboard.io/free",
   "author": {
-    "name": "CodedThemes",
-    "email": "codedthemes@gmail.com",
-    "url": "https://codedthemes.com/"
+    "name": "SuperKey"
   },
   "scripts": {
     "start": "vite",

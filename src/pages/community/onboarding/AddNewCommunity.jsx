@@ -5,7 +5,7 @@ import React from 'react'
 const AddNewCommunity = ({ setOnboardingType, onBoardingType }) => {
     return (
         <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
-            <Grid item size={{ xs: 9 }}>
+            <Grid item >
                 <Stack spacing={2} alignItems={'center'}>
                     <StyledTypography variant="h4">What is the name of your community?</StyledTypography>
                     <RadioGroup
@@ -15,12 +15,12 @@ const AddNewCommunity = ({ setOnboardingType, onBoardingType }) => {
                     >
                         <FormControlLabel
                             value="single"
-                            control={<Radio color='secondary' />}
+                            control={<Radio color='success' />}
                             label="Single Community"
                         />
                         <FormControlLabel
                             value="multiple"
-                            control={<Radio color='secondary' />}
+                            control={<Radio color='success' />}
                             label="Multiple Communities"
                         />
                     </RadioGroup>

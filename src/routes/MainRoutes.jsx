@@ -38,6 +38,10 @@ const MainRoutes = {
       element: <Shadow />
     },
     {
+      path: 'color',
+      element: <Color />
+    },
+    {
       path: 'typography',
       element: <Typography />
     }
