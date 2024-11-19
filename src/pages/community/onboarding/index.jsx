@@ -18,11 +18,13 @@ import AddNewCommunity from "./AddNewCommunity";
 import CommunityName from "./CommunituyName";
 import { useLocation, useNavigate } from "react-router";
 import UserTable from "pages/dashboard/UserTable";
+import ImportPolicy from "./InsuranceDocument";
+import InsuranceDocuments from "./InsuranceTable";
 
 const onBoardingStepper = [
     {
         title: "Add New Community",
-        component: (props) => <AddNewCommunity {...props} />,
+        component: (props) => <InsuranceDocuments {...props} />,
     },
     {
         title: "Community Address",

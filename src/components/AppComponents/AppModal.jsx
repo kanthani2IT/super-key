@@ -25,7 +25,7 @@ const AppModal = ({ open, onClose, children }) => {
         >
             <Fade in={open}>
 
-                <Paper sx={{ width: "695px", height: "70vh", px: '3%', py: '1.5%', borderRadius: '10px' }}>
+                <Paper sx={{ width: "60vw", height: "70vh", px: '3%', py: '1.5%', borderRadius: '10px' }}>
 
                     {children}
                 </Paper>
