@@ -15,7 +15,6 @@ import AddNewCommunity from "./AddNewCommunity";
 import CommunityName from "./CommunituyName";
 import CommunityAddress from "./CommunityAddress";
 import CommunityDetails from "./CommunityDetails";
-import InsuranceDocument from "../../../components/AppComponents/UploadDocument";
 import InsuranceUpload from "./InsuranceTable";
 import SuccessScreen from "./SuccessScreen";
 
@@ -29,7 +28,7 @@ const initialValues = {
         mobile: '',
         address: ""
     },
-    projectManager: {
+    propertyManager: {
         name: '',
         email: '',
         mobile: '',
@@ -80,7 +79,7 @@ const onBoardingStepper = [
                 mobile: '',
                 address: ""
             },
-            projectManager: {
+            propertyManager: {
                 name: '',
                 email: '',
                 mobile: '',
@@ -96,7 +95,7 @@ const onBoardingStepper = [
                     .required('Mobile number is required'),
                 address: Yup.string().required('Address is required'),
             }),
-            projectManager: Yup.object().shape({
+            propertyManager: Yup.object().shape({
                 name: Yup.string().required('Name is required'),
                 email: Yup.string().email('Invalid email format').required('Email is required'),
                 mobile: Yup.string()
@@ -139,7 +138,7 @@ const CommunityOnboarding = () => {
     const [validationSchema, setValidationSchema] = useState(onBoardingStepper[activeStep]?.initialValidationSchema || null);
     const [community, setCommunity] = useState({
         manager: true,
-        projectManager: true,
+        propertyManager: true,
     })
     const finalStep =
         activeStep == onBoardingStepper?.length - 1;
@@ -168,7 +167,7 @@ const CommunityOnboarding = () => {
         setValidationSchema(null)
         setCommunity({
             manager: true,
-            projectManager: true,
+            propertyManager: true,
         })
         setShow("true")
         setSelectedFiles([])
@@ -221,10 +220,10 @@ const CommunityOnboarding = () => {
             });
         }
 
-        if (key === 'projectManager') {
+        if (key === 'propertyManager') {
             setValidationSchema((prevSchema) => {
                 const updatedSchema = { ...prevSchema };
-                value !== 'true' ? delete updatedSchema.projectManager : updatedSchema.projectManager = initialValidationSchema.communityManager
+                value !== 'true' ? delete updatedSchema.propertyManager : updatedSchema.propertyManager = initialValidationSchema.communityManager
                 return updatedSchema;
             });
         }
