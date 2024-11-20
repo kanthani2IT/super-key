@@ -1,5 +1,5 @@
 import { Box, Container, Grid2 as Grid, Typography } from '@mui/material';
-import pageNotFound from 'assets/images/icons/pageNotFound.jpg';
+import pageNotFound from 'assets/images/icons/development.jpg';
 import { Image } from 'components/StyledComponents';
 export default function PageNotFound() {
 
@@ -19,9 +19,11 @@ export default function PageNotFound() {
 
                     </Grid>
                     <Grid size={{ xs: 12 }}>
-
                         <Typography variant="h6">
-                            oops..!  The page you’re looking for doesn’t exist.
+                            oops..! The page you’re looking for is
+                        </Typography>
+                        <Typography variant="title">
+                            Under Construction.
                         </Typography>
                     </Grid>
 
