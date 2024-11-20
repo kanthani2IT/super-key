@@ -91,7 +91,8 @@ const onBoardingStepper = [
                 name: Yup.string().required('Name is required'),
                 email: Yup.string().email('Invalid email format').required('Email is required'),
                 mobile: Yup.string()
-                    .matches(/^[0-9]{10}$/, 'Invalid mobile number format')
+                    .min(10, "Mobile number must be at least 10 digits.")
+                    .max(15, "Mobile number cannot exceed 15 digits.")
                     .required('Mobile number is required'),
                 address: Yup.string().required('Address is required'),
             }),
@@ -99,7 +100,8 @@ const onBoardingStepper = [
                 name: Yup.string().required('Name is required'),
                 email: Yup.string().email('Invalid email format').required('Email is required'),
                 mobile: Yup.string()
-                    .matches(/^[0-9]{10}$/, 'Invalid mobile number format')
+                    .min(10, "Mobile number must be at least 10 digits.")
+                    .max(15, "Mobile number cannot exceed 15 digits.")
                     .required('Mobile number is required'),
                 address: Yup.string().required('Address is required'),
             }),
@@ -209,6 +211,7 @@ const CommunityOnboarding = () => {
     };
 
     const handleCommunityDetails = (key, value) => {
+
         const initialValidationSchema = onBoardingStepper[activeStep]?.initialValidationSchema
         setCommunity({ ...community, [key]: value === 'true' })
 

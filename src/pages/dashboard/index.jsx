@@ -49,7 +49,6 @@ export default function DashboardDefault() {
     setOpen(false)
   }
   const { data, isLoading } = useGetUsers()
-  console.log(data)
   return (
     <Grid container rowSpacing={3} columnSpacing={2}>
 

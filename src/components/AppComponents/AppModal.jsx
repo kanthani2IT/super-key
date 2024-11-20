@@ -8,7 +8,6 @@ const AppModal = ({ open, onClose, children, activeStep, steps, ...props }) => {
         steps && <AppStepper activeStep={activeStep} steps={steps} />
 
     )
-    console.log(props)
     return (
         <Modal
 

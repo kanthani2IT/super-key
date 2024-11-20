@@ -1,7 +1,7 @@
 import { Link } from '@mui/material';
 import PasswordField from 'components/styledComponents/PasswordField.jsx';
-import { BootstrapInput } from 'components/AppComponents/CustomField';
 import CustomTextField from 'components/AppComponents/CustomTextField';
+import { BootstrapInput } from 'components/StyledComponents';
 
 // Login Form Component
 const LoginForm = ({ userCredentials, onChangeCredential, errors, next, resetPassword }) => {

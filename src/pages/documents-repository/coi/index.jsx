@@ -1,24 +1,81 @@
 import { Search } from "@mui/icons-material";
-import { Button, Grid2 as Grid, InputAdornment, OutlinedInput, TextField, Typography } from "@mui/material";
+import { Button, Grid2 as Grid, InputAdornment, Typography } from "@mui/material";
 import CardGrid from "components/AppComponents/AppDataCard";
 import AppModal from "components/AppComponents/AppModal";
-import AppModalContainer from "components/AppComponents/AppModalContainer";
 import AppRowBox from "components/AppComponents/AppRowBox";
-import MainCard from "components/MainCard";
 import { StyledTextField } from "components/StyledComponents";
 import { useState } from "react";
 import { certificateData, COIData } from "utils/constants";
 import CertificatesCard from "./CertificatesCard";
+import * as Yup from 'yup';
+import { useFormik } from "formik";
+import CoiEmailProcess from "./CoiEmailProcess";
 
+
+const initialValues = {
+  community: {},
+  certificate: {},
+  toPropertyManager: 'yes',
+  id: "",
+  name: "",
+  email: "",
+  sms: 'yes',
+  mobile: "",
+
+}
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string().email("Invalid email format").required("Email is required"),
+  mobile: Yup.string().min(10, "Mobile number must be at least 10 digits.")
+    .max(15, "Mobile number cannot exceed 15 digits.")
+    .required("Mobile number is required"),
+})
 
 const COI = () => {
   const [showCertificates, setShowCertificates] = useState(false)
 
-  const handleCertificates = (coi) => {
-    console.log(coi)
+  const [open, setOpen] = useState(false)
+
+  const updateCoi = (key, value) => {
+    setFieldValue(key, value);
+  }
+  const handleCertificates = (community) => {
+    updateCoi('community', community)
     setShowCertificates(!showCertificates);
   };
 
+  const handleEmailModal = (certificate) => {
+    updateCoi('certificate', certificate)
+    setOpen(true);
+  }
+  const handleEmailModalClose = () => {
+    setOpen(false);
+
+    resetForm();
+  }
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    enableReinitialize: true,
+    onSubmit: (values) => {
+      console.log({ values })
+    },
+  })
+  const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors, resetForm, } = formik;
+
+  const footer = () => {
+    return (
+      <AppRowBox>
+
+        <div></div>
+
+        <Button color="info" type="submit" onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
+          variant="contained" size="large">
+          {"Send"}
+        </Button>
+      </AppRowBox>)
+  }
   return (
     <Grid container spacing={5}>
       <AppRowBox >
@@ -43,12 +100,16 @@ const COI = () => {
         </Grid>
       </AppRowBox>
       {!showCertificates ? <Grid item size={{ xs: 12 }}>
-        <CardGrid handleClick={handleCertificates} data={COIData} />
+        <CardGrid handle handleClick={handleCertificates} data={COIData} />
       </Grid> :
         <Grid item size={{ xs: 12 }}>
 
-          <CertificatesCard handleCertificates={handleCertificates} certificateData={certificateData} />
+          <CertificatesCard title={values?.community?.title} handleEmail={handleEmailModal} handleCertificates={handleCertificates} certificateData={certificateData} />
         </Grid>}
+
+      <AppModal padding={'10%'} height={'70vh'} enableCard title={'Select Recipient'} open={open} onClose={handleEmailModalClose} footer={footer()}  >
+        <CoiEmailProcess formik={formik} />
+      </AppModal>
     </Grid>
 
   );

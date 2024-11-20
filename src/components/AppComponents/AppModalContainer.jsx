@@ -3,10 +3,10 @@ import { Card, CardActions, CardContent, CardHeader, Divider, Paper, Stack, Typo
 
 
 
-const StyledPaper = styled(Paper)(({ theme, noPadding, width, height, align }) => ({
+const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
     width: width || "auto",
     height: height || "auto",
-    padding: noPadding ? "1%" : "2%",
+    padding: "2%",
     alignContent: align,
     borderRadius: "10px",
     backgroundColor: theme.palette.background.paper, // Use theme color
@@ -17,13 +17,15 @@ const StyledFlexCard = styled(Card)(({ theme, }) => ({
     display: "flex", flexDirection: "column", height: "100%"
 }));
 // borderBottom: `0.5px solid ${theme.palette.divider}`
-const StyledFlexCardContent = styled(CardContent)(({ theme, footer }) => ({
+const StyledFlexCardContent = styled(CardContent)(({ theme, padding, footer }) => ({
+    paddingLeft: padding,
+    paddingRight: padding,
     flex: footer ? "1 0 70%" : "auto", overflowY: "auto", marginTop: 2, marginBottom: 2, borderRadius: "8px"
 }));
 
-const AppModalContainer = ({ children, height = '80vh', width = "700px", noPadding = false, enableCard = false, title, footer, header, stepper, align }) => {
+const AppModalContainer = ({ children, height = '80vh', width = "700px", padding = '2%', enableCard = false, title, footer, header, stepper, align }) => {
     return (
-        <StyledPaper width={width} height={height} noPadding={noPadding} align={align}>
+        <StyledPaper width={width} height={height} align={align}>
             {enableCard ? <StyledFlexCard
                 elevation={0}
             >
@@ -40,7 +42,7 @@ const AppModalContainer = ({ children, height = '80vh', width = "700px", noPaddi
                     }
                 /> : header}
                 {header && <Divider />}
-                <StyledFlexCardContent footer={footer} >
+                <StyledFlexCardContent padding={padding} footer={footer} >
                     {children}
                 </StyledFlexCardContent>
 

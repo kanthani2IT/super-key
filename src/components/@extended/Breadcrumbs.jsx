@@ -34,7 +34,6 @@ export default function Breadcrumbs({ navigation, title, ...others }) {
 
   useEffect(() => {
     navigation?.items?.map((menu) => {
-      console.log('s', menu)
       if (menu.type && menu.type === 'group') {
         getCollapse(menu);
       }
