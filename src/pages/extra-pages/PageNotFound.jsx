@@ -1,5 +1,5 @@
 import { Box, Container, Grid2 as Grid, Typography } from '@mui/material';
-import pageNotFound from 'assets/images/icons/development.jpg';
+import pageNotFound from 'assets/images/icons/development.jpeg';
 import { Image } from 'components/StyledComponents';
 export default function PageNotFound() {
 
