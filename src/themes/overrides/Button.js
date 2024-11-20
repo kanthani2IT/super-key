@@ -69,10 +69,11 @@ function getColorStyle({ variant, color, theme }) {
     case "text":
     default:
       return {
-        color: dark,
+        color: main,
         "&:hover": {
-          color: darker,
-          backgroundColor: lighter,
+          color: dark,
+          boxShadow: "none",
+          backgroundColor: "inherit",
         },
         ...commonShadow,
       };

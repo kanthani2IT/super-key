@@ -8,7 +8,6 @@ export default function TextField() {
             background: "#F7F9FB",
 
             padding: "3px 10px",
-            // borderRadius: "8px",
             "& fieldset": {
               borderColor: "#c0c0c0",
             },
@@ -20,8 +19,6 @@ export default function TextField() {
             padding: "7px 0",
             fontWeight: "400",
             fontSize: "1rem",
-            borderRadius: "8px",
-
             "&::placeholder": {
               color: "#757575", // Placeholder color
               opacity: 0.5,

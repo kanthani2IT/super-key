@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
-    "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
+    "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
+    "deploy": "npm install && vite build"
   },
   "dependencies": {
     "@ant-design/colors": "^7.1.0",
@@ -37,6 +38,7 @@
     "axios": "^1.7.7",
     "formik": "^2.4.6",
     "framer-motion": "^11.11.8",
+    "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
     "process": "^0.11.10",
     "prop-types": "^15.8.1",

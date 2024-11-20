@@ -8,13 +8,16 @@ import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
 import { useFormik } from "formik";
 import UserTable from "pages/dashboard/UserTable";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import * as Yup from 'yup';
 import AddNewCommunity from "./AddNewCommunity";
 import CommunityName from "./CommunituyName";
 import CommunityAddress from "./CommunityAddress";
 import CommunityDetails from "./CommunityDetails";
+import InsuranceDocument from "../../../components/AppComponents/UploadDocument";
+import InsuranceUpload from "./InsuranceTable";
+import SuccessScreen from "./SuccessScreen";
 
 const initialValues = {
     onBoardingType: "single",
@@ -105,7 +108,12 @@ const onBoardingStepper = [
 
     },
     {
-        title: "Done",
+        title: "Insurance Documentation",
+        component: (props) => <InsuranceUpload {...props} />
+    }, {
+        title: "",
+        component: () => <SuccessScreen />,
+        initialValues: {}
     }
 ];
 const defaultValue = {
@@ -121,7 +129,8 @@ const CommunityOnboarding = () => {
     const currentOnboradingType = searchParams.get("type");
     const currentStep = Number(searchParams.get("cs"));
     const modalOpen = Boolean(searchParams.get("onboarding"));
-
+    const [show, setShow] = useState("true")
+    const [selectedFiles, setSelectedFiles] = useState([])
     const [activeStep, setActiveStep] = useState(currentStep);
     const [open, setOpen] = useState(modalOpen);
     const [onBoardingType, setOnboardingType] = useState(
@@ -132,8 +141,8 @@ const CommunityOnboarding = () => {
         manager: true,
         projectManager: true,
     })
-    const nextLabel =
-        activeStep == onBoardingStepper?.length - 1 ? "Done" : "Next";
+    const finalStep =
+        activeStep == onBoardingStepper?.length - 1;
 
     const handleOpen = () => {
         setOpen(true);
@@ -157,6 +166,13 @@ const CommunityOnboarding = () => {
         });
         setOpen(false);
         setValidationSchema(null)
+        setCommunity({
+            manager: true,
+            projectManager: true,
+        })
+        setShow("true")
+        setSelectedFiles([])
+        resetForm()
     };
 
     const handleQueryParams = (step) => {
@@ -219,7 +235,7 @@ const CommunityOnboarding = () => {
     const footer = () => {
         return (
             <AppRowBox>
-                {activeStep ? (
+                {activeStep && !finalStep ? (
                     <Button color="info" onClick={handleBack} variant="outlined" size="large">
                         Back
                     </Button>
@@ -228,7 +244,7 @@ const CommunityOnboarding = () => {
                 )}
                 <Button color="info" type="submit" onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
                     variant="contained" size="large">
-                    {nextLabel}
+                    {finalStep ? "Done" : "Next"}
                 </Button>
             </AppRowBox>)
     }
@@ -246,10 +262,10 @@ const CommunityOnboarding = () => {
             console.log(values);
         }
     });
-    const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors } = formik;
+    const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors, resetForm } = formik;
 
     return (
-        <Grid container sx={{ mt: 2 }} spacing={4}>
+        <Grid container spacing={4}>
             <Grid
                 item
                 size={{ xs: 12 }}
@@ -275,7 +291,7 @@ const CommunityOnboarding = () => {
                 <UserTable height={'80vh'} />
             </Grid>
 
-            <AppModal open={open} onClose={handleClose} enableCard title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={footer()} steps={onBoardingStepper}>
+            <AppModal height={finalStep ? "50vh" : undefined} open={open} onClose={handleClose} enableCard={!finalStep} title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper} align={finalStep ? 'center' : ""}>
 
                 {onBoardingStepper[activeStep]?.component && onBoardingStepper[activeStep]?.component({
                     setOnboardingType,
@@ -287,7 +303,11 @@ const CommunityOnboarding = () => {
                     setValues,
                     handleChange,
                     community,
-                    handleCommunityDetails
+                    handleCommunityDetails,
+                    setShow,
+                    show,
+                    setSelectedFiles,
+                    selectedFiles
                 })}
 
             </AppModal>

@@ -1,18 +1,27 @@
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie"; // Import js-cookie
 
 export const useAuthCookies = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-
+  // Function to get a cookie
   const getCookie = (key = "") => {
-    return cookies[key];
+    const cookieValue = Cookies.get([key]);
+  try {
+    return JSON.parse(cookieValue); // Parse string back into object
+  } catch (error) {
+    return cookieValue; // Return as is if parsing fails
+  }
+  
   };
 
+  // Function to set a cookie
   const setAuthCookie = (key, value) => {
-    setCookie(key, value, { path: "/" });
+    const stringifiedValue = JSON.stringify(value);
+
+    Cookies.set(key, stringifiedValue, { path: "/" }); // Set the cookie with a path
   };
 
+  // Function to remove a cookie
   const removeAuthCookie = (key) => {
-    removeCookie(key, { path: "/" });
+    Cookies.remove(key, { path: "/" }); // Remove the cookie with the specified path
   };
 
   return { getCookie, setAuthCookie, removeAuthCookie };

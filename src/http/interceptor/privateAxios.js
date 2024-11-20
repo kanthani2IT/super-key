@@ -1,22 +1,36 @@
 import { useAuthCookies } from "utils/cookie";
-import { useCookies } from "react-cookie";
 
 const privateAxios = (http) => {
-  const { cookies } = useCookies();
-  console.log(cookies);
-  return http.interceptors.request.use(
+  // Attach request interceptor
+  http.interceptors.request.use(
     (config) => {
-      const token = "1234";
-      console.log(token);
-      if (token) {
-        config.headers["Authorization"] = `Bearer ${token}`;
+      const { getCookie } = useAuthCookies();
+
+      const authToken = getCookie("token");
+      if (authToken) {
+        config.headers["Authorization"] = `Bearer ${authToken}`;
       }
       return config;
     },
     (error) => {
+      // Handle request errors
       return Promise.reject(error);
     }
   );
+
+  // Attach response interceptor (optional: handle token expiration globally)
+  http.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 401) {
+        // Handle unauthorized errors (e.g., redirect to login)
+        console.error("Unauthorized! Redirecting to login...");
+      }
+      return Promise.reject(error);
+    }
+  );
+
+  return http;
 };
 
 export default privateAxios;

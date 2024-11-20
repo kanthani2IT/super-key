@@ -32,18 +32,18 @@ const pages = {
         title: 'Community',
         url: '/community',
         icon: icons.PropertyIcon,
-
+        showTitle: false,
         type: "collapse",
-        subMenu: [{
+        children: [{
           id: 'communities',
           title: 'Communities',
-          url: '/community-onboarding',
+          url: '/onboarding',
           type: "item",
           // icon: icons.HelpIcon,
         }, , {
           id: 'documents',
           title: 'Documents',
-          url: '/community-documents',
+          url: '/documents',
           type: "item",
           // icon: icons.HelpIcon,
         },
@@ -67,15 +67,16 @@ const pages = {
         title: 'Property',
         url: '/property',
         icon: icons.PropertyIcon,
-
+        showTitle: false,
         type: "item",
 
       },
       {
         id: 'insurance',
         title: 'Insurance',
-        type: 'collapse',
+        type: 'item',
         url: '/insurance',
+        showTitle: false,
         icon: icons.InsuranceIcon,
       },
       {
@@ -83,14 +84,31 @@ const pages = {
         title: 'Claims Management',
         url: '/claims-management',
         type: "item",
+        showTitle: false,
         icon: icons.ClaimsIcon,
       },
       {
         id: 'documents-repository',
         title: 'Documents Repository',
         url: '/documents-repository',
-        type: "item",
         icon: icons.DocumentIcon,
+        type: "collapse",
+        children: [{
+          id: 'all_documents',
+          title: 'All Documents',
+          url: '/all-documents',
+          type: "item",
+          showTitle: true,
+          // icon: icons.HelpIcon,
+        }, , {
+          id: 'coi',
+          title: 'COI',
+          url: '/coi',
+          type: "item",
+          showTitle: true,
+          // icon: icons.HelpIcon,
+        },
+        ]
       },
       {
         id: 'payments',
@@ -98,7 +116,6 @@ const pages = {
         url: '/payments',
         icon: icons.PaymentIcon,
         type: "item",
-
         badge: 2
       },
       {

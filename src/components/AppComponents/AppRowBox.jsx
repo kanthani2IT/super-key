@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
 
-const AppRowBox = ({ justifyContent = 'space-between', children }) => {
+const AppRowBox = ({ justifyContent = 'space-between', width = '100%', children }) => {
     return (
         <Box
             sx={{
@@ -10,8 +10,8 @@ const AppRowBox = ({ justifyContent = 'space-between', children }) => {
                 flexWrap: 'wrap',
                 justifyContent: justifyContent,
                 alignItems: 'center',
-                width: '100%',
-
+                width: width,
+                padding: 0.5
             }}
         >
             {children}

@@ -8,6 +8,11 @@ export default function Typography(fontFamily) {
     fontWeightRegular: 400,
     fontWeightMedium: 500,
     fontWeightBold: 600,
+    title: {
+      fontWeight: 400,
+      fontSize: "1.8rem",
+      lineHeight: 1.57,
+    },
     h1: {
       fontWeight: 600,
       fontSize: "2.375rem",

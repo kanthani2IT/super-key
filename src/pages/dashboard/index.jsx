@@ -72,7 +72,7 @@ export default function DashboardDefault() {
             <MainCard title='Communities' secondary={'Full View'} secondaryAction={() => setOpen(true)} >
               <Stack spacing={2} >
                 <Typography variant='h6' >Community Users</Typography>
-                <Typography variant='subtitle2' color='success' >{data?.data?.length || 0}</Typography>
+                <Typography variant='subtitle2' color='success' >{data?.data?.totalSize ?? data?.data?.length ?? 0}</Typography>
               </Stack>
             </MainCard>
           </Grid>
@@ -113,9 +113,9 @@ export default function DashboardDefault() {
         height='auto'
         width='70%'
       >
-        <MainCard noStyles={true} title={'Community Users'} count={data?.data?.length} >
+        <MainCard noStyles={true} title={'Community Users'} count={data?.data?.totalSize ?? data?.data?.length} >
 
-          <UserTable tableData={data?.data} isLoading={isLoading} />
+          <UserTable tableData={data?.data?.records ?? data?.data} isLoading={isLoading} />
         </MainCard>
       </AppModal >
       <Grid size={{ xs: 12 }}>
