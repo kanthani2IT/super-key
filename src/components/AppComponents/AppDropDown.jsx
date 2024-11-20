@@ -1,6 +1,5 @@
-import { Autocomplete, Box, createFilterOptions, Divider, ListItem, TextField, Typography, useTheme } from '@mui/material';
+import { Autocomplete, Box, createFilterOptions, Divider, TextField, Typography, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { StyledTextField } from 'components/StyledComponents';
 import { useState } from 'react';
 
 // Styled component for the custom "Add Manually" button

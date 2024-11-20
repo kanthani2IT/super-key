@@ -13,7 +13,6 @@ export default function NavGroup({ item }) {
 
   const [activeNav, setActiveNav] = useState('');
   const { pathname } = useLocation();
-
   useEffect(() => {
     // Update activeNav when pathname changes
     setActiveNav(pathname);
@@ -29,8 +28,10 @@ export default function NavGroup({ item }) {
       case 'collapse':
         return (
           <NavItem
+
             key={menuItem.id}
             item={menuItem}
+            navUrl={menuItem.url}
             level={1}
             collapse
             handleActiveItem={handleActiveItem}
@@ -40,7 +41,9 @@ export default function NavGroup({ item }) {
       case 'item':
         return (
           <NavItem
+
             key={menuItem.id}
+            navUrl={menuItem.url}
             item={menuItem}
             level={1}
             handleActiveItem={handleActiveItem}

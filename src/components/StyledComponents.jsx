@@ -6,8 +6,8 @@ export const StyledTypography = styled(Typography)(({ theme }) => ({
 }));
 
 export const Image = styled('img')`
-  height: 20vh;
-  width: 100%;
+    height: ${(props) => props.height || '50vh'};
+    width: ${(props) => props.width || '100%'};
 `;
 
 export const StyledTextField = styled(TextField)({
@@ -15,21 +15,30 @@ export const StyledTextField = styled(TextField)({
     padding: '6px 10px',
     borderRadius: '8px',
     '& fieldset': {
-      borderColor: '#d1d9e6',
+      borderColor: '#EBEEF2',
     },
     '&:hover fieldset': {
-      borderColor: '#c0c0c0',
+      borderColor: '#EBEEF2',
     },
+
   },
-  background: '#F7F9FB',
-  borderRadius: '8px',
+
   '& .MuiInputBase-input': {
+    borderRadius: '8px',
     padding: '8px 0',
     fontWeight: "600",
     fontSize: '1rem',
+    background: 'none',
+    '& fieldset': {
+      borderColor: '#EBEEF2',
+    },
+    '&:hover fieldset': {
+      borderColor: '#EBEEF2',
+    },
     '&::placeholder': {
-      color: '#757575', // Set the placeholder color here
-      opacity: 1,       // Ensure the placeholder is fully opaque
+      color: '#98A2B2', // Set the placeholder color here
+      opacity: 1,
+      fontWeight: "600"// Ensure the placeholder is fully opaque
     },
   },
 });

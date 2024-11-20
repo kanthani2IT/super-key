@@ -10,11 +10,11 @@ const options = [
     { label: "India, Phoenix", value: "LA" },
 ];
 
-const CommunityAddress = ({ setFieldValue, values, touched, errors }) => {
+const CommunityAddress = ({ setFieldValue, formValues, touched, errors }) => {
 
     const [address, setAddress] = useState({
         searchTerm: null,
-        value: values?.communityAddress || null,
+        value: formValues?.communityAddress || null,
     })
     const handleAddressChange = (key = 'searchTerm', value = null, reset = false) => {
         if (!reset) {
@@ -33,11 +33,10 @@ const CommunityAddress = ({ setFieldValue, values, touched, errors }) => {
             setFieldValue('communityAddress', null)
         }
     }
-    console.log(values)
     return (
         <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
             <Grid item size={{ xs: 9 }}>
-                <Image src={mapImg} alt='map' />
+                <Image height={'20vh'} src={mapImg} alt='map' />
             </Grid>
             <Grid item >
                 <Stack spacing={4}>
