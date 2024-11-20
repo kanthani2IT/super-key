@@ -6,15 +6,15 @@ import { StyledButton } from './TaskTable';
 const columns = [
   {
     field: 'id', headerName: 'ID', flex: 1, renderCell: (data) =>
-      <b>{data.row.id}</b>
+      <b>{data?.row?.id ?? data?.row?.Id}</b>
   },
   {
     field: 'name', headerName: 'Name', flex: 1, renderCell: (data) =>
-      <b>{data.row.name}</b>
+      <b>{data?.row?.name ?? data?.row?.Name}</b>
   },
   {
     field: 'email', headerName: 'Email ID', flex: 1, renderCell: (data) =>
-      <b>{data.row.email}</b>
+      <b>{data?.row?.email ?? data?.row?.Email}</b>
   },
   {
     field: 'action',
@@ -46,6 +46,7 @@ export default function UserTable({ tableData, isLoading, height = 400 }) {
           rows={tableData || []}
           columns={columns}
           initialState={{ pagination: { paginationModel } }}
+          getRowId={(row) => row?.Id ?? row?.id}
           pageSizeOptions={[5, 10]}
           checkboxSelection
           sx={{ border: 0 }}
@@ -54,3 +55,5 @@ export default function UserTable({ tableData, isLoading, height = 400 }) {
     </Paper>
   );
 }
+
+

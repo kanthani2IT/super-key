@@ -291,7 +291,7 @@ const CommunityOnboarding = () => {
                 <UserTable height={'80vh'} />
             </Grid>
 
-            <AppModal height={finalStep ? "50vh" : undefined} open={open} onClose={handleClose} enableCard title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper}>
+            <AppModal height={finalStep ? "50vh" : undefined} open={open} onClose={handleClose} enableCard={!finalStep} title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper} align={finalStep ? 'center' : ""}>
 
                 {onBoardingStepper[activeStep]?.component && onBoardingStepper[activeStep]?.component({
                     setOnboardingType,
