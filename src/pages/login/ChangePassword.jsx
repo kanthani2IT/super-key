@@ -19,8 +19,8 @@ const ChangePassword = () => {
   const { id } = useParams(); // Access the URL parameter (taskId)
   const newPasswordMutation = useNewPassword();
   const resetPasswordMutation = useResetPassword();
-  const { getCookie } = useAuthCookies()
-  const user = getCookie("user")
+  const {getCookie}=useAuthCookies()
+  const user=getCookie("superkey")
   const [userCredentials, setUserCredentials] = useState(initialState);
   const [errors, setErrors] = useState(initialState);
 

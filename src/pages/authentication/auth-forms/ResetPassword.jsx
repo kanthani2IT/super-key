@@ -27,9 +27,9 @@ export default function ResetPassword(props) {
     setSubmitting(false);
     if (id == "change") {
       let payload = {
-        email: values?.email,
-        password: values?.password,
-        newPassword: values?.newPassword,
+        email: user?.email,
+        password: values.password,
+        newPassword: values.newPassword,
       }
       newPasswordMutation.mutate(payload);
     } else {

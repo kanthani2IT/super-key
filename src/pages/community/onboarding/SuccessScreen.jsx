@@ -7,7 +7,7 @@ const SuccessScreen = () => {
     return (
         <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
             <Grid item size={{ xs: 9 }}>
-                <Image height={'12vh'} width={'31%'} src={completedImg} alt='done' />
+                <Image height={'90%'} width={'30%'} src={completedImg} alt='done' />
             </Grid>
             <Grid item >
                 <Stack spacing={4}>

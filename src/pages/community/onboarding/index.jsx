@@ -15,6 +15,7 @@ import AddNewCommunity from "./AddNewCommunity";
 import CommunityName from "./CommunituyName";
 import CommunityAddress from "./CommunityAddress";
 import CommunityDetails from "./CommunityDetails";
+import InsuranceUpload from "./InsuranceTable";
 import SuccessScreen from "./SuccessScreen";
 
 const initialValues = {
@@ -27,7 +28,7 @@ const initialValues = {
         mobile: '',
         address: ""
     },
-    projectManager: {
+    propertyManager: {
         name: '',
         email: '',
         mobile: '',
@@ -78,7 +79,7 @@ const onBoardingStepper = [
                 mobile: '',
                 address: ""
             },
-            projectManager: {
+            propertyManager: {
                 name: '',
                 email: '',
                 mobile: '',
@@ -94,7 +95,7 @@ const onBoardingStepper = [
                     .required('Mobile number is required'),
                 address: Yup.string().required('Address is required'),
             }),
-            projectManager: Yup.object().shape({
+            propertyManager: Yup.object().shape({
                 name: Yup.string().required('Name is required'),
                 email: Yup.string().email('Invalid email format').required('Email is required'),
                 mobile: Yup.string()
@@ -106,6 +107,9 @@ const onBoardingStepper = [
 
     },
     {
+        title: "Insurance Documentation",
+        component: (props) => <InsuranceUpload {...props} />
+    }, {
         title: "",
         component: () => <SuccessScreen />,
         initialValues: {}
@@ -124,7 +128,8 @@ const CommunityOnboarding = () => {
     const currentOnboradingType = searchParams.get("type");
     const currentStep = Number(searchParams.get("cs"));
     const modalOpen = Boolean(searchParams.get("onboarding"));
-
+    const [show, setShow] = useState("true")
+    const [selectedFiles, setSelectedFiles] = useState([])
     const [activeStep, setActiveStep] = useState(currentStep);
     const [open, setOpen] = useState(modalOpen);
     const [onBoardingType, setOnboardingType] = useState(
@@ -133,7 +138,7 @@ const CommunityOnboarding = () => {
     const [validationSchema, setValidationSchema] = useState(onBoardingStepper[activeStep]?.initialValidationSchema || null);
     const [community, setCommunity] = useState({
         manager: true,
-        projectManager: true,
+        propertyManager: true,
     })
     const finalStep =
         activeStep == onBoardingStepper?.length - 1;
@@ -160,6 +165,13 @@ const CommunityOnboarding = () => {
         });
         setOpen(false);
         setValidationSchema(null)
+        setCommunity({
+            manager: true,
+            propertyManager: true,
+        })
+        setShow("true")
+        setSelectedFiles([])
+        resetForm()
     };
 
     const handleQueryParams = (step) => {
@@ -208,10 +220,10 @@ const CommunityOnboarding = () => {
             });
         }
 
-        if (key === 'projectManager') {
+        if (key === 'propertyManager') {
             setValidationSchema((prevSchema) => {
                 const updatedSchema = { ...prevSchema };
-                value !== 'true' ? delete updatedSchema.projectManager : updatedSchema.projectManager = initialValidationSchema.communityManager
+                value !== 'true' ? delete updatedSchema.propertyManager : updatedSchema.propertyManager = initialValidationSchema.communityManager
                 return updatedSchema;
             });
         }
@@ -249,7 +261,7 @@ const CommunityOnboarding = () => {
             console.log(values);
         }
     });
-    const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors } = formik;
+    const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors, resetForm } = formik;
 
     return (
         <Grid container spacing={4}>
@@ -278,7 +290,7 @@ const CommunityOnboarding = () => {
                 <UserTable height={'80vh'} />
             </Grid>
 
-            <AppModal height={finalStep ? "30vh" : ""} open={open} onClose={handleClose} enableCard title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper}>
+            <AppModal height={finalStep ? "50vh" : undefined} open={open} onClose={handleClose} enableCard={!finalStep} title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper} align={finalStep ? 'center' : ""}>
 
                 {onBoardingStepper[activeStep]?.component && onBoardingStepper[activeStep]?.component({
                     setOnboardingType,
@@ -290,7 +302,11 @@ const CommunityOnboarding = () => {
                     setValues,
                     handleChange,
                     community,
-                    handleCommunityDetails
+                    handleCommunityDetails,
+                    setShow,
+                    show,
+                    setSelectedFiles,
+                    selectedFiles
                 })}
 
             </AppModal>
