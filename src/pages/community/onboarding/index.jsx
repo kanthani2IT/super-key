@@ -109,9 +109,9 @@ const onBoardingStepper = [
     },
     {
         title: "Insurance Documentation",
-        component:(props)=><InsuranceUpload {...props}/>
-    },{
-        title:"",
+        component: (props) => <InsuranceUpload {...props} />
+    }, {
+        title: "",
         component: () => <SuccessScreen />,
         initialValues: {}
     }
@@ -129,8 +129,8 @@ const CommunityOnboarding = () => {
     const currentOnboradingType = searchParams.get("type");
     const currentStep = Number(searchParams.get("cs"));
     const modalOpen = Boolean(searchParams.get("onboarding"));
-    const [show, setShow]=useState("true")
-    const [selectedFiles,setSelectedFiles]=useState([])
+    const [show, setShow] = useState("true")
+    const [selectedFiles, setSelectedFiles] = useState([])
     const [activeStep, setActiveStep] = useState(currentStep);
     const [open, setOpen] = useState(modalOpen);
     const [onBoardingType, setOnboardingType] = useState(
@@ -262,7 +262,7 @@ const CommunityOnboarding = () => {
             console.log(values);
         }
     });
-    const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors } = formik;
+    const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors, resetForm } = formik;
 
     return (
         <Grid container spacing={4}>
