@@ -10,7 +10,7 @@ import { Formik } from 'formik';
 
 // project imports
 import AnimateButton from 'components/@extended/AnimateButton';
-import { FormTextField } from 'components/AppComponents/FormTextField';
+import { FormOutLinedField } from 'components/AppComponents/FormOutLinedField';
 import { useLoginUser } from 'hooks/useLogin';
 import { useAuthCookies } from 'utils/cookie';
 import { createValidationSchema } from 'utils/loginUtils';
@@ -27,7 +27,7 @@ export default function AuthLogin(props) {
     setSubmitting(false);
     loginMutation.mutate({ values, checked })
   };
-
+console.log(user,"user")
   return (
     <Formik
       initialValues={{
@@ -42,7 +42,7 @@ export default function AuthLogin(props) {
           <Grid container spacing={3}>
             {fieldsConfig.map((field) => (
               <Grid item xs={12} key={field.name}>
-                <FormTextField
+                <FormOutLinedField
                   id={field.id}
                   type={field.type}
                   name={field.name}

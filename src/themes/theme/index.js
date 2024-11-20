@@ -10,7 +10,7 @@ export default function Theme(colors) {
     300: grey[4],
     400: grey[5],
     500: grey[6],
-    600: grey[7],
+    600: "#7C7C7C",
     700: grey[8],
     800: grey[9],
     900: grey[10],
@@ -25,7 +25,7 @@ export default function Theme(colors) {
 
   return {
     primary: {
-      lighter: blue[0],
+      lighter: "#F7F9FB",
       100: blue[1],
       200: blue[2],
       light: blue[3],
@@ -71,15 +71,15 @@ export default function Theme(colors) {
     },
     info: {
       lighter: cyan[0],
-      light: cyan[3],
-      main: cyan[5],
-      dark: cyan[7],
+      light: "#DCEDFF",
+      main: "#2954E1",
+      dark: "#2954E1",
       darker: cyan[9],
       contrastText,
     },
     success: {
-      lighter: "#278B5C1A",
-      light: "#bee4d3",
+      lighter: "#FBFFFD",
+      light: "#E6F3ED",
       main: "#278B5C",
       dark: green[7],
       darker: green[9],

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Autocomplete, TextField, IconButton, Typography, Box, Button, createFilterOptions } from '@mui/material';
+import { Autocomplete, Box, createFilterOptions, Divider, TextField, Typography, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { AddIcCallOutlined, Clear } from '@mui/icons-material';
+import { useState } from 'react';
 
 // Styled component for the custom "Add Manually" button
 const AddManuallyButton = styled(Typography)({
-    color: '#1a73e8',
+    color: '#2954E1',
     cursor: 'pointer',
     marginLeft: 'auto',
     fontSize: '0.875rem',
@@ -13,30 +12,31 @@ const AddManuallyButton = styled(Typography)({
 
 });
 
-const StyledTextField = styled(TextField)({
-    '& .MuiOutlinedInput-root': {
-        padding: '6px 10px',
-        borderRadius: '8px',
-        '& fieldset': {
-            borderColor: '#d1d9e6',
-        },
-        '&:hover fieldset': {
-            borderColor: '#c0c0c0',
-        },
-    },
-    background: '#EBF1F4',
-    borderRadius: '8px',
-    '& .MuiInputBase-input': {
-        padding: '8px 0',
-        fontSize: '1rem',
-        '&::placeholder': {
-            color: '#757575', // Set the placeholder color here
-            opacity: 1,       // Ensure the placeholder is fully opaque
-        },
-    },
-});
+const OptionComponent = ({ label, props }) => {
+    const theme = useTheme()
 
-const AppAutocompleteComponent = ({ onChange, searchString, value, placeholder, options }) => {
+    return (
+        <Box
+            component="li"
+            {...props}
+            sx={{
+
+                backgroundColor: `${theme.palette.primary.lighter} !important`,
+                height: "51px",
+                '&:hover': {
+                    backgroundColor: `${theme.palette.info.light} !important`,
+
+                }
+
+            }}
+        >
+
+            <Typography variant="h5">{label}</Typography>
+        </Box>
+    )
+}
+
+const AppAutocompleteComponent = ({ onChange, searchString, value, placeholder, options, error }) => {
     const [open, setOpen] = useState(false)
     const handleSearchChange = (event) => {
         const search = event.target.value;
@@ -81,7 +81,6 @@ const AppAutocompleteComponent = ({ onChange, searchString, value, placeholder, 
     return (
         <Autocomplete
             freeSolo
-            selectOnFocus
             clearOnBlur
             fullWidth
             open={open}
@@ -115,25 +114,13 @@ const AppAutocompleteComponent = ({ onChange, searchString, value, placeholder, 
                 // Regular option
                 return option.label;
             }}
-            renderOption={(props, option) => (
-                !option.searchTerm && <Box
-                    component="li"
-                    {...props}
-                    sx={{
-                        backgroundColor: props['aria-selected'] ? '#e3f2fd' : 'transparent',
-                        padding: '8px 16px',
-                        '&:hover': {
-                            backgroundColor: '#e3f2fd',
-
-                        },
-                    }}
-                >
-                    <Typography variant="body2">{option.label}</Typography>
-                </Box>
+            renderOption={(props, option, state) => (
+                <>  {!option.searchTerm && <OptionComponent label={option.label} props={props} />}
+                    {!option.searchTerm && <Divider />}
+                </>
             )}
             renderInput={(params) => (
-                <StyledTextField
-
+                <TextField
                     {...params}
                     label=""
                     variant="outlined"
@@ -142,17 +129,20 @@ const AppAutocompleteComponent = ({ onChange, searchString, value, placeholder, 
                         onChange('searchTerm', ''); // Clear search term on blur if dropdown closed without a selection
                     }}
                     onChange={handleSearchChange}
+                    error={Boolean(error)}
+                    helperText={error}
 
                 />
             )}
             ListboxProps={{
                 style: {
                     padding: 0,
+
                 },
             }}
             PaperComponent={({ children }) => (
-                <Box sx={{ borderRadius: '8px', boxShadow: 3, overflow: 'hidden', mt: 1 }}>
-                    {searchString != "" && searchString !== value && <Box component={'li'} onMouseDown={(event) => event.preventDefault()} sx={{ display: 'flex', alignItems: 'center', padding: '8px 16px', backgroundColor: '#f5f5f5' }}>
+                <Box sx={{ borderRadius: '8px', boxShadow: 3, overflow: 'hidden', mt: 1.2 }}>
+                    {searchString != "" && searchString !== value && <> <Box component={'li'} onMouseDown={(event) => event.preventDefault()} sx={{ display: 'flex', alignItems: 'center', padding: '8px 16px', height: "51px", backgroundColor: '#F7F9FB' }}>
                         <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
                             {searchString}
                         </Typography>
@@ -163,10 +153,11 @@ const AppAutocompleteComponent = ({ onChange, searchString, value, placeholder, 
                             onClick={handleAddManuallyClick}>
                             Add Manually
                         </AddManuallyButton>
-                    </Box>}
+                    </Box> <Divider /></>}
                     {children}
                 </Box>
             )}
+
         />
     );
 };

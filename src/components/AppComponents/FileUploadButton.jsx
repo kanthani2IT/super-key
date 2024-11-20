@@ -9,7 +9,7 @@ const FileUploadButton = ({ onFileChange, fileTypes }) => {
       sx={{ mt: 2, mb: 2, borderRadius: '0.7rem', p: '0.7rem 4rem' }}
       component="label"
     >
-      Import
+      Select Files
       <input
         type="file"
         hidden

@@ -40,7 +40,9 @@ export const useLoginUser = () => {
           severity:SEVERITY.success
         });}
       if(checked){
-        setAuthCookie("superkey", values)}
+        setAuthCookie("superkey", values)}else{
+          setAuthCookie("superkey", values)
+        }
         
     },
     onError: (error) => {
@@ -48,6 +50,7 @@ export const useLoginUser = () => {
         message: error.response.data.token,
         severity: SEVERITY.error,
       });
+      setAuthCookie("superkey", {email:error.response.data.email})
       console.error(error);
     },
   });

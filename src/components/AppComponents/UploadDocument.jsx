@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import FileUploadButton from 'components/AppComponents/FileUploadButton';  // Importing the common button component
 import FileDetails from 'components/AppComponents/FileDetails';  // Component to display file details
-import { importPolicyData } from './utils';  // Importing the data
+import { importPolicyData } from '../../pages/community/onboarding/utils';  // Importing the data
 import UploadIcon from 'assets/images/icons/NavIcons/UploadIcon';
 
-const ImportPolicy = () => {
-    const [selectedFiles, setSelectedFiles] = useState([]);  // State to store the selected files
+const InsuranceDocument = ({selectedFiles, setSelectedFiles}) => {
+    
   
     const handleFileUpload = (event) => {
       const fileList = event.target.files;
@@ -44,13 +44,13 @@ const ImportPolicy = () => {
         <FileUploadButton onFileChange={handleFileUpload} fileTypes={importPolicyData.fileTypes} />
   
         {/* File Details for Each Selected File */}
-        {selectedFiles.length > 0 && (
+        {/* {selectedFiles.length > 0 && (
           <Box width="100%" mt={2}>
             {selectedFiles.map((file, index) => (
               <FileDetails key={index} file={file} />
             ))}
           </Box>
-        )}
+        )} */}
   
         {/* Footer Text */}
         <Typography variant="caption" color="textSecondary">
@@ -60,5 +60,5 @@ const ImportPolicy = () => {
     );
   };
   
-  export default ImportPolicy;
+  export default InsuranceDocument;
   

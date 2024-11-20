@@ -9,7 +9,7 @@ import { Formik } from 'formik';
 
 // project imports
 import AnimateButton from 'components/@extended/AnimateButton';
-import { FormTextField } from 'components/AppComponents/FormTextField';
+import { FormOutLinedField } from 'components/AppComponents/FormOutLinedField';
 import { useNewPassword, useResetPassword } from 'hooks/useLogin';
 import { useAuthCookies } from 'utils/cookie';
 import { createValidationSchema } from 'utils/loginUtils';
@@ -27,7 +27,7 @@ export default function ResetPassword(props) {
     setSubmitting(false);
     if (id == "change") {
       let payload = {
-        email: values.email,
+        email: user?.email,
         password: values.password,
         newPassword: values.newPassword,
       }
@@ -43,7 +43,7 @@ export default function ResetPassword(props) {
   return (
     <Formik
       initialValues={{
-        email: user.email,
+        email: user?.email,
         password: '',
         newPassword: '',
         confirmPassword: '',
@@ -58,7 +58,7 @@ export default function ResetPassword(props) {
           <Grid container spacing={3}>
             {fieldsConfig.map((field) => (
               <Grid item xs={12} key={field.name}>
-                <FormTextField
+                <FormOutLinedField
                   id={field.id}
                   type={field.type}
                   name={field.name}

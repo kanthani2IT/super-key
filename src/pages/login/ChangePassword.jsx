@@ -20,7 +20,7 @@ const ChangePassword = () => {
   const newPasswordMutation = useNewPassword();
   const resetPasswordMutation = useResetPassword();
   const {getCookie}=useAuthCookies()
-  const user=getCookie("user")
+  const user=getCookie("superkey")
   const [userCredentials, setUserCredentials] = useState(initialState);
   const [errors, setErrors] = useState(initialState);
 

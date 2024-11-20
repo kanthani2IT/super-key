@@ -22,7 +22,7 @@ export default function Breadcrumbs({ navigation, title, ...others }) {
         if (collapse.type && collapse.type === 'collapse') {
           getCollapse(collapse);
         } else if (collapse.type && collapse.type === 'item') {
-          if (location.pathname === collapse.url) {
+          if (location.pathname.includes(collapse.url)) {
             setMain(menu);
             setItem(collapse);
           }
@@ -34,6 +34,7 @@ export default function Breadcrumbs({ navigation, title, ...others }) {
 
   useEffect(() => {
     navigation?.items?.map((menu) => {
+      console.log('s', menu)
       if (menu.type && menu.type === 'group') {
         getCollapse(menu);
       }
@@ -70,28 +71,26 @@ export default function Breadcrumbs({ navigation, title, ...others }) {
     );
 
     // main
-    if (item.breadcrumbs !== false) {
-      breadcrumbContent = (
-        <MainCard border={false} sx={{ mb: 3, bgcolor: 'transparent' }} {...others} content={false}>
-          <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
-            <Grid>
-              <MuiBreadcrumbs aria-label="breadcrumb">
-                <Typography component={Link} to="/" color="textSecondary" variant="h6" sx={{ textDecoration: 'none' }}>
-                  Home
-                </Typography>
-                {mainContent}
-                {itemContent}
-              </MuiBreadcrumbs>
+    breadcrumbContent = (
+      <MainCard border={false} sx={{ mb: 3, bgcolor: 'transparent' }} {...others} content={false}>
+        <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
+          {item.breadcrumbs && <Grid>
+            <MuiBreadcrumbs aria-label="breadcrumb">
+              <Typography component={Link} to="/" color="textSecondary" variant="h6" sx={{ textDecoration: 'none' }}>
+                Home
+              </Typography>
+              {mainContent}
+              {itemContent}
+            </MuiBreadcrumbs>
+          </Grid>}
+          {item.showTitle && (
+            <Grid sx={{ mt: 2 }}>
+              <Typography variant="h4">{item.title}</Typography>
             </Grid>
-            {title && (
-              <Grid sx={{ mt: 2 }}>
-                <Typography variant="h5">{item.title}</Typography>
-              </Grid>
-            )}
-          </Grid>
-        </MainCard>
-      );
-    }
+          )}
+        </Grid>
+      </MainCard>
+    );
   }
 
   return breadcrumbContent;

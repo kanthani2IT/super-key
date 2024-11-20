@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import MainCard from 'components/MainCard';
 
 // assets
-import { Modal } from '@mui/material';
+import AppModal from 'components/AppComponents/AppModal';
 import MainTabs from 'components/MainTabs';
 import { useGetUsers } from 'hooks/useOnboard';
 import { ColorBox } from 'pages/component-overview/color';
@@ -15,7 +15,6 @@ import { useState } from 'react';
 import RenewalPieChart from './RenewalPieChart';
 import TaskTable from './TaskTable';
 import UserTable from './UserTable';
-import { useAuthCookies } from 'utils/cookie';
 
 // avatar style
 const avatarSX = {
@@ -108,25 +107,17 @@ export default function DashboardDefault() {
           </Grid>
         </MainCard>
       </Grid>
-      <Modal
-
+      <AppModal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
+        height='auto'
+        width='70%'
       >
-        <Grid size={{ xs: 8 }}>
-          <MainCard title={'Community Users'} count={data?.data?.length} >
+        <MainCard noStyles={true} title={'Community Users'} count={data?.data?.length} >
 
-            <UserTable tableData={data?.data} isLoading={isLoading} />
-          </MainCard>
-        </Grid>
-      </Modal>
+          <UserTable tableData={data?.data} isLoading={isLoading} />
+        </MainCard>
+      </AppModal >
       <Grid size={{ xs: 12 }}>
         <MainCard title={'Task Assigned'} secondary={'Full View'} >
           <MainTabs handleChange={handleChange} value={selectedTab} tabs={tabs} />

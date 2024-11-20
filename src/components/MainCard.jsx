@@ -32,6 +32,7 @@ function MainCard(
     title,
     count,
     secondaryAction,
+    noStyles = false,
     ...others
   },
   ref
@@ -44,7 +45,7 @@ function MainCard(
       elevation={elevation || 0}
       ref={ref}
       {...others}
-      sx={{
+      sx={!noStyles && {
         border: border ? '1px solid' : 'none',
         borderRadius: 2,
         borderColor: theme.palette.mode === 'dark' ? theme.palette.divider : theme.palette.grey.A800,
@@ -64,19 +65,19 @@ function MainCard(
     >
 
       {title && <CardHeader sx={headerSX} title={<Stack flexDirection={"row"} alignItems={"center"}><Typography variant="h3">{title}</Typography>
-      {count && (
-            
-              <Chip
-                variant="combined"
-                color={"success"}
-                // icon={isLoss ? <FallOutlined style={iconSX} /> : <RiseOutlined style={iconSX} />}
-                label={`${count}`}
-                sx={{ ml: 2}}
-                size="small"
-              />
-            
-          )}
-      </Stack>} action={secondary && <Typography variant="body1" sx={{ textDecoration: 'none', cursor:"pointer" }} color="primary" onClick={secondaryAction&&secondaryAction}>
+        {count && (
+
+          <Chip
+            variant="combined"
+            color={"success"}
+            // icon={isLoss ? <FallOutlined style={iconSX} /> : <RiseOutlined style={iconSX} />}
+            label={`${count}`}
+            sx={{ ml: 2 }}
+            size="small"
+          />
+
+        )}
+      </Stack>} action={secondary && <Typography variant="body1" sx={{ textDecoration: 'none', cursor: "pointer" }} color="primary" onClick={secondaryAction && secondaryAction}>
         <ExpandAltOutlined style={{ marginRight: 2 }} fontSize="medium" />   {secondary}
       </Typography>} />}
 

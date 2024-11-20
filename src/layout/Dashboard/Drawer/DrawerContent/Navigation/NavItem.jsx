@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { forwardRef, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -11,21 +11,22 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useGetMenuMaster } from 'api/menu';
 import styled from '@emotion/styled';
 
-export default function NavItem({ item, level, collapse = false, handleActiveItem, activeNav }) {
+export default function NavItem({ subMenu = false, navUrl, item, level, collapse = false, handleActiveItem, activeNav }) {
   const theme = useTheme();
   const { menuMaster } = useGetMenuMaster();
+
   const [collapseOpen, setCollapseOpen] = useState(false);
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
   const { pathname } = useLocation();
 
   const itemTarget = item.target ? '_blank' : '_self';
   const listItemProps = !collapse
-    ? { component: forwardRef((props, ref) => <Link ref={ref} {...props} to={item.url} target={itemTarget} />) }
+    ? { component: forwardRef((props, ref) => <Link ref={ref} {...props} to={navUrl} target={itemTarget} />) }
     : {};
 
+  const isSelected = collapse ? activeNav.includes(navUrl) : activeNav == navUrl;
   const textColor = theme.palette.common.black;
   const iconSelectedColor = theme.palette.text.success;
-  const isSelected = collapse ? activeNav.includes(item.url) : activeNav == item.url;
   const Icon = item.icon;
   const itemIcon = item.icon ? <Icon fill={isSelected ? iconSelectedColor : textColor} /> : null;
   const handleCollapseMenu = (open) => {
@@ -46,44 +47,51 @@ export default function NavItem({ item, level, collapse = false, handleActiveIte
 
 
   const StyledListItemButton = styled(ListItemButton)(({ theme, drawerOpen, level }) => ({
-    margin: '5%',
+    margin: subMenu ? '2%' : '5%',
     gap: 2,
     zIndex: 1201,
     paddingLeft: drawerOpen ? `${level * 28}px` : theme.spacing(1.5),
     paddingY: !drawerOpen && level === 1 ? theme.spacing(1.25) : theme.spacing(1),
-    ...(drawerOpen && {
-      '&:hover': {
-        backgroundColor: theme.palette.success.light,
-        borderRadius: '0.625rem',
-      },
-      '&.Mui-selected': {
-        backgroundColor: theme.palette.success.light,
-        borderRadius: '0.625rem',
-        color: theme.palette.primary.main, // Replace `iconSelectedColor` with the correct color
-        '&:hover': {
-          color: theme.palette.primary.main, // Replace `iconSelectedColor` with the correct color
-          backgroundColor: theme.palette.success.light,
-        },
-      },
-    }),
-    ...(!drawerOpen && {
-      '&:hover': { backgroundColor: 'transparent' },
-      '&.Mui-selected': {
-        '&:hover': { backgroundColor: 'transparent' },
-        backgroundColor: 'transparent',
-      },
-    }),
-  }));
+    // ...(drawerOpen && {
+    borderRadius: '0.625rem',
 
+    '&:hover': {
+      backgroundColor: theme.palette.success.light,
+    },
+    '&.Mui-selected': {
+      backgroundColor: theme.palette.success.light,
+      // color: theme.palette.primary.main,
+      '&:hover': {
+        // color: theme.palette.primary.main,
+        backgroundColor: theme.palette.success.light,
+      },
+    },
+    // }),
+    // ...(!drawerOpen && {
+    //   '&:hover': { backgroundColor: 'transparent' },
+    //   '&.Mui-selected': {
+    //     '&:hover': { backgroundColor: 'transparent' },
+    //     backgroundColor: 'transparent',
+    //   },
+    // }),
+  }));
 
   const StyledCollapse = styled(Collapse)(({ theme }) => ({
     margin: '5%',
-    gap: theme.spacing(1),
-    paddingLeft: theme.spacing(1.5),
+    gap: theme.spacing(0.5),
+    // paddingLeft: theme.spacing(1.5),
     borderRadius: '10px',
     backgroundColor: theme.palette.grey[100],
-    border: `1px solid ${theme.palette.success.main}`,
+    // border: `1px solid ${theme.palette.success.main}`,
   }));
+  useEffect(() => {
+    if (collapseOpen && !isSelected) {
+      setCollapseOpen(false)
+    } else if (!collapseOpen && isSelected) {
+      setCollapseOpen(true)
+
+    }
+  }, [isSelected])
   return (
     <>
       <StyledListItemButton
@@ -91,16 +99,18 @@ export default function NavItem({ item, level, collapse = false, handleActiveIte
         disabled={item.disabled}
         onClick={() => handleMenuClick(item.url)}
         selected={isSelected}
+        subItem
 
       >
         {itemIcon && (
           <ListItemIcon
             sx={{
-              minWidth: 28,
+              minWidth: '15%',
               ...(!drawerOpen && {
                 borderRadius: 1.5,
                 width: 36,
                 height: 36,
+
                 justifyContent: 'center',
                 '&:hover': { bgcolor: 'success.light' },
               }),
@@ -115,21 +125,30 @@ export default function NavItem({ item, level, collapse = false, handleActiveIte
         )}
         {(drawerOpen || (!drawerOpen && level !== 1)) && (
           <ListItemText
+            sx={{
+              minWidth: '5%',
+              flexShrink: 0, // Prevent the icon from shrinking
+            }}
             primary={
-              <Typography variant="subtitle1" sx={{ color: isSelected ? iconSelectedColor : textColor }}>
+              <Typography variant="subtitle1" color={isSelected ? 'success' : 'secondary'}>
                 {item.title}
               </Typography>
             }
           />
         )}
-        {collapse && (collapseOpen ? <ExpandLess color={isSelected ? iconSelectedColor : 'secondary'} fontSize='small' /> : <ExpandMore color={isSelected ? iconSelectedColor : 'secondary'} fontSize='small' />)}
-      </StyledListItemButton>
+        <ListItemIcon sx={{
+          minWidth: '5%',
+        }}>
+          {((drawerOpen || (!drawerOpen && level !== 1)) && collapse) && (collapseOpen ? <ExpandLess color={isSelected ? 'success' : 'secondary'} fontSize='small' /> : <ExpandMore color={isSelected ? 'success' : 'secondary'} fontSize='small' />)}
+
+        </ListItemIcon>
+      </StyledListItemButton >
       {collapse && (
         <StyledCollapse in={collapseOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {item?.subMenu?.map((subItem, index) => (
-              <NavItem key={item.subItem} item={subItem} handleActiveItem={
-                () => handleSubmenuClick(subItem.url)
+            {item?.children?.map((subItem, index) => (
+              <NavItem subMenu navUrl={item.url + subItem.url} key={item.subItem} item={subItem} handleActiveItem={
+                () => handleSubmenuClick(item.url + subItem.url)
               }
                 activeNav={activeNav}
               />
@@ -137,7 +156,8 @@ export default function NavItem({ item, level, collapse = false, handleActiveIte
             ))}
           </List>
         </StyledCollapse>
-      )}
+      )
+      }
 
     </>
   );
