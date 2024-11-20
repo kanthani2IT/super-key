@@ -4,7 +4,7 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  Grid,
+  Grid2 as Grid,
   Link,
   MenuItem,
   Radio,
@@ -34,7 +34,7 @@ const documentTypes = [
   'Premium finance Agreement',
 ];
 
-const InsuranceUpload = ({show, setShow,selectedFiles, setSelectedFiles}) => {
+const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => {
   const [files, setFiles] = useState([]); // Store uploaded files
   const [selectAll, setSelectAll] = useState(false); // Track select all state
   const [activePolicies, setActivePolicies] = useState([]); // Track active policies for each file
@@ -83,129 +83,135 @@ const InsuranceUpload = ({show, setShow,selectedFiles, setSelectedFiles}) => {
     setActivePolicies(updatedActivePolicies);
   };
 
-const StyledSelect = styled(Select)({
-  '& .MuiSelect-select': {
-    border: 'none', // Removes border from the select div
-    borderRadius: '0.6rem', // Rounded corners
-    fontSize: '0.8rem', // Adjust font size
-    background: '#F2F2F2', // Background color
-    padding: "0.4rem", // Optional: Reduces padding inside the select div
-    fontWeight:"400",
-  },
-  '& fieldset': {
-    border: 'none', // Removes the border from the fieldset (for outlined variant)
-  },
-});
-console.log(show,"####")
+  const StyledSelect = styled(Select)({
+    '& .MuiSelect-select': {
+      border: 'none', // Removes border from the select div
+      borderRadius: '0.6rem', // Rounded corners
+      fontSize: '0.8rem', // Adjust font size
+      background: '#F2F2F2', // Background color
+      padding: "0.4rem", // Optional: Reduces padding inside the select div
+      fontWeight: "400",
+    },
+    '& fieldset': {
+      border: 'none', // Removes the border from the fieldset (for outlined variant)
+    },
+  });
+  console.log(show, "####")
   return (
-    <>
-    <Grid item xs={12}>
-      <Stack spacing={2} justifyContent="space-between">
-        <StyledTypography variant="h5">Do you have any documentation available?</StyledTypography>
-        <RadioGroup row sx={{ gap: 5 }} name="manager" value={show}
-                        onChange={(event) => setShow(event.target.value)} defaultValue={show}>
-          <FormControlLabel value="true" control={<Radio color="success" />} label="Yes" />
-          <FormControlLabel value="false" control={<Radio color="success" />} label="No" />
-        </RadioGroup>
-      </Stack>
-    </Grid>
+    <Grid container spacing={4} >
+      <Grid item size={{ xs: 12 }}>
+        {!selectedFiles.length ? <Stack spacing={2} justifyContent={'space-between'} >
+          <StyledTypography variant="h5">Do you have any documentation available?</StyledTypography>
+          <RadioGroup row sx={{ gap: 5 }} name="manager" value={show}
+            onChange={(event) => setShow(event.target.value)} defaultValue={show}>
+            <FormControlLabel value="true" control={<Radio color="success" />} label="Yes" />
+            <FormControlLabel value="false" control={<Radio color="success" />} label="No" />
+          </RadioGroup>
+        </Stack> : <Stack spacing={2} textAlign="center">
+          <StyledTypography variant="h5">Do you have any documentation available?</StyledTypography>
+        </Stack>}
+      </Grid>
 
-   {show=="true"&&selectedFiles.length<=0&& <InsuranceDocument  setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles}/>}
+      <Grid item size={{ xs: 12 }}>
+        {show == "true" && selectedFiles.length <= 0 && <InsuranceDocument setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />}
+      </Grid>
+      <Grid item size={{ xs: 12 }}>
 
-    {/* Document Table */}
-    {show=="true"&&selectedFiles.length > 0 && (
-      <Table>
-        <TableHead>
-          
-        </TableHead>
-        <TableBody>
-        <TableRow>
-            <TableCell>
-              <Checkbox label="Select all" /> Select All
-            </TableCell>
-            <TableCell>
-              <StyledSelect
-                onChange={(event) => handleTypeChange(event)}
-                displayEmpty
-                variant="outlined"
-                sx={{ width: '200px' }} // Fixed width applied here
-              >
-                <MenuItem value="" disabled>
-                  Select Document Type
-                </MenuItem>
-                {documentTypes.map((type) => (
-                  <MenuItem key={type} value={type}>
-                    {type}
-                  </MenuItem>
-                ))}
-              </StyledSelect>
-            </TableCell>
-            <TableCell></TableCell>
-          </TableRow>
-          {selectedFiles.map((file, index) => (
-            <TableRow key={index}>
-              {/* File Name */}
-              <TableCell>
-                <Box display="flex" alignItems="center">
-                  <FileIcon sx={{ mr: 1 }} />
-                  <Link variant="h7" sx={{ cursor: 'pointer', ml: 1, fontSize: '0.75rem' }}>
-                    {truncateFileName(file.name)}
-                  </Link>
-                </Box>
-              </TableCell>
+        {/* Document Table */}
+        {show == "true" && selectedFiles.length > 0 && (
+          <Table>
+            <TableHead>
 
-              {/* Document Type Dropdown */}
-              <TableCell>
-                <StyledSelect
-                  onChange={(event) => handleTypeChange(index, event)}
-                  displayEmpty
-                  variant="outlined"
-                  sx={{ width: '200px' }} // Fixed width applied here as well
-                >
-                  <MenuItem value="" disabled>
-                    Select Document Type
-                  </MenuItem>
-                  {documentTypes.map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {type}
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <Checkbox label="Select all" /> Select All
+                </TableCell>
+                <TableCell>
+                  <StyledSelect
+                    onChange={(event) => handleTypeChange(event)}
+                    displayEmpty
+                    variant="outlined"
+                    sx={{ width: '200px' }} // Fixed width applied here
+                  >
+                    <MenuItem value="" disabled>
+                      Select Document Type
                     </MenuItem>
-                  ))}
-                </StyledSelect>
-              </TableCell>
+                    {documentTypes.map((type) => (
+                      <MenuItem key={type} value={type}>
+                        {type}
+                      </MenuItem>
+                    ))}
+                  </StyledSelect>
+                </TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+              {selectedFiles.map((file, index) => (
+                <TableRow key={index}>
+                  {/* File Name */}
+                  <TableCell>
+                    <Box display="flex" alignItems="center">
+                      <FileIcon sx={{ mr: 1 }} />
+                      <Link variant="h7" sx={{ cursor: 'pointer', ml: 1, fontSize: '0.75rem' }}>
+                        {truncateFileName(file.name)}
+                      </Link>
+                    </Box>
+                  </TableCell>
 
-              {/* Remove File Action and Active Document */}
-              <TableCell sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                {/* Remove File */}
-                <Link variant="h7" sx={{ cursor: 'pointer', fontSize: '0.75rem' }} onClick={() => handleRemoveFile(index)}>
-                  Remove File
-                </Link>
+                  {/* Document Type Dropdown */}
+                  <TableCell>
+                    <StyledSelect
+                      onChange={(event) => handleTypeChange(index, event)}
+                      displayEmpty
+                      variant="outlined"
+                      sx={{ width: '200px' }} // Fixed width applied here as well
+                    >
+                      <MenuItem value="" disabled>
+                        Select Document Type
+                      </MenuItem>
+                      {documentTypes.map((type) => (
+                        <MenuItem key={type} value={type}>
+                          {type}
+                        </MenuItem>
+                      ))}
+                    </StyledSelect>
+                  </TableCell>
 
-                {/* Active Document Checkbox */}
-                <Box display="flex" alignItems="center" sx={{ fontSize: '0.75rem' }}>
-                  <Checkbox
-                    checked={activePolicies[index]}
-                    // onChange={() => handleActiveChange(index)}
-                  />
-                  <Typography variant="h7" sx={{ cursor: 'pointer', fontSize: '0.75rem' }}>
-                    Active Document
-                  </Typography>
-                </Box>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    )}
+                  {/* Remove File Action and Active Document */}
+                  <TableCell sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    {/* Remove File */}
+                    <Link variant="h7" sx={{ cursor: 'pointer', fontSize: '0.75rem' }} onClick={() => handleRemoveFile(index)}>
+                      Remove File
+                    </Link>
 
-    {/* Upload Button */}
-    {show=="true"&& files.length > 0 && (
-      <Box display="flex" justifyContent="flex-end" mt={3}>
-        <Button variant="contained" color="primary" size="large">
-          Upload
-        </Button>
-      </Box>
-    )}
-  </>
+                    {/* Active Document Checkbox */}
+                    <Box display="flex" alignItems="center" sx={{ fontSize: '0.75rem' }}>
+                      <Checkbox
+                        checked={activePolicies[index]}
+                      // onChange={() => handleActiveChange(index)}
+                      />
+                      <Typography variant="h7" sx={{ cursor: 'pointer', fontSize: '0.75rem' }}>
+                        Active Document
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+
+        )}
+      </Grid>
+      {/* Upload Button */}
+      {show == "true" && files.length > 0 && (
+        <Box display="flex" justifyContent="flex-end" mt={3}>
+          <Button variant="contained" color="primary" size="large">
+            Upload
+          </Button>
+        </Box>
+      )}
+    </Grid>
   );
 };
 
