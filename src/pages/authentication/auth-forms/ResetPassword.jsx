@@ -43,7 +43,7 @@ export default function ResetPassword(props) {
   return (
     <Formik
       initialValues={{
-        email: user?.email,
+        email: user?.email || "",
         password: '',
         newPassword: '',
         confirmPassword: '',

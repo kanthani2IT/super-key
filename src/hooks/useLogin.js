@@ -41,7 +41,7 @@ export const useLoginUser = () => {
         });}
       if(checked){
         setAuthCookie("superkey", values)}else{
-          setAuthCookie("superkey", values)
+          setAuthCookie("superkey", {email:values.email})
         }
         
     },

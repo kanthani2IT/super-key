@@ -42,3 +42,16 @@ export const COIData = [
   { title: "Highland Crest Villas", count: 8 },
   { title: "Riverside Manor", count: 19 },
 ];
+
+export const certificateData = [
+  { title: "Electricity and Boiler Plate COI" },
+  { title: "Property COI" },
+  { title: "Umbrella COI" },
+  { title: "Legal COI" },
+  { title: "Glass COI" },
+  { title: "Commercial Crime COI" },
+  { title: "Fire Hazard COI" },
+  { title: "Construction COI" },
+  { title: "Vehicle Insurance COI" },
+  { title: "Employee Liability COI" },
+];

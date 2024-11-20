@@ -119,6 +119,7 @@ const StyledSelect = styled(Select)({
     fontSize: '0.8rem', // Adjust font size
     background: '#F2F2F2', // Background color
     padding: "0.4rem", // Optional: Reduces padding inside the select div
+    fontWeight:"400",
   },
   '& fieldset': {
     border: 'none', // Removes the border from the fieldset (for outlined variant)
@@ -168,7 +169,7 @@ const StyledSelect = styled(Select)({
             </TableCell>
             <TableCell></TableCell>
           </TableRow>
-          {fileFormat.map((file, index) => (
+          {selectedFiles.map((file, index) => (
             <TableRow key={index}>
               {/* File Name */}
               <TableCell>

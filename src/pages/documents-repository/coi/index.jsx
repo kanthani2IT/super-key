@@ -1,11 +1,24 @@
 import { Search } from "@mui/icons-material";
-import { Grid2 as Grid, InputAdornment, OutlinedInput, TextField, Typography } from "@mui/material";
+import { Button, Grid2 as Grid, InputAdornment, OutlinedInput, TextField, Typography } from "@mui/material";
 import CardGrid from "components/AppComponents/AppDataCard";
+import AppModal from "components/AppComponents/AppModal";
+import AppModalContainer from "components/AppComponents/AppModalContainer";
 import AppRowBox from "components/AppComponents/AppRowBox";
+import MainCard from "components/MainCard";
 import { StyledTextField } from "components/StyledComponents";
-import { COIData } from "utils/constants";
+import { useState } from "react";
+import { certificateData, COIData } from "utils/constants";
+import CertificatesCard from "./CertificatesCard";
+
 
 const COI = () => {
+  const [showCertificates, setShowCertificates] = useState(false)
+
+  const handleCertificates = (coi) => {
+    console.log(coi)
+    setShowCertificates(!showCertificates);
+  };
+
   return (
     <Grid container spacing={5}>
       <AppRowBox >
@@ -24,17 +37,18 @@ const COI = () => {
       <AppRowBox>
         <Grid size={{ xs: 12, sm: 8, md: 6, lg: 4 }}>
           <AppRowBox >
-
             <Typography variant="h5">Communities</Typography>
-            <Typography variant="body1">3 Communities &nbsp; |&nbsp; 96 COI  </Typography>
-
-
+            <Typography variant="body1">{COIData?.length} Communities &nbsp; |&nbsp; {COIData?.length * 10} COI  </Typography>
           </AppRowBox>
         </Grid>
       </AppRowBox>
-      <Grid item size={{ xs: 12 }}>
-        <CardGrid data={COIData} />
-      </Grid>
+      {!showCertificates ? <Grid item size={{ xs: 12 }}>
+        <CardGrid handleClick={handleCertificates} data={COIData} />
+      </Grid> :
+        <Grid item size={{ xs: 12 }}>
+
+          <CertificatesCard handleCertificates={handleCertificates} certificateData={certificateData} />
+        </Grid>}
     </Grid>
 
   );

@@ -31,7 +31,7 @@ console.log(user,"user")
   return (
     <Formik
       initialValues={{
-        email: user?.email,
+        email: !!user?.password?user?.email:"",
         password: user?.password,
       }}
       validationSchema={validationSchema}

@@ -20,6 +20,7 @@ import Typography from "./Typography";
 import TextField from "./TextField";
 import Select from "./Select";
 import Modal from "./Modal";
+import Divider from "./Divider";
 
 // ==============================|| OVERRIDES - MAIN ||============================== //
 
@@ -42,6 +43,7 @@ export default function ComponentsOverrides(theme) {
     Typography(),
     TextField(),
     Select(),
-    Modal(theme)
+    Modal(theme),
+    Divider(theme)
   );
 }

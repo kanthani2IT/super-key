@@ -49,7 +49,7 @@ const ChangePassword = () => {
         validationErrors.currentPassword = CREDENTIAL_ERRORS.passwordInvalid;
         isValid = false;
       }
-    } 
+    }
 
     if (!userCredentials.newPassword.trim()) {
       validationErrors.newPassword = CREDENTIAL_ERRORS.newPasswordRequired;
@@ -79,10 +79,10 @@ const ChangePassword = () => {
 
     if (validatePasswords()) {
       if (id == "reset") {
-        let payload={
-          email:user.email,
-          password:userCredentials.currentPassword,
-          newPassword:userCredentials.newPassword,
+        let payload = {
+          email: user?.email || "",
+          password: userCredentials.currentPassword,
+          newPassword: userCredentials.newPassword,
         }
         newPasswordMutation.mutate(payload);
       } else {
