@@ -109,7 +109,7 @@ const onBoardingStepper = [
     },
     {
         title: "Insurance Documentation",
-        component:(props)=><InsuranceUpload/>
+        component:(props)=><InsuranceUpload {...props}/>
     },{
         title:"",
         component: () => <SuccessScreen />,
@@ -129,7 +129,8 @@ const CommunityOnboarding = () => {
     const currentOnboradingType = searchParams.get("type");
     const currentStep = Number(searchParams.get("cs"));
     const modalOpen = Boolean(searchParams.get("onboarding"));
-
+    const [show, setShow]=useState("true")
+    const [selectedFiles,setSelectedFiles]=useState([])
     const [activeStep, setActiveStep] = useState(currentStep);
     const [open, setOpen] = useState(modalOpen);
     const [onBoardingType, setOnboardingType] = useState(
@@ -169,6 +170,8 @@ const CommunityOnboarding = () => {
             manager: true,
             projectManager: true,
         })
+        setShow("true")
+        setSelectedFiles([])
         resetForm()
     };
 
@@ -300,7 +303,11 @@ const CommunityOnboarding = () => {
                     setValues,
                     handleChange,
                     community,
-                    handleCommunityDetails
+                    handleCommunityDetails,
+                    setShow,
+                    show,
+                    setSelectedFiles,
+                    selectedFiles
                 })}
 
             </AppModal>

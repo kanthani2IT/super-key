@@ -34,11 +34,11 @@ const documentTypes = [
   'Premium finance Agreement',
 ];
 
-const InsuranceUpload = () => {
+const InsuranceUpload = ({show, setShow,selectedFiles, setSelectedFiles}) => {
   const [files, setFiles] = useState([]); // Store uploaded files
   const [selectAll, setSelectAll] = useState(false); // Track select all state
   const [activePolicies, setActivePolicies] = useState([]); // Track active policies for each file
-  const [selectedFiles, setSelectedFiles] = useState([]);  // State to store the selected files
+  // const [selectedFiles, setSelectedFiles] = useState([]);  // State to store the selected files
   // Handle file uploads
   const handleFileUpload = (event) => {
     const uploadedFiles = Array.from(event.target.files).map((file) => ({
@@ -82,36 +82,7 @@ const InsuranceUpload = () => {
     updatedActivePolicies[index] = !updatedActivePolicies[index];
     setActivePolicies(updatedActivePolicies);
   };
-  const fileFormat=[
-    {
-        "name": "Software Framework Comparison.pptx",
-        "size": "8772.27",
-        "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        "documentType": "",
-        "isActive": false
-    },
-    {
-        "name": "software-framework-slide1.png",
-        "size": "25.75",
-        "type": "image/png",
-        "documentType": "",
-        "isActive": false
-    },
-    {
-        "name": "Timeline_View_Test_Cases.docx",
-        "size": "36.93",
-        "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "documentType": "",
-        "isActive": false
-    },
-    {
-        "name": "Unit test cases for Discussion Panel.docx",
-        "size": "9.32",
-        "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "documentType": "",
-        "isActive": false
-    }
-]
+
 const StyledSelect = styled(Select)({
   '& .MuiSelect-select': {
     border: 'none', // Removes border from the select div
@@ -125,22 +96,24 @@ const StyledSelect = styled(Select)({
     border: 'none', // Removes the border from the fieldset (for outlined variant)
   },
 });
+console.log(show,"####")
   return (
     <>
     <Grid item xs={12}>
       <Stack spacing={2} justifyContent="space-between">
         <StyledTypography variant="h5">Do you have any documentation available?</StyledTypography>
-        <RadioGroup row sx={{ gap: 5 }} name="manager">
+        <RadioGroup row sx={{ gap: 5 }} name="manager" value={show}
+                        onChange={(event) => setShow(event.target.value)} defaultValue={show}>
           <FormControlLabel value="true" control={<Radio color="success" />} label="Yes" />
           <FormControlLabel value="false" control={<Radio color="success" />} label="No" />
         </RadioGroup>
       </Stack>
     </Grid>
 
-   {selectedFiles.length<=0&& <InsuranceDocument  setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles}/>}
+   {show=="true"&&selectedFiles.length<=0&& <InsuranceDocument  setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles}/>}
 
     {/* Document Table */}
-    {selectedFiles.length > 0 && (
+    {show=="true"&&selectedFiles.length > 0 && (
       <Table>
         <TableHead>
           
@@ -225,7 +198,7 @@ const StyledSelect = styled(Select)({
     )}
 
     {/* Upload Button */}
-    {files.length > 0 && (
+    {show=="true"&& files.length > 0 && (
       <Box display="flex" justifyContent="flex-end" mt={3}>
         <Button variant="contained" color="primary" size="large">
           Upload
