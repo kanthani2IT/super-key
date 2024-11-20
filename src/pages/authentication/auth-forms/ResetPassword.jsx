@@ -27,9 +27,9 @@ export default function ResetPassword(props) {
     setSubmitting(false);
     if (id == "change") {
       let payload = {
-        email: values.email,
-        password: values.password,
-        newPassword: values.newPassword,
+        email: values?.email,
+        password: values?.password,
+        newPassword: values?.newPassword,
       }
       newPasswordMutation.mutate(payload);
     } else {
@@ -43,7 +43,7 @@ export default function ResetPassword(props) {
   return (
     <Formik
       initialValues={{
-        email: user.email,
+        email: user?.email || "",
         password: '',
         newPassword: '',
         confirmPassword: '',

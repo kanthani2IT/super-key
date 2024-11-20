@@ -15,6 +15,7 @@ import AddNewCommunity from "./AddNewCommunity";
 import CommunityName from "./CommunituyName";
 import CommunityAddress from "./CommunityAddress";
 import CommunityDetails from "./CommunityDetails";
+import SuccessScreen from "./SuccessScreen";
 
 const initialValues = {
     onBoardingType: "single",
@@ -105,7 +106,9 @@ const onBoardingStepper = [
 
     },
     {
-        title: "Done",
+        title: "",
+        component: () => <SuccessScreen />,
+        initialValues: {}
     }
 ];
 const defaultValue = {
@@ -132,8 +135,8 @@ const CommunityOnboarding = () => {
         manager: true,
         projectManager: true,
     })
-    const nextLabel =
-        activeStep == onBoardingStepper?.length - 1 ? "Done" : "Next";
+    const finalStep =
+        activeStep == onBoardingStepper?.length - 1;
 
     const handleOpen = () => {
         setOpen(true);
@@ -219,7 +222,7 @@ const CommunityOnboarding = () => {
     const footer = () => {
         return (
             <AppRowBox>
-                {activeStep ? (
+                {activeStep && !finalStep ? (
                     <Button color="info" onClick={handleBack} variant="outlined" size="large">
                         Back
                     </Button>
@@ -228,7 +231,7 @@ const CommunityOnboarding = () => {
                 )}
                 <Button color="info" type="submit" onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
                     variant="contained" size="large">
-                    {nextLabel}
+                    {finalStep ? "Done" : "Next"}
                 </Button>
             </AppRowBox>)
     }
@@ -275,7 +278,7 @@ const CommunityOnboarding = () => {
                 <UserTable height={'80vh'} />
             </Grid>
 
-            <AppModal open={open} onClose={handleClose} enableCard title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={footer()} steps={onBoardingStepper}>
+            <AppModal height={finalStep ? "30vh" : ""} open={open} onClose={handleClose} enableCard title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper}>
 
                 {onBoardingStepper[activeStep]?.component && onBoardingStepper[activeStep]?.component({
                     setOnboardingType,

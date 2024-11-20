@@ -19,8 +19,8 @@ const ChangePassword = () => {
   const { id } = useParams(); // Access the URL parameter (taskId)
   const newPasswordMutation = useNewPassword();
   const resetPasswordMutation = useResetPassword();
-  const {getCookie}=useAuthCookies()
-  const user=getCookie("user")
+  const { getCookie } = useAuthCookies()
+  const user = getCookie("user")
   const [userCredentials, setUserCredentials] = useState(initialState);
   const [errors, setErrors] = useState(initialState);
 
@@ -49,7 +49,7 @@ const ChangePassword = () => {
         validationErrors.currentPassword = CREDENTIAL_ERRORS.passwordInvalid;
         isValid = false;
       }
-    } 
+    }
 
     if (!userCredentials.newPassword.trim()) {
       validationErrors.newPassword = CREDENTIAL_ERRORS.newPasswordRequired;
@@ -79,10 +79,10 @@ const ChangePassword = () => {
 
     if (validatePasswords()) {
       if (id == "reset") {
-        let payload={
-          email:user.email,
-          password:userCredentials.currentPassword,
-          newPassword:userCredentials.newPassword,
+        let payload = {
+          email: user?.email || "",
+          password: userCredentials.currentPassword,
+          newPassword: userCredentials.newPassword,
         }
         newPasswordMutation.mutate(payload);
       } else {
