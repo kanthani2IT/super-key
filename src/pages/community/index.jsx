@@ -17,6 +17,7 @@ import CommunityDetails from "./onboarding/CommunityDetails";
 import InsuranceUpload from "./onboarding/InsuranceTable";
 import SuccessScreen from "./onboarding/SuccessScreen";
 import AppGrid from "components/AppComponents/AppGrid";
+import { Grid, height } from "@mui/system";
 
 const initialValues = {
     onBoardingType: "single",
@@ -45,7 +46,8 @@ const onBoardingStepper = [
         component: (props) => <AddNewCommunity {...props} />,
         initialValues: {
             onBoardingType: "single"
-        }
+        },
+        height: "20vh",
     },
     {
         title: "Community Address",
@@ -56,7 +58,9 @@ const onBoardingStepper = [
         initialValidationSchema: {
             communityAddress: Yup.string().required('Community Address is required'),
 
-        }
+        },
+        height: "60vh",
+
     },
     {
         title: "Community Name",
@@ -67,7 +71,9 @@ const onBoardingStepper = [
         initialValidationSchema: {
             communityName: Yup.string().required('Community Name is required'),
 
-        }
+        },
+        height: "40vh",
+
     },
     {
         title: "Community Details",
@@ -94,7 +100,6 @@ const onBoardingStepper = [
                     .min(10, "Mobile number must be at least 10 digits.")
                     .max(15, "Mobile number cannot exceed 15 digits.")
                     .required('Mobile number is required'),
-                address: Yup.string().required('Address is required'),
             }),
             propertyManager: Yup.object().shape({
                 name: Yup.string().required('Name is required'),
@@ -103,18 +108,21 @@ const onBoardingStepper = [
                     .min(10, "Mobile number must be at least 10 digits.")
                     .max(15, "Mobile number cannot exceed 15 digits.")
                     .required('Mobile number is required'),
-                address: Yup.string().required('Address is required'),
             }),
         },
+        height: "60vh",
 
     },
     {
         title: "Insurance Documentation",
-        component: (props) => <InsuranceUpload {...props} />
+        component: (props) => <InsuranceUpload {...props} />,
+        height: "auto",
+
     }, {
         title: "",
-        component: () => <SuccessScreen />,
-        initialValues: {}
+        component: ({ handleClose }) => <SuccessScreen title={'Your Community Onboarded Successfully !'} handleClose={handleClose} />,
+        initialValues: {},
+        height: "auto",
     }
 ];
 const defaultValue = {
@@ -237,17 +245,22 @@ const CommunityOnboarding = () => {
     const footer = () => {
         return (
             <AppRowBox>
-                {activeStep && !finalStep ? (
-                    <Button color="info" onClick={handleBack} variant="outlined" size="large">
-                        Back
+                <AppGrid item >
+                    {activeStep && !finalStep ? (
+                        <Button fullWidth color="secondary" onClick={handleBack} variant="outlined" size="small">
+                            Back
+                        </Button>
+                    ) : (
+                        <div></div>
+                    )}
+                </AppGrid>
+                <AppGrid item >
+
+                    <Button fullWidth color="info" type="submit" onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
+                        variant="contained" size="large">
+                        {finalStep ? "Done" : "Next"}
                     </Button>
-                ) : (
-                    <div></div>
-                )}
-                <Button color="info" type="submit" onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
-                    variant="contained" size="large">
-                    {finalStep ? "Done" : "Next"}
-                </Button>
+                </AppGrid>
             </AppRowBox>)
     }
 
@@ -294,7 +307,7 @@ const CommunityOnboarding = () => {
                 <UserTable height={'80vh'} />
             </AppGrid>
 
-            <AppModal height={finalStep ? "50vh" : undefined} open={open} onClose={handleClose} enableCard={!finalStep} title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper} align={finalStep ? 'center' : ""}>
+            <AppModal height={finalStep ? "30vh" : 'auto'} cardHeight={onBoardingStepper[activeStep].height || undefined} open={open} onClose={handleClose} enableCard={!finalStep} title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper} align={finalStep ? 'center' : ""}>
 
                 {onBoardingStepper[activeStep]?.component && onBoardingStepper[activeStep]?.component({
                     setOnboardingType,
@@ -310,7 +323,8 @@ const CommunityOnboarding = () => {
                     setShow,
                     show,
                     setSelectedFiles,
-                    selectedFiles
+                    selectedFiles,
+                    handleClose
                 })}
 
             </AppModal>

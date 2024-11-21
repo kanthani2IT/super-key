@@ -114,6 +114,13 @@ const AppAutocompleteComponent = ({ onChange, searchString, value, placeholder, 
                 // Regular option
                 return option.label;
             }}
+            ListboxProps={{
+                style: {
+                    padding: 0,
+                    maxHeight: "153px", // Approximately 3 items of 51px height each
+                    overflowY: "auto", // Enable scrolling if more than 3 items
+                },
+            }}
             renderOption={(props, option, state) => (
                 <>  {!option.searchTerm && <OptionComponent label={option.label} props={props} />}
                     {!option.searchTerm && <Divider />}
@@ -134,12 +141,7 @@ const AppAutocompleteComponent = ({ onChange, searchString, value, placeholder, 
 
                 />
             )}
-            ListboxProps={{
-                style: {
-                    padding: 0,
 
-                },
-            }}
             PaperComponent={({ children }) => (
                 <Box sx={{ borderRadius: '8px', boxShadow: 3, overflow: 'hidden', mt: 1.2 }}>
                     {searchString != "" && searchString !== value && <> <Box component={'li'} onMouseDown={(event) => event.preventDefault()} sx={{ display: 'flex', alignItems: 'center', padding: '8px 16px', height: "51px", backgroundColor: '#F7F9FB' }}>

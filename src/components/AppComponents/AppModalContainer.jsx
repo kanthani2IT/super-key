@@ -1,61 +1,79 @@
 import styled from '@emotion/styled';
 import { Card, CardActions, CardContent, CardHeader, Divider, Paper, Stack, Typography } from '@mui/material';
 
-
-
+// Styled components
 const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
     width: width || "auto",
     height: height || "auto",
-    padding: "2%",
+    padding: "1%",
     alignContent: align,
     borderRadius: "10px",
-    backgroundColor: theme.palette.background.paper, // Use theme color
-    boxShadow: theme.shadows[6], // Default box shadow
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[6],
 }));
 
-const StyledFlexCard = styled(Card)(({ theme, }) => ({
-    display: "flex", flexDirection: "column", height: "100%"
+const StyledFlexCard = styled(Card)(({ theme }) => ({
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
 }));
-// borderBottom: `0.5px solid ${theme.palette.divider}`
-const StyledFlexCardContent = styled(CardContent)(({ theme, padding, footer }) => ({
+
+const StyledFlexCardContent = styled(CardContent)(({ height, theme, padding, footer }) => ({
     paddingLeft: padding,
     paddingRight: padding,
-    flex: footer ? "1 0 70%" : "auto", overflowY: "auto", marginTop: 2, marginBottom: 2, borderRadius: "8px"
+    flex: footer ? `1 0 ${height}` : height,
+    marginTop: 2,
+    marginBottom: 2,
+    borderRadius: "8px",
 }));
 
-const AppModalContainer = ({ children, height = '80vh', width = "700px", padding = '2%', enableCard = false, title, footer, header, stepper, align }) => {
+// AppModalContainer Component
+const AppModalContainer = ({
+    children,
+    cardHeight = '70%',
+    height = 'auto',
+    width = "40vw",
+    padding = '3%',
+    enableCard = false,
+    title,
+    footer,
+    header,
+    stepper,
+    align
+}) => {
     return (
         <StyledPaper width={width} height={height} align={align}>
-            {enableCard ? <StyledFlexCard
-                elevation={0}
-            >
-                {!header && title ? <CardHeader
-                    title={
-                        <Stack alignItems={"center"} gap={1}>
-                            <Typography variant="h2">
-                                {title}
-                            </Typography>
+            {enableCard ? (
+                <StyledFlexCard elevation={0}>
+                    {title && !header && (
+                        <CardHeader
+                            title={
+                                <Stack alignItems="center" gap={1}>
+                                    <Typography variant="h2">{title}</Typography>
+                                    {/* Optionally include stepper */}
+                                    {/* {stepper && stepper()} */}
+                                </Stack>
+                            }
+                        />
+                    )}
+                    {header && !title && header}
+                    {header && <Divider />}
 
-                            {/* {stepper && stepper()} */}
+                    <StyledFlexCardContent height={cardHeight} padding={padding} footer={footer}>
+                        {children}
+                    </StyledFlexCardContent>
 
-                        </Stack>
-                    }
-                /> : header}
-                {header && <Divider />}
-                <StyledFlexCardContent padding={padding} footer={footer} >
-                    {children}
-                </StyledFlexCardContent>
-
-                {footer && < Divider />}
-                {footer && <CardActions>
-                    {footer}
-                </CardActions>}
-            </StyledFlexCard> :
+                    {footer && (
+                        <CardActions>
+                            {footer}
+                        </CardActions>
+                    )}
+                </StyledFlexCard>
+            ) : (
                 children
-            }
-
+            )}
         </StyledPaper>
-    )
-}
+    );
+};
 
-export default AppModalContainer
+export default AppModalContainer;

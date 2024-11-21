@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button } from '@mui/material';
 
-const FileUploadButton = ({ onFileChange, fileTypes }) => {
+const FileUploadButton = ({ disabled, onFileChange, fileTypes }) => {
   return (
     <Button
+      disabled={disabled}
       variant="contained"
       color="primary"
       sx={{ mt: 2, mb: 2, borderRadius: '0.7rem', p: '0.7rem 4rem' }}

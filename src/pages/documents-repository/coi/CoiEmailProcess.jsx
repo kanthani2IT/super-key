@@ -12,6 +12,7 @@ const initialValues = {
 }
 const CoiEmailProcess = ({ formik }) => {
     const { values, setFieldValue, errors, touched, resetForm } = formik
+
     const [mailDetails, setMailDetails] = useState({
         toPropertyManager: values?.toPropertyManager,
         propertyManager: values?.id ? {

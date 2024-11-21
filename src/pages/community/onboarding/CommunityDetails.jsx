@@ -1,6 +1,6 @@
-import { Autocomplete, Divider, FormControlLabel, Grid2 as Grid, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material';
+import { Autocomplete, Divider, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import AppGrid from 'components/AppComponents/AppGrid';
 import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
-import { StyledTypography } from 'components/StyledComponents';
 import { useEffect, useState } from 'react';
 import { cManagers } from 'utils/constants';
 
@@ -53,40 +53,16 @@ const CommunityDetails = ({
     const size = { xs: 12, sm: 12, md: 6, lg: 6, xl: 6, }
 
     return (
-        <Grid container spacing={4} >
+        <AppGrid container spacing={4} >
 
-            <Grid item container size={{ xs: 12 }} rowSpacing={3} >
-                <Grid item size={{ xs: 12 }} >
-                    <AppLabelComponent label={'Do you have the Community Manager in your community?'}>
-                        <RadioGroup
-                            row
+            <AppGrid item container size={{ xs: 12 }} rowSpacing={3} >
 
-                            sx={{ gap: 5 }}
-                            name='manager'
-                            value={community.manager}
-                            onChange={(event, value) => handleCommunityDetails(event.target.name, value)}
-                        >
-                            <FormControlLabel
-                                value={'true'}
-                                control={<Radio color='success' />}
-                                label="Yes"
-                            />
-                            <FormControlLabel
-                                value={'false'}
-                                control={<Radio color='success' />}
-                                label="No"
-                            />
-                        </RadioGroup>
-                    </AppLabelComponent>
+                <AppGrid item container spacing={2} >
 
-
-                </Grid>
-                {community.manager ? <Grid item container spacing={2} >
-
-                    <Grid item size={{ xs: 12 }} >
-                        <Typography variant="h4">Add details about your Community Manager</Typography>
-                    </Grid>
-                    <Grid item size={size} >
+                    <AppGrid item size={{ xs: 12 }} >
+                        <Typography variant="h4">Community Manager</Typography>
+                    </AppGrid>
+                    <AppGrid item size={size} >
                         <AppLabelComponent label={'Community Manager Name'}>
 
                             <Autocomplete
@@ -121,8 +97,8 @@ const CommunityDetails = ({
                             />
                         </AppLabelComponent>
 
-                    </Grid>
-                    <Grid item size={size} >
+                    </AppGrid>
+                    <AppGrid item size={size} >
                         <AppLabelComponent label={'Email'}>
                             <TextField
                                 required
@@ -136,9 +112,9 @@ const CommunityDetails = ({
                                 error={Boolean(touched.communityManager?.email && errors.communityManager?.email)}
                                 helperText={touched.communityManager?.email && errors.communityManager?.email}
                             />
-                        </AppLabelComponent>                    </Grid>
+                        </AppLabelComponent>                    </AppGrid>
 
-                    <Grid item size={size} >
+                    <AppGrid item size={size} >
                         <AppLabelComponent label={'Mobile Number'}>
 
                             <TextField
@@ -153,66 +129,23 @@ const CommunityDetails = ({
                                 helperText={touched.communityManager?.mobile && errors.communityManager?.mobile}
                             />
                         </AppLabelComponent>
-                    </Grid>
-
-                    <Grid item size={size} >
-                        <AppLabelComponent label={'Address'}>
-
-                            <TextField
-                                required
-                                fullWidth
-                                placeholder='Los angels'
-                                multiline
-                                name="communityManager.address"
-                                value={values.communityManager.address}
-                                onChange={(event) => handleChange(event)}
-                                onBlur={handleBlur}
-                                error={Boolean(touched.communityManager?.address && errors.communityManager?.address)}
-                                helperText={touched.communityManager?.address && errors.communityManager?.address}
-                            />
-                        </AppLabelComponent>
-                    </Grid>
-                </Grid> : null}
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-
-                <Divider sx={{ color: "GrayText" }} />
-            </Grid>
-
-            <Grid item container size={{ xs: 12 }} rowSpacing={3} >
-
-                <Grid item size={{ xs: 12 }} >
-                    <AppLabelComponent label={'Do you have the Property Manager in your community?'}>
-                        <RadioGroup
-                            row
-
-                            sx={{ gap: 5 }}
-                            name='propertyManager'
-                            value={community.propertyManager}
-                            onChange={(event, value) => handleCommunityDetails(event.target.name, value)}
-                        >
-                            <FormControlLabel
-                                value={'true'}
-                                control={<Radio color='success' />}
-                                label="Yes"
-                            />
-                            <FormControlLabel
-                                value={'false'}
-                                control={<Radio color='success' />}
-                                label="No"
-                            />
-                        </RadioGroup>
-                    </AppLabelComponent>
+                    </AppGrid>
 
 
-                </Grid>
+                </AppGrid>
+            </AppGrid>
 
-                {community.propertyManager ? <Grid item container spacing={2} >
 
-                    <Grid item size={{ xs: 12 }} >
-                        <Typography variant="h4">Add details about your Property Manager</Typography>
-                    </Grid>
-                    <Grid item size={size} >
+            <AppGrid item container size={{ xs: 12 }} rowSpacing={3} >
+
+
+
+                <AppGrid item container spacing={2} >
+
+                    <AppGrid item size={{ xs: 12 }} >
+                        <Typography variant="h4">Property Manager</Typography>
+                    </AppGrid>
+                    <AppGrid item size={size} >
                         <AppLabelComponent label={'Property Manager Name'}>
 
                             <Autocomplete
@@ -246,8 +179,8 @@ const CommunityDetails = ({
                                 fullWidth
                             />
                         </AppLabelComponent>
-                    </Grid>
-                    <Grid item size={size} >
+                    </AppGrid>
+                    <AppGrid item size={size} >
                         <AppLabelComponent label={'Email'}>
                             <TextField
                                 required
@@ -262,9 +195,9 @@ const CommunityDetails = ({
                             />
 
                         </AppLabelComponent>
-                    </Grid>
+                    </AppGrid>
 
-                    <Grid item size={size} >
+                    <AppGrid item size={size} >
                         <AppLabelComponent label={'Mobile Number'}>
                             <TextField
                                 fullWidth
@@ -278,29 +211,13 @@ const CommunityDetails = ({
                                 helperText={touched.propertyManager?.mobile && errors.propertyManager?.mobile}
                             />
                         </AppLabelComponent>
-                    </Grid>
+                    </AppGrid>
 
-                    <Grid item size={size} >
-                        <AppLabelComponent label={'Address'}>
 
-                            <TextField
-                                fullWidth
-                                placeholder='New Jersey'
-                                required
-                                name="propertyManager.address"
-                                value={values.propertyManager.address}
-                                onChange={(event) => handleChange(event)}
-                                onBlur={handleBlur}
-                                error={Boolean(touched.propertyManager?.address && errors.propertyManager?.address)}
-                                helperText={touched.propertyManager?.address && errors.propertyManager?.address}
-                                multiline
-                            />
-                        </AppLabelComponent>
-                    </Grid>
-                </Grid> : null}
+                </AppGrid>
 
-            </Grid>
-        </Grid>
+            </AppGrid>
+        </AppGrid>
 
 
     )

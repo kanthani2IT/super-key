@@ -1,6 +1,6 @@
 // material-ui
 import { alpha } from "@mui/material/styles";
-import { borderRadius } from "@mui/system";
+import { borderRadius, padding } from "@mui/system";
 
 // project import
 import getColors from "utils/getColors";
@@ -97,8 +97,10 @@ export default function Button(theme) {
   const disabledStyle = {
     "&.Mui-disabled": {
       backgroundColor: theme.palette.grey[200],
+      color: "inherit",
     },
   };
+
   const iconStyle = {
     "&>*:nth-of-type(1)": {
       fontSize: "inherit",
@@ -112,6 +114,7 @@ export default function Button(theme) {
       },
       styleOverrides: {
         root: {
+          padding: "0 0 0 0",
           fontWeight: 400,
           borderRadius: "12px",
           "&::after": {
@@ -124,9 +127,7 @@ export default function Button(theme) {
             height: "100%",
             borderRadius: 4,
             opacity: 0,
-            // transition: "all 0.5s",
           },
-
           "&:active::after": {
             position: "absolute",
             borderRadius: 4,
@@ -134,6 +135,19 @@ export default function Button(theme) {
             top: 0,
             opacity: 1,
             transition: "0s",
+          },
+          [theme.breakpoints.down("sm")]: {
+            fontSize: "0.75rem",
+            padding: "6px 12px",
+            borderRadius: "8px",
+          },
+          [theme.breakpoints.up("md")]: {
+            fontSize: "0.875rem",
+            padding: "8px 16px",
+          },
+          [theme.breakpoints.up("lg")]: {
+            fontSize: "1rem",
+            padding: "10px 20px",
           },
         },
         contained: {

@@ -40,10 +40,10 @@ const MainRoutes = {
     {
       path: 'documents-repository',
       children: [
-        {
-          path: 'all-documents',
-          element: <AllDocuments />
-        },
+        // {
+        //   path: 'all-documents',
+        //   element: <AllDocuments />
+        // },
         {
           path: 'coi',
           element: <COI />

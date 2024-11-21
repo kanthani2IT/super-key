@@ -10,11 +10,11 @@ import CertificatesCard from "./CertificatesCard";
 import * as Yup from 'yup';
 import { useFormik } from "formik";
 import CoiEmailProcess from "./CoiEmailProcess";
+import SuccessScreen from "pages/community/onboarding/SuccessScreen";
 
 
 const initialValues = {
-  community: {},
-  certificate: {},
+
   toPropertyManager: 'yes',
   id: "",
   name: "",
@@ -32,13 +32,30 @@ const validationSchema = Yup.object().shape({
     .required("Mobile number is required"),
 })
 
+const coiMailSteps = [
+  {
+    title: "Select Recipient",
+    component: (props) => <CoiEmailProcess {...props} />
+  },
+  {
+    title: "",
+    component: () => <SuccessScreen title={'Email sent successfully!'} />
+  }
+]
+let intialValues = {
+  community: {},
+  certificate: {},
+}
+
 const COI = () => {
   const [showCertificates, setShowCertificates] = useState(false)
-
+  const [activeStep, setActiveStep] = useState(0)
   const [open, setOpen] = useState(false)
-
+  const [coi, setCoi] = useState(intialValues)
+  const finalStep =
+    activeStep == coiMailSteps?.length - 1;
   const updateCoi = (key, value) => {
-    setFieldValue(key, value);
+    setCoi({ ...coi, [key]: value })
   }
   const handleCertificates = (community) => {
     updateCoi('community', community)
@@ -60,9 +77,12 @@ const COI = () => {
     enableReinitialize: true,
     onSubmit: (values) => {
       console.log({ values })
+      if (values) {
+        setActiveStep(1)
+      }
     },
   })
-  const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors, resetForm, } = formik;
+  const { handleSubmit, resetForm, } = formik;
 
   const footer = () => {
     return (
@@ -100,15 +120,15 @@ const COI = () => {
         </Grid>
       </AppRowBox>
       {!showCertificates ? <Grid item size={{ xs: 12 }}>
-        <CardGrid handle handleClick={handleCertificates} data={COIData} />
+        <CardGrid handleClick={handleCertificates} data={COIData} />
       </Grid> :
         <Grid item size={{ xs: 12 }}>
 
-          <CertificatesCard title={values?.community?.title} handleEmail={handleEmailModal} handleCertificates={handleCertificates} certificateData={certificateData} />
+          <CertificatesCard title={coi?.community?.title} handleEmail={handleEmailModal} handleCertificates={handleCertificates} certificateData={certificateData} />
         </Grid>}
 
-      <AppModal padding={'10%'} height={'70vh'} enableCard title={'Select Recipient'} open={open} onClose={handleEmailModalClose} footer={footer()}  >
-        <CoiEmailProcess formik={formik} />
+      <AppModal height={finalStep ? "30vh" : '70vh'} enableCard={!finalStep} title={coiMailSteps[activeStep].title} open={open} onClose={handleEmailModalClose} footer={!finalStep && footer()} align={finalStep ? 'center' : ""}  >
+        {coiMailSteps[activeStep].component({ formik: formik })}
       </AppModal>
     </Grid>
 

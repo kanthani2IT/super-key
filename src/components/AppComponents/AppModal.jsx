@@ -10,16 +10,13 @@ const AppModal = ({ open, onClose, children, activeStep, steps, ...props }) => {
     )
     return (
         <Modal
-
             open={open} onClose={onClose}
         >
-            {/* <Fade in={open}> */}
             <AppModalContainer stepper={stepper}{...props} >
                 {children}
             </AppModalContainer>
 
 
-            {/* </Fade> */}
         </Modal>
     )
 }

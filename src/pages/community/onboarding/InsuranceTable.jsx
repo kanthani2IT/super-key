@@ -96,7 +96,6 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
       border: 'none', // Removes the border from the fieldset (for outlined variant)
     },
   });
-  console.log(show, "####")
   return (
     <Grid container spacing={4} >
       <Grid item size={{ xs: 12 }}>
@@ -113,7 +112,7 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
       </Grid>
 
       <Grid item size={{ xs: 12 }}>
-        {show == "true" && selectedFiles.length <= 0 && <InsuranceDocument setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />}
+        {selectedFiles.length <= 0 && <InsuranceDocument enable={show == "true"} setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />}
       </Grid>
       <Grid item size={{ xs: 12 }}>
 
