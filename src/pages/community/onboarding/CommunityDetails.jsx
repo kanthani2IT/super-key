@@ -1,4 +1,5 @@
 import { Autocomplete, Divider, FormControlLabel, Grid2 as Grid, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material';
+import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
 import { StyledTypography } from 'components/StyledComponents';
 import { useEffect, useState } from 'react';
 import { cManagers } from 'utils/constants';
@@ -49,15 +50,14 @@ const CommunityDetails = ({
         const { name, value } = event.target
         setFieldValue(name, value);
     };
-
+    const size = { xs: 12, sm: 12, md: 6, lg: 6, xl: 6, }
 
     return (
         <Grid container spacing={4} >
 
             <Grid item container size={{ xs: 12 }} rowSpacing={3} >
                 <Grid item size={{ xs: 12 }} >
-                    <Stack spacing={2} justifyContent={'space-between'}>
-                        <StyledTypography variant="h5">Do you have the Community Manager in your community?</StyledTypography>
+                    <AppLabelComponent label={'Do you have the Community Manager in your community?'}>
                         <RadioGroup
                             row
 
@@ -77,8 +77,8 @@ const CommunityDetails = ({
                                 label="No"
                             />
                         </RadioGroup>
+                    </AppLabelComponent>
 
-                    </Stack>
 
                 </Grid>
                 {community.manager ? <Grid item container spacing={2} >
@@ -86,9 +86,8 @@ const CommunityDetails = ({
                     <Grid item size={{ xs: 12 }} >
                         <Typography variant="h4">Add details about your Community Manager</Typography>
                     </Grid>
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5"> Community Manager Name</StyledTypography>
+                    <Grid item size={size} >
+                        <AppLabelComponent label={'Community Manager Name'}>
 
                             <Autocomplete
 
@@ -120,11 +119,11 @@ const CommunityDetails = ({
                                 )}
                                 fullWidth
                             />
-                        </Stack>
+                        </AppLabelComponent>
+
                     </Grid>
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5">Email</StyledTypography>
+                    <Grid item size={size} >
+                        <AppLabelComponent label={'Email'}>
                             <TextField
                                 required
                                 id='communityManager'
@@ -137,12 +136,11 @@ const CommunityDetails = ({
                                 error={Boolean(touched.communityManager?.email && errors.communityManager?.email)}
                                 helperText={touched.communityManager?.email && errors.communityManager?.email}
                             />
-                        </Stack>
-                    </Grid>
+                        </AppLabelComponent>                    </Grid>
 
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5">Mobile Number</StyledTypography>
+                    <Grid item size={size} >
+                        <AppLabelComponent label={'Mobile Number'}>
+
                             <TextField
                                 placeholder='+123423355'
                                 required
@@ -154,12 +152,12 @@ const CommunityDetails = ({
                                 error={Boolean(touched.communityManager?.mobile && errors.communityManager?.mobile)}
                                 helperText={touched.communityManager?.mobile && errors.communityManager?.mobile}
                             />
-                        </Stack>
+                        </AppLabelComponent>
                     </Grid>
 
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5">Address</StyledTypography>
+                    <Grid item size={size} >
+                        <AppLabelComponent label={'Address'}>
+
                             <TextField
                                 required
                                 fullWidth
@@ -172,7 +170,7 @@ const CommunityDetails = ({
                                 error={Boolean(touched.communityManager?.address && errors.communityManager?.address)}
                                 helperText={touched.communityManager?.address && errors.communityManager?.address}
                             />
-                        </Stack>
+                        </AppLabelComponent>
                     </Grid>
                 </Grid> : null}
             </Grid>
@@ -184,8 +182,7 @@ const CommunityDetails = ({
             <Grid item container size={{ xs: 12 }} rowSpacing={3} >
 
                 <Grid item size={{ xs: 12 }} >
-                    <Stack spacing={2} justifyContent={'space-between'}>
-                        <StyledTypography variant="h5">Do you have the Property Manager in your community?</StyledTypography>
+                    <AppLabelComponent label={'Do you have the Property Manager in your community?'}>
                         <RadioGroup
                             row
 
@@ -205,8 +202,8 @@ const CommunityDetails = ({
                                 label="No"
                             />
                         </RadioGroup>
+                    </AppLabelComponent>
 
-                    </Stack>
 
                 </Grid>
 
@@ -215,9 +212,8 @@ const CommunityDetails = ({
                     <Grid item size={{ xs: 12 }} >
                         <Typography variant="h4">Add details about your Property Manager</Typography>
                     </Grid>
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5"> Property Manager Name</StyledTypography>
+                    <Grid item size={size} >
+                        <AppLabelComponent label={'Property Manager Name'}>
 
                             <Autocomplete
                                 name="propertyManager.name"
@@ -249,11 +245,10 @@ const CommunityDetails = ({
                                 )}
                                 fullWidth
                             />
-                        </Stack>
+                        </AppLabelComponent>
                     </Grid>
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5">Email</StyledTypography>
+                    <Grid item size={size} >
+                        <AppLabelComponent label={'Email'}>
                             <TextField
                                 required
                                 placeholder='propertyManager@gmail.com'
@@ -265,12 +260,12 @@ const CommunityDetails = ({
                                 error={Boolean(touched.propertyManager?.email && errors.propertyManager?.email)}
                                 helperText={touched.propertyManager?.email && errors.propertyManager?.email}
                             />
-                        </Stack>
+
+                        </AppLabelComponent>
                     </Grid>
 
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5">Mobile Number</StyledTypography>
+                    <Grid item size={size} >
+                        <AppLabelComponent label={'Mobile Number'}>
                             <TextField
                                 fullWidth
                                 placeholder='+14128373933'
@@ -282,12 +277,12 @@ const CommunityDetails = ({
                                 error={Boolean(touched.propertyManager?.mobile && errors.propertyManager?.mobile)}
                                 helperText={touched.propertyManager?.mobile && errors.propertyManager?.mobile}
                             />
-                        </Stack>
+                        </AppLabelComponent>
                     </Grid>
 
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5">Address</StyledTypography>
+                    <Grid item size={size} >
+                        <AppLabelComponent label={'Address'}>
+
                             <TextField
                                 fullWidth
                                 placeholder='New Jersey'
@@ -300,7 +295,7 @@ const CommunityDetails = ({
                                 helperText={touched.propertyManager?.address && errors.propertyManager?.address}
                                 multiline
                             />
-                        </Stack>
+                        </AppLabelComponent>
                     </Grid>
                 </Grid> : null}
 

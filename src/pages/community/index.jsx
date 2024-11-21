@@ -1,7 +1,6 @@
 import { AddCircle } from "@mui/icons-material";
 import {
     Button,
-    Grid2 as Grid,
     Typography
 } from "@mui/material";
 import AppModal from "components/AppComponents/AppModal";
@@ -11,12 +10,13 @@ import UserTable from "pages/dashboard/UserTable";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import * as Yup from 'yup';
-import AddNewCommunity from "./AddNewCommunity";
-import CommunityName from "./CommunituyName";
-import CommunityAddress from "./CommunityAddress";
-import CommunityDetails from "./CommunityDetails";
-import InsuranceUpload from "./InsuranceTable";
-import SuccessScreen from "./SuccessScreen";
+import AddNewCommunity from "./onboarding/AddNewCommunity";
+import CommunityName from "./onboarding/CommunituyName";
+import CommunityAddress from "./onboarding/CommunityAddress";
+import CommunityDetails from "./onboarding/CommunityDetails";
+import InsuranceUpload from "./onboarding/InsuranceTable";
+import SuccessScreen from "./onboarding/SuccessScreen";
+import AppGrid from "components/AppComponents/AppGrid";
 
 const initialValues = {
     onBoardingType: "single",
@@ -267,19 +267,20 @@ const CommunityOnboarding = () => {
     const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors, resetForm } = formik;
 
     return (
-        <Grid container spacing={4}>
-            <Grid
+        <AppGrid container spacing={4}>
+            <AppGrid
                 item
                 size={{ xs: 12 }}
                 container
                 justifyContent="space-between"
                 alignItems="center"
             >
-                <Grid item>
+                <AppGrid item>
                     <Typography variant="h4">Communities</Typography>
-                </Grid>
-                <Grid item>
+                </AppGrid>
+                <AppGrid item>
                     <Button
+                        size="large"
                         color="info"
                         startIcon={<AddCircle />}
                         variant="contained"
@@ -287,11 +288,11 @@ const CommunityOnboarding = () => {
                     >
                         Add Community
                     </Button>
-                </Grid>
-            </Grid>
-            <Grid item size={{ xs: 12 }}>
+                </AppGrid>
+            </AppGrid>
+            <AppGrid item size={{ xs: 12 }}>
                 <UserTable height={'80vh'} />
-            </Grid>
+            </AppGrid>
 
             <AppModal height={finalStep ? "50vh" : undefined} open={open} onClose={handleClose} enableCard={!finalStep} title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper} align={finalStep ? 'center' : ""}>
 
@@ -313,7 +314,7 @@ const CommunityOnboarding = () => {
                 })}
 
             </AppModal>
-        </Grid >
+        </AppGrid >
     );
 };
 

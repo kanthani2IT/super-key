@@ -11,7 +11,7 @@ const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/index')));
 
 
-const CommunityOnboarding = Loadable(lazy(() => import('pages/community/onboarding/index')));
+const CommunityOnboarding = Loadable(lazy(() => import('pages/community/index')));
 const AllDocuments = Loadable(lazy(() => import('pages/documents-repository/all-documents/index')));
 const COI = Loadable(lazy(() => import('pages/documents-repository/coi/index')));
 
