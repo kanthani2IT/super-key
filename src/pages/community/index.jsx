@@ -17,7 +17,6 @@ import CommunityDetails from "./onboarding/CommunityDetails";
 import InsuranceUpload from "./onboarding/InsuranceTable";
 import SuccessScreen from "./onboarding/SuccessScreen";
 import AppGrid from "components/AppComponents/AppGrid";
-import { Grid, height } from "@mui/system";
 
 const initialValues = {
     onBoardingType: "single",
@@ -56,7 +55,7 @@ const onBoardingStepper = [
             communityAddress: ""
         },
         initialValidationSchema: {
-            communityAddress: Yup.string().required('Community Address is required'),
+            communityAddress: Yup.object().required('Community Address is required'),
 
         },
         height: "60vh",
@@ -69,7 +68,7 @@ const onBoardingStepper = [
             communityName: ""
         },
         initialValidationSchema: {
-            communityName: Yup.string().required('Community Name is required'),
+            communityName: Yup.object().required('Community Name is required'),
 
         },
         height: "40vh",
@@ -245,23 +244,23 @@ const CommunityOnboarding = () => {
     const footer = () => {
         return (
             <AppRowBox>
-                <AppGrid item >
+                <AppGrid item size={{ xs: 2 }} >
                     {activeStep && !finalStep ? (
-                        <Button fullWidth color="secondary" onClick={handleBack} variant="outlined" size="small">
+                        <Button fullWidth color="secondary" onClick={handleBack} variant="outlined" >
                             Back
                         </Button>
                     ) : (
                         <div></div>
                     )}
                 </AppGrid>
-                <AppGrid item >
+                <AppGrid item size={{ xs: 2 }} >
 
                     <Button fullWidth color="info" type="submit" onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
-                        variant="contained" size="large">
+                        variant="contained" >
                         {finalStep ? "Done" : "Next"}
                     </Button>
                 </AppGrid>
-            </AppRowBox>)
+            </AppRowBox >)
     }
 
 

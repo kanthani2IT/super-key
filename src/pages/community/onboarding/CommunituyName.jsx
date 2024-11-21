@@ -3,6 +3,7 @@ import AppDropDown from 'components/AppComponents/AppDropDown';
 import { useState } from 'react';
 
 import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
+import AppAutoComplete from 'components/AppComponents/AppAutoComplete';
 
 
 const options = [
@@ -20,30 +21,11 @@ const options = [
 
 
 
-const CommunityName = ({ setFieldValue, formValues, errors,
-    touched, }) => {
+const CommunityName = ({ setFieldValue, formValues, touched, errors }) => {
 
-    const [name, setName] = useState({
-        searchTerm: null,
-        value: formValues?.communityName || null,
-    })
-    const handleChange = (key = 'searchTerm', value = null, reset = false) => {
-        if (!reset) {
-            setName(prevAdd => ({
-                ...prevAdd,
-                [key]: value
-            }))
-            if (key == 'value') {
-                setFieldValue('communityName', value)
-            }
-        } else {
-            setName({
-                searchTerm: '',
-                value: null,
-            })
-            setFieldValue('communityName', value)
-
-        }
+    const [address, setAddress] = useState('')
+    const onSearch = (searchString) => {
+        setAddress(searchString)
     }
 
 
@@ -51,7 +33,7 @@ const CommunityName = ({ setFieldValue, formValues, errors,
         <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
             <Grid item >
                 <AppLabelComponent gap={2} variant="h4" label={'What is the name of your community?'}>
-                    <AppDropDown error={touched.communityName && errors.communityName} onChange={handleChange} searchString={name.searchTerm} value={name.value} placeholder={'Search your Community'} options={options} />
+                    <AppAutoComplete name='communityName' freesolo error={touched.communityName && errors.communityName} onChange={setFieldValue} searchString={address} value={formValues.communityName} options={options} placeholder='Search your Community' onSearch={onSearch} />
                 </AppLabelComponent>
 
             </Grid>

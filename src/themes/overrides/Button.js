@@ -1,6 +1,5 @@
 // material-ui
 import { alpha } from "@mui/material/styles";
-import { borderRadius, padding } from "@mui/system";
 
 // project import
 import getColors from "utils/getColors";
@@ -114,7 +113,7 @@ export default function Button(theme) {
       },
       styleOverrides: {
         root: {
-          padding: "0 0 0 0",
+          // padding: "0 0 0 0",
           fontWeight: 400,
           borderRadius: "12px",
           "&::after": {
@@ -137,17 +136,16 @@ export default function Button(theme) {
             transition: "0s",
           },
           [theme.breakpoints.down("sm")]: {
-            fontSize: "0.75rem",
-            padding: "6px 12px",
-            borderRadius: "8px",
+            fontSize: "0.75em",
+            padding: "0.375em 0.75em",
           },
           [theme.breakpoints.up("md")]: {
-            fontSize: "0.875rem",
-            padding: "8px 16px",
+            fontSize: "0.875em",
+            padding: "0.6em 0.75em",
           },
           [theme.breakpoints.up("lg")]: {
-            fontSize: "1rem",
-            padding: "10px 20px",
+            fontSize: "1em",
+            padding: "0.625em 1em",
           },
         },
         contained: {

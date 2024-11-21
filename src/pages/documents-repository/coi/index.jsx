@@ -1,4 +1,4 @@
-import { Search } from "@mui/icons-material";
+import { Mail, Search, Send } from "@mui/icons-material";
 import { Button, Grid2 as Grid, InputAdornment, Typography } from "@mui/material";
 import CardGrid from "components/AppComponents/AppDataCard";
 import AppModal from "components/AppComponents/AppModal";
@@ -11,6 +11,7 @@ import * as Yup from 'yup';
 import { useFormik } from "formik";
 import CoiEmailProcess from "./CoiEmailProcess";
 import SuccessScreen from "pages/community/onboarding/SuccessScreen";
+import AppGrid from "components/AppComponents/AppGrid";
 
 
 const initialValues = {
@@ -89,17 +90,16 @@ const COI = () => {
       <AppRowBox>
 
         <div></div>
-
-        <Button color="info" type="submit" onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
-          variant="contained" size="large">
+        <Button fullWidth color="info" type="submit" onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
+          variant="contained" endIcon={<Send />}>
           {"Send"}
         </Button>
       </AppRowBox>)
   }
   return (
-    <Grid container spacing={5}>
+    <AppGrid container spacing={5}>
       <AppRowBox >
-        <Grid size={{ xs: 12, sm: 8, md: 6, lg: 4 }}>
+        <AppGrid size={{ xs: 12, sm: 8, md: 6, lg: 4 }}>
           <StyledTextField fullWidth placeholder="Search COI" slotProps={{
             input: {
               startAdornment: (
@@ -109,28 +109,28 @@ const COI = () => {
               )
             }
           }} />
-        </Grid>
+        </AppGrid>
       </AppRowBox>
       <AppRowBox>
-        <Grid size={{ xs: 12, sm: 8, md: 6, lg: 4 }}>
+        <AppGrid size={{ xs: 12, sm: 8, md: 6, lg: 4 }}>
           <AppRowBox >
             <Typography variant="h5">Communities</Typography>
             <Typography variant="body1">{COIData?.length} Communities &nbsp; |&nbsp; {COIData?.length * 10} COI  </Typography>
           </AppRowBox>
-        </Grid>
+        </AppGrid>
       </AppRowBox>
-      {!showCertificates ? <Grid item size={{ xs: 12 }}>
+      {!showCertificates ? <AppGrid item size={{ xs: 12 }}>
         <CardGrid handleClick={handleCertificates} data={COIData} />
-      </Grid> :
-        <Grid item size={{ xs: 12 }}>
+      </AppGrid> :
+        <AppGrid item size={{ xs: 12 }}>
 
           <CertificatesCard title={coi?.community?.title} handleEmail={handleEmailModal} handleCertificates={handleCertificates} certificateData={certificateData} />
-        </Grid>}
+        </AppGrid>}
 
       <AppModal height={finalStep ? "30vh" : '70vh'} enableCard={!finalStep} title={coiMailSteps[activeStep].title} open={open} onClose={handleEmailModalClose} footer={!finalStep && footer()} align={finalStep ? 'center' : ""}  >
         {coiMailSteps[activeStep].component({ formik: formik })}
       </AppModal>
-    </Grid>
+    </AppGrid>
 
   );
 };

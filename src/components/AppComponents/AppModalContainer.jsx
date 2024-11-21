@@ -32,7 +32,7 @@ const AppModalContainer = ({
     children,
     cardHeight = '70%',
     height = 'auto',
-    width = "40vw",
+    width = "40%",
     padding = '3%',
     enableCard = false,
     title,

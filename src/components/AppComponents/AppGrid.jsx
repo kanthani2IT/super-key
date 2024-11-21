@@ -3,7 +3,7 @@ import { Grid2 as Grid } from '@mui/material'
 
 const AppGrid = ({ children, ...props }) => {
     return (
-        <Grid {...props} >
+        <Grid  {...props} >
             {children}
         </Grid>
     )

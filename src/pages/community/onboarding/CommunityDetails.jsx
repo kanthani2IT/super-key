@@ -50,7 +50,7 @@ const CommunityDetails = ({
         const { name, value } = event.target
         setFieldValue(name, value);
     };
-    const size = { xs: 12, sm: 12, md: 6, lg: 6, xl: 6, }
+    const size = { xs: 12, sm: 12, md: 12, lg: 6, xl: 6, }
 
     return (
         <AppGrid container spacing={4} >
