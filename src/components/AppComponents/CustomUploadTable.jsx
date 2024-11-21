@@ -34,7 +34,7 @@ const CustomUploadTable = ({ cols, tableData }) => {
         </TableHead>
         <TableBody>
           {tableData.map((rows, rowsIndex) => (
-            <StyledTableRow>
+            <StyledTableRow key={rowsIndex}>
               {cols.map((col) => {
                 if (col.fieldName === "action") {
                   return (
