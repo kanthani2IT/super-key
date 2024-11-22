@@ -13,11 +13,11 @@ import {
 const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
   width: width || "auto",
   height: height || "auto",
-  padding: "2%",
+  padding: "1%",
   alignContent: align,
   borderRadius: "10px",
-  backgroundColor: theme.palette.background.paper, // Use theme color
-  boxShadow: theme.shadows[6], // Default box shadow
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: theme.shadows[6],
 }));
 
 const StyledFlexCard = styled(Card)(({ theme }) => ({
@@ -25,56 +25,56 @@ const StyledFlexCard = styled(Card)(({ theme }) => ({
   flexDirection: "column",
   height: "100%",
 }));
-// borderBottom: `0.5px solid ${theme.palette.divider}`
-const StyledFlexCardContent = styled(CardContent)(
-  ({ theme, padding, footer }) => ({
-    paddingLeft: padding,
-    paddingRight: padding,
-    flex: footer ? "1 0 70%" : "auto",
-    overflowY: "auto",
-    marginTop: 2,
-    marginBottom: 2,
-    borderRadius: "8px",
-  })
-);
+
+const StyledFlexCardContent = styled(CardContent)(({ height, theme, padding, footer }) => ({
+  paddingLeft: padding,
+  paddingRight: padding,
+  flex: footer ? `1 0 ${height}` : height,
+  marginTop: 2,
+  marginBottom: 2,
+  borderRadius: "8px",
+}));
 
 const AppModalContainer = ({
   children,
-  height = "80vh",
-  width = "700px",
-  padding = "2%",
+  cardHeight = '70%',
+  height = 'auto',
+  width = "40%",
+  padding = '3%',
   enableCard = false,
   title,
   footer,
   header,
   stepper,
-  align,
+  align
 }) => {
   return (
     <StyledPaper width={width} height={height} align={align}>
       {enableCard ? (
         <StyledFlexCard elevation={0}>
-          {!header && title ? (
+          {title && !header && (
             <CardHeader
               title={
-                <Stack alignItems={"center"} gap={1}>
+                <Stack alignItems="center" gap={1}>
                   <Typography variant="h2">{title}</Typography>
-
+                  {/* Optionally include stepper */}
                   {stepper && stepper()}
                 </Stack>
               }
             />
-          ) : (
-            header
           )}
-
+          {header && !title && header}
           {header && <Divider />}
-          <StyledFlexCardContent padding={padding} footer={footer}>
+
+          <StyledFlexCardContent height={cardHeight} padding={padding} footer={footer}>
             {children}
           </StyledFlexCardContent>
 
-          {footer && <Divider />}
-          {footer && <CardActions>{footer}</CardActions>}
+          {footer && (
+            <CardActions>
+              {footer}
+            </CardActions>
+          )}
         </StyledFlexCard>
       ) : (
         children

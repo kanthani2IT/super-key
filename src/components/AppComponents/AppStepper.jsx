@@ -26,7 +26,7 @@ const CustomStepIcon = () => null;
 
 const AppStepper = ({ activeStep, steps }) => {
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", height: "1vh" }}>
       <Stepper
         activeStep={activeStep}
         alternativeLabel
