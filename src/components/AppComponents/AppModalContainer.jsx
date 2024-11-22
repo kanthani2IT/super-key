@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 
 const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
-  width: width || "auto",
+  minWidth: width || "auto",
+  maxWidth: width || "auto",
   height: height || "auto",
   padding: "1%",
   alignContent: align,
@@ -30,7 +31,7 @@ const StyledFlexCardContent = styled(CardContent)(({ height, theme, padding, foo
   paddingLeft: padding,
   paddingRight: padding,
   flex: footer ? `1 0 ${height}` : height,
-  marginTop: 2,
+  marginTop: 3,
   marginBottom: 2,
   borderRadius: "8px",
 }));
@@ -39,7 +40,7 @@ const AppModalContainer = ({
   children,
   cardHeight = '70%',
   height = 'auto',
-  width = "40%",
+  width = "40vw",
   padding = '3%',
   enableCard = false,
   title,
@@ -55,9 +56,9 @@ const AppModalContainer = ({
           {title && !header && (
             <CardHeader
               title={
-                <Stack alignItems="center" gap={1}>
-                  <Typography variant="h2">{title}</Typography>
-                  {/* Optionally include stepper */}
+                <Stack textAlign={'center'} justifyContent={'center'} alignItems="center" gap={1} mb='2px' >
+                  <Typography variant="h2">{title}
+                  </Typography>
                   {stepper && stepper()}
                 </Stack>
               }

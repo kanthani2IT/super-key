@@ -1,4 +1,5 @@
 import { Autocomplete, Divider, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import AppAutoComplete from 'components/AppComponents/AppAutoComplete';
 import AppGrid from 'components/AppComponents/AppGrid';
 import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
 import { useEffect, useState } from 'react';
@@ -10,7 +11,7 @@ const CommunityDetails = ({
     errors,
     touched,
     setFieldValue,
-    community, handleCommunityDetails }) => {
+}) => {
 
     const { communityManager, propertyManager } = formValues
 
@@ -51,7 +52,6 @@ const CommunityDetails = ({
         setFieldValue(name, value);
     };
     const size = { xs: 12, sm: 12, md: 12, lg: 6, xl: 6, }
-
     return (
         <AppGrid container spacing={4} >
 
@@ -63,38 +63,19 @@ const CommunityDetails = ({
                         <Typography variant="h4">Community Manager</Typography>
                     </AppGrid>
                     <AppGrid item size={size} >
-                        <AppLabelComponent label={'Community Manager Name'}>
-
-                            <Autocomplete
-
-                                name="communityManager.name"
-                                options={cManagers}
-                                getOptionLabel={(option) => {
-                                    if (typeof option === 'string') {
-                                        return option;
-                                    }
-                                    if (option.label) {
-                                        return option.label;
-                                    }
-                                    return option.name;
-                                }}
+                        <AppLabelComponent label={'Name'}>
+                            <AppAutoComplete name="communityManager.name" freeSolo={false}
+                                error={touched.communityManager?.name && errors.communityManager?.name}
+                                onChange={setFieldValue}
+                                nameParam='name'
+                                // searchString={address}
                                 value={communityManager?.name || ''}
-                                onChange={(event, value) => {
-
-                                    setFieldValue("communityManager.name", value ? value.name : '');
-                                }}
-
-                                renderInput={(params) => (
-                                    <TextField
-                                        required
-                                        {...params}
-                                        placeholder="Select Manager"
-                                        error={Boolean(touched.communityManager?.name && errors.communityManager?.name)}
-                                        helperText={touched.communityManager?.name && errors.communityManager?.name}
-                                    />
-                                )}
-                                fullWidth
+                                options={cManagers}
+                                placeholder='Select Manager'
+                            // onSearch={onSearch}
                             />
+
+
                         </AppLabelComponent>
 
                     </AppGrid>
@@ -146,38 +127,18 @@ const CommunityDetails = ({
                         <Typography variant="h4">Property Manager</Typography>
                     </AppGrid>
                     <AppGrid item size={size} >
-                        <AppLabelComponent label={'Property Manager Name'}>
-
-                            <Autocomplete
-                                name="propertyManager.name"
+                        <AppLabelComponent label={'Name'}>
+                            <AppAutoComplete name="propertyManager.name" freeSolo={false}
+                                error={touched.propertyManager?.name && errors.propertyManager?.name}
+                                onChange={setFieldValue}
+                                nameParam='name'
+                                // searchString={address}
+                                value={propertyManager?.name || ''}
                                 options={cManagers}
-                                getOptionLabel={(option) => {
-                                    // Value selected with enter, right from the input
-                                    if (typeof option === 'string') {
-                                        return option;
-                                    }
-                                    // Add "xxx" option created dynamically
-                                    if (option.label) {
-                                        return option.label;
-                                    }
-                                    // Regular option
-                                    return option.name;
-                                }}
-                                value={propertyManager.name || ''} // Only use the name here
-                                onChange={(event, value) => {
-                                    setFieldValue("propertyManager.name", value ? value.name : '');
-                                }}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        required
-                                        placeholder="Select Property Manager"
-                                        error={Boolean(touched.propertyManager?.name && errors.propertyManager?.name)}
-                                        helperText={touched.propertyManager?.name && errors.propertyManager?.name}
-                                    />
-                                )}
-                                fullWidth
+                                placeholder='Select Property Manager'
+                            // onSearch={onSearch}
                             />
+
                         </AppLabelComponent>
                     </AppGrid>
                     <AppGrid item size={size} >

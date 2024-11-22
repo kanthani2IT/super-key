@@ -3,12 +3,14 @@ import {
     Button,
     Typography
 } from "@mui/material";
+import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
 import { useFormik } from "formik";
 import UserTable from "pages/dashboard/UserTable";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useGlobalStore } from "store/store";
 import * as Yup from 'yup';
 import AddNewCommunity from "./onboarding/AddNewCommunity";
 import CommunityName from "./onboarding/CommunituyName";
@@ -16,7 +18,7 @@ import CommunityAddress from "./onboarding/CommunityAddress";
 import CommunityDetails from "./onboarding/CommunityDetails";
 import InsuranceUpload from "./onboarding/InsuranceTable";
 import SuccessScreen from "./onboarding/SuccessScreen";
-import AppGrid from "components/AppComponents/AppGrid";
+import { addQueryParams } from "utils/helpers";
 
 const initialValues = {
     onBoardingType: "single",
@@ -46,7 +48,7 @@ const onBoardingStepper = [
         initialValues: {
             onBoardingType: "single"
         },
-        height: "20vh",
+        height: "25vh",
     },
     {
         title: "Community Address",
@@ -93,7 +95,7 @@ const onBoardingStepper = [
         },
         initialValidationSchema: {
             communityManager: Yup.object().shape({
-                name: Yup.string().required('Name is required'),
+                name: Yup.object().required('Name is required'),
                 email: Yup.string().email('Invalid email format').required('Email is required'),
                 mobile: Yup.string()
                     .min(10, "Mobile number must be at least 10 digits.")
@@ -101,7 +103,7 @@ const onBoardingStepper = [
                     .required('Mobile number is required'),
             }),
             propertyManager: Yup.object().shape({
-                name: Yup.string().required('Name is required'),
+                name: Yup.object().required('Name is required'),
                 email: Yup.string().email('Invalid email format').required('Email is required'),
                 mobile: Yup.string()
                     .min(10, "Mobile number must be at least 10 digits.")
@@ -132,6 +134,7 @@ const defaultValue = {
 const CommunityOnboarding = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { onboarding, updateOnboarding, resetOnboarding } = useGlobalStore();
 
     const searchParams = new URLSearchParams(location.search);
     const currentOnboradingType = searchParams.get("type");
@@ -181,6 +184,8 @@ const CommunityOnboarding = () => {
         setShow("true")
         setSelectedFiles([])
         resetForm()
+        resetOnboarding()
+
     };
 
     const handleQueryParams = (step) => {
@@ -213,30 +218,14 @@ const CommunityOnboarding = () => {
             handleQueryParams(activeStep - 1);
             setValidationSchema(onBoardingStepper[activeStep - 1]?.initialValidationSchema || null)
             setActiveStep((prevStep) => prevStep - 1);
+            updateOnboarding(values);
 
         }
     };
 
-    const handleCommunityDetails = (key, value) => {
-
-        const initialValidationSchema = onBoardingStepper[activeStep]?.initialValidationSchema
-        setCommunity({ ...community, [key]: value === 'true' })
-
-        if (key === 'manager') {
-            setValidationSchema((prevSchema) => {
-                const updatedSchema = { ...prevSchema };
-                value !== 'true' ? delete updatedSchema.communityManager : updatedSchema.communityManager = initialValidationSchema.communityManager
-                return updatedSchema;
-            });
-        }
-
-        if (key === 'propertyManager') {
-            setValidationSchema((prevSchema) => {
-                const updatedSchema = { ...prevSchema };
-                value !== 'true' ? delete updatedSchema.propertyManager : updatedSchema.propertyManager = initialValidationSchema.communityManager
-                return updatedSchema;
-            });
-        }
+    const handleOnboardingType = (value) => {
+        setOnboardingType(value)
+        setFieldValue('onBoardingType', value)
     }
 
 
@@ -265,18 +254,22 @@ const CommunityOnboarding = () => {
 
 
     const formik = useFormik({
-        initialValues: initialValues,
+        initialValues: onboarding ?? initialValues,
         validationSchema: validationSchema ? Yup.object().shape(
             validationSchema
         ) : null,
         enableReinitialize: true,
         onSubmit: (values) => {
+            updateOnboarding(values);
             handleNext(values);
             setTouched({});
-            console.log(values);
         }
     });
     const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors, resetForm } = formik;
+
+    console.log(addQueryParams('/api/v1', { search: "hii", fields: "sss" }))
+    console.log(addQueryParams('/api/v1', { search: "hii" }))
+    console.log(addQueryParams('/api/v1', {}))
 
     return (
         <AppGrid container spacing={4}>
@@ -309,7 +302,7 @@ const CommunityOnboarding = () => {
             <AppModal height={finalStep ? "30vh" : 'auto'} cardHeight={onBoardingStepper[activeStep].height || undefined} open={open} onClose={handleClose} enableCard={!finalStep} title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper} align={finalStep ? 'center' : ""}>
 
                 {onBoardingStepper[activeStep]?.component && onBoardingStepper[activeStep]?.component({
-                    setOnboardingType,
+                    handleOnboardingType,
                     onBoardingType,
                     formValues: values,
                     errors,
@@ -318,7 +311,6 @@ const CommunityOnboarding = () => {
                     setValues,
                     handleChange,
                     community,
-                    handleCommunityDetails,
                     setShow,
                     show,
                     setSelectedFiles,

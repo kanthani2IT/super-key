@@ -13,7 +13,7 @@ const CustomConnector = styled(StepConnector)(({ theme }) => ({
     border: 0,
     borderRadius: 10,
     backgroundColor: "#B0B0B0",
-    width: "150%",
+    width: "5vw",
   },
   "&.Mui-active, &.Mui-completed": {
     "& .MuiStepConnector-line": {

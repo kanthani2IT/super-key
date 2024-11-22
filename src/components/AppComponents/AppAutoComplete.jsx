@@ -143,29 +143,38 @@ const AppAutoComplete = ({
             }}
             ListboxProps={{
                 sx: {
-                    padding: 0, // Removes the default padding
+                    width: 'auto',
+                    maxHeight: "153px",
+                    overflowY: "auto",
+                    padding: 0,
+                    color: "inherit",
                     "& .MuiAutocomplete-option": {
-                        minHeight: "45px", // Set a consistent height for each option
+                        minHeight: "45px",
                         display: "flex",
-                        alignItems: "center", // Ensures text is vertically aligned
+                        alignItems: "center",
                         "&:hover, &:focus": {
-                            color: "inherit",
-                            backgroundColor: theme.palette.info.light, // Change background color on hover for regular options
+                            backgroundColor: theme.palette.info.light,
                         },
-
                     },
+
                 },
             }}
             componentsProps={{
                 paper: {
                     sx: {
+                        width: 'auto',
+                        background: '#F7F9FB',
                         marginTop: 2, // Add gap
                         borderRadius: 2,
-                        maxHeight: "153px", // Approximately 3 items of 51px height each
-                        overflowY: "auto", // Enable scrolling if more than 3 items
+                        "& .MuiAutocomplete-noOptions": {
+                            color: "inherit",
+                            fontWeight: "bold",
+                        },
+
                     },
                 },
             }}
+            noOptionsText='No data found'
             fullWidth
             open={open}
             onOpen={() => setOpen(true)}

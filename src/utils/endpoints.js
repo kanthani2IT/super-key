@@ -13,7 +13,11 @@ const COMMUNITY = {
   getAll: "/api/community",
 };
 const COMMON = {
-  getAllLocation: (type) => `/api/autocomplete?input=${type}`,
+  getAllLocation: `/api/autocomplete`,
+  getAllCommunity: `/api/community`,
+  getAllCommunityManager: `/api/manager`,
+  getAllPropertyManager: `/api/propertyManager`,
+  getAllDocTypes: `/api/docTypes`,
 };
 
 export { LOGIN, ONBOARD, COMMON, COMMUNITY };
