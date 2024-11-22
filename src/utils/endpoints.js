@@ -8,6 +8,7 @@ const LOGIN = {
 };
 const ONBOARD = {
   getUsers: "/api/veruna/users",
+  getUserById: (id) => `/api/community/:${id}`,
 };
 const COMMUNITY = {
   getAll: "/api/community",
@@ -16,4 +17,4 @@ const COMMON = {
   getAllLocation: (type) => `/api/autocomplete?input=${type}`,
 };
 
-export { LOGIN, ONBOARD, COMMON, COMMUNITY };
+export { COMMON, COMMUNITY, LOGIN, ONBOARD };

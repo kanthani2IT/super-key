@@ -16,6 +16,20 @@ export const useGetUsers = () => {
   // Return the necessary states: data, isLoading, isError, error
   return { data, isLoading, isError, error };
 };
+export const useGetUserById = (id) => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["userInfo"],
+    queryFn: api.onboard.getUserById(id),
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+  // Return the necessary states: data, isLoading, isError, error
+  return { data, isLoading, isError, error };
+};
 
 // export const useLoginUser = () => {
 //   const navigate = useNavigate();
