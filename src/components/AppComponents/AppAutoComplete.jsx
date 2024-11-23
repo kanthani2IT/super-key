@@ -24,6 +24,7 @@ const AppAutoComplete = ({
     freeSolo = true,
     options = [],
     nameParam = "label",
+    valueParam = "value",
     placeholder = 'type',
     inputValue,
     error,
@@ -97,7 +98,7 @@ const AppAutoComplete = ({
                         <>
                             <Box
                                 {...props}
-                                key={option.id}
+                                key={option[valueParam]}
                                 sx={{
                                     display: "flex",
                                     justifyContent: "space-between",
@@ -124,15 +125,26 @@ const AppAutoComplete = ({
                         </>
                     );
                 }
+                const isSelected = value && option[valueParam] === value[valueParam];
 
                 return (
                     <>
+
                         <Box
                             {...props}
-                            key={option.id} // Add a key for each option
-                            sx={{ px: 2 }}
+                            key={option[valueParam]}
+                            aria-selected={isSelected ? "true" : "false"}
+                            sx={{
+                                px: 2,
+                                display: "flex",
+                                alignItems: "center",
+                                backgroundColor: isSelected ? theme.palette.info.light : "transparent",
+                                "&:hover": {
+                                    backgroundColor: theme.palette.action.hover,
+                                },
+                            }}
                         >
-                            <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+                            <Typography variant="subtitle1" sx={{ fontWeight: isSelected ? "bold" : "normal" }}>
                                 {option[nameParam]}
                             </Typography>
                         </Box>
@@ -157,6 +169,7 @@ const AppAutoComplete = ({
                         },
                     },
 
+
                 },
             }}
             componentsProps={{
@@ -171,10 +184,13 @@ const AppAutoComplete = ({
                             fontWeight: "bold",
                         },
 
+
                     },
                 },
             }}
             noOptionsText='No data found'
+            selectOnFocus
+
             fullWidth
             open={open}
             onOpen={() => setOpen(true)}

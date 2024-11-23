@@ -11,14 +11,14 @@ import UserTable from "pages/dashboard/UserTable";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useGlobalStore } from "store/store";
+import { addQueryParams } from "utils/helpers";
 import * as Yup from 'yup';
 import AddNewCommunity from "./onboarding/AddNewCommunity";
-import CommunityName from "./onboarding/CommunituyName";
 import CommunityAddress from "./onboarding/CommunityAddress";
 import CommunityDetails from "./onboarding/CommunityDetails";
+import CommunityName from "./onboarding/CommunityName";
 import InsuranceUpload from "./onboarding/InsuranceTable";
 import SuccessScreen from "./onboarding/SuccessScreen";
-import { addQueryParams } from "utils/helpers";
 
 const initialValues = {
     onBoardingType: "single",
@@ -227,7 +227,6 @@ const CommunityOnboarding = () => {
         setOnboardingType(value)
         setFieldValue('onBoardingType', value)
     }
-
 
 
     const footer = () => {
