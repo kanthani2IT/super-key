@@ -6,125 +6,81 @@ import {
 import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
+import CircularLoader from "components/CircularLoader";
+import Loader from "components/Loader";
 import { useFormik } from "formik";
 import UserTable from "pages/dashboard/UserTable";
-import { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useGlobalStore } from "store/store";
 import * as Yup from 'yup';
-import AddNewCommunity from "./onboarding/AddNewCommunity";
-import CommunityAddress from "./onboarding/CommunityAddress";
-import CommunityDetails from "./onboarding/CommunityDetails";
-import CommunityName from "./onboarding/CommunityName";
-import InsuranceUpload from "./onboarding/InsuranceTable";
-import SuccessScreen from "./onboarding/SuccessScreen";
-
-const initialValues = {
-    onBoardingType: "single",
-    communityAddress: "",
-    communityName: "",
-    communityManager: {
-        name: '',
-        email: '',
-        mobile: '',
-        address: ""
-    },
-    propertyManager: {
-        name: '',
-        email: '',
-        mobile: '',
-        address: ""
-    },
 
 
-}
+const AddNewCommunity = React.lazy(() => import("./onboarding/AddNewCommunity"));
+const CommunityAddress = React.lazy(() => import("./onboarding/CommunityAddress"));
+const CommunityDetails = React.lazy(() => import("./onboarding/CommunityDetails"));
+const CommunityName = React.lazy(() => import("./onboarding/CommunityName"));
+const InsuranceUpload = React.lazy(() => import("./onboarding/InsuranceTable"));
+const SuccessScreen = React.lazy(() => import("./onboarding/SuccessScreen"));
 
 
 const onBoardingStepper = [
     {
         title: "Add New Community",
-        component: (props) => <AddNewCommunity {...props} />,
-        initialValues: {
-            onBoardingType: "single"
-        },
+        component: (props) => (
+            <AddNewCommunity {...props} />
+        ),
         height: "25vh",
     },
     {
         title: "Community Address",
-        component: (props) => <CommunityAddress {...props} />,
-        initialValues: {
-            communityAddress: ""
-        },
-        initialValidationSchema: {
-            communityAddress: Yup.object().required('Community Address is required'),
+        component: (props) => (
 
-        },
+            <CommunityAddress {...props} />
+
+        ),
         height: "60vh",
-
     },
     {
         title: "Community Name",
-        component: (props) => <CommunityName {...props} />,
-        initialValues: {
-            communityName: ""
-        },
-        initialValidationSchema: {
-            communityName: Yup.object().required('Community Name is required'),
+        component: (props) => (
 
-        },
+            <CommunityName {...props} />
+
+        ),
         height: "40vh",
-
     },
     {
         title: "Community Details",
-        component: (props) => <CommunityDetails {...props} />,
-        initialValues: {
-            communityManager: {
-                name: '',
-                email: '',
-                mobile: '',
-                address: ""
-            },
-            propertyManager: {
-                name: '',
-                email: '',
-                mobile: '',
-                address: ""
-            },
-        },
-        initialValidationSchema: {
-            communityManager: Yup.object().shape({
-                name: Yup.object().required('Name is required'),
-                email: Yup.string().email('Invalid email format').required('Email is required'),
-                mobile: Yup.string()
-                    .min(10, "Mobile number must be at least 10 digits.")
-                    .max(15, "Mobile number cannot exceed 15 digits.")
-                    .required('Mobile number is required'),
-            }),
-            propertyManager: Yup.object().shape({
-                name: Yup.object().required('Name is required'),
-                email: Yup.string().email('Invalid email format').required('Email is required'),
-                mobile: Yup.string()
-                    .min(10, "Mobile number must be at least 10 digits.")
-                    .max(15, "Mobile number cannot exceed 15 digits.")
-                    .required('Mobile number is required'),
-            }),
-        },
-        height: "60vh",
+        component: (props) => (
 
+            <CommunityDetails {...props} />
+
+        ),
+        height: "60vh",
     },
     {
         title: "Insurance Documentation",
-        component: (props) => <InsuranceUpload {...props} />,
-        height: "auto",
+        component: (props) => (
 
-    }, {
-        title: "",
-        component: ({ handleClose }) => <SuccessScreen title={'Your Community Onboarded Successfully !'} handleClose={handleClose} />,
-        initialValues: {},
+            <InsuranceUpload {...props} />
+
+        ),
         height: "auto",
-    }
+    },
+    {
+        title: "",
+        component: ({ handleClose }) => (
+
+            <SuccessScreen
+                title="Your Community Onboarded Successfully!"
+                handleClose={handleClose}
+            />
+        ),
+        height: "auto",
+    },
 ];
+
 const defaultValue = {
     onBoardingType: "single",
     activeStep: 0,
@@ -252,7 +208,7 @@ const CommunityOnboarding = () => {
 
 
     const formik = useFormik({
-        initialValues: onboarding ?? initialValues,
+        initialValues: onboarding,
         validationSchema: validationSchema ? Yup.object().shape(
             validationSchema
         ) : null,
@@ -264,7 +220,7 @@ const CommunityOnboarding = () => {
         }
     });
     const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors, resetForm } = formik;
-
+    console.log(onboarding)
 
     return (
         <AppGrid container spacing={4}>
@@ -293,26 +249,24 @@ const CommunityOnboarding = () => {
             <AppGrid item size={{ xs: 12 }}>
                 <UserTable height={'80vh'} />
             </AppGrid>
-
             <AppModal height={finalStep ? "30vh" : 'auto'} cardHeight={onBoardingStepper[activeStep].height || undefined} open={open} onClose={handleClose} enableCard={!finalStep} title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper} align={finalStep ? 'center' : ""}>
-
-                {onBoardingStepper[activeStep]?.component && onBoardingStepper[activeStep]?.component({
-                    handleOnboardingType,
-                    onBoardingType,
-                    formValues: values,
-                    errors,
-                    touched,
-                    setFieldValue,
-                    setValues,
-                    handleChange,
-                    community,
-                    setShow,
-                    show,
-                    setSelectedFiles,
-                    selectedFiles,
-                    handleClose
-                })}
-
+                <Suspense fallback={<CircularLoader />}>
+                    {onBoardingStepper[activeStep]?.component && onBoardingStepper[activeStep]?.component({
+                        handleOnboardingType,
+                        onBoardingType,
+                        formValues: values,
+                        errors,
+                        touched,
+                        setFieldValue,
+                        handleChange,
+                        community,
+                        setShow,
+                        show,
+                        setSelectedFiles,
+                        selectedFiles,
+                        handleClose
+                    })}
+                </Suspense>
             </AppModal>
         </AppGrid >
     );

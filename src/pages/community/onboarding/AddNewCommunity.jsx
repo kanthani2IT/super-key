@@ -3,7 +3,7 @@ import AppGrid from 'components/AppComponents/AppGrid'
 import AppLabelComponent from 'components/AppComponents/AppLabelComponent'
 
 const AddNewCommunity = ({ handleOnboardingType, onBoardingType }) => {
-    console.log(onBoardingType)
+    console.log('first component')
     return (
         <AppGrid container justifyContent={'center'} rowSpacing={4} >
             <AppGrid item size={{ xs: 10 }} >

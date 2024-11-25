@@ -20,7 +20,7 @@ export default function App() {
             <RouterProvider router={router} />
             {/* <ReactQueryDevtools initialIsOpen={true} /> */}
           </QueryClientProvider>
-          <SuccessSnackbar />  {/* Add the CustomSnackbar component here */}
+          <SuccessSnackbar />
 
         </SnackbarProvider>
       </ScrollTop>

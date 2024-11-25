@@ -5,7 +5,7 @@ import { api } from "api";
 export const useLocationsQuery = (search) =>
   useQuery({
     queryKey: ["allLocationList", search],
-    queryFn: () => api.common.getAllLocation(search),
+    queryFn: api.common.getAllLocation({ search }),
     keepPreviousData: true,
     onSuccess: (data) => {
       console.log("Locations data:", data);
@@ -19,7 +19,7 @@ export const useLocationsQuery = (search) =>
 export const useCommunitiesQuery = (search) =>
   useQuery({
     queryKey: ["allCommunities", search],
-    queryFn: () => api.common.getAllCommunity(search),
+    queryFn: api.common.getAllCommunity({ search }),
     keepPreviousData: true,
     onSuccess: (data) => {
       console.log("Communities data:", data);
@@ -33,7 +33,7 @@ export const useCommunitiesQuery = (search) =>
 export const useCommunityManagersQuery = (search) =>
   useQuery({
     queryKey: ["allCommunityMangers", search],
-    queryFn: () => api.common.getAllCommunityManager(search),
+    queryFn: api.common.getAllCommunityManager({ search }),
     keepPreviousData: true,
     onSuccess: (data) => {
       console.log("Community Managers data:", data);
@@ -47,7 +47,7 @@ export const useCommunityManagersQuery = (search) =>
 export const usePropertyManagersQuery = (search) =>
   useQuery({
     queryKey: ["allPropertyMangers", search],
-    queryFn: () => api.common.getAllPropertyManager(search),
+    queryFn: api.common.getAllPropertyManager({ search }),
     keepPreviousData: true,
     onSuccess: (data) => {
       console.log("Property Managers data:", data);
@@ -61,7 +61,7 @@ export const usePropertyManagersQuery = (search) =>
 export const useDocumentsQuery = (search) =>
   useQuery({
     queryKey: ["allDocumentsMangers", search],
-    queryFn: () => api.common.getAllDocumentsManger(search),
+    queryFn: api.common.getAllDocTypes({ search }),
     keepPreviousData: true,
     onSuccess: (data) => {
       console.log("Documents Managers data:", data);

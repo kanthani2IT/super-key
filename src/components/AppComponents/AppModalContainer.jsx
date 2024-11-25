@@ -11,14 +11,25 @@ import {
 } from "@mui/material";
 
 const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
-  minWidth: width || "auto",
-  maxWidth: width || "auto",
+  // width: width || "auto",
   height: height || "auto",
   padding: "1%",
   alignContent: align,
   borderRadius: "10px",
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[6],
+  [theme.breakpoints.up("xs")]: {
+    width: "75%",
+  },
+  [theme.breakpoints.up("sm")]: {
+    width: "75%",
+  },
+  [theme.breakpoints.up("md")]: {
+    width: "50%",
+  },
+  [theme.breakpoints.up("lg")]: {
+    width: "40%"
+  },
 }));
 
 const StyledFlexCard = styled(Card)(({ theme }) => ({

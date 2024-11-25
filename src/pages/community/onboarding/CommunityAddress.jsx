@@ -3,7 +3,9 @@ import mapImg from 'assets/images/icons/map.png';
 import AppAutoComplete from 'components/AppComponents/AppAutoComplete';
 import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
 import { Image } from 'components/StyledComponents';
+import { useLocationsQuery } from 'hooks/useDropDown';
 import { useState } from 'react';
+import { useDebounceFn } from 'utils/helpers';
 
 const options = [
     { label: "Phoenix North Estates, Phoenix, AZ 85023, USAPhoenix North Estates, Phoenix, AZ 85023, USA", value: "AZ" },
@@ -12,13 +14,16 @@ const options = [
     { label: "New ", value: " lj" }
 ];
 
-const CommunityAddress = ({ setFieldValue, formValues, touched, errors, }) => {
-
+const CommunityAddress = ({ handleChange, formValues, touched, errors, }) => {
     const [address, setAddress] = useState('')
-    const onSearch = (searchString) => {
-        console.log(searchString)
+
+    const onSearch = useDebounceFn((searchString) => {
         setAddress(searchString)
-    }
+
+    }, 500)
+    const location = useLocationsQuery(address)
+    console.log(location)
+
     return (
         <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
             <Grid item size={{ xs: 10 }}>
@@ -26,7 +31,7 @@ const CommunityAddress = ({ setFieldValue, formValues, touched, errors, }) => {
             </Grid>
             <Grid item >
                 <AppLabelComponent gap={2} variant="h4" label={'What is the address of your community?'}>
-                    <AppAutoComplete name='communityAddress' freesolo error={touched.communityAddress && errors.communityAddress} onChange={setFieldValue} searchString={address} value={formValues.communityAddress} options={options} placeholder='Search your address' onSearch={onSearch} />
+                    <AppAutoComplete valueParam='value' name='communityAddress' freesolo error={touched.communityAddress && errors.communityAddress} onChange={handleChange} value={formValues.communityAddress} options={options} placeholder='Search your address' onSearch={onSearch} />
                 </AppLabelComponent>
 
 

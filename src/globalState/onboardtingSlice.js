@@ -1,5 +1,7 @@
 import { storeResetsFns } from "store/store";
 
+const defaultCountryCode = { label: "+1", value: "+1" };
+
 const initialOnboardingValues = {
   onBoardingType: "single",
   communityAddress: "",
@@ -8,12 +10,14 @@ const initialOnboardingValues = {
     name: "",
     email: "",
     mobile: "",
+    countryCode: defaultCountryCode,
     address: "",
   },
   propertyManager: {
     name: "",
     email: "",
     mobile: "",
+    countryCode: defaultCountryCode,
     address: "",
   },
 };

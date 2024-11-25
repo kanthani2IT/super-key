@@ -3,36 +3,76 @@ import { useState } from 'react';
 import AppAutoComplete from 'components/AppComponents/AppAutoComplete';
 import AppGrid from 'components/AppComponents/AppGrid';
 import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
+import { useCommunitiesQuery } from 'hooks/useDropDown';
+import { useDebounce, useDebounceFn } from 'utils/helpers';
 
 
 const options = [
-    { label: "Desert Eagle" },
-    { label: "Naples" },
-    { label: "Sarasota" },
-    { label: "Tampa" },
-    { label: "Orlando" },
-    { label: "Miami" },
-    { label: "Jacksonville" },
-    { label: "St. Petersburg" },
-    { label: "Fort Lauderdale" },
-    { label: "Palm Beach" }
+    {
+        id: "808c6301479c40b8b4a039bae45d1465",
+        name: "Green Valley Community"
+    },
+    {
+        id: "1",
+        name: "Desert Eagle"
+    },
+    {
+        id: "2",
+        name: "Naples"
+    },
+    {
+        id: "3",
+        name: "Sarasota"
+    },
+    {
+        id: "4",
+        name: "Tampa"
+    },
+    {
+        id: "5",
+        name: "Orlando"
+    },
+    {
+        id: "6",
+        name: "Miami"
+    },
+    {
+        id: "7",
+        name: "Jacksonville"
+    },
+    {
+        id: "8",
+        name: "St. Petersburg"
+    },
+    {
+        id: "9",
+        name: "Fort Lauderdale"
+    },
+    {
+        id: "10",
+        name: "Palm Beach"
+    }
 ];
 
 
 
-const CommunityName = ({ setFieldValue, formValues, touched, errors }) => {
 
-    const [address, setAddress] = useState('')
-    const onSearch = (searchString) => {
-        setAddress(searchString)
-    }
+const CommunityName = ({ handleChange, formValues, touched, errors }) => {
 
+    const [name, setName] = useState('')
+
+    const onSearch = useDebounceFn((searchString) => {
+        setName(searchString)
+
+    }, 500)
+    const communities = useCommunitiesQuery(name)
+    console.log(communities)
 
     return (
         <AppGrid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
             <AppGrid item >
                 <AppLabelComponent gap={2} variant="h4" label={'What is the name of your community?'}>
-                    <AppAutoComplete name='communityName' freesolo error={touched.communityName && errors.communityName} onChange={setFieldValue} searchString={address} value={formValues.communityName} options={options} placeholder='Search your Community' onSearch={onSearch} />
+                    <AppAutoComplete nameParam='name' name='communityName' freesolo error={touched.communityName && errors.communityName} onChange={handleChange} value={formValues.communityName} options={options} placeholder='Search your Community' onSearch={onSearch} />
                 </AppLabelComponent>
 
             </AppGrid>

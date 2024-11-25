@@ -2,34 +2,61 @@ import { getRequest } from "http/request";
 import { COMMON } from "utils/endpoints";
 import { addQueryParams } from "utils/helpers";
 
-const getAllLocation = async ({ search }) => {
-  const requestUrl = addQueryParams(COMMON.getAllLocation, { search });
-  const response = await getRequest(requestUrl);
-  return response;
+const getAllLocation = async (queries) => {
+  try {
+    const requestUrl = addQueryParams(COMMON.getAllLocation, queries);
+    const response = await getRequest(requestUrl);
+    return response;
+  } catch (error) {
+    console.error("Error fetching locations:", error);
+    throw error;
+  }
 };
 
-const getAllCommunity = async ({ search }) => {
-  const requestUrl = addQueryParams(COMMON.getAllCommunity, { search });
-  const response = await getRequest(requestUrl);
-  return response;
+const getAllCommunity = async (queries) => {
+  try {
+    const requestUrl = addQueryParams(COMMON.getAllCommunity, queries);
+    const response = await getRequest(requestUrl);
+    return response;
+  } catch (error) {
+    console.error("Error fetching communities:", error);
+    throw error;
+  }
 };
 
-const getAllCommunityManager = async ({ search }) => {
-  const requestUrl = addQueryParams(COMMON.getAllCommunityManager, { search });
-  const response = await getRequest(requestUrl);
-  return response;
+const getAllCommunityManager = async (queries) => {
+  try {
+    const requestUrl = addQueryParams(COMMON.getAllCommunityManager, {
+      queries,
+    });
+    const response = await getRequest(requestUrl);
+    return response;
+  } catch (error) {
+    console.error("Error fetching community managers:", error);
+    throw error;
+  }
 };
 
-const getAllPropertyManager = async ({ search }) => {
-  const requestUrl = addQueryParams(COMMON.getAllPropertyManager, { search });
-  const response = await getRequest(requestUrl);
-  return response;
+const getAllPropertyManager = async (queries) => {
+  try {
+    const requestUrl = addQueryParams(COMMON.getAllPropertyManager, queries);
+    const response = await getRequest(requestUrl);
+    return response;
+  } catch (error) {
+    console.error("Error fetching property managers:", error);
+    throw error;
+  }
 };
 
-const getAllDocumentTypes = async ({ search }) => {
-  const requestUrl = addQueryParams(COMMON.getAllDocumentTypes, { search });
-  const response = await getRequest(requestUrl);
-  return response;
+const getAllDocTypes = async (queries) => {
+  try {
+    const requestUrl = addQueryParams(COMMON.getAllDocTypes, queries);
+    const response = await getRequest(requestUrl);
+    return response;
+  } catch (error) {
+    console.error("Error fetching document types:", error);
+    throw error;
+  }
 };
 
 export const commonApi = {
@@ -37,5 +64,5 @@ export const commonApi = {
   getAllCommunity,
   getAllCommunityManager,
   getAllPropertyManager,
-  getAllDocumentTypes,
+  getAllDocTypes,
 };

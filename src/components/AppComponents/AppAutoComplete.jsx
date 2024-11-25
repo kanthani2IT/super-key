@@ -24,7 +24,7 @@ const AppAutoComplete = ({
     freeSolo = true,
     options = [],
     nameParam = "label",
-    valueParam = "value",
+    valueParam = "id",
     placeholder = 'type',
     inputValue,
     error,
@@ -32,29 +32,36 @@ const AppAutoComplete = ({
     name,
     value,
     onSearch,
-    searchString,
+    onBlur,
     ...props
 }) => {
     const [open, setOpen] = useState(false)
     const theme = useTheme()
     const handleAddManually = (customOption) => {
 
-        onChange(name, customOption);
-        onSearch('');
+        onChange?.({ target: { name, value: customOption } });
+        onSearch?.('');
 
         setOpen(false);
 
     }
     const handleClose = () => {
         setOpen(false);
-        onSearch('');
+        onSearch?.('');
 
     };
     const handleInputChange = (_, newInputValue, reason) => {
         if (reason == 'input') {
-            onSearch(newInputValue);
+            onSearch?.(newInputValue);
         }
     }
+
+    const handleChange = (event, newValue) => {
+        onChange?.({ target: { name, value: newValue } });
+    };
+    const handleBlur = (event) => {
+        onBlur?.({ target: { name, value } });
+    };
     return (
         <Autocomplete
             {...props}
@@ -65,7 +72,8 @@ const AppAutoComplete = ({
             clearOnBlur
             openOnFocus
             freeSolo={freeSolo}
-            onChange={(_, value) => onChange(name, value)}
+            onChange={handleChange}
+            onBlur={handleBlur}
             onInputChange={handleInputChange}
             getOptionLabel={(option) => {
                 if (typeof option === "string") {
