@@ -11,8 +11,6 @@ const getUsersData = async ({ queryKey }) => {
   return reponse;
 };
 const getUserById = async (id) => {
-  console.log(id, "id");
-
   const reponse = await http({
     method: "GET",
     url: ONBOARD.getUserById(id),
