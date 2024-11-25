@@ -1,5 +1,6 @@
 import { AddCircle } from "@mui/icons-material";
 import { Button, Drawer, Typography } from "@mui/material";
+
 import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
@@ -7,12 +8,14 @@ import { useFormik } from "formik";
 import UserTable from "pages/dashboard/UserTable";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useGlobalStore } from "store/store";
 import * as Yup from "yup";
 import EditCommunity from "./edit-community";
+
 import AddNewCommunity from "./onboarding/AddNewCommunity";
-import CommunityName from "./onboarding/CommunituyName";
 import CommunityAddress from "./onboarding/CommunityAddress";
 import CommunityDetails from "./onboarding/CommunityDetails";
+import CommunityName from "./onboarding/CommunityName";
 import InsuranceUpload from "./onboarding/InsuranceTable";
 import SuccessScreen from "./onboarding/SuccessScreen";
 
@@ -41,7 +44,7 @@ const onBoardingStepper = [
     initialValues: {
       onBoardingType: "single",
     },
-    height: "20vh",
+    height: "25vh",
   },
   {
     title: "Community Address",
@@ -84,7 +87,7 @@ const onBoardingStepper = [
     },
     initialValidationSchema: {
       communityManager: Yup.object().shape({
-        name: Yup.string().required("Name is required"),
+        name: Yup.object().required("Name is required"),
         email: Yup.string()
           .email("Invalid email format")
           .required("Email is required"),
@@ -94,7 +97,7 @@ const onBoardingStepper = [
           .required("Mobile number is required"),
       }),
       propertyManager: Yup.object().shape({
-        name: Yup.string().required("Name is required"),
+        name: Yup.object().required("Name is required"),
         email: Yup.string()
           .email("Invalid email format")
           .required("Email is required"),
@@ -123,6 +126,7 @@ const onBoardingStepper = [
     height: "auto",
   },
 ];
+
 const defaultValue = {
   onBoardingType: "single",
   activeStep: 0,
@@ -131,6 +135,7 @@ const defaultValue = {
 const CommunityOnboarding = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { onboarding, updateOnboarding, resetOnboarding } = useGlobalStore();
 
   const searchParams = new URLSearchParams(location.search);
   const currentOnboradingType = searchParams.get("type");
@@ -161,143 +166,127 @@ const CommunityOnboarding = () => {
   const handleOpen = () => {
     setOpen(true);
 
-    let queryParams = "?onboarding=true";
-    if (!currentStep) {
-      queryParams = "?onboarding=true&cs=0";
-    }
-    navigate({
-      pathname: location.pathname,
-      search: !open ? queryParams : "",
-    });
-  };
+    const handleOpen = () => {
+      setOpen(true);
 
-  const handleClose = () => {
-    setActiveStep(0);
-    setOnboardingType(defaultValue.onBoardingType);
-    navigate({
-      pathname: location.pathname,
-      search: "",
-    });
-    setOpen(false);
-    setValidationSchema(null);
-    setCommunity({
-      manager: true,
-      propertyManager: true,
-    });
-    setShow("true");
-    setSelectedFiles([]);
-    resetForm();
-  };
+      let queryParams = "?onboarding=true";
+      if (!currentStep) {
+        queryParams = "?onboarding=true&cs=0";
+      }
+      navigate({
+        pathname: location.pathname,
+        search: !open ? queryParams : "",
+      });
+    };
 
-  const handleQueryParams = (step) => {
-    searchParams.set("cs", step);
+    const handleClose = () => {
+      setActiveStep(0);
+      setOnboardingType(defaultValue.onBoardingType);
+      navigate({
+        pathname: location.pathname,
+        search: "",
+      });
+      setOpen(false);
+      setValidationSchema(null);
+      setCommunity({
+        manager: true,
+        propertyManager: true,
+      });
+      setShow("true");
+      setSelectedFiles([]);
+      resetForm();
+      resetOnboarding();
+    };
 
-    navigate({
-      pathname: location.pathname,
-      search: searchParams.toString(),
-    });
-  };
-
-  const handleNext = () => {
-    if (activeStep == 0) {
-      searchParams.set("type", onBoardingType);
+    const handleQueryParams = (step) => {
+      searchParams.set("cs", step);
 
       navigate({
         pathname: location.pathname,
         search: searchParams.toString(),
       });
-    }
-    if (activeStep < onBoardingStepper.length - 1) {
-      handleQueryParams(activeStep + 1);
-      setValidationSchema(
-        onBoardingStepper[activeStep + 1]?.initialValidationSchema || null
-      );
-      setActiveStep((prevStep) => prevStep + 1);
-    }
-  };
+    };
 
-  const handleBack = () => {
-    if (activeStep > 0) {
-      handleQueryParams(activeStep - 1);
-      setValidationSchema(
-        onBoardingStepper[activeStep - 1]?.initialValidationSchema || null
-      );
-      setActiveStep((prevStep) => prevStep - 1);
-    }
-  };
+    const handleNext = () => {
+      if (activeStep == 0) {
+        searchParams.set("type", onBoardingType);
 
-  const handleCommunityDetails = (key, value) => {
-    const initialValidationSchema =
-      onBoardingStepper[activeStep]?.initialValidationSchema;
-    setCommunity({ ...community, [key]: value === "true" });
+        navigate({
+          pathname: location.pathname,
+          search: searchParams.toString(),
+        });
+      }
+      if (activeStep < onBoardingStepper.length - 1) {
+        handleQueryParams(activeStep + 1);
+        setValidationSchema(
+          onBoardingStepper[activeStep + 1]?.initialValidationSchema || null
+        );
+        setActiveStep((prevStep) => prevStep + 1);
+      }
+    };
 
-    if (key === "manager") {
-      setValidationSchema((prevSchema) => {
-        const updatedSchema = { ...prevSchema };
-        value !== "true"
-          ? delete updatedSchema.communityManager
-          : (updatedSchema.communityManager =
-              initialValidationSchema.communityManager);
-        return updatedSchema;
-      });
-    }
+    const handleBack = () => {
+      if (activeStep > 0) {
+        handleQueryParams(activeStep - 1);
+        setValidationSchema(
+          onBoardingStepper[activeStep - 1]?.initialValidationSchema || null
+        );
+        setActiveStep((prevStep) => prevStep - 1);
+        updateOnboarding(values);
+      }
+    };
 
-    if (key === "propertyManager") {
-      setValidationSchema((prevSchema) => {
-        const updatedSchema = { ...prevSchema };
-        value !== "true"
-          ? delete updatedSchema.propertyManager
-          : (updatedSchema.propertyManager =
-              initialValidationSchema.communityManager);
-        return updatedSchema;
-      });
-    }
-  };
+    const handleOnboardingType = (value) => {
+      setOnboardingType(value);
+      setFieldValue("onBoardingType", value);
+    };
 
-  const footer = () => {
-    return (
-      <AppRowBox>
-        <AppGrid item size={{ xs: 2 }}>
-          {activeStep && !finalStep ? (
+    const footer = () => {
+      return (
+        <AppRowBox>
+          <AppGrid item size={{ xs: 2 }}>
+            {activeStep && !finalStep ? (
+              <Button
+                fullWidth
+                color="secondary"
+                onClick={handleBack}
+                variant="outlined"
+              >
+                Back
+              </Button>
+            ) : (
+              <div></div>
+            )}
+          </AppGrid>
+          <AppGrid item size={{ xs: 2 }}>
             <Button
               fullWidth
-              color="secondary"
-              onClick={handleBack}
-              variant="outlined"
+              color="info"
+              type="submit"
+              onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
+              variant="contained"
             >
-              Back
+              {finalStep ? "Done" : "Next"}
             </Button>
-          ) : (
-            <div></div>
-          )}
-        </AppGrid>
-        <AppGrid item size={{ xs: 2 }}>
-          <Button
-            fullWidth
-            color="info"
-            type="submit"
-            onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
-            variant="contained"
-          >
-            {finalStep ? "Done" : "Next"}
-          </Button>
-        </AppGrid>
-      </AppRowBox>
-    );
+          </AppGrid>
+        </AppRowBox>
+      );
+    };
+
+    const formik = useFormik({
+      initialValues: onboarding ?? initialValues,
+      validationSchema: validationSchema
+        ? Yup.object().shape(validationSchema)
+        : null,
+      enableReinitialize: true,
+      onSubmit: (values) => {
+        updateOnboarding(values);
+        handleNext(values);
+        setTouched({});
+      },
+    });
   };
 
-  const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: validationSchema
-      ? Yup.object().shape(validationSchema)
-      : null,
-    enableReinitialize: true,
-    onSubmit: (values) => {
-      handleNext(values);
-      setTouched({});
-      console.log(values);
-    },
-  });
   const {
     values,
     errors,

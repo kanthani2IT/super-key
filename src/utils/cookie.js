@@ -1,27 +1,25 @@
-import Cookies from "js-cookie"; // Import js-cookie
+import Cookies from "js-cookie";
 
 export const useAuthCookies = () => {
-  // Function to get a cookie
   const getCookie = (key = "") => {
     const cookieValue = Cookies.get([key]);
-  try {
-    return JSON.parse(cookieValue); // Parse string back into object
-  } catch (error) {
-    return cookieValue; // Return as is if parsing fails
-  }
-  
+    try {
+      return JSON.parse(cookieValue);
+    } catch (error) {
+      return cookieValue;
+    }
   };
 
   // Function to set a cookie
   const setAuthCookie = (key, value) => {
     const stringifiedValue = JSON.stringify(value);
 
-    Cookies.set(key, stringifiedValue, { path: "/" }); // Set the cookie with a path
+    Cookies.set(key, stringifiedValue, { path: "/" });
   };
 
   // Function to remove a cookie
   const removeAuthCookie = (key) => {
-    Cookies.remove(key, { path: "/" }); // Remove the cookie with the specified path
+    Cookies.remove(key, { path: "/" });
   };
 
   return { getCookie, setAuthCookie, removeAuthCookie };

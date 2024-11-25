@@ -1,9 +1,8 @@
-import { Grid2 as Grid } from '@mui/material';
-import AppDropDown from 'components/AppComponents/AppDropDown';
 import { useState } from 'react';
 
-import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
 import AppAutoComplete from 'components/AppComponents/AppAutoComplete';
+import AppGrid from 'components/AppComponents/AppGrid';
+import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
 
 
 const options = [
@@ -30,14 +29,14 @@ const CommunityName = ({ setFieldValue, formValues, touched, errors }) => {
 
 
     return (
-        <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
-            <Grid item >
+        <AppGrid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
+            <AppGrid item >
                 <AppLabelComponent gap={2} variant="h4" label={'What is the name of your community?'}>
                     <AppAutoComplete name='communityName' freesolo error={touched.communityName && errors.communityName} onChange={setFieldValue} searchString={address} value={formValues.communityName} options={options} placeholder='Search your Community' onSearch={onSearch} />
                 </AppLabelComponent>
 
-            </Grid>
-        </Grid>
+            </AppGrid>
+        </AppGrid>
     )
 }
 

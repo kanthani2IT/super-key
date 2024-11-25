@@ -1,5 +1,4 @@
 const LOGIN = {
-  getUser: "todos",
   userLogin: "api/auth/login",
   requestReset: (email) => `/api/auth/request-reset?email=${email}`,
   resetPassword: "/api/auth/resetPassword",
@@ -14,7 +13,11 @@ const COMMUNITY = {
   getAll: "/api/community",
 };
 const COMMON = {
-  getAllLocation: (type) => `/api/autocomplete?input=${type}`,
+  getAllLocation: `/api/address`,
+  getAllCommunity: `/api/community/name`,
+  getAllCommunityManager: `/api/communityManager`,
+  getAllPropertyManager: `/api/propertyManager`,
+  getAllDocTypes: `/api/document-types/names`,
 };
 
 export { COMMON, COMMUNITY, LOGIN, ONBOARD };

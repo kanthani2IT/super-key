@@ -7,12 +7,10 @@ const AppModal = ({ open, onClose, children, activeStep, steps, ...props }) => {
     steps && <AppStepper activeStep={activeStep} steps={steps} />;
   return (
     <Modal open={open} onClose={onClose}>
-      {/* <Fade in={open}> */}
       <AppModalContainer stepper={stepper} {...props}>
         {children}
       </AppModalContainer>
 
-      {/* </Fade> */}
     </Modal>
   );
 };

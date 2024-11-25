@@ -1,9 +1,8 @@
-import { Grid2 as Grid, Stack } from '@mui/material';
+import { Grid2 as Grid } from '@mui/material';
 import mapImg from 'assets/images/icons/map.png';
 import AppAutoComplete from 'components/AppComponents/AppAutoComplete';
-import AppDropDown from 'components/AppComponents/AppDropDown';
 import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
-import { Image, StyledTypography } from 'components/StyledComponents';
+import { Image } from 'components/StyledComponents';
 import { useState } from 'react';
 
 const options = [
