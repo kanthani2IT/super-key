@@ -11,7 +11,6 @@ import UserTable from "pages/dashboard/UserTable";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useGlobalStore } from "store/store";
-import { addQueryParams } from "utils/helpers";
 import * as Yup from 'yup';
 import AddNewCommunity from "./onboarding/AddNewCommunity";
 import CommunityAddress from "./onboarding/CommunityAddress";
@@ -266,9 +265,6 @@ const CommunityOnboarding = () => {
     });
     const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors, resetForm } = formik;
 
-    console.log(addQueryParams('/api/v1', { search: "hii", fields: "sss" }))
-    console.log(addQueryParams('/api/v1', { search: "hii" }))
-    console.log(addQueryParams('/api/v1', {}))
 
     return (
         <AppGrid container spacing={4}>
