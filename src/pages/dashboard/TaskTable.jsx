@@ -4,6 +4,8 @@ import { Box, Button, Card, Stack, Typography, styled } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import MessageIcon from "assets/images/dashboard/MessageIcon";
 import Dot from "components/@extended/Dot";
+import CircularLoader from "components/CircularLoader";
+import NoDataMessage from "components/NoDataMessage";
 import { useState } from "react";
 
 const getStatus = (status) => {
@@ -199,23 +201,30 @@ const TaskTable = ({ tableData, loading }) => {
         handleClose={handleClose}
       />
       <Box sx={{ overflow: "auto", height: "15rem", p: 2 }}>
-        <Stack rowGap={1.5}>
-          {tableData?.map((row, index) => {
-            const status = getStatus(row?.status);
-            return (
-              <ColorRow
-                key={row?.index}
-                title={row?.description}
-                status={status}
-                property={row?.property}
-                bgcolor={
-                  row?.status === "COMPLETED" ? "grey.300" : `error.lighter`
-                }
-                borderRadius={"15px"}
-              />
-            );
-          })}
-        </Stack>
+
+        {loading ? (
+          <CircularLoader />
+        ) : tableData && tableData.length > 0 ? (
+          <Stack rowGap={1.5}>
+            {tableData?.map((row, index) => {
+              const status = getStatus(row?.status);
+              return (
+                <ColorRow
+                  key={row?.index}
+                  title={row?.description}
+                  status={status}
+                  property={row?.property}
+                  bgcolor={
+                    row?.status === "COMPLETED" ? "grey.300" : `error.lighter`
+                  }
+                  borderRadius={"15px"}
+                />
+              );
+            })}
+          </Stack>
+        ) : (
+          <NoDataMessage />
+        )}
       </Box>
     </Stack>
   );
