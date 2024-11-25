@@ -1,8 +1,6 @@
 import { AddCircle } from "@mui/icons-material";
-import {
-    Button,
-    Typography
-} from "@mui/material";
+import { Button, Drawer, Typography } from "@mui/material";
+
 import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
@@ -14,6 +12,7 @@ import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useGlobalStore } from "store/store";
 import * as Yup from 'yup';
+import EditCommunity from "./edit-community";
 
 
 const AddNewCommunity = React.lazy(() => import("./onboarding/AddNewCommunity"));
@@ -84,8 +83,8 @@ const onBoardingStepper = [
 const defaultValue = {
     onBoardingType: "single",
     activeStep: 0,
-    modalOpen: false
-}
+    modalOpen: false,
+};
 const CommunityOnboarding = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -95,20 +94,29 @@ const CommunityOnboarding = () => {
     const currentOnboradingType = searchParams.get("type");
     const currentStep = Number(searchParams.get("cs"));
     const modalOpen = Boolean(searchParams.get("onboarding"));
-    const [show, setShow] = useState("true")
-    const [selectedFiles, setSelectedFiles] = useState([])
+    const [show, setShow] = useState("true");
+    const [selectedFiles, setSelectedFiles] = useState([]);
     const [activeStep, setActiveStep] = useState(currentStep);
     const [open, setOpen] = useState(modalOpen);
     const [onBoardingType, setOnboardingType] = useState(
         currentOnboradingType || defaultValue.onBoardingType
     );
-    const [validationSchema, setValidationSchema] = useState(onBoardingStepper[activeStep]?.initialValidationSchema || null);
+    const [edit, setEdit] = useState(false);
+    const [validationSchema, setValidationSchema] = useState(
+        onBoardingStepper[activeStep]?.initialValidationSchema || null
+    );
     const [community, setCommunity] = useState({
         manager: true,
         propertyManager: true,
-    })
-    const finalStep =
-        activeStep == onBoardingStepper?.length - 1;
+    });
+    const finalStep = activeStep == onBoardingStepper?.length - 1;
+    const openDrawer = () => {
+        setEdit(true);
+    };
+    const closeDrawer = () => {
+        setEdit(false);
+    };
+
 
     const handleOpen = () => {
         setOpen(true);
@@ -131,16 +139,15 @@ const CommunityOnboarding = () => {
             search: "",
         });
         setOpen(false);
-        setValidationSchema(null)
+        setValidationSchema(null);
         setCommunity({
             manager: true,
             propertyManager: true,
-        })
-        setShow("true")
-        setSelectedFiles([])
-        resetForm()
-        resetOnboarding()
-
+        });
+        setShow("true");
+        setSelectedFiles([]);
+        resetForm();
+        resetOnboarding();
     };
 
     const handleQueryParams = (step) => {
@@ -163,7 +170,9 @@ const CommunityOnboarding = () => {
         }
         if (activeStep < onBoardingStepper.length - 1) {
             handleQueryParams(activeStep + 1);
-            setValidationSchema(onBoardingStepper[activeStep + 1]?.initialValidationSchema || null)
+            setValidationSchema(
+                onBoardingStepper[activeStep + 1]?.initialValidationSchema || null
+            );
             setActiveStep((prevStep) => prevStep + 1);
         }
     };
@@ -171,41 +180,50 @@ const CommunityOnboarding = () => {
     const handleBack = () => {
         if (activeStep > 0) {
             handleQueryParams(activeStep - 1);
-            setValidationSchema(onBoardingStepper[activeStep - 1]?.initialValidationSchema || null)
+            setValidationSchema(
+                onBoardingStepper[activeStep - 1]?.initialValidationSchema || null
+            );
             setActiveStep((prevStep) => prevStep - 1);
             updateOnboarding(values);
-
         }
     };
 
     const handleOnboardingType = (value) => {
-        setOnboardingType(value)
-        setFieldValue('onBoardingType', value)
-    }
-
+        setOnboardingType(value);
+        setFieldValue("onBoardingType", value);
+    };
 
     const footer = () => {
         return (
             <AppRowBox>
-                <AppGrid item size={{ xs: 2 }} >
+                <AppGrid item size={{ xs: 2 }}>
                     {activeStep && !finalStep ? (
-                        <Button fullWidth color="secondary" onClick={handleBack} variant="outlined" >
+                        <Button
+                            fullWidth
+                            color="secondary"
+                            onClick={handleBack}
+                            variant="outlined"
+                        >
                             Back
                         </Button>
                     ) : (
                         <div></div>
                     )}
                 </AppGrid>
-                <AppGrid item size={{ xs: 2 }} >
-
-                    <Button fullWidth color="info" type="submit" onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
-                        variant="contained" >
+                <AppGrid item size={{ xs: 2 }}>
+                    <Button
+                        fullWidth
+                        color="info"
+                        type="submit"
+                        onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
+                        variant="contained"
+                    >
                         {finalStep ? "Done" : "Next"}
                     </Button>
                 </AppGrid>
-            </AppRowBox >)
-    }
-
+            </AppRowBox>
+        );
+    };
 
     const formik = useFormik({
         initialValues: onboarding,
@@ -268,6 +286,18 @@ const CommunityOnboarding = () => {
                     })}
                 </Suspense>
             </AppModal>
+            < Drawer
+                open={true}
+                onClose={closeDrawer}
+                anchor="right"
+                PaperProps={{
+                    sx: {
+                        padding: 2,
+                    },
+                }}
+            >
+                <EditCommunity onClose={closeDrawer} />
+            </Drawer >
         </AppGrid >
     );
 };

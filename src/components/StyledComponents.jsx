@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { alpha, TextField, Typography } from "@mui/material";
 
-export const StyledTypography = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.grey,
+export const StyledTypography = styled(Typography)(({ theme, color }) => ({
+  color: color ?? theme.palette.text.grey,
 }));
 
 export const Image = styled('img')`
