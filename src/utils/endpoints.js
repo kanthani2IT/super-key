@@ -19,4 +19,9 @@ const COMMON = {
   getAllDocTypes: `/api/document-types/names`,
 };
 
-export { LOGIN, ONBOARD, COMMON, COMMUNITY };
+const DASHBOARD = {
+  getActiveTask: "/api/tasks",
+  getCompletedTask: "api/tasks/history",
+};
+
+export { COMMON, COMMUNITY, DASHBOARD, LOGIN, ONBOARD };
