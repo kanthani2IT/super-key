@@ -5,22 +5,6 @@ import { useNavigate } from "react-router";
 import { useAuthCookies } from "utils/cookie";
 import { MESSAGE, SEVERITY } from "utils/message";
 
-export const useGetQuery = () => {
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["login"],
-    queryFn: api.login.getUserData,
-    onSuccess: (data) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
-
-  // Return the necessary states: data, isLoading, isError, error
-  return { data, isLoading, isError, error };
-};
-
 export const useLoginUser = () => {
   const navigate = useNavigate();
   const { setAuthCookie } = useAuthCookies();
@@ -28,29 +12,30 @@ export const useLoginUser = () => {
 
   const { mutate, isSuccess, isError, error } = useMutation({
     mutationKey: ["login"],
-    mutationFn: ({values}) => api.login.userLogin(values), // Pass `credentialData` to `mutate`
-    onSuccess: (data, {values, checked}) => {
-      if(data.data.token=="Please set you own password."){
-        navigate("/reset/change",{state:{email:data.data.email}})
-      }else{
-        setAuthCookie("token", data.data.token)
-        navigate('/home');
+    mutationFn: ({ values }) => api.login.userLogin(values), // Pass `credentialData` to `mutate`
+    onSuccess: (data, { values, checked }) => {
+      if (data.data.token == "Please set you own password.") {
+        navigate("/reset/change", { state: { email: data.data.email } });
+      } else {
+        setAuthCookie("token", data.data.token);
+        navigate("/home");
         updateSnackbar({
-          message:MESSAGE.loginSuccess,
-          severity:SEVERITY.success
-        });}
-      if(checked){
-        setAuthCookie("superkey", values)}else{
-          setAuthCookie("superkey", {email:values.email})
-        }
-        
+          message: MESSAGE.loginSuccess,
+          severity: SEVERITY.success,
+        });
+      }
+      if (checked) {
+        setAuthCookie("superkey", values);
+      } else {
+        setAuthCookie("superkey", { email: values.email });
+      }
     },
     onError: (error) => {
       updateSnackbar({
         message: error.response.data.token,
         severity: SEVERITY.error,
       });
-      setAuthCookie("superkey", {email:error.response.data.email})
+      setAuthCookie("superkey", { email: error.response.data.email });
       console.error(error);
     },
   });
