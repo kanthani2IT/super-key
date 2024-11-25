@@ -25,7 +25,7 @@ export function useDebounce(value, delay) {
   return debouncedValue;
 }
 
-export function useDebounceFn(fn, delay) {
+export function useDebounceFn(fn, delay = 500) {
   const timer = useRef(null);
 
   return function (...args) {

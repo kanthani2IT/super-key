@@ -18,7 +18,7 @@ const AddManuallyButton = styled(Typography)({
     fontWeight: 500,
 });
 
-const filter = createFilterOptions();
+const filterOption = createFilterOptions();
 
 const AppAutoComplete = ({
     freeSolo = true,
@@ -33,6 +33,8 @@ const AppAutoComplete = ({
     value,
     onSearch,
     onBlur,
+    filter = false,
+    searchKey = '',
     ...props
 }) => {
     const [open, setOpen] = useState(false)
@@ -52,7 +54,7 @@ const AppAutoComplete = ({
     };
     const handleInputChange = (_, newInputValue, reason) => {
         if (reason == 'input') {
-            onSearch?.(newInputValue);
+            onSearch?.(newInputValue, searchKey ?? name);
         }
     }
 
@@ -82,7 +84,7 @@ const AppAutoComplete = ({
                 return option[nameParam] || "";
             }}
             filterOptions={(options, params) => {
-                const filtered = filter(options, params);
+                const filtered = filter ? filterOption(options, params) : options;
                 if (freeSolo && (params.inputValue !== "")) {
                     return [
                         { id: "add-manually", [nameParam]: params.inputValue, isCustom: true },

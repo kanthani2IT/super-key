@@ -11,5 +11,5 @@ const http = axios.create({
 });
 
 // Add interceptors for error handling and token management
-privateAxios(http);
+// privateAxios(http);
 export default http;

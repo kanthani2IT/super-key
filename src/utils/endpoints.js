@@ -13,8 +13,8 @@ const COMMUNITY = {
 };
 const COMMON = {
   getAllLocation: `/api/address`,
-  getAllCommunity: `/api/community/name`,
-  getAllCommunityManager: `/api/communityManager`,
+  getAllCommunity: `/api/community`,
+  getAllCommunityManager: `/api/manager`,
   getAllPropertyManager: `/api/propertyManager`,
   getAllDocTypes: `/api/document-types/names`,
 };

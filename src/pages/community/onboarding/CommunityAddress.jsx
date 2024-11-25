@@ -20,7 +20,7 @@ const CommunityAddress = ({ handleChange, formValues, touched, errors, }) => {
     const onSearch = useDebounceFn((searchString) => {
         setAddress(searchString)
 
-    }, 500)
+    })
     const location = useLocationsQuery(address)
     console.log(location)
 

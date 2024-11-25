@@ -4,7 +4,7 @@ import AppAutoComplete from 'components/AppComponents/AppAutoComplete';
 import AppGrid from 'components/AppComponents/AppGrid';
 import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
 import { useCommunitiesQuery } from 'hooks/useDropDown';
-import { useDebounce, useDebounceFn } from 'utils/helpers';
+import { useDebounceFn } from 'utils/helpers';
 
 
 const options = [
@@ -65,14 +65,14 @@ const CommunityName = ({ handleChange, formValues, touched, errors }) => {
         setName(searchString)
 
     }, 500)
-    const communities = useCommunitiesQuery(name)
-    console.log(communities)
+
+    const { data: communityList } = useCommunitiesQuery(name)
 
     return (
         <AppGrid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
             <AppGrid item >
                 <AppLabelComponent gap={2} variant="h4" label={'What is the name of your community?'}>
-                    <AppAutoComplete nameParam='name' name='communityName' freesolo error={touched.communityName && errors.communityName} onChange={handleChange} value={formValues.communityName} options={options} placeholder='Search your Community' onSearch={onSearch} />
+                    <AppAutoComplete valueParam='communityId' nameParam='name' name='communityName' error={touched.communityName && errors.communityName} onChange={handleChange} value={formValues.communityName} options={communityList?.data} placeholder='Search your Community' onSearch={onSearch} />
                 </AppLabelComponent>
 
             </AppGrid>

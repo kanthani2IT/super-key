@@ -1,10 +1,11 @@
-import { Autocomplete, Divider, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 import AppAutoComplete from 'components/AppComponents/AppAutoComplete';
 import AppGrid from 'components/AppComponents/AppGrid';
 import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
-import AppRowBox from 'components/AppComponents/AppRowBox';
+import { useCommunityManagersQuery, usePropertyManagersQuery } from 'hooks/useDropDown';
 import { useEffect, useState } from 'react';
 import { cManagers, countryPhoneCodes } from 'utils/constants';
+import { useDebounceFn } from 'utils/helpers';
 
 
 const CommunityDetails = ({
@@ -13,8 +14,21 @@ const CommunityDetails = ({
     touched,
     setFieldValue,
 }) => {
+    const size = { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 }
+
+    //mobile number
+    const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 }
+    const mobileSize = { xs: 9, sm: 9, md: 9, lg: 4, xl: 4 }
+
 
     const { communityManager, propertyManager } = formValues
+
+    const [seachString, setSearchString] = useState({
+        communityManager: '',
+        propertyManager: ''
+    })
+    const { data: communityManagerList } = useCommunityManagersQuery(seachString.communityManager)
+    const { data: propertyManagerList } = usePropertyManagersQuery(seachString.propertyManager)
 
     const [values, setValues] = useState({
         communityManager: {
@@ -33,10 +47,13 @@ const CommunityDetails = ({
         },
     })
 
+
     useEffect(() => {
         setValues({ communityManager, propertyManager })
     }, [])
 
+
+    //handlers
     const handleChange = (event) => {
         const { name, value } = event.target
         const [id, key] = name.split('.')
@@ -53,12 +70,15 @@ const CommunityDetails = ({
         const { name, value } = event.target
         setFieldValue(name, value);
     };
-    const size = { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 }
 
-    //mobile number
-    const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 }
-    const mobileSize = { xs: 9, sm: 9, md: 9, lg: 4, xl: 4 }
+    const onSearch = useDebounceFn((searchString, key) => {
+        setSearchString((prev) => ({
+            ...prev,
+            [key]: searchString
+        }))
+    })
 
+    //For Mobile Number
     const Mobile = ({ key, values, mobileError, handleChange, handleBlur }) => {
         return (
 
@@ -70,12 +90,11 @@ const CommunityDetails = ({
                             onChange={handleChange}
                             onBlur={handleBlur}
                             nameParam='label'
-                            // searchString={address}
                             value={values?.countryCode || ''}
                             options={countryPhoneCodes}
                             placeholder='+1'
                             disableClearable
-                        // onSearch={onSearch}
+                            filter
                         />
 
                     </AppLabelComponent>
@@ -100,6 +119,10 @@ const CommunityDetails = ({
 
         )
     }
+
+
+    console.log(communityManagerList, propertyManagerList)
+
     return (
         <AppGrid container spacing={4} >
 
@@ -118,11 +141,11 @@ const CommunityDetails = ({
                                 onBlur={handleBlur}
                                 nameParam='name'
 
-                                // searchString={address}
+                                searchKey='communityManager'
                                 value={values?.communityManager?.name || ''}
                                 options={cManagers}
                                 placeholder='Select Manager'
-                            // onSearch={onSearch}
+                                onSearch={onSearch}
                             />
 
 
@@ -169,11 +192,11 @@ const CommunityDetails = ({
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 nameParam='name'
-                                // searchString={address}
+                                searchKey='propertyManager'
                                 value={values?.propertyManager?.name || ''}
                                 options={cManagers}
                                 placeholder='Select Property Manager'
-                            // onSearch={onSearch}
+                                onSearch={onSearch}
                             />
 
                         </AppLabelComponent>
