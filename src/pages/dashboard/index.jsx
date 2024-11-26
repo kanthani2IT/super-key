@@ -1,5 +1,4 @@
 // material-ui
-import Grid from "@mui/material/Grid2";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -7,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import MainCard from "components/MainCard";
 
 // assets
+import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import MainTabs from "components/MainTabs";
 import { useGetActiveTask, useGetCompletedTask } from "hooks/useDashboard";
@@ -17,23 +17,6 @@ import RenewalPieChart from "./RenewalPieChart";
 import TaskTable from "./TaskTable";
 import UserTable from "./UserTable";
 
-// avatar style
-const avatarSX = {
-  width: 36,
-  height: 36,
-  fontSize: "1rem",
-};
-
-// action style
-const actionSX = {
-  mt: 0.75,
-  ml: 1,
-  top: "auto",
-  right: "auto",
-  alignSelf: "flex-start",
-  transform: "none",
-};
-
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 const tabs = [
   { label: "Active Task", value: "active" },
@@ -42,31 +25,24 @@ const tabs = [
 
 export default function DashboardDefault() {
   const [selectedTab, setSelectedTab] = useState(tabs[0].value);
-
   const [open, setOpen] = useState(false);
-  const handleChange = (event, newValue) => {
-    setSelectedTab(newValue);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const isActiveTab = selectedTab === "active";
   const { data, isLoading } = useGetUsers();
   const { data: activeTaskList, isLoading: isActiveLoading } =
     useGetActiveTask();
   const { data: completedTaskList, isLoading: isCompletedLoading } =
     useGetCompletedTask();
 
-  const renderTabName = () => {
-    if (selectedTab === "active") {
-      return true;
-    } else {
-      return false;
-    }
+  const handleChange = (event, newValue) => {
+    setSelectedTab(newValue);
+  };
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
-    <Grid container rowSpacing={3} columnSpacing={2}>
-      <Grid size={{ xs: 12 }}>
+    <AppGrid container rowSpacing={3} columnSpacing={2}>
+      <AppGrid size={{ xs: 12 }}>
         <MainCard
           title="Alerts"
           secondary={"Full View"}
@@ -90,10 +66,10 @@ export default function DashboardDefault() {
             />
           </Stack>
         </MainCard>
-      </Grid>
-      <Grid size={{ xs: 12, md: 6, lg: 6 }}>
-        <Grid container rowSpacing={2} columnSpacing={2}>
-          <Grid size={{ xs: 12 }}>
+      </AppGrid>
+      <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
+        <AppGrid container rowSpacing={2} columnSpacing={2}>
+          <AppGrid size={{ xs: 12 }}>
             <MainCard
               title="Communities"
               secondary={"Full View"}
@@ -106,8 +82,8 @@ export default function DashboardDefault() {
                 </Typography>
               </Stack>
             </MainCard>
-          </Grid>
-          <Grid size={{ xs: 12, md: 4, lg: 4 }}>
+          </AppGrid>
+          <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
             <MainCard>
               <Stack rowGap={4} textAlign={"center"}>
                 <Typography variant="h6">
@@ -119,8 +95,8 @@ export default function DashboardDefault() {
                 </Typography>
               </Stack>
             </MainCard>
-          </Grid>
-          <Grid size={{ xs: 12, md: 4, lg: 4 }}>
+          </AppGrid>
+          <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
             <MainCard>
               <Stack rowGap={4} textAlign={"center"}>
                 <Typography variant="h6">
@@ -131,8 +107,8 @@ export default function DashboardDefault() {
                 </Typography>
               </Stack>
             </MainCard>
-          </Grid>
-          <Grid size={{ xs: 12, md: 4, lg: 4 }}>
+          </AppGrid>
+          <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
             <MainCard>
               <Stack rowGap={4} textAlign={"center"}>
                 <Typography variant="h6">
@@ -144,16 +120,16 @@ export default function DashboardDefault() {
                 </Typography>
               </Stack>
             </MainCard>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid size={{ xs: 12, md: 6, lg: 6 }}>
+          </AppGrid>
+        </AppGrid>
+      </AppGrid>
+      <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
         <MainCard title={"Upcoming Renewals"}>
-          <Grid size={{ xs: 12 }} justifyItems={"center"}>
+          <AppGrid size={{ xs: 12 }} justifyItems={"center"}>
             <RenewalPieChart />
-          </Grid>
+          </AppGrid>
         </MainCard>
-      </Grid>
+      </AppGrid>
       <AppModal open={open} onClose={handleClose} height="auto" width="70%">
         <MainCard
           noStyles={true}
@@ -166,7 +142,7 @@ export default function DashboardDefault() {
           />
         </MainCard>
       </AppModal>
-      <Grid size={{ xs: 12 }}>
+      <AppGrid size={{ xs: 12 }}>
         <MainCard title={"Task Assigned"} secondary={"Full View"} isFilter>
           <MainTabs
             handleChange={handleChange}
@@ -175,12 +151,12 @@ export default function DashboardDefault() {
           />
           <TaskTable
             tableData={
-              renderTabName() ? activeTaskList?.data : completedTaskList?.data
+              isActiveTab ? activeTaskList?.data : completedTaskList?.data
             }
-            loading={renderTabName() ? isActiveLoading : isCompletedLoading}
+            loading={isActiveTab ? isActiveLoading : isCompletedLoading}
           />
         </MainCard>
-      </Grid>
-    </Grid>
+      </AppGrid>
+    </AppGrid>
   );
 }
