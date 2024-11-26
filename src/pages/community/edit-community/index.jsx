@@ -19,7 +19,7 @@ import {
 } from "hooks/useDropDown";
 import { useGetUserById } from "hooks/useOnboard";
 import { useEffect, useState } from "react";
-import { cManagers, pManagers } from "utils/constants";
+import { cManagers, countryPhoneCodes, pManagers } from "utils/constants";
 import * as Yup from "yup";
 import { OnBoardButton } from "../StyledComponents";
 const initialValues = {
@@ -433,11 +433,10 @@ const EditCommunity = ({ onClose }) => {
                     }
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    nameParam="name"
-                    valueParam=""
+                    nameParam="label"
                     searchKey="communityManager"
                     value={values?.communityManager?.code || ""}
-                    options={pManagers}
+                    options={countryPhoneCodes}
                     placeholder="+1"
                     // onSearch={onSearch}
                   />
@@ -449,7 +448,7 @@ const EditCommunity = ({ onClose }) => {
                     value={values.communityManager.contactNumber}
                     fullWidth
                     onChange={handleChange}
-                    placeholder={"Eg : 124575588"}
+                    placeholder="+123423355"
                     name="communityManager.contactNumber"
                     disabled={!enableEdit}
                     error={Boolean(
@@ -526,10 +525,10 @@ const EditCommunity = ({ onClose }) => {
                     }
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    nameParam="name"
+                    nameParam="label"
                     searchKey="propertyManager"
                     value={values?.propertyManager?.code || ""}
-                    options={pManagers}
+                    options={countryPhoneCodes}
                     placeholder="+1"
                     // onSearch={onSearch}
                   />
@@ -541,7 +540,7 @@ const EditCommunity = ({ onClose }) => {
                     value={values.propertyManager.contactNumber}
                     fullWidth
                     onChange={handleChange}
-                    placeholder={"Eg : 124575588"}
+                    placeholder="+123423355"
                     name="propertyManager.contactNumber"
                     disabled={!enableEdit}
                     error={Boolean(
