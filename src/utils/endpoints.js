@@ -1,13 +1,28 @@
 const LOGIN = {
-  getUser: "todos",
-  userLogin:"api/auth/login",
-  requestReset:(email)=>`/api/auth/request-reset?email=${email}`,
-  resetPassword:"/api/auth/resetPassword",
-  newPassword:"/api/auth/setNewPassword",
-  enableMailChecking:(email)=>`/api/auth/email?email=${email}`,
+  userLogin: "api/auth/login",
+  requestReset: (email) => `/api/auth/request-reset?email=${email}`,
+  resetPassword: "/api/auth/resetPassword",
+  newPassword: "/api/auth/setNewPassword",
+  enableMailChecking: (email) => `/api/auth/email?email=${email}`,
 };
-const ONBOARD={
-  getUsers:"/api/veruna/users"
-}
+const ONBOARD = {
+  getUsers: "/api/veruna/users",
+  getUserById: (id) => `/api/community/${id}`,
+};
+const COMMUNITY = {
+  getAll: "/api/community",
+};
+const COMMON = {
+  getAllLocation: `/api/address`,
+  getAllCommunity: `/api/community`,
+  getAllCommunityManager: `/api/manager`,
+  getAllPropertyManager: `/api/propertyManager`,
+  getAllDocTypes: `/api/document-types/names`,
+};
 
-export { LOGIN,ONBOARD };
+const DASHBOARD = {
+  getActiveTask: "/api/tasks",
+  getCompletedTask: "api/tasks/history",
+};
+
+export { COMMON, COMMUNITY, DASHBOARD, LOGIN, ONBOARD };

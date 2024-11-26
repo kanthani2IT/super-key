@@ -11,13 +11,24 @@ import {
 } from "@mui/material";
 
 const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
-  width: width || "auto",
   height: height || "auto",
   padding: "1%",
   alignContent: align,
   borderRadius: "10px",
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[6],
+  [theme.breakpoints.up("xs")]: {
+    width: "75%",
+  },
+  [theme.breakpoints.up("sm")]: {
+    width: "75%",
+  },
+  [theme.breakpoints.up("md")]: {
+    width: "50%",
+  },
+  [theme.breakpoints.up("lg")]: {
+    width: "60%"
+  },
 }));
 
 const StyledFlexCard = styled(Card)(({ theme }) => ({
@@ -30,7 +41,7 @@ const StyledFlexCardContent = styled(CardContent)(({ height, theme, padding, foo
   paddingLeft: padding,
   paddingRight: padding,
   flex: footer ? `1 0 ${height}` : height,
-  marginTop: 2,
+  marginTop: 3,
   marginBottom: 2,
   borderRadius: "8px",
 }));
@@ -39,7 +50,7 @@ const AppModalContainer = ({
   children,
   cardHeight = '70%',
   height = 'auto',
-  width = "40%",
+  width = "40vw",
   padding = '3%',
   enableCard = false,
   title,
@@ -55,9 +66,9 @@ const AppModalContainer = ({
           {title && !header && (
             <CardHeader
               title={
-                <Stack alignItems="center" gap={1}>
-                  <Typography variant="h2">{title}</Typography>
-                  {/* Optionally include stepper */}
+                <Stack textAlign={'center'} justifyContent={'center'} alignItems="center" gap={1} mb='2px' >
+                  <Typography variant="h2">{title}
+                  </Typography>
                   {stepper && stepper()}
                 </Stack>
               }

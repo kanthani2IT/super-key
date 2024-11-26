@@ -1,22 +1,21 @@
 import React from 'react';
-import { Box } from '@mui/material';
-import { Grid } from '@mui/system';
+import AppGrid from './AppGrid';
 
 const AppRowBox = ({ justifyContent = 'space-between', width = '100%', children }) => {
     return (
-        <Grid container
+        <AppGrid container
+            justifyContent={justifyContent}
             sx={{
                 display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'wrap',
-                justifyContent: justifyContent,
-                alignItems: 'center',
                 width: width,
-                padding: 0.5
+                alignItems: 'center',
+                padding: 2
             }}
         >
             {children}
-        </Grid>
+        </AppGrid>
     );
 };
 
