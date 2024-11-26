@@ -16,4 +16,11 @@ const COMMON = {
   getAllLocation: (type) => `/api/autocomplete?input=${type}`,
 };
 
-export { LOGIN, ONBOARD, COMMON, COMMUNITY };
+const DASHBOARD = {
+  getActiveTask: "/api/tasks",
+  getCompletedTask: "api/tasks/history",
+  getActiveAndCompletedTaskByFilter: (sort, orderBy) =>
+    `api/tasks/filters?sort=${sort}&orderBy=${orderBy}`,
+};
+
+export { COMMON, COMMUNITY, DASHBOARD, LOGIN, ONBOARD };
