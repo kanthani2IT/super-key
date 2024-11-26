@@ -21,7 +21,9 @@ import {
 } from "hooks/useDropDown";
 import { useGetUserById } from "hooks/useOnboard";
 import { useEffect, useState } from "react";
+import { cManagers, pManagers } from "utils/constants";
 import * as Yup from "yup";
+import { OnBoardButton } from "../StyledComponents";
 const initialValues = {
   addressDetails: {
     communityName: "",
@@ -57,12 +59,12 @@ const res = [
       value: "AZ",
     },
     communityName: {
-      label: "Desert Eagle",
+      label: "Naples",
     },
-    name: {
+    communityManager: {
       name: {
-        id: "vishal",
-        name: "Vishal",
+        id: "jahnavi",
+        name: "Jahnavi",
       },
       email: "john@gmail.com",
       mobile: "6876545689",
@@ -70,8 +72,8 @@ const res = [
     },
     propertyManager: {
       name: {
-        id: "rajesh",
-        name: "Rajesh",
+        id: "rohan",
+        name: "Rohan",
       },
       email: "kjhjk@gmail.com",
       mobile: "6876545899",
@@ -175,20 +177,30 @@ const EditCommunity = ({ onClose }) => {
   const Footer = () => {
     return (
       <>
-        <Button onClick={onReset} color="red" variant="outlined">
-          Off Board Community
-        </Button>
-        <Button onClick={onDiscard} color="secondary" variant="outlined">
-          Discard
-        </Button>
-        <Button
-          color="info"
-          type="submit"
-          onClick={handleSubmit}
-          variant="contained"
+        <AppGrid item size={{ sx: 8 }}>
+          <OnBoardButton onClick={onReset}>Off Board Community</OnBoardButton>
+        </AppGrid>
+        <AppGrid
+          item
+          size={{ sx: 4 }}
+          container
+          sx={{
+            gap: 2,
+          }}
         >
-          Save Changes
-        </Button>
+          <Button onClick={onDiscard} color="secondary" variant="outlined">
+            Discard
+          </Button>
+          <Button
+            color="info"
+            type="submit"
+            onClick={handleSubmit}
+            variant="contained"
+          >
+            Save Changes
+          </Button>
+        </AppGrid>
+
         <AppModal
           open={modal}
           onclose={handleModal}
@@ -371,23 +383,15 @@ const EditCommunity = ({ onClose }) => {
             <Stack rowGap={1}>
               <AppLabelComponent label={"Name"}>
                 <AppAutoComplete
-                  value={values.communityManager.name}
-                  fullWidth
-                  freeSolo
-                  disabled={!enableEdit}
-                  placeholder="Select Community Manager"
-                  onChange={(event, newValue) =>
-                    setFieldValue(
-                      "communityManager.name",
-                      newValue?.value || ""
-                    )
-                  }
-                  options={[
-                    { label: "Sarah Johnson", value: "SarahJohnson" },
-                    { label: "Desert Eagle", value: "DesertEagle" },
-                    { label: "Jacksonville", value: "Jacksonville" },
-                  ]}
                   name="communityManager.name"
+                  freeSolo={false}
+                  fullWidth
+                  onChange={setFieldValue}
+                  nameParam="name"
+                  disabled={!enableEdit}
+                  value={values.communityManager.name || ""}
+                  options={cManagers}
+                  placeholder="Select Community Manager"
                   error={Boolean(
                     touched.communityManager?.name &&
                       errors.communityManager?.name
@@ -501,20 +505,15 @@ const EditCommunity = ({ onClose }) => {
             <Stack rowGap={1}>
               <AppLabelComponent label={"Name"}>
                 <AppAutoComplete
-                  value={values.propertyManager.name}
+                  value={values.propertyManager.name || ""}
                   fullWidth
-                  freeSolo
+                  freeSolo={false}
                   placeholder="Select Property Manager"
                   disabled={!enableEdit}
-                  onChange={(event, newValue) =>
-                    setFieldValue("propertyManager.name", newValue?.value || "")
-                  }
-                  options={[
-                    { label: "Sarah Johnson", value: "SarahJohnson" },
-                    { label: "Desert Eagle", value: "DesertEagle" },
-                    { label: "Jacksonville", value: "Jacksonville" },
-                  ]}
-                  name="communityManager.name"
+                  nameParam="name"
+                  onChange={setFieldValue}
+                  options={pManagers}
+                  name="propertyManager.name"
                   error={Boolean(
                     touched.propertyManager?.name &&
                       errors.propertyManager?.name
