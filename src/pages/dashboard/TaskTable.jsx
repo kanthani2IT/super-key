@@ -1,14 +1,13 @@
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Box, Button, Card, Stack, Typography, styled } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import MessageIcon from "assets/images/dashboard/MessageIcon";
 import Dot from "components/@extended/Dot";
-import { useState } from "react";
+import AppSkeleton from "components/AppComponents/AppSkeleton";
+import { StyledDashboardCard } from "./StyledComponent";
 
 const getStatus = (status) => {
   let color;
-
   switch (status) {
     case "COMPLETED":
       color = "success";
@@ -23,19 +22,6 @@ const getStatus = (status) => {
   return color;
 };
 
-export const StyledButton = styled(Button)(({ theme }) => ({
-  borderRadius: "0.625rem", // Setting border radius
-  border: `0.5px solid ${theme.palette.primary.main}`, // Border style
-  background: " #FFF", // Background color
-  color: theme.palette.primary.main, // Optional: text color based on theme
-  padding: "8px 16px", // Optional: padding for the button
-  "&:hover": {
-    border: "0.5px solid #ffffff",
-    color: " #FFF",
-    background: theme.palette.primary.main, // Optional: change background on hover
-  },
-}));
-
 export const ColorRow = ({
   bgcolor,
   title,
@@ -48,7 +34,7 @@ export const ColorRow = ({
 }) => {
   const theme = useTheme();
   return (
-    <Card sx={{ "&.MuiPaper-root": { boxShadow: "0 0 !important" } }}>
+    <StyledDashboardCard>
       <Box
         sx={{
           display: "flex",
@@ -70,15 +56,15 @@ export const ColorRow = ({
                 justifyContent: "center",
                 alignItems: "center",
                 bgcolor,
-                color: dark ? "grey.800" : "#ffffff",
+                color: dark ? "grey.800" : theme.palette.background.default,
                 border: main ? "1px dashed" : "1px solid transparent",
                 p: 2,
                 borderRadius,
               }}
             >
               <Typography
-                variant="subtitle1"
-                color="#323C4D"
+                variant="h6"
+                color={theme.palette.text.primary}
                 sx={{ flexBasis: "75%" }}
               >
                 {title}
@@ -86,15 +72,15 @@ export const ColorRow = ({
 
               <Box
                 variant="h3"
-                color="#323C4D"
+                color={theme.palette.text.primary}
                 sx={{ flexBasis: "20%", textAlign: "center" }}
               >
                 <Dot color={status} />
               </Box>
 
               <Typography
-                variant="h3"
-                color="#323C4D"
+                variant="subtitle1"
+                color={theme.palette.text.primary}
                 sx={{ flexBasis: "20%", textAlign: "center" }}
               >
                 {property}
@@ -121,10 +107,11 @@ export const ColorRow = ({
           </>
         )}
       </Box>
-    </Card>
+    </StyledDashboardCard>
   );
 };
-const TableHeader = ({ open, handleClick }) => {
+const TableHeader = () => {
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -138,30 +125,21 @@ const TableHeader = ({ open, handleClick }) => {
       <Typography sx={{ flexBasis: "5%" }}></Typography>
       <Typography
         variant="subtitle1"
-        color="#323C4D"
+        color={theme.palette.text.primary}
         sx={{ flexBasis: "75%", textAlign: "left" }}
       ></Typography>
-      <Button
-        size="large"
-        sx={{ flexBasis: "20%", textAlign: "center" }}
-        onClick={handleClick}
-        endIcon={
-          open ? (
-            <ExpandLess color={"secondary"} fontSize="medium" />
-          ) : (
-            <ExpandMore color={"secondary"} fontSize="medium" />
-          )
-        }
-        disableRipple
-        disableElevation
-        disableFocusRipple
-        color="#323C4D"
-      >
-        Status
-      </Button>
+
       <Typography
         variant="h6"
-        color="#323C4D"
+        color={theme.palette.text.primary}
+        sx={{ flexBasis: "20%", textAlign: "center" }}
+      >
+        Status
+      </Typography>
+
+      <Typography
+        variant="h6"
+        color={theme.palette.text.primary}
         sx={{ flexBasis: "20%", textAlign: "center" }}
       >
         Property
@@ -169,7 +147,7 @@ const TableHeader = ({ open, handleClick }) => {
       <Box sx={{ flexBasis: "11%" }} />
       <Typography
         variant="h6"
-        color="#323C4D"
+        color={theme.palette.text.primary}
         sx={{ flexBasis: "10%", textAlign: "center" }}
       >
         Action
@@ -179,42 +157,47 @@ const TableHeader = ({ open, handleClick }) => {
   );
 };
 const TaskTable = ({ tableData, loading }) => {
-  console.log(tableData);
-  console.log(loading);
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <Stack sx={{ mt: 1 }}>
-      <TableHeader
-        open={open}
-        handleClick={handleClick}
-        handleClose={handleClose}
-      />
+      <TableHeader />
       <Box sx={{ overflow: "auto", height: "15rem", p: 2 }}>
         <Stack rowGap={1.5}>
-          {tableData?.map((row, index) => {
-            const status = getStatus(row?.status);
-            return (
-              <ColorRow
-                key={row?.index}
-                title={row?.description}
-                status={status}
-                property={row?.property}
-                bgcolor={
-                  row?.status === "COMPLETED" ? "grey.300" : `error.lighter`
-                }
-                borderRadius={"15px"}
-              />
-            );
-          })}
+          {!loading ? (
+            <>
+              {tableData?.length > 0 ? (
+                <>
+                  {tableData?.map((row, index) => {
+                    const status = getStatus(row?.status);
+                    return (
+                      <ColorRow
+                        key={row?.index}
+                        title={row?.description}
+                        status={status}
+                        property={row?.property}
+                        bgcolor={
+                          row?.status === "COMPLETED"
+                            ? "grey.300"
+                            : `error.lighter`
+                        }
+                        borderRadius={"15px"}
+                      />
+                    );
+                  })}
+                </>
+              ) : (
+                <Typography textAlign={"center"} variant="body1">
+                  No Data
+                </Typography>
+              )}
+            </>
+          ) : (
+            <AppSkeleton
+              row={3}
+              variant={"custom"}
+              width={"100%"}
+              height={"60px"}
+            />
+          )}
         </Stack>
       </Box>
     </Stack>

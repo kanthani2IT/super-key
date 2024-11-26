@@ -9,10 +9,10 @@ import MainCard from "components/MainCard";
 import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import MainTabs from "components/MainTabs";
-import { useGetActiveTask, useGetCompletedTask } from "hooks/useDashboard";
+import { useGetActiveAndCompletedTaskByFilter } from "hooks/useDashboard";
 import { useGetUsers } from "hooks/useOnboard";
 import { ColorBox } from "pages/component-overview/color";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RenewalPieChart from "./RenewalPieChart";
 import TaskTable from "./TaskTable";
 import UserTable from "./UserTable";
@@ -26,18 +26,40 @@ const tabs = [
 export default function DashboardDefault() {
   const [selectedTab, setSelectedTab] = useState(tabs[0].value);
   const [open, setOpen] = useState(false);
-  const isActiveTab = selectedTab === "active";
+
   const { data, isLoading } = useGetUsers();
-  const { data: activeTaskList, isLoading: isActiveLoading } =
-    useGetActiveTask();
-  const { data: completedTaskList, isLoading: isCompletedLoading } =
-    useGetCompletedTask();
+
+  const {
+    data: taskData,
+    mutate: fetchActiveAndCompletedTaskByFilter,
+    isLoading: isTaskLoading,
+  } = useGetActiveAndCompletedTaskByFilter();
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
+    fetchData(newValue);
   };
   const handleClose = () => {
     setOpen(false);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = (status) => {
+    let reqBody = {
+      sort: "createdAt",
+      orderBy: "desc",
+      data: [
+        {
+          column: "status",
+          operator: "contains",
+          value: status ?? selectedTab,
+        },
+      ],
+    };
+    fetchActiveAndCompletedTaskByFilter(reqBody);
   };
 
   return (
@@ -143,18 +165,13 @@ export default function DashboardDefault() {
         </MainCard>
       </AppModal>
       <AppGrid size={{ xs: 12 }}>
-        <MainCard title={"Task Assigned"} secondary={"Full View"} isFilter>
+        <MainCard title={"Task Assigned"} secondary={"Full View"}>
           <MainTabs
             handleChange={handleChange}
             value={selectedTab}
             tabs={tabs}
           />
-          <TaskTable
-            tableData={
-              isActiveTab ? activeTaskList?.data : completedTaskList?.data
-            }
-            loading={isActiveTab ? isActiveLoading : isCompletedLoading}
-          />
+          <TaskTable tableData={taskData?.data || []} loading={isTaskLoading} />
         </MainCard>
       </AppGrid>
     </AppGrid>
