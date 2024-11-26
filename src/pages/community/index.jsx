@@ -6,7 +6,7 @@ import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
 import CircularLoader from "components/CircularLoader";
 import { useFormik } from "formik";
-import { RadiusStyledButton } from "pages/dashboard/TaskTable";
+import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
 import UserTable from "pages/dashboard/UserTable";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";

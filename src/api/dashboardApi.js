@@ -17,4 +17,17 @@ const getCompletedTask = async () => {
   return response;
 };
 
-export const dashboardApi = { getActiveTask, getCompletedTask };
+const getActiveAndCompletedTaskByFilter = async (body) => {
+  const response = await http({
+    method: "POST",
+    url: DASHBOARD.getActiveAndCompletedTaskByFilter(body.sort, body.orderBy),
+    data: body.data,
+  });
+  return response;
+};
+
+export const dashboardApi = {
+  getActiveTask,
+  getCompletedTask,
+  getActiveAndCompletedTaskByFilter,
+};
