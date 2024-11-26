@@ -18,6 +18,7 @@ import {
   usePropertyManagersQuery,
 } from "hooks/useDropDown";
 import { useGetUserById } from "hooks/useOnboard";
+import { RadiusStyledButton } from "pages/dashboard/TaskTable";
 import { useEffect, useState } from "react";
 import {
   cManagers,
@@ -26,7 +27,6 @@ import {
   pManagers,
 } from "utils/constants";
 import * as Yup from "yup";
-import { OnBoardButton } from "../StyledComponents";
 const initialValues = {
   addressDetails: {
     communityName: "",
@@ -60,6 +60,7 @@ const res = [
       label:
         "Phoenix North Estates, Phoenix, AZ 85023, USAPhoenix North Estates, Phoenix, AZ 85023, USA",
       value: "AZ",
+      zipcode: "NY 11402",
     },
     communityName: {
       label: "Naples",
@@ -79,8 +80,8 @@ const res = [
     },
     propertyManager: {
       name: {
-        id: "rohan",
-        name: "Rohan",
+        id: "preeti",
+        name: "Preeti",
       },
       email: "kjhjk@gmail.com",
       mobile: "6876545899",
@@ -221,7 +222,19 @@ const EditCommunity = ({ onClose }) => {
     return (
       <>
         <AppGrid item size={{ sx: 8 }}>
-          <OnBoardButton onClick={onReset}>Off Board Community</OnBoardButton>
+          <RadiusStyledButton
+            color="#FFFFFF"
+            textColor="#E12929"
+            width="227px"
+            height="50px"
+            borderRadius="10px"
+            onClick={onReset}
+            sx={{
+              border: "0.5px solid #E12929",
+            }}
+          >
+            Off Board Community
+          </RadiusStyledButton>
         </AppGrid>
         <AppGrid
           item
@@ -231,17 +244,22 @@ const EditCommunity = ({ onClose }) => {
             gap: 2,
           }}
         >
-          <Button onClick={onDiscard} color="secondary" variant="outlined">
+          <RadiusStyledButton
+            onClick={onDiscard}
+            color="secondary"
+            variant="outlined"
+            textColor="#8c8c8c"
+          >
             Discard
-          </Button>
-          <Button
+          </RadiusStyledButton>
+          <RadiusStyledButton
             color="info"
             type="submit"
             onClick={handleSubmit}
             variant="contained"
           >
             Save Changes
-          </Button>
+          </RadiusStyledButton>
         </AppGrid>
 
         <AppModal
@@ -257,12 +275,12 @@ const EditCommunity = ({ onClose }) => {
           >
             <CardContent sx={{ textAlign: "center" }}>
               <Typography variant="h5">
-                Are you sure that you want to do discard the changes
+                Are you sure that you want to do discard the changes?
               </Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "center" }}>
               <Button
-                onClick={handleSubmit}
+                onClick={handleModal}
                 color="secondary"
                 variant="outlined"
               >
@@ -295,14 +313,15 @@ const EditCommunity = ({ onClose }) => {
             {"AddressDetails"}
           </Typography>
 
-          <Button
+          <RadiusStyledButton
             onClick={handleEdit}
-            color="primary"
             variant="outlined"
+            textColor="blue"
+            color="white"
             startIcon={<EditFilled />}
           >
             Edit Details
-          </Button>
+          </RadiusStyledButton>
         </AppGrid>
         <AppGrid container spacing={5}>
           <AppGrid item size={{ xs: 6 }}>
