@@ -85,6 +85,32 @@ const FileNameBox = styled(Box)({
   alignItems: 'center',
 });
 
+const StyledTableRow = styled(TableRow)`
+  background-color: ${(props) => (props.isHovered ? '#E6F0FD' : 'transparent')};
+  color: ${(props) => (props.isHovered ? 'white' : 'inherit')};
+
+  &:hover {
+    background-color: "#E6F0FD";
+    color: white;
+  }
+
+  ${(props) =>
+    props.isFixed &&
+    `
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 10;
+  `}
+`;
+
+const StickyRow = styled(TableRow)`
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 10;
+`;
+
 // Reusable components
 const DocumentTypeDropdown = ({ value, onChange }) => (
   <>
@@ -112,8 +138,8 @@ disableClearable
   </>
 );
 
-const FileRow = ({ files, index, onRemove, onTypeChange, onActiveChange, isActive, hoveredRow, setHoveredRow, onClickPreview }) => (
-  <TableRow key={index}>
+const FileRow = ({ files, index, onRemove, onTypeChange, onActiveChange, setHoveredSingleRow,hoveredSingleRow, hoveredRow, setHoveredRow, onClickPreview }) => (
+  <StyledTableRow key={index} isHovered={hoveredSingleRow===index} onMouseEnter={()=>setHoveredSingleRow(index)} onMouseLeave={()=>setHoveredSingleRow(null)}>
     <EllipsisCell key={index}  onMouseEnter={() => setHoveredRow(index)} onMouseLeave={() => setHoveredRow(null)}>
       {hoveredRow === index && (
         <div style={{ position: "absolute", left: "6%", zIndex: 1000000, display: "flex", alignItems: "center", gap: "10px" }}>
@@ -144,7 +170,7 @@ const FileRow = ({ files, index, onRemove, onTypeChange, onActiveChange, isActiv
           <Typography variant="h7" sx={{ fontSize: '0.85rem' }}>Active Document</Typography>
         </Box>
     </EllipsisCell>
-  </TableRow>
+  </StyledTableRow>
 );
 
 // Main Component
@@ -152,6 +178,7 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
   const [files, setFiles] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [hoveredRow, setHoveredRow] = useState(null);
+  const [hoveredSingleRow, setHoveredSingleRow] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selected, setSelected] = useState(0);
 
@@ -211,7 +238,7 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
               <StyledBox>
                 <StyledTable>
                   <TableBody>
-                    <TableRow>
+                    <StickyRow>
                       <EllipsisCell>
                        
                       </EllipsisCell>
@@ -220,7 +247,7 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
                       <EllipsisCell>
                       <Checkbox onChange={handleSelectAll} checked={selectAll} /> Select All
                       </EllipsisCell>
-                    </TableRow>
+                    </StickyRow>
                     {selectedFiles.map((files, index) => (
                       <FileRow
                         key={index}
@@ -233,6 +260,8 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
                         hoveredRow={hoveredRow}
                         setHoveredRow={setHoveredRow}
                         onClickPreview={onClickPreview}
+                        setHoveredSingleRow={setHoveredSingleRow}
+                        hoveredSingleRow={hoveredSingleRow}
                       />
                     ))}
                   </TableBody>

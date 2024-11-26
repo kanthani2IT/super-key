@@ -207,7 +207,6 @@ const CommunityOnboarding = () => {
     const handleOnboardingType = (value) => {
         setOnboardingType(value);
         setFieldValue("onBoardingType", value);
-        console.log(value,"IIIIII")
     };
 
     const handleSelectionChange = (selected) => {
@@ -268,7 +267,7 @@ const CommunityOnboarding = () => {
         resetForm,
     } = formik;
     console.log(onboarding);
-console.log(values,"$$$$$ values")
+
     return (
         <AppGrid container spacing={4}>
             <AppGrid
@@ -352,6 +351,7 @@ console.log(values,"$$$$$ values")
                             setSelectedFiles,
                             selectedFiles,
                             handleClose,
+
                         })}
                 </Suspense>
             </AppModal>
