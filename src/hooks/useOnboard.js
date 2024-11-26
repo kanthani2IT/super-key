@@ -1,5 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "api";
+import { useSnackbar } from "components/AppComponents/SnackBarProvider";
+import { MESSAGE, SEVERITY } from "utils/message";
 
 export const useGetUsers = () => {
   const { data, isLoading, isError, error } = useQuery({
@@ -29,6 +31,33 @@ export const useGetUserById = (id) => {
   });
   // Return the necessary states: data, isLoading, isError, error
   return { data, isLoading, isError, error };
+};
+
+export const useOnboardCommunity = (successHandler) => {
+  const { updateSnackbar } = useSnackbar();
+  const mutation = useMutation({
+    mutationKey: ["community-onboarding"],
+    mutationFn: (payload) => api.onboard.createCommunity(payload),
+    onSuccess: (data) => {
+      console.log("Mutation successful:", data);
+      successHandler?.();
+      updateSnackbar({
+        message: MESSAGE.communityOnboardedSuccess,
+        severity: SEVERITY.success,
+      });
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.token || "An error occurred.";
+      console.error("Mutation error:", errorMessage);
+      updateSnackbar({
+        message: errorMessage,
+        severity: SEVERITY.error,
+      });
+      successHandler?.();
+    },
+  });
+
+  return mutation;
 };
 
 // export const useLoginUser = () => {

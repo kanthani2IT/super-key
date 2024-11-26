@@ -13,6 +13,7 @@ import { useLocation, useNavigate } from "react-router";
 import { useGlobalStore } from "store/store";
 import * as Yup from "yup";
 import EditCommunity from "./edit-community";
+import { useOnboardCommunity } from "hooks/useOnboard";
 
 const AddNewCommunity = React.lazy(
     () => import("./onboarding/AddNewCommunity")
@@ -54,7 +55,7 @@ const onBoardingStepper = [
         component: (props) => <CommunityDetails {...props} />,
         initialValidationSchema: {
             communityManager: Yup.object().shape({
-                name: Yup.string().required("Name is required"),
+                name: Yup.object().required("Name is required"),
                 email: Yup.string()
                     .email("Invalid email format")
                     .required("Email is required"),
@@ -64,7 +65,7 @@ const onBoardingStepper = [
                     .required("Mobile number is required"),
             }),
             propertyManager: Yup.object().shape({
-                name: Yup.string().required("Name is required"),
+                name: Yup.object().required("Name is required"),
                 email: Yup.string()
                     .email("Invalid email format")
                     .required("Email is required"),
@@ -241,6 +242,10 @@ const CommunityOnboarding = () => {
             </AppRowBox>
         );
     };
+    const successHandler = () => {
+        resetOnboarding();
+    }
+    const { mutate, isLoading, isSuccess, isError, data } = useOnboardCommunity(successHandler);
 
     const formik = useFormik({
         initialValues: onboarding,
@@ -248,9 +253,18 @@ const CommunityOnboarding = () => {
             ? Yup.object().shape(validationSchema)
             : null,
         enableReinitialize: true,
-        onSubmit: (values) => {
-            updateOnboarding(values);
-            handleNext(values);
+        onSubmit: async (values) => {
+            if (activeStep == onBoardingStepper?.length - 2) {
+                let payload = {
+                    ...values,
+                }
+                mutate(payload);
+
+            } else {
+                handleNext(values);
+                updateOnboarding(values);
+
+            }
             setTouched({});
         },
     });
@@ -264,7 +278,6 @@ const CommunityOnboarding = () => {
         setTouched,
         resetForm,
     } = formik;
-    console.log(onboarding);
 
     return (
         <AppGrid container spacing={4}>
@@ -328,7 +341,7 @@ const CommunityOnboarding = () => {
                 enableCard={!finalStep}
                 title={onBoardingStepper[activeStep].title}
                 activeStep={activeStep}
-                footer={!finalStep && footer()}
+                footer={footer()}
                 steps={onBoardingStepper}
                 align={finalStep ? "center" : ""}
             >
@@ -347,7 +360,7 @@ const CommunityOnboarding = () => {
                             show,
                             setSelectedFiles,
                             selectedFiles,
-                            handleClose,
+                            handleSubmit,
                         })}
                 </Suspense>
             </AppModal>

@@ -1,9 +1,9 @@
 import { TextField } from '@mui/material'
 import React from 'react'
 
-const AppTextField = () => {
+const AppTextField = ({ size = 'medium', props }) => {
     return (
-        <TextField />
+        <TextField size={size}{...props} />
     )
 }
 

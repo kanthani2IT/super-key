@@ -1,5 +1,6 @@
 import http from "http/http";
-import { ONBOARD } from "utils/endpoints";
+import { postRequest } from "http/request";
+import { COMMUNITY, ONBOARD } from "utils/endpoints";
 
 const getUsersData = async ({ queryKey }) => {
   console.log(queryKey);
@@ -18,4 +19,9 @@ const getUserById = async (id) => {
   return reponse;
 };
 
-export const onboardApi = { getUsersData, getUserById };
+const createCommunity = async (payload) => {
+  const reponse = await postRequest(COMMUNITY.createCommunity, payload);
+  return reponse;
+};
+
+export const onboardApi = { getUsersData, getUserById, createCommunity };

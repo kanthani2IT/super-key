@@ -11,9 +11,10 @@ const ONBOARD = {
 };
 const COMMUNITY = {
   getAll: "/api/community",
+  createCommunity: "/api/community",
 };
 const COMMON = {
-  getAllLocation: `/api/address`,
+  getAllLocation: `/api/autocomplete?input="ind"`,
   getAllCommunity: `/api/community`,
   getAllCommunityManager: `/api/manager`,
   getAllPropertyManager: `/api/propertyManager`,
