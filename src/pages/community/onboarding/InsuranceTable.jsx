@@ -41,16 +41,16 @@ const StyledSelect = styled(Select)({
     border: 'none !important',
     borderRadius: '0.7rem',
     fontSize: '0.85rem',
-    fontWeight: 400,
+    fontWeight: "400",
     background: '#F2F2F2',
     padding: '0.4rem',
     maxWidth: '8rem',
     width: "8rem",
     backgroundColor: "#F2F2F2 !important"
   },
-  '& fieldset': { border: 'none' },
+  '& fieldset': { border: 'none', fontSize:"400", },
   '& .MuiOutlinedInput-notchedOutline': { borderColor: 'transparent' },
-  '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'transparent' },
+  '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'transparent', },
   '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'transparent' },
 });
 
@@ -120,11 +120,14 @@ const FileRow = ({ file, index, onRemove, onTypeChange, onActiveChange, isActive
         <Link variant="h7" sx={{ cursor: 'pointer', fontSize: '0.85rem', textDecoration: "underline" }} onClick={() => onRemove(index)}>
           Remove File
         </Link>
-        <Box display="flex" alignItems="center">
+        
+      </ActionBox>
+    </EllipsisCell>
+    <EllipsisCell>
+    <Box display="flex" alignItems="center">
           <Checkbox checked={isActive} onChange={() => onActiveChange(index)} />
           <Typography variant="h7" sx={{ fontSize: '0.85rem' }}>Active Document</Typography>
         </Box>
-      </ActionBox>
     </EllipsisCell>
   </TableRow>
 );
@@ -194,9 +197,12 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
                   <TableBody>
                     <TableRow>
                       <EllipsisCell>
-                        <Checkbox onChange={handleSelectAll} checked={selectAll} /> Select All
+                       
                       </EllipsisCell>
                       <EllipsisCell colSpan={2}> <DocumentTypeDropdown /></EllipsisCell>
+                      <EllipsisCell>
+                      <Checkbox onChange={handleSelectAll} checked={selectAll} /> Select All
+                      </EllipsisCell>
                     </TableRow>
                     {selectedFiles.map((file, index) => (
                       <FileRow
