@@ -37,20 +37,16 @@ export const ColorRow = ({
     <StyledDashboardCard>
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          p: ' 0.5rem 0.9375rem 0.5rem 1.125rem',
-          bgcolor,
-          color: dark ? 'grey.800' : '#ffffff',
-          border: main ? '1px dashed' : '1px solid transparent'
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: theme.palette.primary.lighter,
         }}
       >
         {title && (
           <>
-
-            <Typography variant="subtitle1" color="#323C4D" sx={{ flexBasis: '80%' }}>
-              {title}
+            <Typography sx={{ flexBasis: "5%" }}>
+              <CheckCircleIcon />
             </Typography>
 
             <Box
@@ -91,19 +87,23 @@ export const ColorRow = ({
               </Typography>
             </Box>
 
+            <Box
+              sx={{
+                flexBasis: "10%",
+                display: "flex",
+                gap: 2,
+                pl: 2,
+                alignItems: "center",
+              }}
+            >
+              <Button size="small" variant="outlined">
+                View
+              </Button>
 
-            <Typography variant="h3" color="#323C4D" sx={{ flexBasis: '20%', textAlign: 'center' }}>
-              {property}
-            </Typography>
-
-            <StyledButton size='small' variant="contained" sx={{ flexBasis: '15%' }}>
-              View Info
-            </StyledButton>
-
-            <IconButton sx={{ flexBasis: '5%' }}>
-              <CheckCircleTwoTone fontSize='medium' color='grey' />
-            </IconButton>
-
+              <Button>
+                <MessageIcon />
+              </Button>
+            </Box>
           </>
         )}
       </Box>
@@ -156,7 +156,6 @@ const TableHeader = () => {
     </Box>
   );
 };
-
 const TaskTable = ({ tableData, loading }) => {
   return (
     <Stack sx={{ mt: 1 }}>
