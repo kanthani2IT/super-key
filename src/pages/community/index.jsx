@@ -17,6 +17,7 @@ import CommunityDetails from "./onboarding/CommunityDetails";
 import InsuranceUpload from "./onboarding/InsuranceTable";
 import SuccessScreen from "./onboarding/SuccessScreen";
 import AppGrid from "components/AppComponents/AppGrid";
+import { width } from "@mui/system";
 
 const initialValues = {
     onBoardingType: "single",
@@ -115,8 +116,8 @@ const onBoardingStepper = [
     {
         title: "Insurance Documentation",
         component: (props) => <InsuranceUpload {...props} />,
-        height: "auto",
-
+        height: "70vh",
+        width:"60vw",
     }, {
         title: "",
         component: ({ handleClose }) => <SuccessScreen title={'Your Community Onboarded Successfully !'} handleClose={handleClose} />,
@@ -306,7 +307,7 @@ const CommunityOnboarding = () => {
                 <UserTable height={'80vh'} />
             </AppGrid>
 
-            <AppModal height={finalStep ? "30vh" : 'auto'} cardHeight={onBoardingStepper[activeStep].height || undefined} open={open} onClose={handleClose} enableCard={!finalStep} title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper} align={finalStep ? 'center' : ""}>
+            <AppModal width={onBoardingStepper[activeStep].width||undefined} height={finalStep ? "30vh" : 'auto'} cardHeight={onBoardingStepper[activeStep].height || undefined} open={open} onClose={handleClose} enableCard={!finalStep} title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper} align={finalStep ? 'center' : ""}>
 
                 {onBoardingStepper[activeStep]?.component && onBoardingStepper[activeStep]?.component({
                     setOnboardingType,
