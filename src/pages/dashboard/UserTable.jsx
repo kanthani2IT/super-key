@@ -28,7 +28,7 @@ const columns = [
     field: 'status',
     headerName: 'Status'
   },
-  {
+   {
     field: 'action',
     headerName: 'Action',
     renderCell: (row) => (
@@ -122,4 +122,4 @@ export default function UserTable({ isLoading, height = 400, onSelectionChange }
       )}
     </Box>
   );
-}
+          }

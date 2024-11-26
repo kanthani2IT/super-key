@@ -12,6 +12,7 @@ import { useLocation, useNavigate } from "react-router";
 import { useGlobalStore } from "store/store";
 import * as Yup from 'yup';
 import EditCommunity from "./edit-community";
+import { RadiusStyledButton } from "pages/dashboard/TaskTable";
 
 
 const AddNewCommunity = React.lazy(() => import("./onboarding/AddNewCommunity"));
@@ -136,6 +137,8 @@ const CommunityOnboarding = () => {
         manager: true,
         propertyManager: true,
     });
+    const [selectedRows, setSelectedRows] = useState([]);
+
     const finalStep = activeStep == onBoardingStepper?.length - 1;
     const openDrawer = () => {
         setEdit(true);
@@ -220,6 +223,10 @@ const CommunityOnboarding = () => {
         setFieldValue("onBoardingType", value);
     };
 
+
+  const handleSelectionChange = (selected) => {
+    setSelectedRows(selected); 
+  };
     const footer = () => {
         return (
             <AppRowBox>
@@ -268,31 +275,60 @@ const CommunityOnboarding = () => {
     console.log(onboarding)
 
     return (
+
         <AppGrid container spacing={4}>
-            <AppGrid
-                item
-                size={{ xs: 12 }}
-                container
-                justifyContent="space-between"
-                alignItems="center"
-            >
-                <AppGrid item>
-                    <Typography variant="h4">Communities</Typography>
-                </AppGrid>
-                <AppGrid item>
-                    <Button
-                        size="large"
+            <AppGrid item
+        size={{ xs: 12 }}
+        container
+        justifyContent="space-between"
+        alignItems="center"
+      >
+         <AppGrid item sx={{ display: 'flex', gap: 2 }}>
+      <RadiusStyledButton variant="contained">
+        Communities
+      </RadiusStyledButton>
+      <RadiusStyledButton
+        color="#E9E9E9"
+        height="50px"
+        width="100px"
+        textColor="#7B828F"
+        variant="contained"
+      >
+        Assets
+      </RadiusStyledButton>
+    </AppGrid>
+    
+           
+              
+                <AppGrid item sx={{ display: 'flex', gap: 2 }}>
+                  {selectedRows.length > 0 && (
+    <RadiusStyledButton
+        color="#FFFFFF"
+        textColor="#E12929" 
+        width="227px" 
+        height="50px" 
+        borderRadius="10px" 
+        sx={{
+          border: "0.5px solid #E12929", 
+        }}
+      >
+    Off Board Community
+      </RadiusStyledButton>
+       )}
+                    <RadiusStyledButton
+        borderRadius="10px" 
                         color="info"
                         startIcon={<AddCircle />}
                         variant="contained"
                         onClick={handleOpen}
                     >
                         Add Community
-                    </Button>
+                    </RadiusStyledButton>
                 </AppGrid>
-            </AppGrid>
+    </AppGrid>
+
             <AppGrid item size={{ xs: 12 }}>
-                <UserTable height={'80vh'} />
+            <UserTable height={"80vh"} onSelectionChange={handleSelectionChange} />
             </AppGrid>
             <AppModal height={finalStep ? "30vh" : 'auto'} cardHeight={onBoardingStepper[activeStep].height || undefined} open={open} onClose={handleClose} enableCard={!finalStep} title={onBoardingStepper[activeStep].title} activeStep={activeStep} footer={!finalStep && footer()} steps={onBoardingStepper} align={finalStep ? 'center' : ""}>
                 <Suspense fallback={<CircularLoader />}>
