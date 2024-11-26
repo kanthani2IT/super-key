@@ -39,7 +39,9 @@ const AppCard = ({ onClose, children, title, footer }) => {
         {children}
       </CardContent>
 
-      <CardActions sx={{ justifyContent: "flex-end" }}>{footer}</CardActions>
+      <CardActions sx={{ justifyContent: "space-between" }}>
+        {footer}
+      </CardActions>
     </Card>
   );
 };
