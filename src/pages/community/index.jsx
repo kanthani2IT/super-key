@@ -5,7 +5,6 @@ import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
 import CircularLoader from "components/CircularLoader";
-import Loader from "components/Loader";
 import { useFormik } from "formik";
 import UserTable from "pages/dashboard/UserTable";
 import React, { Suspense, useState } from "react";
@@ -38,6 +37,9 @@ const onBoardingStepper = [
             <CommunityAddress {...props} />
 
         ),
+        initialValidationSchema: {
+            communityAddress: Yup.object().required("Community Address is required"),
+        },
         height: "60vh",
     },
     {
@@ -47,6 +49,9 @@ const onBoardingStepper = [
             <CommunityName {...props} />
 
         ),
+        initialValidationSchema: {
+            communityName: Yup.object().required("Community Name is required"),
+        },
         height: "40vh",
     },
     {
@@ -56,6 +61,28 @@ const onBoardingStepper = [
             <CommunityDetails {...props} />
 
         ),
+        initialValidationSchema: {
+            communityManager: Yup.object().shape({
+                name: Yup.string().required("Name is required"),
+                email: Yup.string()
+                    .email("Invalid email format")
+                    .required("Email is required"),
+                mobile: Yup.string()
+                    .min(10, "Mobile number must be at least 10 digits.")
+                    .max(15, "Mobile number cannot exceed 15 digits.")
+                    .required("Mobile number is required"),
+            }),
+            propertyManager: Yup.object().shape({
+                name: Yup.string().required("Name is required"),
+                email: Yup.string()
+                    .email("Invalid email format")
+                    .required("Email is required"),
+                mobile: Yup.string()
+                    .min(10, "Mobile number must be at least 10 digits.")
+                    .max(15, "Mobile number cannot exceed 15 digits.")
+                    .required("Mobile number is required"),
+            }),
+        },
         height: "60vh",
     },
     {
@@ -287,7 +314,7 @@ const CommunityOnboarding = () => {
                 </Suspense>
             </AppModal>
             < Drawer
-                open={true}
+                open={edit}
                 onClose={closeDrawer}
                 anchor="right"
                 PaperProps={{

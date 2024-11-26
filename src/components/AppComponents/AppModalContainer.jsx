@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 
 const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
-  // width: width || "auto",
   height: height || "auto",
   padding: "1%",
   alignContent: align,

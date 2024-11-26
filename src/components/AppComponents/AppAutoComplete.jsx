@@ -18,6 +18,25 @@ const AddManuallyButton = styled(Typography)({
     fontWeight: 500,
 });
 
+
+const AddManuallyOptionWrapper = styled(Box)({
+    display: "flex",
+    justifyContent: "space-between",
+    cursor: "default !important", // Prevent click event on entire option
+    "&:hover": {
+        backgroundColor: "transparent !important", // Prevent hover color change
+    },
+})
+const OptionWrapper = styled(Box)(({ theme, isSelected }) => ({
+    // px: 2,
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: isSelected ? theme.palette.info.light : "transparent",
+    "&:hover": {
+        backgroundColor: theme.palette.action.hover,
+    },
+}))
+
 const filterOption = createFilterOptions();
 
 const AppAutoComplete = ({
@@ -64,6 +83,7 @@ const AppAutoComplete = ({
     const handleBlur = (event) => {
         onBlur?.({ target: { name, value } });
     };
+
     return (
         <Autocomplete
             {...props}
@@ -106,17 +126,10 @@ const AppAutoComplete = ({
                 if (option?.isCustom) {
                     return (
                         <>
-                            <Box
+                            <AddManuallyOptionWrapper
                                 {...props}
                                 key={option[valueParam]}
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    cursor: "default !important", // Prevent click event on entire option
-                                    "&:hover": {
-                                        backgroundColor: "transparent !important", // Prevent hover color change
-                                    },
-                                }}
+
                                 onClick={(event) => event.stopPropagation()}
                             >
                                 <Typography variant="subtitle1">{option[nameParam]}</Typography>
@@ -130,7 +143,7 @@ const AppAutoComplete = ({
                                 >
                                     Add Manually
                                 </AddManuallyButton>
-                            </Box>
+                            </AddManuallyOptionWrapper>
                             <Divider />
                         </>
                     );
@@ -140,24 +153,17 @@ const AppAutoComplete = ({
                 return (
                     <>
 
-                        <Box
+                        <OptionWrapper
+                            isSelected={isSelected}
                             {...props}
                             key={option[valueParam]}
                             aria-selected={isSelected ? "true" : "false"}
-                            sx={{
-                                px: 2,
-                                display: "flex",
-                                alignItems: "center",
-                                backgroundColor: isSelected ? theme.palette.info.light : "transparent",
-                                "&:hover": {
-                                    backgroundColor: theme.palette.action.hover,
-                                },
-                            }}
+
                         >
                             <Typography variant="subtitle1" sx={{ fontWeight: isSelected ? "bold" : "normal" }}>
                                 {option[nameParam]}
                             </Typography>
-                        </Box>
+                        </OptionWrapper>
                         <Divider />
                     </>
 
@@ -186,14 +192,13 @@ const AppAutoComplete = ({
                 paper: {
                     sx: {
                         width: 'auto',
-                        background: '#F7F9FB',
-                        marginTop: 2, // Add gap
+                        background: theme.palette.primary.lighter,
+                        marginTop: 2,
                         borderRadius: 2,
                         "& .MuiAutocomplete-noOptions": {
                             color: "inherit",
                             fontWeight: "bold",
                         },
-
 
                     },
                 },
