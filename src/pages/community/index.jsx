@@ -10,7 +10,6 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useGlobalStore } from "store/store";
 import * as Yup from "yup";
-import EditCommunity from "./edit-community";
 
 import AddNewCommunity from "./onboarding/AddNewCommunity";
 import CommunityAddress from "./onboarding/CommunityAddress";
@@ -18,6 +17,7 @@ import CommunityDetails from "./onboarding/CommunityDetails";
 import CommunityName from "./onboarding/CommunityName";
 import InsuranceUpload from "./onboarding/InsuranceTable";
 import SuccessScreen from "./onboarding/SuccessScreen";
+import EditCommunity from "./edit-community";
 
 const initialValues = {
   onBoardingType: "single",
@@ -166,126 +166,123 @@ const CommunityOnboarding = () => {
   const handleOpen = () => {
     setOpen(true);
 
-    const handleOpen = () => {
-      setOpen(true);
+    let queryParams = "?onboarding=true";
+    if (!currentStep) {
+      queryParams = "?onboarding=true&cs=0";
+    }
+    navigate({
+      pathname: location.pathname,
+      search: !open ? queryParams : "",
+    });
+  };
 
-      let queryParams = "?onboarding=true";
-      if (!currentStep) {
-        queryParams = "?onboarding=true&cs=0";
-      }
-      navigate({
-        pathname: location.pathname,
-        search: !open ? queryParams : "",
-      });
-    };
+  const handleClose = () => {
+    setActiveStep(0);
+    setOnboardingType(defaultValue.onBoardingType);
+    navigate({
+      pathname: location.pathname,
+      search: "",
+    });
+    setOpen(false);
+    setValidationSchema(null);
+    setCommunity({
+      manager: true,
+      propertyManager: true,
+    });
+    setShow("true");
+    setSelectedFiles([]);
+    resetForm();
+    resetOnboarding();
+  };
 
-    const handleClose = () => {
-      setActiveStep(0);
-      setOnboardingType(defaultValue.onBoardingType);
-      navigate({
-        pathname: location.pathname,
-        search: "",
-      });
-      setOpen(false);
-      setValidationSchema(null);
-      setCommunity({
-        manager: true,
-        propertyManager: true,
-      });
-      setShow("true");
-      setSelectedFiles([]);
-      resetForm();
-      resetOnboarding();
-    };
+  const handleQueryParams = (step) => {
+    searchParams.set("cs", step);
 
-    const handleQueryParams = (step) => {
-      searchParams.set("cs", step);
+    navigate({
+      pathname: location.pathname,
+      search: searchParams.toString(),
+    });
+  };
+
+  const handleNext = () => {
+    if (activeStep == 0) {
+      searchParams.set("type", onBoardingType);
 
       navigate({
         pathname: location.pathname,
         search: searchParams.toString(),
       });
-    };
+    }
+    if (activeStep < onBoardingStepper.length - 1) {
+      handleQueryParams(activeStep + 1);
+      setValidationSchema(
+        onBoardingStepper[activeStep + 1]?.initialValidationSchema || null
+      );
+      setActiveStep((prevStep) => prevStep + 1);
+    }
+  };
 
-    const handleNext = () => {
-      if (activeStep == 0) {
-        searchParams.set("type", onBoardingType);
+  const handleBack = () => {
+    if (activeStep > 0) {
+      handleQueryParams(activeStep - 1);
+      setValidationSchema(
+        onBoardingStepper[activeStep - 1]?.initialValidationSchema || null
+      );
+      setActiveStep((prevStep) => prevStep - 1);
+      updateOnboarding(values);
+    }
+  };
 
-        navigate({
-          pathname: location.pathname,
-          search: searchParams.toString(),
-        });
-      }
-      if (activeStep < onBoardingStepper.length - 1) {
-        handleQueryParams(activeStep + 1);
-        setValidationSchema(
-          onBoardingStepper[activeStep + 1]?.initialValidationSchema || null
-        );
-        setActiveStep((prevStep) => prevStep + 1);
-      }
-    };
+  const handleOnboardingType = (value) => {
+    setOnboardingType(value);
+    setFieldValue("onBoardingType", value);
+  };
 
-    const handleBack = () => {
-      if (activeStep > 0) {
-        handleQueryParams(activeStep - 1);
-        setValidationSchema(
-          onBoardingStepper[activeStep - 1]?.initialValidationSchema || null
-        );
-        setActiveStep((prevStep) => prevStep - 1);
-        updateOnboarding(values);
-      }
-    };
-
-    const handleOnboardingType = (value) => {
-      setOnboardingType(value);
-      setFieldValue("onBoardingType", value);
-    };
-
-    const footer = () => {
-      return (
-        <AppRowBox>
-          <AppGrid item size={{ xs: 2 }}>
-            {activeStep && !finalStep ? (
-              <Button
-                fullWidth
-                color="secondary"
-                onClick={handleBack}
-                variant="outlined"
-              >
-                Back
-              </Button>
-            ) : (
-              <div></div>
-            )}
-          </AppGrid>
-          <AppGrid item size={{ xs: 2 }}>
+  const footer = () => {
+    return (
+      <AppRowBox>
+        <AppGrid item size={{ xs: 2 }}>
+          {activeStep && !finalStep ? (
             <Button
               fullWidth
-              color="info"
-              type="submit"
-              onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
-              variant="contained"
+              color="secondary"
+              onClick={handleBack}
+              variant="outlined"
             >
-              {finalStep ? "Done" : "Next"}
+              Back
             </Button>
-          </AppGrid>
-        </AppRowBox>
-      );
-    };
-
-    const formik = useFormik({
-      initialValues: onboarding ?? initialValues,
-      validationSchema: validationSchema
-        ? Yup.object().shape(validationSchema)
-        : null,
-      enableReinitialize: true,
-      onSubmit: (values) => {
-        updateOnboarding(values);
-        handleNext(values);
-        setTouched({});
-      },
-    });
+          ) : (
+            <div></div>
+          )}
+        </AppGrid>
+        <AppGrid item size={{ xs: 2 }}>
+          <Button
+            fullWidth
+            color="info"
+            type="submit"
+            onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
+            variant="contained"
+          >
+            {finalStep ? "Done" : "Next"}
+          </Button>
+        </AppGrid>
+      </AppRowBox>
+    );
   };
+
+  const formik = useFormik({
+    initialValues: onboarding ?? initialValues,
+    validationSchema: validationSchema
+      ? Yup.object().shape(validationSchema)
+      : null,
+    enableReinitialize: true,
+    onSubmit: (values) => {
+      updateOnboarding(values);
+      handleNext(values);
+      setTouched({});
+      console.log(values, "values");
+    },
+  });
 
   const {
     values,
@@ -350,7 +347,7 @@ const CommunityOnboarding = () => {
       >
         {onBoardingStepper[activeStep]?.component &&
           onBoardingStepper[activeStep]?.component({
-            setOnboardingType,
+            handleOnboardingType,
             onBoardingType,
             formValues: values,
             errors,
@@ -359,7 +356,6 @@ const CommunityOnboarding = () => {
             setValues,
             handleChange,
             community,
-            handleCommunityDetails,
             setShow,
             show,
             setSelectedFiles,
@@ -367,6 +363,7 @@ const CommunityOnboarding = () => {
             handleClose,
           })}
       </AppModal>
+
       <Drawer
         open={edit}
         onClose={closeDrawer}

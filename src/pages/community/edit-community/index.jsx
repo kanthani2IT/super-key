@@ -1,16 +1,26 @@
+import { EditFilled } from "@ant-design/icons";
 import {
   Autocomplete,
   Button,
-  FormLabel,
+  Card,
+  CardActions,
+  CardContent,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import { Grid } from "@mui/system";
 import AppAutoComplete from "components/AppComponents/AppAutoComplete";
 import AppCard from "components/AppComponents/AppCard";
+import AppGrid from "components/AppComponents/AppGrid";
+import AppLabelComponent from "components/AppComponents/AppLabelComponent";
+import AppModal from "components/AppComponents/AppModal";
 import { useFormik } from "formik";
+import {
+  useCommunityManagersQuery,
+  usePropertyManagersQuery,
+} from "hooks/useDropDown";
 import { useGetUserById } from "hooks/useOnboard";
+import { useEffect, useState } from "react";
 import * as Yup from "yup";
 const initialValues = {
   addressDetails: {
@@ -19,10 +29,18 @@ const initialValues = {
     state: "",
     zipcode: "",
   },
-  communityDetails: {
-    communityManager: "",
+  communityManager: {
+    name: "",
+    code: "",
     contactNumber: "",
-    communityType: "",
+
+    email: "",
+  },
+  propertyManager: {
+    name: "",
+    code: "",
+    contactNumber: "",
+
     email: "",
   },
   insuranceDetails: {
@@ -30,6 +48,37 @@ const initialValues = {
     insuranceCoverage: "",
   },
 };
+const res = [
+  {
+    onBoardingType: "single",
+    communityAddress: {
+      label:
+        "Phoenix North Estates, Phoenix, AZ 85023, USAPhoenix North Estates, Phoenix, AZ 85023, USA",
+      value: "AZ",
+    },
+    communityName: {
+      label: "Desert Eagle",
+    },
+    name: {
+      name: {
+        id: "vishal",
+        name: "Vishal",
+      },
+      email: "john@gmail.com",
+      mobile: "6876545689",
+      address: "",
+    },
+    propertyManager: {
+      name: {
+        id: "rajesh",
+        name: "Rajesh",
+      },
+      email: "kjhjk@gmail.com",
+      mobile: "6876545899",
+      address: "",
+    },
+  },
+];
 
 const initialValidationSchema = {
   addressDetails: Yup.object().shape({
@@ -38,10 +87,18 @@ const initialValidationSchema = {
     state: Yup.string().required("State is required"),
     zipcode: Yup.string().required("Zipcode is required"),
   }),
-  communityDetails: Yup.object().shape({
-    communityManager: Yup.string().required("Name is required"),
+  communityManager: Yup.object().shape({
+    name: Yup.string().required("Name is required"),
     contactNumber: Yup.string().required("Contact Number is required"),
-    communityType: Yup.string().required("Community Type is required"),
+    code: Yup.string().required("Country Code is required"),
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+  }),
+  propertyManager: Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    contactNumber: Yup.string().required("Contact Number is required"),
+    code: Yup.string().required("Country Code is required"),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
@@ -53,8 +110,15 @@ const initialValidationSchema = {
 };
 
 const EditCommunity = ({ onClose }) => {
+  const [enableEdit, setEnableEdit] = useState(false);
+  const [modal, setModal] = useState(false);
   const { data: userData, isLoading } = useGetUserById("98765432345678");
-  console.log(userData, "userdata");
+  const { data: communityManagerData } = useCommunityManagersQuery({
+    search: "",
+  });
+  const { data: propertyManagerData } = usePropertyManagersQuery({
+    search: "",
+  });
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -78,333 +142,552 @@ const EditCommunity = ({ onClose }) => {
     formik.resetForm();
     onClose();
   };
+  useEffect(() => {
+    if (res?.[0]?.name?.name?.name) {
+      setValues((prevValues) => ({
+        ...prevValues,
+        addressDetails: {
+          ...prevValues.addressDetails,
+          communityName: res[0].communityName.label,
+        },
+        communityManager: {
+          ...prevValues.communityManager,
+          name: res[0].name.name.name,
+          email: res[0].name.email,
+          contactNumber: res[0].name.mobile,
+        },
+        propertyManager: {
+          ...prevValues.propertyManager,
+          name: res[0].propertyManager.name.name,
+          email: res[0].propertyManager.email,
+          contactNumber: res[0].propertyManager.mobile,
+        },
+      }));
+    }
+  }, []);
+  const onDiscard = () => {
+    setModal(true);
+  };
+  const handleModal = () => {
+    setModal(false);
+  };
+
   const Footer = () => {
     return (
       <>
-        <Button onClick={onReset}>Discard</Button>
-        <Button onClick={handleSubmit}>Save Changes</Button>
+        <Button onClick={onReset} color="red" variant="outlined">
+          Off Board Community
+        </Button>
+        <Button onClick={onDiscard} color="secondary" variant="outlined">
+          Discard
+        </Button>
+        <Button
+          color="info"
+          type="submit"
+          onClick={handleSubmit}
+          variant="contained"
+        >
+          Save Changes
+        </Button>
+        <AppModal
+          open={modal}
+          onclose={handleModal}
+          height={"30vh"}
+          align={"center"}
+        >
+          <Card
+            sx={{
+              boxShadow: "none",
+            }}
+          >
+            <CardContent sx={{ textAlign: "center" }}>
+              <Typography variant="h5">
+                Are you sure that you want to do discard the changes
+              </Typography>
+            </CardContent>
+            <CardActions sx={{ justifyContent: "center" }}>
+              <Button
+                onClick={handleSubmit}
+                color="secondary"
+                variant="outlined"
+              >
+                Save
+              </Button>
+              <Button onClick={handleModal} color="info" variant="contained">
+                Yes,Discard
+              </Button>
+            </CardActions>
+          </Card>
+        </AppModal>
       </>
     );
+  };
+  const handleEdit = () => {
+    setEnableEdit(true);
   };
 
   return (
     <AppCard title={"Desert Springs"} footer={<Footer />} onClose={onClose}>
-      <Grid
+      <AppGrid
         container
         size={{ xs: 12 }}
         padding={1}
-        spacing={2}
+        spacing={1}
         direction={"column"}
       >
-        <Typography variant="h3" sx={{ mb: 2 }}>
-          {"AddressDetails"}
-        </Typography>
-        <Grid container spacing={2}>
-          <Grid item size={{ xs: 6 }}>
+        <AppGrid container sx={{ justifyContent: "space-between" }}>
+          <Typography variant="h3" sx={{ mb: 2 }}>
+            {"AddressDetails"}
+          </Typography>
+
+          <Button
+            onClick={handleEdit}
+            color="primary"
+            variant="outlined"
+            startIcon={<EditFilled />}
+          >
+            Edit Details
+          </Button>
+        </AppGrid>
+        <AppGrid container spacing={5}>
+          <AppGrid item size={{ xs: 6 }}>
             <Stack rowGap={1}>
-              <FormLabel>Community Name</FormLabel>
-              <TextField
-                value={formik.values.addressDetails.communityName}
-                placeholder="Eg : Desert Springs"
-                fullWidth
-                onChange={formik.handleChange}
-                name="addressDetails.communityName"
-                error={Boolean(
-                  formik.touched.addressDetails?.communityName &&
+              <AppLabelComponent
+                label="Community Name"
+                color={"secondary"}
+                variant="body2"
+              >
+                <TextField
+                  value={formik.values.addressDetails.communityName}
+                  placeholder="Eg : Desert Springs"
+                  fullWidth
+                  onChange={formik.handleChange}
+                  disabled={!enableEdit}
+                  name="addressDetails.communityName"
+                  error={Boolean(
+                    formik.touched.addressDetails?.communityName &&
+                      formik.errors.addressDetails?.communityName
+                  )}
+                  helperText={
+                    formik.touched.addressDetails?.communityName &&
                     formik.errors.addressDetails?.communityName
-                )}
-                helperText={
-                  formik.touched.addressDetails?.communityName &&
-                  formik.errors.addressDetails?.communityName
-                }
-              />
+                  }
+                />
+              </AppLabelComponent>
             </Stack>
-          </Grid>
-          <Grid item size={{ xs: 6 }}>
+          </AppGrid>
+          <AppGrid item size={{ xs: 6 }}>
             <Stack rowGap={1}>
-              <FormLabel>City</FormLabel>
-
-              <TextField
-                value={formik.values.addressDetails.city}
-                fullWidth
-                placeholder="Eg : Flushing"
-                onChange={formik.handleChange}
-                name="addressDetails.city"
-                error={Boolean(
-                  formik.touched.addressDetails?.city &&
+              <AppLabelComponent
+                label="City"
+                color={"secondary"}
+                variant="body2"
+              >
+                <TextField
+                  value={formik.values.addressDetails.city}
+                  fullWidth
+                  placeholder="Eg : Flushing"
+                  onChange={formik.handleChange}
+                  name="addressDetails.city"
+                  disabled={!enableEdit}
+                  error={Boolean(
+                    formik.touched.addressDetails?.city &&
+                      formik.errors.addressDetails?.city
+                  )}
+                  helperText={
+                    formik.touched.addressDetails?.city &&
                     formik.errors.addressDetails?.city
-                )}
-                helperText={
-                  formik.touched.addressDetails?.city &&
-                  formik.errors.addressDetails?.city
-                }
-              />
+                  }
+                />
+              </AppLabelComponent>
             </Stack>
-          </Grid>
-          <Grid item size={{ xs: 6 }}>
+          </AppGrid>
+          <AppGrid item size={{ xs: 6 }}>
             <Stack rowGap={1}>
-              <FormLabel>State</FormLabel>
-
-              <TextField
-                value={formik.values.addressDetails.state}
-                fullWidth
-                onChange={formik.handleChange}
-                name="addressDetails.state"
-                placeholder="Eg : New York"
-                error={Boolean(
-                  formik.touched.addressDetails?.state &&
+              <AppLabelComponent
+                label="State"
+                color={"secondary"}
+                variant="body2"
+              >
+                <TextField
+                  value={formik.values.addressDetails.state}
+                  fullWidth
+                  onChange={formik.handleChange}
+                  name="addressDetails.state"
+                  placeholder="Eg : New York"
+                  disabled={!enableEdit}
+                  error={Boolean(
+                    formik.touched.addressDetails?.state &&
+                      formik.errors.addressDetails?.state
+                  )}
+                  helperText={
+                    formik.touched.addressDetails?.state &&
                     formik.errors.addressDetails?.state
-                )}
-                helperText={
-                  formik.touched.addressDetails?.state &&
-                  formik.errors.addressDetails?.state
-                }
-              />
+                  }
+                />
+              </AppLabelComponent>
             </Stack>
-          </Grid>
-          <Grid item size={{ xs: 6 }}>
+          </AppGrid>
+          <AppGrid item size={{ xs: 6 }}>
             <Stack rowGap={1}>
-              <FormLabel>ZipCode</FormLabel>
-              <TextField
-                value={formik.values.addressDetails.zipcode}
-                fullWidth
-                onChange={formik.handleChange}
-                name="addressDetails.zipcode"
-                placeholder="Eg : NY 11402"
-                error={Boolean(
-                  formik.touched.addressDetails?.zipcode &&
+              <AppLabelComponent
+                label="Zipcode"
+                color={"secondary"}
+                variant="body2"
+              >
+                <TextField
+                  value={formik.values.addressDetails.zipcode}
+                  fullWidth
+                  onChange={formik.handleChange}
+                  name="addressDetails.zipcode"
+                  placeholder="Eg : NY 11402"
+                  disabled={!enableEdit}
+                  error={Boolean(
+                    formik.touched.addressDetails?.zipcode &&
+                      formik.errors.addressDetails?.zipcode
+                  )}
+                  helperText={
+                    formik.touched.addressDetails?.zipcode &&
                     formik.errors.addressDetails?.zipcode
-                )}
-                helperText={
-                  formik.touched.addressDetails?.zipcode &&
-                  formik.errors.addressDetails?.zipcode
-                }
-              />
+                  }
+                />
+              </AppLabelComponent>
             </Stack>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid
+          </AppGrid>
+        </AppGrid>
+      </AppGrid>
+      <AppGrid
         container
         size={{ xs: 12 }}
         padding={1}
-        spacing={2}
+        spacing={1}
         direction={"column"}
       >
         <Typography variant="h3" sx={{ mb: 2 }}>
-          {"CommunityDetails"}
+          {"CommunityManager"}
         </Typography>
-        <Grid container spacing={2}>
-          <Grid item size={{ xs: 6 }}>
+        <AppGrid container spacing={5}>
+          <AppGrid item size={{ xs: 6 }}>
             <Stack rowGap={1}>
-              <FormLabel>Community Property Manager</FormLabel>
-
-              <AppAutoComplete
-                value={values.communityDetails.communityManager}
-                fullWidth
-                freeSolo
-                placeholder="Select Community Manager"
-                onChange={(event, newValue) =>
-                  setFieldValue(
-                    "communityDetails.communityManager",
-                    newValue?.value || ""
-                  )
-                }
-                options={[
-                  { label: "Sarah Johnson", value: "SarahJohnson" },
-                  { label: "Desert Eagle", value: "DesertEagle" },
-                  { label: "Jacksonville", value: "Jacksonville" },
-                ]}
-                name="communityDetails.communityManager"
-                error={Boolean(
-                  touched.communityDetails?.communityManager &&
-                    errors.communityDetails?.communityManager
-                )}
-                helperText={
-                  touched.communityDetails?.communityManager &&
-                  errors.communityDetails?.communityManager
-                }
-              />
+              <AppLabelComponent label={"Name"}>
+                <AppAutoComplete
+                  value={values.communityManager.name}
+                  fullWidth
+                  freeSolo
+                  disabled={!enableEdit}
+                  placeholder="Select Community Manager"
+                  onChange={(event, newValue) =>
+                    setFieldValue(
+                      "communityManager.name",
+                      newValue?.value || ""
+                    )
+                  }
+                  options={[
+                    { label: "Sarah Johnson", value: "SarahJohnson" },
+                    { label: "Desert Eagle", value: "DesertEagle" },
+                    { label: "Jacksonville", value: "Jacksonville" },
+                  ]}
+                  name="communityManager.name"
+                  error={Boolean(
+                    touched.communityManager?.name &&
+                      errors.communityManager?.name
+                  )}
+                  helperText={
+                    touched.communityManager?.name &&
+                    errors.communityManager?.name
+                  }
+                />
+              </AppLabelComponent>
             </Stack>
-          </Grid>
-          <Grid item size={{ xs: 6 }}>
+          </AppGrid>
+          <AppGrid item size={{ xs: 6 }}>
             <Stack rowGap={1}>
-              <FormLabel>Contact Number</FormLabel>
-
-              <Grid container spacing={2}>
-                <Grid item size={{ xs: 12, sm: 2 }}>
-                  <Autocomplete
-                    value={values.communityDetails.communityManager}
-                    fullWidth
-                    onChange={(event, newValue) =>
-                      setFieldValue(
-                        "communityDetails.communityManager",
-                        newValue?.value || ""
-                      )
-                    }
-                    options={[
-                      { label: "+1", value: "SarahJohnson" },
-                      { label: "91", value: "DesertEagle" },
-                      { label: "+11", value: "Jacksonville" },
-                    ]}
-                    name="communityDetails.communityManager"
-                    renderInput={(params) => (
-                      <TextField
-                        required
-                        {...params}
-                        placeholder="+1"
-                        error={Boolean(
-                          touched.communityDetails?.communityManager &&
-                            errors.communityDetails?.communityManager
-                        )}
-                        helperText={
-                          touched.communityDetails?.communityManager &&
-                          errors.communityDetails?.communityManager
-                        }
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item size={{ xs: 12, sm: 10 }}>
-                  <TextField
-                    value={values.communityDetails.contactNumber}
-                    fullWidth
-                    onChange={handleChange}
-                    name="communityDetails.contactNumber"
-                    error={Boolean(
-                      touched.communityDetails?.contactNumber &&
-                        errors.communityDetails?.contactNumber
-                    )}
-                    helperText={
-                      touched.communityDetails?.contactNumber &&
-                      errors.communityDetails?.contactNumber
-                    }
-                  />
-                </Grid>
-              </Grid>
+              <AppLabelComponent label={"Email"}>
+                <TextField
+                  value={values.communityManager.email}
+                  fullWidth
+                  onChange={handleChange}
+                  name="communityManager.email"
+                  placeholder="Eg : SarahJohnson@gmail.com"
+                  disabled={!enableEdit}
+                  error={Boolean(
+                    touched.communityManager?.email &&
+                      errors.communityManager?.email
+                  )}
+                  helperText={
+                    touched.communityManager?.email &&
+                    errors.communityManager?.email
+                  }
+                />
+              </AppLabelComponent>
             </Stack>
-          </Grid>
-          <Grid item size={{ xs: 6 }}>
+          </AppGrid>
+          <AppGrid item size={{ xs: 6 }}>
             <Stack rowGap={1}>
-              <FormLabel>Community Type</FormLabel>
-
-              <AppAutoComplete
-                value={values.communityDetails.communityType}
-                fullWidth
-                onChange={(event, newValue) =>
-                  setFieldValue(
-                    "communityDetails.communityType",
-                    newValue?.value || ""
-                  )
-                }
-                placeholder="Select Community Type"
-                freeSolo
-                options={[
-                  { label: "CommunityType 1", value: 10 },
-                  { label: "Community Type 2", value: 20 },
-                  { label: "CommunityType 3", value: 30 },
-                ]}
-                name="communityDetails.communityType"
-                error={Boolean(
-                  touched.communityDetails?.communityType &&
-                    errors.communityDetails?.communityType
-                )}
-                helperText={
-                  touched.communityDetails?.communityType &&
-                  errors.communityDetails?.communityType
-                }
-              />
+              <AppGrid container spacing={2}>
+                <AppGrid item size={{ xs: 12, sm: 2 }}>
+                  <AppLabelComponent label={"Code"}>
+                    <Autocomplete
+                      value={values.communityManager.code}
+                      fullWidth
+                      disabled={!enableEdit}
+                      onChange={(event, newValue) =>
+                        setFieldValue(
+                          "communityManager.code",
+                          newValue?.value || ""
+                        )
+                      }
+                      options={[
+                        { label: "+1", value: "SarahJohnson" },
+                        { label: "91", value: "DesertEagle" },
+                        { label: "+11", value: "Jacksonville" },
+                      ]}
+                      name="communityManager.code"
+                      renderInput={(params) => (
+                        <TextField
+                          required
+                          {...params}
+                          placeholder="+1"
+                          error={Boolean(
+                            touched.communityManager?.code &&
+                              errors.communityManager?.code
+                          )}
+                          helperText={
+                            touched.communityManager?.code &&
+                            errors.communityManager?.code
+                          }
+                        />
+                      )}
+                    />
+                  </AppLabelComponent>
+                </AppGrid>
+                <AppGrid item size={{ xs: 12, sm: 10 }}>
+                  <AppLabelComponent label={"Mobile Number"}>
+                    <TextField
+                      value={values.communityManager.contactNumber}
+                      fullWidth
+                      onChange={handleChange}
+                      placeholder={"Eg : 124575588"}
+                      name="communityManager.contactNumber"
+                      disabled={!enableEdit}
+                      error={Boolean(
+                        touched.communityManager?.contactNumber &&
+                          errors.communityManager?.contactNumber
+                      )}
+                      helperText={
+                        touched.communityManager?.contactNumber &&
+                        errors.communityManager?.contactNumber
+                      }
+                    />
+                  </AppLabelComponent>
+                </AppGrid>
+              </AppGrid>
             </Stack>
-          </Grid>
-          <Grid item size={{ xs: 6 }}>
-            <Stack rowGap={1}>
-              <FormLabel>Email ID</FormLabel>
-
-              <TextField
-                value={values.communityDetails.email}
-                fullWidth
-                onChange={handleChange}
-                name="communityDetails.email"
-                placeholder="Eg : SarahJohnson@gmail.com"
-                error={Boolean(
-                  touched.communityDetails?.email &&
-                    errors.communityDetails?.email
-                )}
-                helperText={
-                  touched.communityDetails?.email &&
-                  errors.communityDetails?.email
-                }
-              />
-            </Stack>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid
+          </AppGrid>
+        </AppGrid>
+      </AppGrid>
+      <AppGrid
         container
         size={{ xs: 12 }}
         padding={1}
-        spacing={2}
+        // spacing={2}
+        direction={"column"}
+      >
+        <Typography variant="h3" sx={{ mb: 2 }}>
+          {"PropertyManager"}
+        </Typography>
+        <AppGrid container spacing={5}>
+          <AppGrid item size={{ xs: 6 }}>
+            <Stack rowGap={1}>
+              <AppLabelComponent label={"Name"}>
+                <AppAutoComplete
+                  value={values.propertyManager.name}
+                  fullWidth
+                  freeSolo
+                  placeholder="Select Property Manager"
+                  disabled={!enableEdit}
+                  onChange={(event, newValue) =>
+                    setFieldValue("propertyManager.name", newValue?.value || "")
+                  }
+                  options={[
+                    { label: "Sarah Johnson", value: "SarahJohnson" },
+                    { label: "Desert Eagle", value: "DesertEagle" },
+                    { label: "Jacksonville", value: "Jacksonville" },
+                  ]}
+                  name="communityManager.name"
+                  error={Boolean(
+                    touched.propertyManager?.name &&
+                      errors.propertyManager?.name
+                  )}
+                  helperText={
+                    touched.propertyManager?.name &&
+                    errors.propertyManager?.name
+                  }
+                />
+              </AppLabelComponent>
+            </Stack>
+          </AppGrid>
+          <AppGrid item size={{ xs: 6 }}>
+            <Stack rowGap={1}>
+              <AppLabelComponent label={"Email"}>
+                <TextField
+                  value={values.propertyManager.email}
+                  fullWidth
+                  onChange={handleChange}
+                  name="propertyManager.email"
+                  placeholder="Eg : SarahJohnson@gmail.com"
+                  disabled={!enableEdit}
+                  error={Boolean(
+                    touched.propertyManager?.email &&
+                      errors.propertyManager?.email
+                  )}
+                  helperText={
+                    touched.propertyManager?.email &&
+                    errors.propertyManager?.email
+                  }
+                />
+              </AppLabelComponent>
+            </Stack>
+          </AppGrid>
+          <AppGrid item size={{ xs: 6 }}>
+            <Stack rowGap={1}>
+              <AppGrid container spacing={2}>
+                <AppGrid item size={{ xs: 12, sm: 2 }}>
+                  <AppLabelComponent label={"Code"}>
+                    <Autocomplete
+                      value={values.propertyManager.code}
+                      fullWidth
+                      disabled={!enableEdit}
+                      onChange={(event, newValue) =>
+                        setFieldValue(
+                          "propertyManager.code",
+                          newValue?.value || ""
+                        )
+                      }
+                      options={[
+                        { label: "+1", value: "SarahJohnson" },
+                        { label: "91", value: "DesertEagle" },
+                        { label: "+11", value: "Jacksonville" },
+                      ]}
+                      name="propertyManager.code"
+                      renderInput={(params) => (
+                        <TextField
+                          required
+                          {...params}
+                          placeholder="+1"
+                          error={Boolean(
+                            touched.propertyManager?.code &&
+                              errors.propertyManager?.code
+                          )}
+                          helperText={
+                            touched.propertyManager?.code &&
+                            errors.propertyManager?.code
+                          }
+                        />
+                      )}
+                    />
+                  </AppLabelComponent>
+                </AppGrid>
+                <AppGrid item size={{ xs: 12, sm: 10 }}>
+                  <AppLabelComponent label={"Mobile Number"}>
+                    <TextField
+                      value={values.propertyManager.contactNumber}
+                      fullWidth
+                      onChange={handleChange}
+                      placeholder={"Eg : 124575588"}
+                      name="propertyManager.contactNumber"
+                      disabled={!enableEdit}
+                      error={Boolean(
+                        touched.propertyManager?.contactNumber &&
+                          errors.propertyManager?.contactNumber
+                      )}
+                      helperText={
+                        touched.propertyManager?.contactNumber &&
+                        errors.propertyManager?.contactNumber
+                      }
+                    />
+                  </AppLabelComponent>
+                </AppGrid>
+              </AppGrid>
+            </Stack>
+          </AppGrid>
+        </AppGrid>
+      </AppGrid>
+      <AppGrid
+        container
+        size={{ xs: 12 }}
+        padding={1}
+        spacing={1}
         direction={"column"}
       >
         <Typography variant="h3" sx={{ mb: 2 }}>
           {"InsuranceDetails"}
         </Typography>
-        <Grid container spacing={2}>
-          <Grid item size={{ xs: 6 }}>
+        <AppGrid container spacing={5}>
+          <AppGrid item size={{ xs: 6 }}>
             <Stack rowGap={1}>
-              <FormLabel>Insurance Value</FormLabel>
-
-              <AppAutoComplete
-                value={values.insuranceDetails.insuranceValue}
-                fullWidth
-                freeSolo
-                onChange={(event, newValue) =>
-                  setFieldValue(
-                    "insuranceDetails.insuranceValue",
-                    newValue?.value || ""
-                  )
-                }
-                options={[
-                  { label: "1,500,300", value: 15000000 },
-                  { label: "3,500,000", value: 3500000 },
-                  { label: "5,500,000", value: 5500000 },
-                ]}
-                name="insuranceDetails.insuranceValue"
-                placeholder="Select Community Manager"
-                error={Boolean(
-                  touched.insuranceDetails?.insuranceValue &&
+              <AppLabelComponent
+                label="Insurance Value"
+                color={"secondary"}
+                variant="body2"
+              >
+                <AppAutoComplete
+                  value={values.insuranceDetails.insuranceValue}
+                  fullWidth
+                  freeSolo
+                  onChange={(event, newValue) =>
+                    setFieldValue(
+                      "insuranceDetails.insuranceValue",
+                      newValue?.value || ""
+                    )
+                  }
+                  options={[
+                    { label: "1,500,300", value: "15000000" },
+                    { label: "3,500,000", value: "3500000" },
+                    { label: "5,500,000", value: "5500000" },
+                  ]}
+                  name="insuranceDetails.insuranceValue"
+                  placeholder="Eg,1,500,300"
+                  error={Boolean(
+                    touched.insuranceDetails?.insuranceValue &&
+                      errors.insuranceDetails?.insuranceValue
+                  )}
+                  helperText={
+                    touched.insuranceDetails?.insuranceValue &&
                     errors.insuranceDetails?.insuranceValue
-                )}
-                helperText={
-                  touched.insuranceDetails?.insuranceValue &&
-                  errors.insuranceDetails?.insuranceValue
-                }
-              />
+                  }
+                />
+              </AppLabelComponent>
             </Stack>
-          </Grid>
-          <Grid item size={{ xs: 6 }}>
+          </AppGrid>
+          <AppGrid item size={{ xs: 6 }}>
             <Stack rowGap={1}>
-              <FormLabel>Insurance Coverage</FormLabel>
-
-              <TextField
-                value={values.insuranceDetails.insuranceCoverage}
-                placeholder="Eg : 1,00,000"
-                fullWidth
-                onChange={handleChange}
-                name="insuranceDetails.insuranceCoverage"
-                error={Boolean(
-                  touched.insuranceDetails?.insuranceCoverage &&
+              <AppLabelComponent
+                label="Insurance Coverage"
+                color={"secondary"}
+                variant="body2"
+              >
+                <TextField
+                  value={values.insuranceDetails.insuranceCoverage}
+                  placeholder="Eg : 1,00,000"
+                  fullWidth
+                  onChange={handleChange}
+                  name="insuranceDetails.insuranceCoverage"
+                  disabled={!enableEdit}
+                  error={Boolean(
+                    touched.insuranceDetails?.insuranceCoverage &&
+                      errors.insuranceDetails?.insuranceCoverage
+                  )}
+                  helperText={
+                    touched.insuranceDetails?.insuranceCoverage &&
                     errors.insuranceDetails?.insuranceCoverage
-                )}
-                helperText={
-                  touched.insuranceDetails?.insuranceCoverage &&
-                  errors.insuranceDetails?.insuranceCoverage
-                }
-              />
+                  }
+                />
+              </AppLabelComponent>
             </Stack>
-          </Grid>
-        </Grid>
-      </Grid>
+          </AppGrid>
+        </AppGrid>
+      </AppGrid>
     </AppCard>
   );
 };

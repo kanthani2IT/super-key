@@ -60,8 +60,8 @@ export const usePropertyManagersQuery = (search) =>
 // Custom hook for Document Type Query
 export const useDocumentsQuery = (search) =>
   useQuery({
-    queryKey: ["allDocumentsMangers", search],
-    queryFn: () => api.common.getAllDocumentsManger(search),
+    queryKey: ["allDocumentsTYpe", search],
+    queryFn: () => api.common.getAllDocumentTypes(search),
     keepPreviousData: true,
     onSuccess: (data) => {
       console.log("Documents Managers data:", data);

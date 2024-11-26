@@ -27,7 +27,7 @@ const getAllPropertyManager = async ({ search }) => {
 };
 
 const getAllDocumentTypes = async ({ search }) => {
-  const requestUrl = addQueryParams(COMMON.getAllDocumentTypes, { search });
+  const requestUrl = addQueryParams(COMMON.getAllDocTypes, { search });
   const response = await getRequest(requestUrl);
   return response;
 };
