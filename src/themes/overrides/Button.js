@@ -134,17 +134,17 @@ export default function Button(theme) {
             opacity: 1,
             transition: "0s",
           },
-          [theme.breakpoints.down("xs")]: {
-            fontSize: "0.675em",
-          },
           [theme.breakpoints.down("sm")]: {
-            fontSize: "0.675em",
+            fontSize: "0.75em",
+            padding: "0.375em 0.75em",
           },
           [theme.breakpoints.up("md")]: {
             fontSize: "0.875em",
+            padding: "0.6em 0.75em",
           },
           [theme.breakpoints.up("lg")]: {
             fontSize: "1em",
+            padding: "0.625em 1em",
           },
         },
         contained: {

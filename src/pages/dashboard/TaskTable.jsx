@@ -1,4 +1,5 @@
-import { Box, Button, Stack, Typography, styled } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Dot from "components/@extended/Dot";
 import AppSkeleton from "components/AppComponents/AppSkeleton";
@@ -20,35 +21,6 @@ const getStatus = (status) => {
 
   return color;
 };
-export const StyledButton = styled(Button)(({ theme }) => ({
-  borderRadius: "0.625rem", // Setting border radius
-  border: `0.5px solid ${theme.palette.primary.main}`, // Border style
-  background: " #FFF", // Background color
-  color: theme.palette.primary.main, // Optional: text color based on theme
-  padding: "8px 16px", // Optional: padding for the button
-  "&:hover": {
-    border: "0.5px solid #ffffff",
-    color: " #FFF",
-    background: theme.palette.primary.main, // Optional: change background on hover
-  },
-}));
-
-export const RadiusStyledButton = styled(Button)(({ theme, color, height, width, textColor, borderRadius }) => ({
-  width: width || '200px',
-  height: height || '50px',
-  borderRadius: borderRadius || '32px',
-  padding: '15px 29px',
-  gap: '10px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: color || "#288B5B",
-  color: textColor || '#FFFFFF',
-  fontWeight: 'bold',
-  '&:hover': {
-    backgroundColor: color ? color : theme.palette.success.main,
-  },
-}));
 
 export const ColorRow = ({
   bgcolor,
@@ -65,20 +37,16 @@ export const ColorRow = ({
     <StyledDashboardCard>
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          p: ' 0.5rem 0.9375rem 0.5rem 1.125rem',
-          bgcolor,
-          color: dark ? 'grey.800' : '#ffffff',
-          border: main ? '1px dashed' : '1px solid transparent'
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: theme.palette.primary.lighter,
         }}
       >
         {title && (
           <>
-
-            <Typography variant="subtitle1" color="#323C4D" sx={{ flexBasis: '80%' }}>
-              {title}
+            <Typography sx={{ flexBasis: "5%" }}>
+              <CheckCircleIcon />
             </Typography>
 
             <Box
@@ -119,22 +87,26 @@ export const ColorRow = ({
               </Typography>
             </Box>
 
+            <Box
+              sx={{
+                flexBasis: "10%",
+                display: "flex",
+                gap: 2,
+                pl: 2,
+                alignItems: "center",
+              }}
+            >
+              <Button size="small" variant="outlined">
+                View
+              </Button>
 
-            <Typography variant="h3" color="#323C4D" sx={{ flexBasis: '20%', textAlign: 'center' }}>
-              {property}
-            </Typography>
-
-            <StyledButton size='small' variant="contained" sx={{ flexBasis: '15%' }}>
-              View Info
-            </StyledButton>
-
-            <IconButton sx={{ flexBasis: '5%' }}>
-              <CheckCircleTwoTone fontSize='medium' color='grey' />
-            </IconButton>
-
+              <Button>
+                <MessageIcon />
+              </Button>
+            </Box>
           </>
         )}
-      </Box >
+      </Box>
     </StyledDashboardCard>
   );
 };
@@ -184,7 +156,6 @@ const TableHeader = () => {
     </Box>
   );
 };
-
 const TaskTable = ({ tableData, loading }) => {
   return (
     <Stack sx={{ mt: 1 }}>
@@ -226,8 +197,8 @@ const TaskTable = ({ tableData, loading }) => {
             />
           )}
         </Stack>
-      </Box >
-    </Stack >
+      </Box>
+    </Stack>
   );
 };
 

@@ -20,6 +20,7 @@ const initialOnboardingValues = {
     countryCode: defaultCountryCode,
     address: "",
   },
+  documentUpload:[]
 };
 export const createOnboardingSlice = (set, get) => {
   storeResetsFns.add(() => reset(set));

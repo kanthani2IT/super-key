@@ -27,7 +27,7 @@ const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
     width: "50%",
   },
   [theme.breakpoints.up("lg")]: {
-    width: "40%"
+    width: width
   },
 }));
 
@@ -50,7 +50,7 @@ const AppModalContainer = ({
   children,
   cardHeight = '70%',
   height = 'auto',
-  width = "40vw",
+  width = "40%",
   padding = '3%',
   enableCard = false,
   title,

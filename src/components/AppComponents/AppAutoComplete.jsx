@@ -54,6 +54,7 @@ const AppAutoComplete = ({
     onBlur,
     filter = true,
     searchKey = '',
+    variant="outlined",
     ...props
 }) => {
     const [open, setOpen] = useState(false)
@@ -116,6 +117,7 @@ const AppAutoComplete = ({
             }}
             renderInput={(params) => (
                 <TextField
+                variant={variant}
                     {...params}
                     placeholder={placeholder}
                     error={Boolean(error)}

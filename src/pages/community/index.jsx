@@ -6,7 +6,7 @@ import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
 import CircularLoader from "components/CircularLoader";
 import { useFormik } from "formik";
-import { RadiusStyledButton } from "pages/dashboard/TaskTable";
+import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
 import UserTable from "pages/dashboard/UserTable";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
@@ -81,6 +81,7 @@ const onBoardingStepper = [
         title: "Insurance Documentation",
         component: (props) => <InsuranceUpload {...props} />,
         height: "auto",
+        width: "60%"
     },
     {
         title: "",
@@ -90,7 +91,7 @@ const onBoardingStepper = [
                 handleClose={handleClose}
             />
         ),
-        height: "auto",
+        height: "100vh",
     },
 ];
 
@@ -335,7 +336,7 @@ const CommunityOnboarding = () => {
                 <UserTable height={"80vh"} onSelectionChange={handleSelectionChange} />
             </AppGrid>
             <AppModal
-                height={finalStep ? "30vh" : "auto"}
+                height={finalStep ? "40vh" : "auto"}
                 cardHeight={onBoardingStepper[activeStep].height || undefined}
                 open={open}
                 onClose={handleClose}
@@ -345,6 +346,7 @@ const CommunityOnboarding = () => {
                 footer={footer()}
                 steps={onBoardingStepper}
                 align={finalStep ? "center" : ""}
+                width={onBoardingStepper[activeStep].width || undefined}
             >
                 <Suspense fallback={<CircularLoader />}>
                     {onBoardingStepper[activeStep]?.component &&
@@ -362,6 +364,7 @@ const CommunityOnboarding = () => {
                             setSelectedFiles,
                             selectedFiles,
                             handleClose,
+
                         })}
                 </Suspense>
             </AppModal>
