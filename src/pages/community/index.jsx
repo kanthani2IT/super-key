@@ -13,6 +13,7 @@ import { useLocation, useNavigate } from "react-router";
 import { useGlobalStore } from "store/store";
 import * as Yup from "yup";
 import EditCommunity from "./edit-community";
+import { width } from "@mui/system";
 
 const AddNewCommunity = React.lazy(
     () => import("./onboarding/AddNewCommunity")
@@ -80,6 +81,7 @@ const onBoardingStepper = [
         title: "Insurance Documentation",
         component: (props) => <InsuranceUpload {...props} />,
         height: "auto",
+        width:"60%"
     },
     {
         title: "",
@@ -89,7 +91,7 @@ const onBoardingStepper = [
                 handleClose={handleClose}
             />
         ),
-        height: "auto",
+        height: "100vh",
     },
 ];
 
@@ -322,7 +324,7 @@ console.log(values,"$$$$$ values")
                 <UserTable height={"80vh"} onSelectionChange={handleSelectionChange} />
             </AppGrid>
             <AppModal
-                height={finalStep ? "30vh" : "auto"}
+                height={finalStep ? "40vh" : "auto"}
                 cardHeight={onBoardingStepper[activeStep].height || undefined}
                 open={open}
                 onClose={handleClose}
@@ -332,6 +334,7 @@ console.log(values,"$$$$$ values")
                 footer={!finalStep && footer()}
                 steps={onBoardingStepper}
                 align={finalStep ? "center" : ""}
+                width={onBoardingStepper[activeStep].width||undefined}
             >
                 <Suspense fallback={<CircularLoader />}>
                     {onBoardingStepper[activeStep]?.component &&

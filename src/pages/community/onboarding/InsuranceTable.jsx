@@ -23,15 +23,13 @@ import InsuranceDocument from '../../../components/AppComponents/UploadDocument'
 import { truncateFileName } from './utils';
 import FilePreview from './FilePreview';
 import PreviewButton from 'components/AppComponents/PreviewButton';
+import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
+import AppAutoComplete from 'components/AppComponents/AppAutoComplete';
 
 // Document types
-const documentTypes = [
-  'Endorsement',
-  'Amendment',
-  'Insurance policy',
-  'Certificate of insurance',
-  'Legal',
-  'Premium finance Agreement',
+export const documentTypes = [
+  {name:'Endorsement', value:'Endosement'}
+  
 ];
 
 // Styled components
@@ -89,31 +87,48 @@ const FileNameBox = styled(Box)({
 
 // Reusable components
 const DocumentTypeDropdown = ({ value, onChange }) => (
-  <StyledSelect value={value} onChange={onChange} style={{ border: "none" }} label="Select Document Type">
-    <MenuItem value="" disabled>Select Document Type</MenuItem>
-    {documentTypes.map((type) => (
-      <MenuItem key={type} value={type}>{type}</MenuItem>
-    ))}
-  </StyledSelect>
+  <>
+    
+                            <AppAutoComplete  freeSolo={false}
+                            sx={{
+  '.MuiOutlinedInput-root fieldset': {
+    borderColor: "#F7F9FB",
+  },
+  
+}}
+                                // variant={"standard"}
+                                onChange={onChange}
+                                
+                                nameParam='name'
+filter
+disableClearable
+                                searchKey='communityManager'
+                                value={value}
+                                options={documentTypes}
+                                placeholder='Select Manager'
+                            />
+
+
+  </>
 );
 
-const FileRow = ({ file, index, onRemove, onTypeChange, onActiveChange, isActive, hoveredRow, setHoveredRow, onClickPreview }) => (
+const FileRow = ({ files, index, onRemove, onTypeChange, onActiveChange, isActive, hoveredRow, setHoveredRow, onClickPreview }) => (
   <TableRow key={index}>
     <EllipsisCell key={index}  onMouseEnter={() => setHoveredRow(index)} onMouseLeave={() => setHoveredRow(null)}>
       {hoveredRow === index && (
         <div style={{ position: "absolute", left: "6%", zIndex: 1000000, display: "flex", alignItems: "center", gap: "10px" }}>
-          <PreviewButton fileName={file.name} index={index} onPreview={onClickPreview} />
+          <PreviewButton fileName={files.file.name} index={index} onPreview={onClickPreview} />
         </div>
       )}
       <FileNameBox>
         <FileIcon sx={{ mr: 1 }} />
         <Link variant="h7" sx={{ cursor: 'pointer', ml: 1, fontSize: '0.85rem', textDecoration: "underline" }}>
-          {truncateFileName(file.name)}
+          {truncateFileName(files.file.name)}
         </Link>
       </FileNameBox>
     </EllipsisCell>
     <EllipsisCell>
-      <DocumentTypeDropdown value={file.documentType} onChange={(event) => onTypeChange(index, event)} />
+      <DocumentTypeDropdown value={files.docType} onChange={(event) => onTypeChange(index, event)} />
     </EllipsisCell>
     <EllipsisCell>
       <ActionBox>
@@ -125,7 +140,7 @@ const FileRow = ({ file, index, onRemove, onTypeChange, onActiveChange, isActive
     </EllipsisCell>
     <EllipsisCell>
     <Box display="flex" alignItems="center">
-          <Checkbox checked={isActive} onChange={() => onActiveChange(index)} />
+          <Checkbox checked={files.active} onChange={() => onActiveChange(index)} />
           <Typography variant="h7" sx={{ fontSize: '0.85rem' }}>Active Document</Typography>
         </Box>
     </EllipsisCell>
@@ -136,15 +151,14 @@ const FileRow = ({ file, index, onRemove, onTypeChange, onActiveChange, isActive
 const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => {
   const [files, setFiles] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [activePolicies, setActivePolicies] = useState([]);
   const [hoveredRow, setHoveredRow] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selected, setSelected] = useState(0);
 
   const handleTypeChange = (index, event) => {
-    const updatedFiles = [...files];
-    updatedFiles[index].documentType = event.target.value;
-    setFiles(updatedFiles);
+    const updatedFiles = [...selectedFiles]; // Create a copy of the array
+    updatedFiles[index] = { ...updatedFiles[index], "docType": event.target.value }; // Update the specific object
+    setSelectedFiles(updatedFiles); // Set the updated array
   };
 
   const handleRemoveFile = (index) => {
@@ -155,13 +169,15 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
   const handleSelectAll = () => {
     const newSelectAll = !selectAll;
     setSelectAll(newSelectAll);
-    setActivePolicies(Array(files.length).fill(newSelectAll));
+    setSelectedFiles((prevFiles) =>
+      prevFiles.map((file) => ({ ...file, active: newSelectAll }))
+    );
   };
 
   const handleActiveChange = (index) => {
-    const updatedActivePolicies = [...activePolicies];
-    updatedActivePolicies[index] = !updatedActivePolicies[index];
-    setActivePolicies(updatedActivePolicies);
+    const updatedFiles = [...selectedFiles]; // Create a copy of the array
+    updatedFiles[index] = { ...updatedFiles[index], "active": !updatedFiles[index].active }; // Update the specific object
+    setSelectedFiles(updatedFiles); // Set the updated array
   };
 
   const onClickPreview = (event, index) => {
@@ -199,20 +215,21 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
                       <EllipsisCell>
                        
                       </EllipsisCell>
-                      <EllipsisCell colSpan={2}> <DocumentTypeDropdown /></EllipsisCell>
+                      <EllipsisCell colSpan={1}> <DocumentTypeDropdown value={documentTypes[0]}/></EllipsisCell>
+                      <EllipsisCell></EllipsisCell>
                       <EllipsisCell>
                       <Checkbox onChange={handleSelectAll} checked={selectAll} /> Select All
                       </EllipsisCell>
                     </TableRow>
-                    {selectedFiles.map((file, index) => (
+                    {selectedFiles.map((files, index) => (
                       <FileRow
                         key={index}
-                        file={file}
+                        files={files}
                         index={index}
                         onRemove={handleRemoveFile}
                         onTypeChange={handleTypeChange}
                         onActiveChange={handleActiveChange}
-                        isActive={activePolicies[index]}
+                        isActive={files[index]?.active}
                         hoveredRow={hoveredRow}
                         setHoveredRow={setHoveredRow}
                         onClickPreview={onClickPreview}

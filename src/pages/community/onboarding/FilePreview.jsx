@@ -86,10 +86,10 @@ const CenteredGrid = styled(Grid)`
 const FilePreviews = ({ open, onClose, selectedFiles, selected }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedFile, setSelectedFile] = useState({ type: "", path: "" });
-
+console.log(selectedFiles)
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
-    const file = selectedFiles[newValue];
+    const file = selectedFiles.file[newValue];
     setSelectedFile({
       type: file.name.split(".").pop(),
       path: URL.createObjectURL(file),
@@ -98,14 +98,14 @@ const FilePreviews = ({ open, onClose, selectedFiles, selected }) => {
 
   useEffect(() => {
     setSelectedTab(selected);
-    const file = selectedFiles[selected];
+    const file = selectedFiles[selected]?.file;
     setSelectedFile({
       type: file.name.split(".").pop(),
       path: URL.createObjectURL(file),
     });
   }, [selected, selectedFiles]);
 
-  const selectedFileNames = Array.from(selectedFiles).map((file) => file.name);
+  const selectedFileNames = Array.from(selectedFiles).map((item) => item?.file?.name);
 
   return (
     <StyledModal open={open} onClose={onClose} disableScrollLock>
