@@ -316,7 +316,7 @@ const CommunityOnboarding = () => {
           </RadiusStyledButton>
         </AppGrid>
       </AppGrid>
-
+      <Button onClick={openDrawer}>Edit</Button>
       <AppGrid item size={{ xs: 12 }}>
         <UserTable height={"80vh"} onSelectionChange={handleSelectionChange} />
       </AppGrid>
