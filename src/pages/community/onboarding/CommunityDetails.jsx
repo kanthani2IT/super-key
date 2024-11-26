@@ -90,6 +90,7 @@ const CommunityDetails = ({
                             onChange={handleChange}
                             onBlur={handleBlur}
                             nameParam='label'
+                            valueParam='value'
                             value={values?.countryCode || ''}
                             options={countryPhoneCodes}
                             placeholder='+1'
