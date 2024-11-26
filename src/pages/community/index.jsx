@@ -242,7 +242,7 @@ const CommunityOnboarding = () => {
                         fullWidth
                         color="info"
                         type="submit"
-                        onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
+                        onClick={() => handleSubmit()}
                         variant="contained"
                     >
                         {finalStep ? "Done" : "Next"}
@@ -264,7 +264,7 @@ const CommunityOnboarding = () => {
             setTouched({});
         }
     });
-    const { values, errors, touched, setFieldValue, setValues, handleSubmit, handleChange, setTouched, setErrors, resetForm } = formik;
+    const { values, errors, touched, setFieldValue, handleSubmit, handleChange, setTouched, resetForm } = formik;
     console.log(onboarding)
 
     return (

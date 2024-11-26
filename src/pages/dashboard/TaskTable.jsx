@@ -1,8 +1,5 @@
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, Button, Card, Stack, Typography, styled } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import MessageIcon from "assets/images/dashboard/MessageIcon";
 import Dot from "components/@extended/Dot";
 import CircularLoader from "components/CircularLoader";
 import NoDataMessage from "components/NoDataMessage";
@@ -38,94 +35,84 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export const ColorRow = ({
-  bgcolor,
-  title,
-  data,
-  dark,
-  main,
-  borderRadius = "15px",
-  status = "",
-  property = "",
-}) => {
-  const theme = useTheme();
+export const RadiusStyledButton = styled(Button)(({ theme, color, height, width, textColor, borderRadius }) => ({
+  width: width || '200px',
+  height: height || '50px',
+  borderRadius: borderRadius || '32px',
+  padding: '15px 29px',
+  gap: '10px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: color || "#288B5B",
+  color: textColor || '#FFFFFF',
+  fontWeight: 'bold',
+  '&:hover': {
+    backgroundColor: color ? color : theme.palette.success.main,
+  },
+}));
+const StyledMenu = styled(Menu)(({ theme }) => ({
+  '& .MuiPaper-root': {               // Target the menu's paper (content) area
+    borderRadius: '8px',
+    backgroundColor: theme.palette.secondary.light,  // Background color for the menu content only
+    boxShadow: theme.shadows[2],                    // Subtle box shadow
+  },
+  color: theme.palette.secondary.main,
+  boxShadow: theme.shadows[2],   // Subtle box shadow
+  '& .MuiMenuItem-root': {
+    fontSize: '0.875rem',
+    fontWeight: '600',
+    borderBottom: `1px solid ${theme.palette.common.white}`, // White divider
+    '&:last-child': {
+      borderBottom: 'none', // Remove divider for the last item
+    },
+  },
+}));
+
+export const ColorRow = ({ bgcolor, title, data, dark, main, borderRadius = '15px', status = '', property = '' }) => {
   return (
-    <Card sx={{ "&.MuiPaper-root": { boxShadow: "0 0 !important" } }}>
+    <Card sx={{ '&.MuiPaper-root': { borderRadius, boxShadow: '0 0 !important' } }}>
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: theme.palette.primary.lighter,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          p: ' 0.5rem 0.9375rem 0.5rem 1.125rem',
+          bgcolor,
+          color: dark ? 'grey.800' : '#ffffff',
+          border: main ? '1px dashed' : '1px solid transparent'
         }}
       >
         {title && (
           <>
-            <Typography sx={{ flexBasis: "5%" }}>
-              <CheckCircleIcon />
+
+            <Typography variant="subtitle1" color="#323C4D" sx={{ flexBasis: '80%' }}>
+              {title}
             </Typography>
 
-            <Box
-              sx={{
-                flexBasis: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                bgcolor,
-                color: dark ? "grey.800" : "#ffffff",
-                border: main ? "1px dashed" : "1px solid transparent",
-                p: 2,
-                borderRadius,
-              }}
-            >
-              <Typography
-                variant="subtitle1"
-                color="#323C4D"
-                sx={{ flexBasis: "75%" }}
-              >
-                {title}
-              </Typography>
-
-              <Box
-                variant="h3"
-                color="#323C4D"
-                sx={{ flexBasis: "20%", textAlign: "center" }}
-              >
-                <Dot color={status} />
-              </Box>
-
-              <Typography
-                variant="h3"
-                color="#323C4D"
-                sx={{ flexBasis: "20%", textAlign: "center" }}
-              >
-                {property}
-              </Typography>
+            <Box variant="h3" color="#323C4D" sx={{ flexBasis: '20%', textAlign: 'center' }}>
+              <Dot color={status} />
             </Box>
 
-            <Box
-              sx={{
-                flexBasis: "10%",
-                display: "flex",
-                gap: 2,
-                pl: 2,
-                alignItems: "center",
-              }}
-            >
-              <Button size="small" variant="outlined">
-                View
-              </Button>
 
-              <Button>
-                <MessageIcon />
-              </Button>
-            </Box>
+            <Typography variant="h3" color="#323C4D" sx={{ flexBasis: '20%', textAlign: 'center' }}>
+              {property}
+            </Typography>
+
+            <StyledButton size='small' variant="contained" sx={{ flexBasis: '15%' }}>
+              View Info
+            </StyledButton>
+
+            <IconButton sx={{ flexBasis: '5%' }}>
+              <CheckCircleTwoTone fontSize='medium' color='grey' />
+            </IconButton>
+
           </>
         )}
       </Box>
-    </Card>
+    </Card >
   );
-};
+}
 const TableHeader = ({ open, handleClick }) => {
   return (
     <Box
@@ -180,6 +167,7 @@ const TableHeader = ({ open, handleClick }) => {
     </Box>
   );
 };
+
 const TaskTable = ({ tableData, loading }) => {
   console.log(tableData);
   console.log(loading);

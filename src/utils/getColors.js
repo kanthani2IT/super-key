@@ -18,3 +18,4 @@ const getColors = (theme, color) => {
 };
 
 export default getColors;
+
