@@ -218,7 +218,7 @@ const CommunityDetails = ({
                         </AppLabelComponent>
                     </AppGrid>
 
-                    <Mobile key={'propertyManager'} handleBlur={handleBlur} handleChange={handleChange} values={values?.propertyManager} mobileError={touched?.propertyManager?.mobile && errors?.propertyManager?.mobile} />
+                    {Mobile({ key: 'propertyManager', values: values.propertyManager, mobileError: touched?.propertyManager?.mobile && errors?.propertyManager?.mobile, handleBlur, handleChange })}
 
 
                 </AppGrid>
