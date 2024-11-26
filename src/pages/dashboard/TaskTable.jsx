@@ -64,7 +64,22 @@ export const StyledButton = styled(Button)(({ theme }) => ({
         background: theme.palette.primary.main, // Optional: change background on hover
     },
 }));
-
+  export const RadiusStyledButton = styled(Button)(({ theme, color, height, width, textColor,borderRadius }) => ({
+    width: width || '200px',  
+    height: height || '50px',  
+    borderRadius: borderRadius || '32px',
+    padding: '15px 29px',
+    gap: '10px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: color || "#288B5B",
+    color: textColor || '#FFFFFF',   
+    fontWeight: 'bold',
+    '&:hover': {
+      backgroundColor: color ? color : theme.palette.success.main,  
+    },
+  }));
 const StyledMenu = styled(Menu)(({ theme }) => ({
     '& .MuiPaper-root': {               // Target the menu's paper (content) area
         borderRadius: '8px',
