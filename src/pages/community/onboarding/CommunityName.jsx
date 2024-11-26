@@ -72,7 +72,7 @@ const CommunityName = ({ handleChange, formValues, touched, errors }) => {
         <AppGrid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
             <AppGrid item >
                 <AppLabelComponent gap={2} variant="h4" label={'What is the name of your community?'}>
-                    <AppAutoComplete valueParam='communityId' nameParam='name' name='communityName' error={touched.communityName && errors.communityName} onChange={handleChange} value={formValues.communityName} options={communityList?.data} placeholder='Search your Community' onSearch={onSearch} />
+                    <AppAutoComplete valueParam='communityId' nameParam='name' name='communityName' error={touched.communityName && errors.communityName} onChange={handleChange} value={formValues.communityName} options={options} placeholder='Search your Community' onSearch={onSearch} />
                 </AppLabelComponent>
 
             </AppGrid>

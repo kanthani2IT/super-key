@@ -1,13 +1,12 @@
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Box, Button, Card, Menu, Stack, Typography, styled } from "@mui/material";
+import { Box, Button, Stack, Typography, styled } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Dot from "components/@extended/Dot";
-import CircularLoader from "components/CircularLoader";
+import AppSkeleton from "components/AppComponents/AppSkeleton";
 import NoDataMessage from "components/NoDataMessage";
-import { useState } from "react";
+import { StyledDashboardCard } from "./StyledComponent";
 
 const getStatus = (status) => {
   let color;
-
   switch (status) {
     case "COMPLETED":
       color = "success";
@@ -21,7 +20,6 @@ const getStatus = (status) => {
 
   return color;
 };
-
 export const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: "0.625rem", // Setting border radius
   border: `0.5px solid ${theme.palette.primary.main}`, // Border style
@@ -51,27 +49,20 @@ export const RadiusStyledButton = styled(Button)(({ theme, color, height, width,
     backgroundColor: color ? color : theme.palette.success.main,
   },
 }));
-const StyledMenu = styled(Menu)(({ theme }) => ({
-  '& .MuiPaper-root': {               // Target the menu's paper (content) area
-    borderRadius: '8px',
-    backgroundColor: theme.palette.secondary.light,  // Background color for the menu content only
-    boxShadow: theme.shadows[2],                    // Subtle box shadow
-  },
-  color: theme.palette.secondary.main,
-  boxShadow: theme.shadows[2],   // Subtle box shadow
-  '& .MuiMenuItem-root': {
-    fontSize: '0.875rem',
-    fontWeight: '600',
-    borderBottom: `1px solid ${theme.palette.common.white}`, // White divider
-    '&:last-child': {
-      borderBottom: 'none', // Remove divider for the last item
-    },
-  },
-}));
 
-export const ColorRow = ({ bgcolor, title, data, dark, main, borderRadius = '15px', status = '', property = '' }) => {
+export const ColorRow = ({
+  bgcolor,
+  title,
+  data,
+  dark,
+  main,
+  borderRadius = "15px",
+  status = "",
+  property = "",
+}) => {
+  const theme = useTheme();
   return (
-    <Card sx={{ '&.MuiPaper-root': { borderRadius, boxShadow: '0 0 !important' } }}>
+    <StyledDashboardCard>
       <Box
         sx={{
           display: 'flex',
@@ -90,8 +81,42 @@ export const ColorRow = ({ bgcolor, title, data, dark, main, borderRadius = '15p
               {title}
             </Typography>
 
-            <Box variant="h3" color="#323C4D" sx={{ flexBasis: '20%', textAlign: 'center' }}>
-              <Dot color={status} />
+            <Box
+              sx={{
+                flexBasis: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                bgcolor,
+                color: dark ? "grey.800" : theme.palette.background.default,
+                border: main ? "1px dashed" : "1px solid transparent",
+                p: 2,
+                borderRadius,
+              }}
+            >
+              <Typography
+                variant="h6"
+                color={theme.palette.text.primary}
+                sx={{ flexBasis: "75%" }}
+              >
+                {title}
+              </Typography>
+
+              <Box
+                variant="h3"
+                color={theme.palette.text.primary}
+                sx={{ flexBasis: "20%", textAlign: "center" }}
+              >
+                <Dot color={status} />
+              </Box>
+
+              <Typography
+                variant="subtitle1"
+                color={theme.palette.text.primary}
+                sx={{ flexBasis: "20%", textAlign: "center" }}
+              >
+                {property}
+              </Typography>
             </Box>
 
 
@@ -109,11 +134,12 @@ export const ColorRow = ({ bgcolor, title, data, dark, main, borderRadius = '15p
 
           </>
         )}
-      </Box>
-    </Card >
+      </Box >
+    </StyledDashboardCard>
   );
-}
-const TableHeader = ({ open, handleClick }) => {
+};
+const TableHeader = () => {
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -127,30 +153,21 @@ const TableHeader = ({ open, handleClick }) => {
       <Typography sx={{ flexBasis: "5%" }}></Typography>
       <Typography
         variant="subtitle1"
-        color="#323C4D"
+        color={theme.palette.text.primary}
         sx={{ flexBasis: "75%", textAlign: "left" }}
       ></Typography>
-      <Button
-        size="large"
-        sx={{ flexBasis: "20%", textAlign: "center" }}
-        onClick={handleClick}
-        endIcon={
-          open ? (
-            <ExpandLess color={"secondary"} fontSize="medium" />
-          ) : (
-            <ExpandMore color={"secondary"} fontSize="medium" />
-          )
-        }
-        disableRipple
-        disableElevation
-        disableFocusRipple
-        color="#323C4D"
-      >
-        Status
-      </Button>
+
       <Typography
         variant="h6"
-        color="#323C4D"
+        color={theme.palette.text.primary}
+        sx={{ flexBasis: "20%", textAlign: "center" }}
+      >
+        Status
+      </Typography>
+
+      <Typography
+        variant="h6"
+        color={theme.palette.text.primary}
         sx={{ flexBasis: "20%", textAlign: "center" }}
       >
         Property
@@ -158,7 +175,7 @@ const TableHeader = ({ open, handleClick }) => {
       <Box sx={{ flexBasis: "11%" }} />
       <Typography
         variant="h6"
-        color="#323C4D"
+        color={theme.palette.text.primary}
         sx={{ flexBasis: "10%", textAlign: "center" }}
       >
         Action
@@ -169,52 +186,48 @@ const TableHeader = ({ open, handleClick }) => {
 };
 
 const TaskTable = ({ tableData, loading }) => {
-  console.log(tableData);
-  console.log(loading);
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <Stack sx={{ mt: 1 }}>
-      <TableHeader
-        open={open}
-        handleClick={handleClick}
-        handleClose={handleClose}
-      />
+      <TableHeader />
       <Box sx={{ overflow: "auto", height: "15rem", p: 2 }}>
-
-        {loading ? (
-          <CircularLoader />
-        ) : tableData && tableData.length > 0 ? (
-          <Stack rowGap={1.5}>
-            {tableData?.map((row, index) => {
-              const status = getStatus(row?.status);
-              return (
-                <ColorRow
-                  key={row?.index}
-                  title={row?.description}
-                  status={status}
-                  property={row?.property}
-                  bgcolor={
-                    row?.status === "COMPLETED" ? "grey.300" : `error.lighter`
-                  }
-                  borderRadius={"15px"}
-                />
-              );
-            })}
-          </Stack>
-        ) : (
-          <NoDataMessage />
-        )}
-      </Box>
-    </Stack>
+        <Stack rowGap={1.5}>
+          {!loading ? (
+            <>
+              {tableData?.length > 0 ? (
+                <>
+                  {tableData?.map((row, index) => {
+                    const status = getStatus(row?.status);
+                    return (
+                      <ColorRow
+                        key={row?.index}
+                        title={row?.description}
+                        status={status}
+                        property={row?.property}
+                        bgcolor={
+                          row?.status === "COMPLETED"
+                            ? "grey.300"
+                            : `error.lighter`
+                        }
+                        borderRadius={"15px"}
+                      />
+                    );
+                  })}
+                </>
+              ) : (
+                <NoDataMessage />
+              )}
+            </>
+          ) : (
+            <AppSkeleton
+              row={3}
+              variant={"custom"}
+              width={"100%"}
+              height={"60px"}
+            />
+          )}
+        </Stack>
+      </Box >
+    </Stack >
   );
 };
 

@@ -254,17 +254,17 @@ const CommunityOnboarding = () => {
             : null,
         enableReinitialize: true,
         onSubmit: async (values) => {
-            if (activeStep == onBoardingStepper?.length - 2) {
-                let payload = {
-                    ...values,
-                }
-                mutate(payload);
+            // if (activeStep == onBoardingStepper?.length - 2) {
+            //     let payload = {
+            //         ...values,
+            //     }
+            //     mutate(payload);
 
-            } else {
-                handleNext(values);
-                updateOnboarding(values);
+            // } else {
+            handleNext(values);
+            updateOnboarding(values);
 
-            }
+            // }
             setTouched({});
         },
     });
@@ -285,6 +285,7 @@ const CommunityOnboarding = () => {
                 item
                 size={{ xs: 12 }}
                 container
+                spacing={2}
                 justifyContent="space-between"
                 alignItems="center"
             >
@@ -360,7 +361,7 @@ const CommunityOnboarding = () => {
                             show,
                             setSelectedFiles,
                             selectedFiles,
-                            handleSubmit,
+                            handleClose,
                         })}
                 </Suspense>
             </AppModal>

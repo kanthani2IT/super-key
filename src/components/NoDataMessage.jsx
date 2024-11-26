@@ -11,9 +11,9 @@ const NoDataMessage = ({ title = "No Data Found" }) => {
             sx={{ textAlign: "center", color: "text.secondary" }}
         >
             <Typography variant="h6">{title}</Typography>
-            <Typography variant="body2">
+            {/* <Typography variant="body2">
                 There are no tasks to display. Try adjusting your filters or check back later.
-            </Typography>
+            </Typography> */}
         </Stack >
     )
 }

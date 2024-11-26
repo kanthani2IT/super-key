@@ -2,7 +2,6 @@ import {
   Box,
   Step,
   StepConnector,
-  StepLabel,
   Stepper,
   styled,
 } from "@mui/material";
@@ -22,28 +21,23 @@ const CustomConnector = styled(StepConnector)(({ theme }) => ({
   },
 }));
 
-const CustomStepIcon = () => null;
+const CustomStep = styled(Step)(({ theme }) => ({
+  "&:not(:last-of-type)": {
+    marginRight: "2px",
+  },
+}));
 
 const AppStepper = ({ activeStep, steps }) => {
   return (
-    <Box sx={{ width: "100%", height: "1vh" }}>
+    <Box sx={{ width: "100%" }}>
       <Stepper
         activeStep={activeStep}
         alternativeLabel
         connector={<CustomConnector />}
       >
-        {steps.map((label, index) => (
-          <Step key={index} completed={activeStep > index}>
-            <StepLabel
-              StepIconComponent={(props) => (
-                <CustomStepIcon
-                  {...props}
-                  active={activeStep === index}
-                  completed={activeStep > index}
-                />
-              )}
-            ></StepLabel>
-          </Step>
+        {steps.map((_, index) => (
+          <CustomStep key={index} completed={activeStep > index}>
+          </CustomStep>
         ))}
       </Stepper>
     </Box>

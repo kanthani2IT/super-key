@@ -52,7 +52,7 @@ const AppAutoComplete = ({
     value,
     onSearch,
     onBlur,
-    filter = false,
+    filter = true,
     searchKey = '',
     ...props
 }) => {

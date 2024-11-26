@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useDebounceFn } from 'utils/helpers';
 
 const options = [
-    { label: "Phoenix North Estates, Phoenix, AZ 85023, USAPhoenix North Estates, Phoenix, AZ 85023, USA", value: "AZ" },
+    { label: "Phoenix North Estates, Phoenix, AZ 85023, USA", value: "AZ" },
     { label: "New York, Phoenix, NY 54321, USA", value: " " },
     { label: "India, Phoenix", value: "LA" },
     { label: "New ", value: " lj" }
