@@ -21,12 +21,32 @@ const AddManuallyButton = styled(Typography)({
     fontWeight: 500,
 });
 
-const filter = createFilterOptions();
+
+const AddManuallyOptionWrapper = styled(Box)({
+    display: "flex",
+    justifyContent: "space-between",
+    cursor: "default !important", // Prevent click event on entire option
+    "&:hover": {
+        backgroundColor: "transparent !important", // Prevent hover color change
+    },
+})
+const OptionWrapper = styled(Box)(({ theme, isSelected }) => ({
+    // px: 2,
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: isSelected ? theme.palette.info.light : "transparent",
+    "&:hover": {
+        backgroundColor: theme.palette.action.hover,
+    },
+}))
+
+const filterOption = createFilterOptions();
 
 const AppAutoComplete = ({
     freeSolo = true,
     options = [],
     nameParam = "label",
+    valueParam = "id",
     placeholder = 'type',
     inputValue,
     error,
@@ -47,23 +67,20 @@ const AppAutoComplete = ({
     const theme = useTheme()
     const handleAddManually = (customOption) => {
 
-        onChange(name, customOption);
-
+        onChange?.({ target: { name, value: customOption } });
+        onSearch?.('');
 
         setOpen(false);
-        if (!props.filter)
-            onSearch('');
 
     }
     const handleClose = () => {
         setOpen(false);
-        if (!props.filter)
-            onSearch('');
+        onSearch?.('');
 
     };
     const handleInputChange = (_, newInputValue, reason) => {
         if (reason == 'input') {
-            onSearch(newInputValue);
+            onSearch?.(newInputValue, searchKey ?? name);
         }
     }
 
@@ -85,7 +102,8 @@ const AppAutoComplete = ({
             openOnFocus
             disabled={isLoading || disabled}
             freeSolo={freeSolo}
-            onChange={(_, value) => onChange(name, value)}
+            onChange={handleChange}
+            onBlur={handleBlur}
             onInputChange={handleInputChange}
             getOptionLabel={(option) => {
                 if (typeof option === "string") {
@@ -94,7 +112,7 @@ const AppAutoComplete = ({
                 return option[nameParam] || "";
             }}
             filterOptions={(options, params) => {
-                const filtered = filter(options, params);
+                const filtered = filter ? filterOption(options, params) : options;
                 if (freeSolo && (params.inputValue !== "")) {
                     return [
                         { id: "add-manually", [nameParam]: params.inputValue, isCustom: true },
@@ -129,17 +147,10 @@ const AppAutoComplete = ({
                 if (option?.isCustom) {
                     return (
                         <>
-                            <Box
+                            <AddManuallyOptionWrapper
                                 {...props}
-                                key={option.id}
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    cursor: "default !important", // Prevent click event on entire option
-                                    "&:hover": {
-                                        backgroundColor: "transparent !important", // Prevent hover color change
-                                    },
-                                }}
+                                key={option[valueParam]}
+
                                 onClick={(event) => event.stopPropagation()}
                             >
                                 <Typography variant="subtitle1">{option[nameParam]}</Typography>
@@ -153,23 +164,27 @@ const AppAutoComplete = ({
                                 >
                                     Add Manually
                                 </AddManuallyButton>
-                            </Box>
+                            </AddManuallyOptionWrapper>
                             <Divider />
                         </>
                     );
                 }
+                const isSelected = value && option[valueParam] === value[valueParam];
 
                 return (
                     <>
-                        <Box
+
+                        <OptionWrapper
+                            isSelected={isSelected}
                             {...props}
-                            key={option.id} // Add a key for each option
-                            sx={{ px: 2 }}
+                            key={option[valueParam]}
+                            aria-selected={isSelected ? "true" : "false"}
+
                         >
-                            <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+                            <Typography variant="subtitle1" sx={{ fontWeight: isSelected ? "bold" : "normal" }}>
                                 {option[nameParam]}
                             </Typography>
-                        </Box>
+                        </OptionWrapper>
                         <Divider />
                     </>
 
@@ -177,29 +192,41 @@ const AppAutoComplete = ({
             }}
             ListboxProps={{
                 sx: {
-                    padding: 0, // Removes the default padding
+                    width: 'auto',
+                    maxHeight: "153px",
+                    overflowY: "auto",
+                    padding: 0,
+                    color: "inherit",
                     "& .MuiAutocomplete-option": {
-                        minHeight: "45px", // Set a consistent height for each option
+                        minHeight: "45px",
                         display: "flex",
-                        alignItems: "center", // Ensures text is vertically aligned
+                        alignItems: "center",
                         "&:hover, &:focus": {
-                            color: "inherit",
-                            backgroundColor: theme.palette.info.light, // Change background color on hover for regular options
+                            backgroundColor: theme.palette.info.light,
                         },
-
                     },
+
+
                 },
             }}
             componentsProps={{
                 paper: {
                     sx: {
-                        marginTop: 2, // Add gap
+                        width: 'auto',
+                        background: theme.palette.primary.lighter,
+                        marginTop: 2,
                         borderRadius: 2,
-                        maxHeight: "153px", // Approximately 3 items of 51px height each
-                        overflowY: "auto", // Enable scrolling if more than 3 items
+                        "& .MuiAutocomplete-noOptions": {
+                            color: "inherit",
+                            fontWeight: "bold",
+                        },
+
                     },
                 },
             }}
+            noOptionsText='No data found'
+            selectOnFocus
+
             fullWidth
             open={open}
             onOpen={() => setOpen(true)}

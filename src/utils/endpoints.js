@@ -14,7 +14,7 @@ const COMMUNITY = {
   createCommunity: "/api/community",
 };
 const COMMON = {
-  getAllLocation: `/api/autocomplete?input="ind"`,
+  getAllLocation: `/api/autocomplete?input=""`,
   getAllCommunity: `/api/community`,
   getAllCommunityManager: `/api/manager`,
   getAllPropertyManager: `/api/propertyManager`,

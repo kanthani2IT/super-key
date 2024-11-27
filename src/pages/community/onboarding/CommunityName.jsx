@@ -65,7 +65,7 @@ const CommunityName = ({ handleChange, formValues, touched, errors }) => {
         setName(searchString)
     }, 500)
 
-    const { data: communityList, isLoading } = useCommunitiesQuery(name)
+    const { data: communityList, isLoading } = useCommunitiesQuery()
 
     return (
         <AppGrid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >

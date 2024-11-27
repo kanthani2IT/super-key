@@ -197,7 +197,7 @@ const FileRow = ({
     <EllipsisCell>
       <DocumentTypeDropdown
         value={files.docType}
-        onChange={(event, data) => onTypeChange(index, data)}
+        onChange={({ target }, data) => onTypeChange(index, target.value)}
         documentTypesData={documentTypesData}
       />
     </EllipsisCell>
@@ -277,7 +277,11 @@ const InsuranceUpload = ({
 
   const handleRemoveFile = (index) => {
     setFiles(files.filter((_, i) => i !== index));
-    setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
+    let updatedFiles = selectedFiles.filter((_, i) => i !== index)
+    setSelectedFiles(updatedFiles);
+    if (!updatedFiles?.length) {
+      setDocType(documentTypesData?.data[0]);
+    }
   };
 
   const handleSelectAll = () => {
@@ -366,8 +370,8 @@ const InsuranceUpload = ({
                         <DocumentTypeDropdown
                           value={docType}
                           documentTypesData={documentTypesData?.data}
-                          onChange={(event, data) =>
-                            handleTypeChange("all", data)
+                          onChange={({ target }, data) =>
+                            handleTypeChange("all", target.value)
                           }
                         />
                       </EllipsisCell>

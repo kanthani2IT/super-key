@@ -55,7 +55,7 @@ const onBoardingStepper = [
         component: (props) => <CommunityDetails {...props} />,
         initialValidationSchema: {
             communityManager: Yup.object().shape({
-                name: Yup.object().required("Name is required"),
+                name: Yup.string().required("Name is required"),
                 email: Yup.string()
                     .email("Invalid email format")
                     .required("Email is required"),
@@ -65,7 +65,7 @@ const onBoardingStepper = [
                     .required("Mobile number is required"),
             }),
             propertyManager: Yup.object().shape({
-                name: Yup.object().required("Name is required"),
+                name: Yup.string().required("Name is required"),
                 email: Yup.string()
                     .email("Invalid email format")
                     .required("Email is required"),
@@ -269,16 +269,16 @@ const CommunityOnboarding = () => {
                         phone: values?.communityManager?.phone,
                         region: values?.communityManager?.countryCode?.value,
                         managementCompanyId: values?.communityManager?.managementCompanyId
-                    },
-                    propertyManager: {
-                        managerId: values?.propertyManager?.managerId,
-                        name: values?.propertyManager?.name,
-                        email: values?.propertyManager?.email,
-                        phone: values?.propertyManager?.phone,
-                        region: values?.propertyManager?.countryCode?.value,
-                        // managementCompanyId: values?.communityManager?.managementCompanyId
-                    },
-                    documents: []
+                    }
+                    // propertyManager: {
+                    //     managerId: values?.propertyManager?.managerId,
+                    //     name: values?.propertyManager?.name,
+                    //     email: values?.propertyManager?.email,
+                    //     phone: values?.propertyManager?.phone,
+                    //     region: values?.propertyManager?.countryCode?.value,
+                    //     // managementCompanyId: values?.communityManager?.managementCompanyId
+                    // },
+                    // files: []
 
                 }
                 mutate(payload);
