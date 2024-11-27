@@ -54,6 +54,9 @@ export default function Palette(mode, presetColor) {
         paper: "#fff",
         default: "#fff",
       },
+      blue: {
+        100: "#E9F3FF",
+      },
     },
   });
 }
