@@ -1,5 +1,6 @@
 import { Card, CardActions, CardContent, Typography } from "@mui/material";
-import { RadiusStyledButton } from "pages/dashboard/TaskTable";
+
+import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
 import AppModal from "./AppModal";
 
 const ConfirmationModal = ({

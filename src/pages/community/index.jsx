@@ -6,7 +6,7 @@ import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
 import CircularLoader from "components/CircularLoader";
 import { useFormik } from "formik";
-import { RadiusStyledButton } from "pages/dashboard/TaskTable";
+import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
 import UserTable from "pages/dashboard/UserTable";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
@@ -54,7 +54,7 @@ const onBoardingStepper = [
     component: (props) => <CommunityDetails {...props} />,
     initialValidationSchema: {
       communityManager: Yup.object().shape({
-        name: Yup.string().required("Name is required"),
+        name: Yup.object().required("Name is required"),
         email: Yup.string()
           .email("Invalid email format")
           .required("Email is required"),
@@ -64,7 +64,7 @@ const onBoardingStepper = [
           .required("Mobile number is required"),
       }),
       propertyManager: Yup.object().shape({
-        name: Yup.string().required("Name is required"),
+        name: Yup.object().required("Name is required"),
         email: Yup.string()
           .email("Invalid email format")
           .required("Email is required"),
@@ -205,6 +205,7 @@ const CommunityOnboarding = () => {
   const handleOnboardingType = (value) => {
     setOnboardingType(value);
     setFieldValue("onBoardingType", value);
+    console.log(value, "IIIIII");
   };
 
   const handleSelectionChange = (selected) => {
@@ -265,7 +266,7 @@ const CommunityOnboarding = () => {
     resetForm,
   } = formik;
   console.log(onboarding);
-
+  console.log(values, "$$$$$ values");
   return (
     <AppGrid container spacing={4}>
       <AppGrid
@@ -316,9 +317,13 @@ const CommunityOnboarding = () => {
           </RadiusStyledButton>
         </AppGrid>
       </AppGrid>
-      <Button onClick={openDrawer}>Edit</Button>
+
       <AppGrid item size={{ xs: 12 }}>
-        <UserTable height={"80vh"} onSelectionChange={handleSelectionChange} />
+        <UserTable
+          height={"80vh"}
+          onSelectionChange={handleSelectionChange}
+          openPopup={openDrawer}
+        />
       </AppGrid>
       <AppModal
         height={finalStep ? "30vh" : "auto"}
@@ -355,11 +360,11 @@ const CommunityOnboarding = () => {
         open={edit}
         onClose={closeDrawer}
         anchor="right"
-        PaperProps={{
-          sx: {
-            padding: 2,
-          },
-        }}
+        // PaperProps={{
+        //     sx: {
+        //         padding: 2,
+        //     },
+        // }}
       >
         <EditCommunity onClose={closeDrawer} />
       </Drawer>

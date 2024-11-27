@@ -25,6 +25,8 @@ const COMMON = {
 const DASHBOARD = {
   getActiveTask: "/api/tasks",
   getCompletedTask: "api/tasks/history",
+  getActiveAndCompletedTaskByFilter: (sort, orderBy) =>
+    `api/tasks/filters?sort=${sort}&orderBy=${orderBy}`,
 };
 
 export { COMMON, COMMUNITY, DASHBOARD, LOGIN, ONBOARD };

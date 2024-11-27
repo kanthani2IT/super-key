@@ -27,7 +27,7 @@ const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
     width: "50%",
   },
   [theme.breakpoints.up("lg")]: {
-    width: "40%"
+    width: "60%"
   },
 }));
 

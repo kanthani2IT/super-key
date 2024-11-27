@@ -15,7 +15,8 @@ import {
   useGetUserById,
   useUpdateUserById,
 } from "hooks/useOnboard";
-import { RadiusStyledButton } from "pages/dashboard/TaskTable";
+import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
+
 import { useEffect, useState } from "react";
 
 import {

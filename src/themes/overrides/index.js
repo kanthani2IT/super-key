@@ -16,6 +16,7 @@ import ListItemIcon from "./ListItemIcon";
 import Modal from "./Modal";
 import OutlinedInput from "./OutlinedInput";
 import Select from "./Select";
+import Skeleton from "./Skeleton";
 import Tab from "./Tab";
 import TableCell from "./TableCell";
 import Tabs from "./Tabs";
@@ -40,10 +41,11 @@ export default function ComponentsOverrides(theme) {
     Tab(theme),
     TableCell(theme),
     Tabs(theme),
-    Typography(),
+    Typography(theme),
     TextField(),
     Select(),
     Modal(theme),
-    Divider(theme)
+    Divider(theme),
+    Skeleton(theme)
   );
 }

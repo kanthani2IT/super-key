@@ -3,7 +3,7 @@ export const importPolicyData = {
   instructions: "Select or drag and drop here. Can bulk upload",
   footerText:
     "Support file under 100 MB. 20 files per upload. Import files in DOCX, XLSX, CSV",
-  fileTypes: [".docx", ".xlsx", ".csv", ".pdf", ".png", ".jpeg", ".gif"],
+  fileTypes: [".docx", ".xlsx", ".csv", ".pdf",],
 };
 
 export const truncateFileName = (

@@ -11,7 +11,13 @@ const InsuranceDocument = ({ enable = true, selectedFiles, setSelectedFiles }) =
   const handleFileUpload = (event) => {
     const fileList = event.target.files;
     const filesArray = Array.from(fileList);  // Convert FileList to an array
-    setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);  // Append new files to the existing ones
+    const totalFiles = selectedFiles.length + filesArray.length;
+  
+    if (totalFiles > 20) {
+      alert('You can only upload a maximum of 20 files.');
+    } else {
+      setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);  // Append new files to the existing ones
+    }
   };
 
   return (
