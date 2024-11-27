@@ -16,9 +16,9 @@ const CommunityDetails = ({
 }) => {
     const size = { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 }
 
-    //mobile number
-    const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 }
-    const mobileSize = { xs: 9, sm: 9, md: 9, lg: 4, xl: 4 }
+    //phone number
+    const countryCodeSize = { xs: 2.5, sm: 2.5, md: 2.5, lg: 2, xl: 2 }
+    const mobileSize = { xs: 9.5, sm: 9.5, md: 9.5, lg: 4, xl: 4 }
 
 
     const { communityManager, propertyManager } = formValues
@@ -27,21 +27,21 @@ const CommunityDetails = ({
         communityManager: '',
         propertyManager: ''
     })
-    const { data: communityManagerList } = useCommunityManagersQuery(seachString.communityManager)
-    const { data: propertyManagerList } = usePropertyManagersQuery(seachString.propertyManager)
+    const { data: communityManagerList, isLoading: communityManagerFetching } = useCommunityManagersQuery()
+    const { data: propertyManagerList, isLoading: propertyManagerFetching } = usePropertyManagersQuery()
 
     const [values, setValues] = useState({
         communityManager: {
             name: '',
             email: '',
-            mobile: '',
+            phone: '',
             countryCode: '',
             address: ""
         },
         propertyManager: {
             name: '',
             email: '',
-            mobile: '',
+            phone: '',
             countryCode: '',
             address: ""
         },
@@ -77,7 +77,6 @@ const CommunityDetails = ({
             [key]: searchString
         }))
     })
-
     //For Mobile Number
     const Mobile = ({ key, values, mobileError, handleChange, handleBlur }) => {
         return (
@@ -96,20 +95,20 @@ const CommunityDetails = ({
                             placeholder='+1'
                             disableClearable
                             filter
+                            disabled
 
                         />
 
                     </AppLabelComponent>
                 </AppGrid>
                 <AppGrid item size={mobileSize} >
-
                     <AppLabelComponent label={'Mobile Number'}>
                         <TextField
                             placeholder='+123423355'
                             required
                             fullWidth
-                            name={`${key}.mobile`}
-                            value={values?.mobile}
+                            name={`${key}.phone`}
+                            value={values?.phone}
                             onChange={(event) => handleChange(event)}
                             onBlur={handleBlur}
                             error={Boolean(mobileError)}
@@ -123,8 +122,25 @@ const CommunityDetails = ({
     }
 
 
-    console.log(communityManagerList, propertyManagerList)
+    const handleManger = (event) => {
+        const { name, value } = event.target
+        const [id, key] = name.split('.')
+        let exitingValue = formValues[id]
+        if (!value?.isCustom) {
+            exitingValue = {
+                ...exitingValue,
+                ...value
+            }
+            setValues(prevState => ({
+                ...prevState,
+                [id]: exitingValue
+            }))
+            setFieldValue(id, exitingValue)
+        } else {
+            handleChange(event)
+        }
 
+    }
     return (
         <AppGrid container spacing={4} >
 
@@ -139,13 +155,13 @@ const CommunityDetails = ({
                         <AppLabelComponent label={'Name'}>
                             <AppAutoComplete name="communityManager.name" freeSolo={false}
                                 error={touched.communityManager?.name && errors.communityManager?.name}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
+                                onChange={handleManger}
                                 nameParam='name'
-
+                                valueParam='managerId'
                                 searchKey='communityManager'
+                                loading={communityManagerFetching}
                                 value={values?.communityManager?.name || ''}
-                                options={cManagers}
+                                options={communityManagerList?.data}
                                 placeholder='Select Manager'
                                 onSearch={onSearch}
                             />
@@ -171,7 +187,7 @@ const CommunityDetails = ({
                         </AppLabelComponent>
                     </AppGrid>
 
-                    {Mobile({ key: 'communityManager', values: values.communityManager, mobileError: touched?.communityManager?.mobile && errors?.communityManager?.mobile, handleBlur, handleChange })}
+                    {Mobile({ key: 'communityManager', values: values.communityManager, mobileError: touched?.communityManager?.phone && errors?.communityManager?.phone, handleBlur, handleChange })}
 
 
                 </AppGrid>
@@ -191,10 +207,10 @@ const CommunityDetails = ({
                         <AppLabelComponent label={'Name'}>
                             <AppAutoComplete name="propertyManager.name" freeSolo={false}
                                 error={touched.propertyManager?.name && errors.propertyManager?.name}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
+                                onChange={handleManger}
                                 nameParam='name'
                                 searchKey='propertyManager'
+                                loading={propertyManagerFetching}
                                 value={values?.propertyManager?.name || ''}
                                 options={cManagers}
                                 placeholder='Select Property Manager'
@@ -220,7 +236,7 @@ const CommunityDetails = ({
                         </AppLabelComponent>
                     </AppGrid>
 
-                    {Mobile({ key: 'propertyManager', values: values.propertyManager, mobileError: touched?.propertyManager?.mobile && errors?.propertyManager?.mobile, handleBlur, handleChange })}
+                    {Mobile({ key: 'propertyManager', values: values.propertyManager, mobileError: touched?.propertyManager?.phone && errors?.propertyManager?.phone, handleBlur, handleChange })}
 
 
                 </AppGrid>

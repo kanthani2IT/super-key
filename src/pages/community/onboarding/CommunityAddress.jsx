@@ -21,8 +21,7 @@ const CommunityAddress = ({ handleChange, formValues, touched, errors, }) => {
         setAddress(searchString)
 
     })
-    const location = useLocationsQuery(address)
-    console.log(location)
+    const { data: location, isLoading } = useLocationsQuery(address)
 
     return (
         <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
@@ -31,7 +30,7 @@ const CommunityAddress = ({ handleChange, formValues, touched, errors, }) => {
             </Grid>
             <Grid item >
                 <AppLabelComponent gap={2} variant="h4" label={'What is the address of your community?'}>
-                    <AppAutoComplete valueParam='value' name='communityAddress' freesolo error={touched.communityAddress && errors.communityAddress} onChange={handleChange} value={formValues.communityAddress} options={options} placeholder='Search your address' onSearch={onSearch} />
+                    <AppAutoComplete loading={isLoading} valueParam='value' name='communityAddress' freesolo error={touched.communityAddress && errors.communityAddress} onChange={handleChange} value={formValues.communityAddress} options={options} placeholder='Search your address' onSearch={onSearch} />
                 </AppLabelComponent>
 
 

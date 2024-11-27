@@ -9,47 +9,47 @@ import { useDebounceFn } from 'utils/helpers';
 
 const options = [
     {
-        id: "808c6301479c40b8b4a039bae45d1465",
+        communityId: "808c6301479c40b8b4a039bae45d1465",
         name: "Green Valley Community"
     },
     {
-        id: "1",
+        communityId: "1",
         name: "Desert Eagle"
     },
     {
-        id: "2",
+        communityId: "2",
         name: "Naples"
     },
     {
-        id: "3",
+        communityId: "3",
         name: "Sarasota"
     },
     {
-        id: "4",
+        communityId: "4",
         name: "Tampa"
     },
     {
-        id: "5",
+        communityId: "5",
         name: "Orlando"
     },
     {
-        id: "6",
+        communityId: "6",
         name: "Miami"
     },
     {
-        id: "7",
+        communityId: "7",
         name: "Jacksonville"
     },
     {
-        id: "8",
+        communityId: "8",
         name: "St. Petersburg"
     },
     {
-        id: "9",
+        communityId: "9",
         name: "Fort Lauderdale"
     },
     {
-        id: "10",
+        communityId: "10",
         name: "Palm Beach"
     }
 ];
@@ -63,16 +63,15 @@ const CommunityName = ({ handleChange, formValues, touched, errors }) => {
 
     const onSearch = useDebounceFn((searchString) => {
         setName(searchString)
-
     }, 500)
 
-    const { data: communityList } = useCommunitiesQuery(name)
+    const { data: communityList, isLoading } = useCommunitiesQuery(name)
 
     return (
         <AppGrid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
             <AppGrid item >
                 <AppLabelComponent gap={2} variant="h4" label={'What is the name of your community?'}>
-                    <AppAutoComplete valueParam='communityId' nameParam='name' name='communityName' error={touched.communityName && errors.communityName} onChange={handleChange} value={formValues.communityName} options={options} placeholder='Search your Community' onSearch={onSearch} />
+                    <AppAutoComplete valueParam='communityId' nameParam='name' name='communityName' error={touched.communityName && errors.communityName} loading={!communityList?.data?.length && isLoading} onChange={handleChange} value={formValues.communityName} options={communityList?.data} placeholder='Search your Community' onSearch={onSearch} />
                 </AppLabelComponent>
 
             </AppGrid>

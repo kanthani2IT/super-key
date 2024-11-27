@@ -55,21 +55,21 @@ const onBoardingStepper = [
         component: (props) => <CommunityDetails {...props} />,
         initialValidationSchema: {
             communityManager: Yup.object().shape({
-                name: Yup.object().required("Name is required"),
+                name: Yup.string().required("Name is required"),
                 email: Yup.string()
                     .email("Invalid email format")
                     .required("Email is required"),
-                mobile: Yup.string()
+                phone: Yup.string()
                     .min(10, "Mobile number must be at least 10 digits.")
                     .max(15, "Mobile number cannot exceed 15 digits.")
                     .required("Mobile number is required"),
             }),
             propertyManager: Yup.object().shape({
-                name: Yup.object().required("Name is required"),
+                name: Yup.string().required("Name is required"),
                 email: Yup.string()
                     .email("Invalid email format")
                     .required("Email is required"),
-                mobile: Yup.string()
+                phone: Yup.string()
                     .min(10, "Mobile number must be at least 10 digits.")
                     .max(15, "Mobile number cannot exceed 15 digits.")
                     .required("Mobile number is required"),
@@ -245,6 +245,7 @@ const CommunityOnboarding = () => {
     };
     const successHandler = () => {
         resetOnboarding();
+        handleNext()
     }
     const { mutate, isLoading, isSuccess, isError, data } = useOnboardCommunity(successHandler);
 
@@ -255,17 +256,34 @@ const CommunityOnboarding = () => {
             : null,
         enableReinitialize: true,
         onSubmit: async (values) => {
-            // if (activeStep == onBoardingStepper?.length - 2) {
-            //     let payload = {
-            //         ...values,
-            //     }
-            //     mutate(payload);
+            if (activeStep == onBoardingStepper?.length - 2) {
+                let payload = {
+                    name: values?.communityName?.name,
+                    contactInfo: values?.communityAddress?.label,
+                    communityManager: {
+                        managerId: values?.communityManager?.managerId,
+                        name: values?.communityManager?.name,
+                        email: values?.communityManager?.email,
+                        phone: values?.communityManager?.phone,
+                        region: values?.communityManager?.countryCode?.value,
+                        managementCompanyId: values?.communityManager?.managementCompanyId
+                    },
+                    propertyManager: {
+                        managerId: values?.propertyManager?.managerId,
+                        name: values?.propertyManager?.name,
+                        email: values?.propertyManager?.email,
+                        phone: values?.propertyManager?.phone,
+                        region: values?.propertyManager?.countryCode?.value,
+                        // managementCompanyId: values?.communityManager?.managementCompanyId
+                    },
+                    documents: []
 
-            // } else {
-            handleNext(values);
-            updateOnboarding(values);
-
-            // }
+                }
+                mutate(payload);
+            } else {
+                handleNext(values);
+                updateOnboarding(values);
+            }
             setTouched({});
         },
     });

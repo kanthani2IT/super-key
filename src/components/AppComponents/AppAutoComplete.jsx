@@ -2,13 +2,16 @@ import styled from "@emotion/styled";
 import {
     Autocomplete,
     Box,
+    CircularProgress,
     Divider,
     TextField,
+    Tooltip,
     Typography,
     createFilterOptions,
     useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
+import AppToolTip from "./AppToolTip";
 
 const AddManuallyButton = styled(Typography)({
     color: "#2954E1",
@@ -52,9 +55,12 @@ const AppAutoComplete = ({
     value,
     onSearch,
     onBlur,
+    loading = false,
     filter = true,
     searchKey = '',
-    variant="outlined",
+    variant = "outlined",
+    disableClearable,
+    disabled,
     ...props
 }) => {
     const [open, setOpen] = useState(false)
@@ -84,16 +90,17 @@ const AppAutoComplete = ({
     const handleBlur = (event) => {
         onBlur?.({ target: { name, value } });
     };
-
+    const isLoading = options?.length && loading
     return (
         <Autocomplete
             {...props}
-
+            disableClearable={isLoading || disableClearable}
             name={name}
             value={value}
             options={options}
             clearOnBlur
             openOnFocus
+            disabled={isLoading || disabled}
             freeSolo={freeSolo}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -113,15 +120,27 @@ const AppAutoComplete = ({
                     ];
                 }
 
+
                 return filtered;
             }}
             renderInput={(params) => (
                 <TextField
-                variant={variant}
+                    variant={variant}
                     {...params}
                     placeholder={placeholder}
                     error={Boolean(error)}
                     helperText={error}
+                    slotProps={{
+                        input: {
+                            ...params.InputProps,
+                            endAdornment: (
+                                <React.Fragment>
+                                    {loading ? <AppToolTip placement='bottom' title='Fetching...'><CircularProgress color="inherit" size={20} /></AppToolTip> : null}
+                                    {params.InputProps.endAdornment}
+                                </React.Fragment>
+                            ),
+                        },
+                    }}
                 />
             )}
             renderOption={(props, option) => {

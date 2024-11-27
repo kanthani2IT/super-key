@@ -44,6 +44,7 @@ const StyledFlexCardContent = styled(CardContent)(({ height, theme, padding, foo
   marginTop: 3,
   marginBottom: 2,
   borderRadius: "8px",
+  overflow: "auto "
 }));
 
 const AppModalContainer = ({
@@ -66,7 +67,7 @@ const AppModalContainer = ({
           {title && !header && (
             <CardHeader
               title={
-                <Stack textAlign={'center'} justifyContent={'center'} alignItems="center" gap={1} mb='2px' >
+                <Stack textAlign={'center'} justifyContent={'center'} alignItems="center" gap={0.5} >
                   <Typography variant="h2">{title}
                   </Typography>
                   {stepper && stepper()}

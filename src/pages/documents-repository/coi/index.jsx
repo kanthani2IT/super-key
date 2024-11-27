@@ -127,7 +127,7 @@ const COI = () => {
           <CertificatesCard title={coi?.community?.title} handleEmail={handleEmailModal} handleCertificates={handleCertificates} certificateData={certificateData} />
         </AppGrid>}
 
-      <AppModal height={finalStep ? "30vh" : '70vh'} enableCard={!finalStep} title={coiMailSteps[activeStep].title} open={open} onClose={handleEmailModalClose} footer={!finalStep && footer()} align={finalStep ? 'center' : ""}  >
+      <AppModal cardHeight={finalStep ? "30vh" : '50vh'} enableCard title={coiMailSteps[activeStep].title} open={open} onClose={handleEmailModalClose} footer={!finalStep && footer()} align={finalStep ? 'center' : ""}  >
         {coiMailSteps[activeStep].component({ formik: formik })}
       </AppModal>
     </AppGrid>

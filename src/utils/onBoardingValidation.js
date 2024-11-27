@@ -8,7 +8,7 @@ const commuityDetails = {
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
-    mobile: Yup.string()
+    phone: Yup.string()
       .min(10, "Mobile number must be at least 10 digits.")
       .max(15, "Mobile number cannot exceed 15 digits.")
       .required("Mobile number is required"),
@@ -18,7 +18,7 @@ const commuityDetails = {
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
-    mobile: Yup.string()
+    phone: Yup.string()
       .min(10, "Mobile number must be at least 10 digits.")
       .max(15, "Mobile number cannot exceed 15 digits.")
       .required("Mobile number is required"),

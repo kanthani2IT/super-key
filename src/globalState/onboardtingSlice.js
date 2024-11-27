@@ -7,20 +7,21 @@ const initialOnboardingValues = {
   communityAddress: "",
   communityName: "",
   communityManager: {
+    managerId: "",
     name: "",
     email: "",
-    mobile: "",
+    phone: "",
     countryCode: defaultCountryCode,
-    address: "",
+    managementCompanyId: "",
   },
   propertyManager: {
+    managerId: "",
     name: "",
     email: "",
-    mobile: "",
+    phone: "",
     countryCode: defaultCountryCode,
-    address: "",
   },
-  documentUpload:[]
+  documentUpload: [],
 };
 export const createOnboardingSlice = (set, get) => {
   storeResetsFns.add(() => reset(set));

@@ -29,7 +29,7 @@ const CustomStep = styled(Step)(({ theme }) => ({
 
 const AppStepper = ({ activeStep, steps }) => {
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", mb: 2, mt: 0 }}>
       <Stepper
         activeStep={activeStep}
         alternativeLabel
