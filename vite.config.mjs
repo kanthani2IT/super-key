@@ -1,7 +1,7 @@
-import path from 'path';
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import jsconfigPaths from 'vite-jsconfig-paths';
+import path from "path";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import jsconfigPaths from "vite-jsconfig-paths";
 
 // ----------------------------------------------------------------------
 
@@ -24,13 +24,13 @@ export default defineConfig({
     ],
   },
   server: {
-    host: '0.0.0.0', // make the server accessible externally
-    open: true,
-    port: 3000
+    host: "0.0.0.0", // make the server accessible externally
+    open: false,
+    port: 3000,
   },
   preview: {
-    host: '0.0.0.0', // make the preview accessible externally
+    host: "0.0.0.0", // make the preview accessible externally
     open: true,
-    port: 3000
-  }
+    port: 3000,
+  },
 });
