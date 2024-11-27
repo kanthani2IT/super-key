@@ -17,7 +17,7 @@ const COMMON = {
   getAllCommunity: `/api/community`,
   getAllCommunityManager: `/api/manager`,
   getAllPropertyManager: `/api/propertyManager`,
-  getAllDocTypes: `/api/document-types/names`,
+  getAllDocTypes: `/api/document-types`,
 };
 
 const DASHBOARD = {

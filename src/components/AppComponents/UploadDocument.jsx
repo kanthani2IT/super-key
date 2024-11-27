@@ -6,14 +6,14 @@ import { importPolicyData } from '../../pages/community/onboarding/utils';  // I
 import UploadIcon from 'assets/images/icons/NavIcons/UploadIcon';
 import { documentTypes } from 'pages/community/onboarding/InsuranceTable';
 
-const InsuranceDocument = ({ enable = true, selectedFiles, setSelectedFiles }) => {
+const InsuranceDocument = ({ enable = true, selectedFiles, setSelectedFiles,documentTypesData }) => {
 
 
   const handleFileUpload = (event) => {
     const fileList = event.target.files;
     const filesArray = Array.from(fileList).map((file) => ({
       file, // The original file object
-      docType: documentTypes[0], // Default value for docType
+      docType: documentTypesData[0]||[], // Default value for docType
       active: false, // Default value for active
     }));
     const totalFiles = selectedFiles.length + filesArray.length;

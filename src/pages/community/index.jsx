@@ -212,6 +212,7 @@ const CommunityOnboarding = () => {
     const handleSelectionChange = (selected) => {
         setSelectedRows(selected);
     };
+    console.log(activeStep, finalStep, show, selectedFiles,"KKKKK")
     const footer = () => {
         return (
             <AppRowBox>
@@ -236,6 +237,7 @@ const CommunityOnboarding = () => {
                         type="submit"
                         onClick={() => handleSubmit()}
                         variant="contained"
+                        disabled={activeStep===4&&show=="true"&&selectedFiles.length==0}
                     >
                         {finalStep ? "Done" : "Next"}
                     </Button>
