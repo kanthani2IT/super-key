@@ -11,9 +11,9 @@ export default function Typography(theme) {
       variants: [
         {
           props: { variant: "subtitle1" },
-          style: {
-            color: theme.palette.text.primary,
-          },
+          // style: {
+          //   color: theme.palette.text.primary,
+          // },
         },
       ],
     },
