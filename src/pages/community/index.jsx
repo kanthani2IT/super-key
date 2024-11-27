@@ -55,7 +55,7 @@ const onBoardingStepper = [
         component: (props) => <CommunityDetails {...props} />,
         initialValidationSchema: {
             communityManager: Yup.object().shape({
-                name: Yup.string().required("Name is required"),
+                name: Yup.object().required("Name is required"),
                 email: Yup.string()
                     .email("Invalid email format")
                     .required("Email is required"),
@@ -65,7 +65,7 @@ const onBoardingStepper = [
                     .required("Mobile number is required"),
             }),
             propertyManager: Yup.object().shape({
-                name: Yup.string().required("Name is required"),
+                name: Yup.object().required("Name is required"),
                 email: Yup.string()
                     .email("Invalid email format")
                     .required("Email is required"),
@@ -212,6 +212,7 @@ const CommunityOnboarding = () => {
     const handleSelectionChange = (selected) => {
         setSelectedRows(selected);
     };
+    console.log(activeStep, finalStep, show, selectedFiles, "KKKKK")
     const footer = () => {
         return (
             <AppRowBox>
@@ -236,6 +237,7 @@ const CommunityOnboarding = () => {
                         type="submit"
                         onClick={() => handleSubmit()}
                         variant="contained"
+                        disabled={activeStep === 4 && show == "true" && selectedFiles.length == 0}
                     >
                         {finalStep ? "Done" : "Next"}
                     </Button>

@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 import {
   Box,
   Button,
@@ -6,7 +6,6 @@ import {
   FormControlLabel,
   Grid,
   Link,
-  MenuItem,
   Radio,
   RadioGroup,
   Select,
@@ -16,79 +15,79 @@ import {
   TableCell,
   TableRow,
   Typography,
-} from '@mui/material';
-import FileIcon from 'assets/images/icons/FileIcon';
-import { useState } from 'react';
-import InsuranceDocument from '../../../components/AppComponents/UploadDocument';
-import { truncateFileName } from './utils';
-import FilePreview from './FilePreview';
-import PreviewButton from 'components/AppComponents/PreviewButton';
-import AppLabelComponent from 'components/AppComponents/AppLabelComponent';
-import AppAutoComplete from 'components/AppComponents/AppAutoComplete';
+} from "@mui/material";
+import FileIcon from "assets/images/icons/FileIcon";
+import AppAutoComplete from "components/AppComponents/AppAutoComplete";
+import PreviewButton from "components/AppComponents/PreviewButton";
+import { useDocumentsQuery } from "hooks/useDropDown";
+import { useEffect, useState } from "react";
+import InsuranceDocument from "../../../components/AppComponents/UploadDocument";
+import FilePreview from "./FilePreview";
+import { truncateFileName } from "./utils";
 
 // Document types
-export const documentTypes = [
-  {name:'Endorsement', value:'Endosement'}
-  
-];
+export const documentTypes = [{ name: "Endorsement", value: "Endosement" }];
 
 // Styled components
 const StyledSelect = styled(Select)({
   border: "none",
-  '& .MuiSelect-select': {
-    border: 'none !important',
-    borderRadius: '0.7rem',
-    fontSize: '0.85rem',
+  "& .MuiSelect-select": {
+    border: "none !important",
+    borderRadius: "0.7rem",
+    fontSize: "0.85rem",
     fontWeight: "400",
-    background: '#F2F2F2',
-    padding: '0.4rem',
-    maxWidth: '8rem',
+    background: "#F2F2F2",
+    padding: "0.4rem",
+    maxWidth: "8rem",
     width: "8rem",
-    backgroundColor: "#F2F2F2 !important"
+    backgroundColor: "#F2F2F2 !important",
   },
-  '& fieldset': { border: 'none', fontSize:"400", },
-  '& .MuiOutlinedInput-notchedOutline': { borderColor: 'transparent' },
-  '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'transparent', },
-  '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'transparent' },
+  "& fieldset": { border: "none", fontSize: "400" },
+  "& .MuiOutlinedInput-notchedOutline": { borderColor: "transparent" },
+  "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "transparent" },
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "transparent",
+  },
 });
 
 const StyledBox = styled(Box)({
-  maxHeight: '400px',
-  overflowY: 'auto',
-  overflowX: 'auto',
-  width: '100%',
+  maxHeight: "400px",
+  overflowY: "auto",
+  overflowX: "auto",
+  width: "100%",
 });
 
 const StyledTable = styled(Table)({
-  tableLayout: 'auto',
-  width: '100%',
-  borderCollapse: 'collapse',
+  tableLayout: "auto",
+  width: "100%",
+  borderCollapse: "collapse",
   position: "relative",
   overflow: "visible",
 });
 
 const EllipsisCell = styled(TableCell)({
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  width: '25%',
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  width: "25%",
 });
 
 const ActionBox = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '1rem',
+  display: "flex",
+  alignItems: "center",
+  gap: "1rem",
+  justifyContent: "right",
 });
 
 const FileNameBox = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
+  display: "flex",
+  alignItems: "center",
 });
 
 const StyledTableRow = styled(TableRow)`
-  background-color: ${(props) => (props.isHovered ? '#E6F0FD' : 'transparent')};
-  color: ${(props) => (props.isHovered ? 'white' : 'inherit')};
-
+  background-color: ${(props) => (props.isHovered ? "#E6F0FD" : "transparent")};
+  color: ${(props) => (props.isHovered ? "white" : "inherit")};
+  cursor: "pointer";
   &:hover {
     background-color: "#E6F0FD";
     color: white;
@@ -112,80 +111,168 @@ const StickyRow = styled(TableRow)`
 `;
 
 // Reusable components
-const DocumentTypeDropdown = ({ value, onChange }) => (
+const DocumentTypeDropdown = ({ value, onChange, documentTypesData }) => (
   <>
-    
-                            <AppAutoComplete  freeSolo={false}
-                            sx={{
-  '.MuiOutlinedInput-root fieldset': {
-    borderColor: "#F7F9FB",
-  },
-  
-}}
-                                // variant={"standard"}
-                                onChange={onChange}
-                                
-                                nameParam='name'
-filter
-disableClearable
-                                searchKey='communityManager'
-                                value={value}
-                                options={documentTypes}
-                                placeholder='Select Manager'
-                            />
-
-
+    <AppAutoComplete
+      freeSolo={false}
+      sx={{
+        ".MuiOutlinedInput-root fieldset": {
+          borderColor: "#F7F9FB",
+        },
+        width: 250,
+        borderColor: "#F7F9FB",
+      }}
+      onChange={onChange}
+      nameParam="documentTypeName"
+      valueParam="documentId"
+      filter
+      disableClearable
+      searchKey="communityManager"
+      value={value}
+      options={documentTypesData}
+      placeholder="Select Manager"
+      size="small"
+    // onSearch={onSearch}
+    />
   </>
 );
 
-const FileRow = ({ files, index, onRemove, onTypeChange, onActiveChange, setHoveredSingleRow,hoveredSingleRow, hoveredRow, setHoveredRow, onClickPreview }) => (
-  <StyledTableRow key={index} isHovered={hoveredSingleRow===index} onMouseEnter={()=>setHoveredSingleRow(index)} onMouseLeave={()=>setHoveredSingleRow(null)}>
-    <EllipsisCell key={index}  onMouseEnter={() => setHoveredRow(index)} onMouseLeave={() => setHoveredRow(null)}>
+const FileRow = ({
+  files,
+  index,
+  onRemove,
+  onTypeChange,
+  onActiveChange,
+  setHoveredSingleRow,
+  hoveredSingleRow,
+  hoveredRow,
+  setHoveredRow,
+  onClickPreview,
+  documentTypesData,
+}) => (
+  <StyledTableRow
+    key={index}
+    isHovered={hoveredSingleRow === index}
+    onMouseEnter={() => setHoveredSingleRow(index)}
+    onMouseLeave={() => setHoveredSingleRow(null)}
+  >
+    <EllipsisCell
+      key={index}
+      onMouseEnter={() => setHoveredRow(index)}
+      onMouseLeave={() => setHoveredRow(null)}
+    >
       {hoveredRow === index && (
-        <div style={{ position: "absolute", left: "6%", zIndex: 1000000, display: "flex", alignItems: "center", gap: "10px" }}>
-          <PreviewButton fileName={files.file.name} index={index} onPreview={onClickPreview} />
+        <div
+          style={{
+            position: "absolute",
+            left: "6%",
+            zIndex: 1000000,
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <PreviewButton
+            fileName={files.file.name}
+            index={index}
+            onPreview={onClickPreview}
+          />
         </div>
       )}
       <FileNameBox>
         <FileIcon sx={{ mr: 1 }} />
-        <Link variant="h7" sx={{ cursor: 'pointer', ml: 1, fontSize: '0.85rem', textDecoration: "underline" }}>
+        <Link
+          variant="h7"
+          sx={{
+            cursor: "pointer",
+            ml: 1,
+            fontSize: "0.85rem",
+            textDecoration: "underline",
+          }}
+        >
           {truncateFileName(files.file.name)}
         </Link>
       </FileNameBox>
     </EllipsisCell>
     <EllipsisCell>
-      <DocumentTypeDropdown value={files.docType} onChange={(event) => onTypeChange(index, event)} />
+      <DocumentTypeDropdown
+        value={files.docType}
+        onChange={(event, data) => onTypeChange(index, data)}
+        documentTypesData={documentTypesData}
+      />
     </EllipsisCell>
     <EllipsisCell>
       <ActionBox>
-        <Link variant="h7" sx={{ cursor: 'pointer', fontSize: '0.85rem', textDecoration: "underline" }} onClick={() => onRemove(index)}>
+        <Link
+          variant="h7"
+          sx={{
+            cursor: "pointer",
+            fontSize: "0.85rem",
+            textDecoration: "underline",
+          }}
+          onClick={() => onRemove(index)}
+        >
           Remove File
         </Link>
-        
       </ActionBox>
     </EllipsisCell>
     <EllipsisCell>
-    <Box display="flex" alignItems="center">
-          <Checkbox checked={files.active} onChange={() => onActiveChange(index)} />
-          <Typography variant="h7" sx={{ fontSize: '0.85rem' }}>Active Document</Typography>
-        </Box>
+      <Box display="flex" alignItems="center">
+        <Checkbox
+          checked={files.active}
+          onChange={() => onActiveChange(index)}
+        />
+        <Typography
+          variant="h7"
+          sx={{
+            fontSize: "0.85rem",
+            color: "#7f7f7f",
+            cursor: "pointer",
+            "&:hover": {
+              color: "#000", // Change this to the desired hover color
+            },
+          }}
+          onClick={() => onActiveChange(index)}
+        >
+          Active Document
+        </Typography>
+      </Box>
     </EllipsisCell>
   </StyledTableRow>
 );
 
 // Main Component
-const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => {
+const InsuranceUpload = ({
+  show,
+  setShow,
+  selectedFiles,
+  setSelectedFiles,
+}) => {
   const [files, setFiles] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [hoveredRow, setHoveredRow] = useState(null);
   const [hoveredSingleRow, setHoveredSingleRow] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selected, setSelected] = useState(0);
+  const { data: documentTypesData } = useDocumentsQuery();
+  const [docType, setDocType] = useState(null);
+  useEffect(() => {
+    if (documentTypesData?.data) {
+      setDocType(documentTypesData?.data[0]);
+    }
+  }, [documentTypesData?.data]);
 
-  const handleTypeChange = (index, event) => {
-    const updatedFiles = [...selectedFiles]; // Create a copy of the array
-    updatedFiles[index] = { ...updatedFiles[index], "docType": event.target.value }; // Update the specific object
-    setSelectedFiles(updatedFiles); // Set the updated array
+  const handleTypeChange = (index, data) => {
+    if (index == "all") {
+      setSelectedFiles((prevFiles) =>
+        prevFiles.map((file) => ({ ...file, docType: data }))
+      );
+      setDocType(data);
+    } else {
+      const updatedFiles = [...selectedFiles]; // Create a copy of the array
+      updatedFiles[index] = { ...updatedFiles[index], docType: data }; // Update the specific object
+      setSelectedFiles(updatedFiles); // Set the updated array
+    }
   };
 
   const handleRemoveFile = (index) => {
@@ -203,7 +290,10 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
 
   const handleActiveChange = (index) => {
     const updatedFiles = [...selectedFiles]; // Create a copy of the array
-    updatedFiles[index] = { ...updatedFiles[index], "active": !updatedFiles[index].active }; // Update the specific object
+    updatedFiles[index] = {
+      ...updatedFiles[index],
+      active: !updatedFiles[index].active,
+    }; // Update the specific object
     setSelectedFiles(updatedFiles); // Set the updated array
   };
 
@@ -216,36 +306,88 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
   return (
     <Grid container spacing={4}>
       <Grid item xs={12}>
-        <Stack spacing={2} textAlign={!selectedFiles.length ? 'start' : 'center'}>
-          <Typography variant="h5">Do you have any documentation available?</Typography>
-          {!selectedFiles.length && (
-            <RadioGroup row sx={{ gap: 5 }} name="manager" value={show} onChange={(event) => setShow(event.target.value)}>
-              <FormControlLabel value="true" control={<Radio color="success" />} label="Yes" />
-              <FormControlLabel value="false" control={<Radio color="success" />} label="No" />
-            </RadioGroup>
+        <Stack
+          spacing={2}
+          textAlign={!selectedFiles.length ? "start" : "center"}
+        >
+          {!selectedFiles.length ? (
+            <>
+              <Typography variant="h5">
+                Do you have any documentation available?
+              </Typography>
+              <RadioGroup
+                row
+                sx={{ gap: 5 }}
+                name="manager"
+                value={show}
+                onChange={(event) => setShow(event.target.value)}
+              >
+                <FormControlLabel
+                  value="true"
+                  control={<Radio color="success" />}
+                  label="Yes"
+                />
+                <FormControlLabel
+                  value="false"
+                  control={<Radio color="success" />}
+                  label="No"
+                />
+              </RadioGroup>
+            </>
+          ) : (
+            <Typography variant="h5" color="gray">
+              update the Document types for the uploaded files
+            </Typography>
           )}
         </Stack>
       </Grid>
-      {show === 'true' && (
+      {show === "true" && (
         <>
-          <Grid item xs={12}>
-            {!selectedFiles.length && (
-              <InsuranceDocument enable setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
-            )}
-          </Grid>
+          {!selectedFiles.length && (
+            <Grid item xs={12}>
+              <InsuranceDocument
+                enable
+                setSelectedFiles={setSelectedFiles}
+                selectedFiles={selectedFiles}
+                documentTypesData={documentTypesData?.data}
+              />
+            </Grid>
+          )}
+
           <Grid item xs={12}>
             {selectedFiles.length > 0 && (
               <StyledBox>
                 <StyledTable>
                   <TableBody>
                     <StickyRow>
-                      <EllipsisCell>
-                       
+                      <EllipsisCell></EllipsisCell>
+                      <EllipsisCell colSpan={1}>
+                        {" "}
+                        <DocumentTypeDropdown
+                          value={docType}
+                          documentTypesData={documentTypesData?.data}
+                          onChange={(event, data) =>
+                            handleTypeChange("all", data)
+                          }
+                        />
                       </EllipsisCell>
-                      <EllipsisCell colSpan={1}> <DocumentTypeDropdown value={documentTypes[0]}/></EllipsisCell>
                       <EllipsisCell></EllipsisCell>
                       <EllipsisCell>
-                      <Checkbox onChange={handleSelectAll} checked={selectAll} /> Select All
+                        <Checkbox
+                          onChange={handleSelectAll}
+                          checked={selectAll}
+                        />{" "}
+                        <Typography
+                          variant="h7"
+                          sx={{
+                            fontSize: "0.85rem",
+                            color: "#000",
+                            cursor: "pointer",
+                          }}
+                          onClick={handleSelectAll}
+                        >
+                          Select All
+                        </Typography>
                       </EllipsisCell>
                     </StickyRow>
                     {selectedFiles.map((files, index) => (
@@ -262,6 +404,7 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
                         onClickPreview={onClickPreview}
                         setHoveredSingleRow={setHoveredSingleRow}
                         hoveredSingleRow={hoveredSingleRow}
+                        documentTypesData={documentTypesData?.data}
                       />
                     ))}
                   </TableBody>
@@ -271,17 +414,26 @@ const InsuranceUpload = ({ show, setShow, selectedFiles, setSelectedFiles }) => 
           </Grid>
         </>
       )}
-      {show === 'true' && files.length > 0 && (
+      {show === "true" && files.length > 0 && (
         <Box display="flex" justifyContent="flex-end" mt={3}>
           <Button variant="contained" color="primary" size="large">
             Upload
           </Button>
         </Box>
-      )}
-      {selectedFiles.length > 0 && (
-        <FilePreview setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} selectedFiles={selectedFiles} selected={selected} setSelected={setSelected} />
-      )}
-    </Grid>
+      )
+      }
+      {
+        selectedFiles.length > 0 && (
+          <FilePreview
+            setIsModalOpen={setIsModalOpen}
+            isModalOpen={isModalOpen}
+            selectedFiles={selectedFiles}
+            selected={selected}
+            setSelected={setSelected}
+          />
+        )
+      }
+    </Grid >
   );
 };
 

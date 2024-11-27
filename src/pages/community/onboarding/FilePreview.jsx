@@ -86,12 +86,12 @@ const CenteredGrid = styled(Grid)`
 const FilePreviews = ({ open, onClose, selectedFiles, selected }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedFile, setSelectedFile] = useState({ type: "", path: "" });
-console.log(selectedFiles)
+
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
-    const file = selectedFiles.file[newValue];
+    const file = selectedFiles[newValue]?.file;
     setSelectedFile({
-      type: file.name.split(".").pop(),
+      type: file?.name.split(".").pop(),
       path: URL.createObjectURL(file),
     });
   };
