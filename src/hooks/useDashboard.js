@@ -20,3 +20,10 @@ export const useGetActiveAndCompletedTaskByFilter = () => {
     mutationFn: (body) => api.dashboard.getActiveAndCompletedTaskByFilter(body),
   });
 };
+
+export const useGetDashboardMetrics = () => {
+  return useQuery({
+    queryKey: ["dashboardMetrics"],
+    queryFn: api.dashboard.getDashboardMetrics,
+  });
+};
