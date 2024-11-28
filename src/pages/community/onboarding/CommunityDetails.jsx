@@ -39,7 +39,7 @@ const CommunityDetails = ({
             address: ""
         },
         propertyManager: {
-            name: '',
+            username: '',
             email: '',
             phone: '',
             countryCode: '',
@@ -126,6 +126,8 @@ const CommunityDetails = ({
         const { name, value } = event.target
         const [id, key] = name.split('.')
         let exitingValue = formValues[id]
+        console.log(value, exitingValue)
+
         if (!value?.isCustom) {
             exitingValue = {
                 ...exitingValue,
@@ -205,14 +207,15 @@ const CommunityDetails = ({
                     </AppGrid>
                     <AppGrid item size={size} >
                         <AppLabelComponent label={'Name'}>
-                            <AppAutoComplete name="propertyManager.name" freeSolo={false}
-                                error={touched.propertyManager?.name && errors.propertyManager?.name}
+                            <AppAutoComplete name="propertyManager.username" freeSolo={false}
+                                error={touched.propertyManager?.username && errors.propertyManager?.username}
                                 onChange={handleManger}
-                                nameParam='name'
+                                nameParam='username'
+                                valueParam='userId'
                                 searchKey='propertyManager'
                                 loading={propertyManagerFetching}
-                                value={values?.propertyManager?.name || ''}
-                                options={cManagers}
+                                value={values?.propertyManager?.username || ''}
+                                options={propertyManagerList?.data}
                                 placeholder='Select Property Manager'
                                 onSearch={onSearch}
                             />

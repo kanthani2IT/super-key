@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Grid, Modal, Tab, Tabs } from "@mui/material";
 import FileViewer from "react-file-viewer";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 // Styled Components
 const StyledModal = styled(Modal)`

@@ -14,7 +14,7 @@ import {
   useGetActiveAndCompletedTaskByFilter,
   useGetDashboardMetrics,
 } from "hooks/useDashboard";
-import { useGetUsers } from "hooks/useOnboard";
+import { useGetUsers } from "hooks/useCommunity";
 import { ColorBox } from "pages/component-overview/color";
 import { useEffect, useState } from "react";
 import RenewalPieChart from "./RenewalPieChart";

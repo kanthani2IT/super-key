@@ -15,8 +15,8 @@ const initialOnboardingValues = {
     managementCompanyId: "",
   },
   propertyManager: {
-    managerId: "",
-    name: "",
+    userId: "",
+    username: "",
     email: "",
     phone: "",
     countryCode: defaultCountryCode,

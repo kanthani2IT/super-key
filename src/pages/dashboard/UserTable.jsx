@@ -13,7 +13,7 @@ import AppPagination from "components/AppComponents/AppPagination";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
-import Loader from "components/Loader";
+import CircularLoader from "components/CircularLoader";
 import { communityStyles } from "components/StyledComponents";
 import { useState } from "react";
 
@@ -111,6 +111,7 @@ export default function UserTable({
   isLoading,
   height = 400,
   onSelectionChange,
+  communityList,
   openPopup,
 }) {
   const theme = useTheme();
@@ -123,7 +124,7 @@ export default function UserTable({
 
   const columns = [
     {
-      field: "id",
+      field: "index",
       headerName: "S.No",
       headerClassName: "bold-header",
     },
@@ -177,16 +178,16 @@ export default function UserTable({
   ];
 
   const handleChangePage = (event, newPage) => setPage(newPage);
-
-  const filteredRows = rows.filter((row) =>
+  const filteredRows = communityList?.content?.filter((row) =>
     Object.values(row).some((value) =>
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
-  const paginatedRows = filteredRows.slice(
-    (page - 1) * pageSize,
-    page * pageSize
-  );
+  console.log(filteredRows)
+  // const paginatedRows = filteredRows.slice(
+  //   (page - 1) * pageSize,
+  //   page * pageSize
+  // );
 
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);
@@ -251,7 +252,7 @@ export default function UserTable({
   return (
     <Box sx={communityStyles.container(height)}>
       {isLoading ? (
-        <Loader />
+        <CircularLoader />
       ) : (
         <>
           <AppTableSearch
@@ -266,13 +267,13 @@ export default function UserTable({
             ]}
           />
 
-          {paginatedRows.length === 0 ? (
+          {filteredRows.length === 0 ? (
             <Box sx={communityStyles.noData}>No Communities Found</Box>
           ) : (
             <>
               <AppTable
                 columns={columns}
-                rows={paginatedRows}
+                rows={filteredRows}
                 getStatus={getStatus}
                 customStyles={{ claims: communityStyles.claims }}
                 onSelectionChange={onSelectionChange}

@@ -14,7 +14,7 @@ import {
   useDeleteUserById,
   useGetUserById,
   useUpdateUserById,
-} from "hooks/useOnboard";
+} from "hooks/useCommunity";
 import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
 
 import { useEffect, useState } from "react";
@@ -443,7 +443,7 @@ const EditCommunity = ({ onClose }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.addressDetails?.zipcode &&
-                    errors.addressDetails?.zipcode
+                  errors.addressDetails?.zipcode
                 )}
                 helperText={
                   touched.addressDetails?.zipcode &&
@@ -498,7 +498,7 @@ const EditCommunity = ({ onClose }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.communityManager?.email &&
-                    errors.communityManager?.email
+                  errors.communityManager?.email
                 )}
                 helperText={
                   touched.communityManager?.email &&
@@ -540,7 +540,7 @@ const EditCommunity = ({ onClose }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.communityManager?.contactNumber &&
-                      errors.communityManager?.contactNumber
+                    errors.communityManager?.contactNumber
                   )}
                   helperText={
                     touched.communityManager?.contactNumber &&
@@ -588,7 +588,7 @@ const EditCommunity = ({ onClose }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.propertyManager?.email &&
-                    errors.propertyManager?.email
+                  errors.propertyManager?.email
                 )}
                 helperText={
                   touched.propertyManager?.email &&
@@ -630,7 +630,7 @@ const EditCommunity = ({ onClose }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.propertyManager?.contactNumber &&
-                      errors.propertyManager?.contactNumber
+                    errors.propertyManager?.contactNumber
                   )}
                   helperText={
                     touched.propertyManager?.contactNumber &&
@@ -692,7 +692,7 @@ const EditCommunity = ({ onClose }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.insuranceDetails?.insuranceCoverage &&
-                    errors.insuranceDetails?.insuranceCoverage
+                  errors.insuranceDetails?.insuranceCoverage
                 )}
                 helperText={
                   touched.insuranceDetails?.insuranceCoverage &&

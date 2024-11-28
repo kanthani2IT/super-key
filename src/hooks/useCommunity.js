@@ -6,7 +6,7 @@ import { MESSAGE, SEVERITY } from "utils/message";
 export const useGetUsers = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["login"],
-    queryFn: api.onboard.getUsersData,
+    queryFn: api.community.getUsersData,
     onSuccess: (data) => {
       console.log(data);
     },
@@ -15,14 +15,13 @@ export const useGetUsers = () => {
     },
   });
 
-  // Return the necessary states: data, isLoading, isError, error
   return { data, isLoading, isError, error };
 };
 
 export const useGetUserById = (id) => {
   console.log("Received id:", id);
 
-  return useQuery(["userInfo", id], () => api.onboard.getUserById(id), {
+  return useQuery(["userInfo", id], () => api.community.getUserById(id), {
     keepPreviousData: true,
     onSuccess: (data) => {
       console.log("User data:", data);
@@ -36,7 +35,7 @@ export const useGetUserById = (id) => {
 export const useUpdateUserById = () =>
   useMutation({
     mutationKey: ["updateUserById"],
-    mutationFn: ({ id, body }) => api.onboard.updateUserById(id, body),
+    mutationFn: ({ id, body }) => api.community.updateUserById(id, body),
     onSuccess: (data) => {
       console.log(data, "data");
     },
@@ -47,7 +46,7 @@ export const useUpdateUserById = () =>
 export const useDeleteUserById = () =>
   useMutation({
     mutationKey: ["deleteUserById"],
-    mutationFn: ({ id, body }) => api.onboard.deleteUserById(id, body),
+    mutationFn: ({ id, body }) => api.community.deleteUserById(id, body),
     onSuccess: (data) => {
       console.log(data, "data");
     },
@@ -61,7 +60,7 @@ export const useOnboardCommunity = (successHandler) => {
   const { updateSnackbar } = useSnackbar();
   const mutation = useMutation({
     mutationKey: ["community-onboarding"],
-    mutationFn: (payload) => api.onboard.createCommunity(payload),
+    mutationFn: (payload) => api.community.createCommunity(payload),
     onSuccess: (data) => {
       console.log("Mutation successful:", data);
       successHandler?.();
@@ -83,6 +82,23 @@ export const useOnboardCommunity = (successHandler) => {
 
   return mutation;
 };
+
+export const useCommunityListQuery = (search) =>
+  useQuery({
+    queryKey: ["community-listing", search],
+    queryFn: () => api.community.getAllCommunityList({ search }),
+    keepPreviousData: true,
+    select: (data) => {
+      // Transform the data here
+      return data.data;
+    },
+    onSuccess: (data) => {
+      console.log("Locations data:", data);
+    },
+    onError: (error) => {
+      console.error("Error fetching locations:", error);
+    },
+  });
 
 // export const useLoginUser = () => {
 //   const navigate = useNavigate();

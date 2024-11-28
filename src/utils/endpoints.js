@@ -13,13 +13,14 @@ const ONBOARD = {
 };
 const COMMUNITY = {
   getAll: "/api/community",
-  createCommunity: "/api/community",
+  createCommunity: "/api/community/create",
+  getAllCommunityList: "/api/community/paging",
 };
 const COMMON = {
-  getAllLocation: `/api/autocomplete?input=""`,
+  getAllLocation: `/api/autocomplete`,
   getAllCommunity: `/api/community`,
   getAllCommunityManager: `/api/manager`,
-  getAllPropertyManager: `/api/propertyManager`,
+  getAllPropertyManager: `/api/property-managers/all`,
   getAllDocTypes: `/api/document-types`,
 };
 
