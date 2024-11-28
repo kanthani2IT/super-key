@@ -105,11 +105,7 @@ export default function DashboardDefault() {
         <AppGrid container rowSpacing={2} columnSpacing={2}>
           <AppGrid size={{ xs: 12 }}>
             {!isLoading ? (
-              <MainCard
-                title="Communities"
-                secondary={"Full View"}
-                secondaryAction={() => setOpen(true)}
-              >
+              <MainCard title="Communities" secondary={"Full View"}>
                 <Stack spacing={2}>
                   <Typography variant="h6">Community Users</Typography>
                   <Typography variant="subtitle2" color="success">

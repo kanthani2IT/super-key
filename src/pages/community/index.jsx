@@ -128,8 +128,11 @@ const CommunityOnboarding = () => {
   });
   const [selectedRows, setSelectedRows] = useState([]);
 
-
-  const { data: communityList, isFetching: communitListFetching } = useCommunityListQuery()
+  const {
+    data: communityList,
+    isFetching: communitListFetching,
+    refetch,
+  } = useCommunityListQuery();
   //handlers
   const openDrawer = () => {
     setEdit(true);
@@ -140,7 +143,7 @@ const CommunityOnboarding = () => {
 
   const handleOpen = () => {
     setOpen(true);
-
+    resetOnboarding();
     let queryParams = "?onboarding=true";
     if (!currentStep) {
       queryParams = "?onboarding=true&cs=0";
@@ -220,15 +223,20 @@ const CommunityOnboarding = () => {
   const successHandler = () => {
     resetOnboarding();
     handleNext();
+    refetch();
   };
 
-  const { mutate, isLoading: communityCreationLoading, isSuccess, isError, data } =
-    useOnboardCommunity(successHandler);
+  const {
+    mutate,
+    isLoading: communityCreationLoading,
+    isSuccess,
+    isError,
+    data,
+  } = useOnboardCommunity(successHandler);
 
   const footer = () => {
     return (
-      <AppRowBox >
-
+      <AppRowBox>
         <AppGrid item size={{ xs: 2 }}>
           {activeStep && !finalStep ? (
             <Button
@@ -250,7 +258,6 @@ const CommunityOnboarding = () => {
             type="submit"
             onClick={() => handleSubmit()}
             variant="contained"
-
             disabled={
               activeStep === 4 && show == "true" && selectedFiles.length == 0
             }
@@ -261,7 +268,6 @@ const CommunityOnboarding = () => {
       </AppRowBox>
     );
   };
-
 
   const formik = useFormik({
     initialValues: onboarding,
@@ -280,7 +286,7 @@ const CommunityOnboarding = () => {
             email: values?.communityManager?.email,
             phone: values?.communityManager?.phone,
             region: values?.communityManager?.countryCode?.value,
-            managementCompanyId: values?.communityManager?.managementCompanyId
+            managementCompanyId: values?.communityManager?.managementCompanyId,
           },
           // propertyManager: {
           //   userId: values?.propertyManager?.userId,
@@ -291,16 +297,14 @@ const CommunityOnboarding = () => {
           //   // managementCompanyId: values?.communityManager?.managementCompanyId
           // },
           // documents: []
-
-        }
+        };
         mutate(payload);
       } else {
         handleNext(values);
         updateOnboarding(values);
       }
       setTouched({});
-    }
-
+    },
   });
   const {
     values,
@@ -387,9 +391,10 @@ const CommunityOnboarding = () => {
         align={finalStep ? "center" : ""}
         width={onBoardingStepper[activeStep].width || undefined}
       >
-        <div style={{ pointerEvents: communityCreationLoading ? "none" : "auto", }}>
+        <div
+          style={{ pointerEvents: communityCreationLoading ? "none" : "auto" }}
+        >
           <Suspense fallback={<CircularLoader />}>
-
             {onBoardingStepper[activeStep]?.component &&
               onBoardingStepper[activeStep]?.component({
                 handleOnboardingType,
@@ -413,11 +418,11 @@ const CommunityOnboarding = () => {
         open={edit}
         onClose={closeDrawer}
         anchor="right"
-      // PaperProps={{
-      //     sx: {
-      //         padding: 2,
-      //     },
-      // }}
+        // PaperProps={{
+        //     sx: {
+        //         padding: 2,
+        //     },
+        // }}
       >
         <EditCommunity onClose={closeDrawer} />
       </Drawer>

@@ -134,8 +134,12 @@ export default function UserTable({
       flex: 1,
     },
     {
+      field: "communityManager",
+      headerName: "Community Manager",
+    },
+    {
       field: "propertyManager",
-      headerName: "Community/Property Manager",
+      headerName: "Property Manager",
     },
     {
       field: "claims",
@@ -183,7 +187,7 @@ export default function UserTable({
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
-  console.log(filteredRows)
+  console.log(filteredRows);
   // const paginatedRows = filteredRows.slice(
   //   (page - 1) * pageSize,
   //   page * pageSize
@@ -267,7 +271,7 @@ export default function UserTable({
             ]}
           />
 
-          {filteredRows.length === 0 ? (
+          {filteredRows?.length === 0 ? (
             <Box sx={communityStyles.noData}>No Communities Found</Box>
           ) : (
             <>
