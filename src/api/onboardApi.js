@@ -1,5 +1,5 @@
 import http from "http/http";
-import { deleteRequest, getRequest, putRequest } from "http/request";
+import { getRequest, putRequest } from "http/request";
 import { ONBOARD } from "utils/endpoints";
 import { addQueryParams } from "utils/helpers";
 
@@ -36,11 +36,11 @@ const updateUserById = async (id, body) => {
   }
 };
 
-const deleteUserById = async (id) => {
+const deleteUserById = async (id, body) => {
   try {
     const requestUrl = addQueryParams(ONBOARD.updateUserById(id));
 
-    const response = await deleteRequest(requestUrl);
+    const response = await putRequest(requestUrl, body);
 
     return response;
   } catch (error) {

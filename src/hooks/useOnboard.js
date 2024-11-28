@@ -45,7 +45,7 @@ export const useUpdateUserById = () =>
 export const useDeleteUserById = () =>
   useMutation({
     mutationKey: ["deleteUserById"],
-    mutationFn: (id) => api.onboard.deleteUserById(id),
+    mutationFn: ({ id, body }) => api.onboard.deleteUserById(id, body),
     onSuccess: (data) => {
       console.log(data, "data");
     },

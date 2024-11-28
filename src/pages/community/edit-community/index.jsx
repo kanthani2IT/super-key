@@ -20,13 +20,14 @@ import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
 import { useEffect, useState } from "react";
 
 import {
-  cManagers,
   countryPhoneCodes,
   insuranceOptions,
   pManagers,
 } from "utils/constants";
 import { useDebounceFn } from "utils/helpers";
 import * as Yup from "yup";
+const defaultCountryCode = { label: "+1", value: "+1" };
+
 const initialValues = {
   addressDetails: {
     communityName: "",
@@ -36,14 +37,14 @@ const initialValues = {
   },
   communityManager: {
     name: null,
-    code: null,
+    code: defaultCountryCode,
     contactNumber: "",
 
     email: "",
   },
   propertyManager: {
     name: null,
-    code: null,
+    code: defaultCountryCode,
     contactNumber: "",
 
     email: "",
@@ -55,25 +56,30 @@ const initialValues = {
 };
 const res = [
   {
-    communityId: "string",
-    name: "string",
+    communityId: "345679056",
+    name: "Carson City",
     contactInfo: "string",
+    state: "California",
+    city: "Sacramento",
+    zipcode: "96162",
     communityManager: {
       managerId: "string",
-      name: "string",
-      email: "string",
-      phone: "string",
-      region: "string",
-      managementCompanyId: "string",
+      name: "Henry",
+      email: "henry@gmaiol.com",
+      phone: "718 222 2222",
+      region: defaultCountryCode,
+      managementCompanyId: "234567890",
     },
     propertyManager: {
-      managerId: "string",
-      name: "string",
-      email: "string",
-      phone: "string",
-      region: "string",
-      managementCompanyId: "string",
+      managerId: "234567890",
+      name: "Lucas",
+      email: "lucas@gmail.com",
+      phone: "717 222 2222",
+      region: defaultCountryCode,
+      managementCompanyId: "123456789",
     },
+    insuranceValue: "5000000",
+    insuranceCoverage: "5000000",
   },
 ];
 
@@ -178,8 +184,17 @@ const EditCommunity = ({ onClose }) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setFieldValue(name, value);
+    const [id, key] = name.split(".");
+
+    setValues((prevState) => ({
+      ...prevState,
+      [id]: {
+        ...prevState[id],
+        [key]: value,
+      },
+    }));
   };
+
   const onSearch = useDebounceFn((searchString, key) => {
     setSearchString((prev) => ({
       ...prev,
@@ -196,9 +211,9 @@ const EditCommunity = ({ onClose }) => {
           ...prevValues.addressDetails,
           communityName: communityData?.name || "",
 
-          city: communityData?.communityAddress?.label || "",
-          state: communityData?.communityAddress?.value || "",
-          zipcode: communityData?.communityAddress?.zipcode || "",
+          city: communityData?.city || "",
+          state: communityData?.state || "",
+          zipcode: communityData?.zipcode || "",
         },
         communityManager: {
           ...prevValues.communityManager,
@@ -222,9 +237,8 @@ const EditCommunity = ({ onClose }) => {
         },
         insuranceDetails: {
           ...prevValues.insuranceDetails,
-          insuranceValue: communityData?.insuranceDetails?.insuranceValue || "",
-          insuranceCoverage:
-            communityData?.insuranceDetails?.insuranceCoverage || "",
+          insuranceValue: communityData?.insuranceValue || "",
+          insuranceCoverage: communityData?.insuranceCoverage || "",
         },
       }));
     }
@@ -238,12 +252,20 @@ const EditCommunity = ({ onClose }) => {
   };
   const handleOffBoard = () => {
     const userId = "98765432345";
-    deleteUserById(userId);
+    const payload = {
+      mappings: [
+        {
+          communityId: "567890987",
+          cmcId: "34567890",
+        },
+      ],
+    };
+    deleteUserById({ id: userId, body: payload });
   };
   const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 };
   const mobileSize = { xs: 9, sm: 9, md: 9, lg: 4, xl: 4 };
   const size = { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 };
-
+  const communityManagerOptions = communityManagerData?.data;
   const Footer = () => {
     return (
       <>
@@ -458,7 +480,8 @@ const EditCommunity = ({ onClose }) => {
                 nameParam="name"
                 searchKey="communityManager"
                 value={values?.communityManager?.name || ""}
-                options={cManagers}
+                options={communityManagerOptions || []}
+                valueParam="managerId"
                 placeholder="Select Manager"
                 onSearch={onSearch}
               />
