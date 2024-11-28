@@ -8,8 +8,12 @@ import MainCard from "components/MainCard";
 // assets
 import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
+import AppSkeleton from "components/AppComponents/AppSkeleton";
 import MainTabs from "components/MainTabs";
-import { useGetActiveAndCompletedTaskByFilter } from "hooks/useDashboard";
+import {
+  useGetActiveAndCompletedTaskByFilter,
+  useGetDashboardMetrics,
+} from "hooks/useDashboard";
 import { useGetUsers } from "hooks/useOnboard";
 import { ColorBox } from "pages/component-overview/color";
 import { useEffect, useState } from "react";
@@ -28,6 +32,14 @@ export default function DashboardDefault() {
   const [open, setOpen] = useState(false);
 
   const { data, isLoading } = useGetUsers();
+  const { data: dashboardData, isLoading: isWidgetLoading } =
+    useGetDashboardMetrics();
+  const {
+    insuredCommunities,
+    totalCommunities,
+    totalCoverageValue,
+    upcomingRenewals,
+  } = dashboardData?.data ?? {};
 
   const {
     data: taskData,
@@ -92,65 +104,110 @@ export default function DashboardDefault() {
       <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
         <AppGrid container rowSpacing={2} columnSpacing={2}>
           <AppGrid size={{ xs: 12 }}>
-            <MainCard
-              title="Communities"
-              secondary={"Full View"}
-              secondaryAction={() => setOpen(true)}
-            >
-              <Stack spacing={2}>
-                <Typography variant="h6">Community Users</Typography>
-                <Typography variant="subtitle2" color="success">
-                  {data?.data?.totalSize ?? data?.data?.length ?? 0}
-                </Typography>
-              </Stack>
-            </MainCard>
+            {!isLoading ? (
+              <MainCard
+                title="Communities"
+                secondary={"Full View"}
+                secondaryAction={() => setOpen(true)}
+              >
+                <Stack spacing={2}>
+                  <Typography variant="h6">Community Users</Typography>
+                  <Typography variant="subtitle2" color="success">
+                    {data?.data?.totalSize ?? data?.data?.length ?? 0}
+                  </Typography>
+                </Stack>
+              </MainCard>
+            ) : (
+              <AppSkeleton
+                row={1}
+                variant={"custom"}
+                width={"100%"}
+                height={"200px"}
+              />
+            )}
           </AppGrid>
           <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
-            <MainCard>
-              <Stack rowGap={4} textAlign={"center"}>
-                <Typography variant="h6">
-                  Communities
-                  <br /> Insured
-                </Typography>
-                <Typography variant="subtitle2" color="success">
-                  30 of 40
-                </Typography>
-              </Stack>
-            </MainCard>
+            {!isWidgetLoading ? (
+              <MainCard>
+                <Stack rowGap={4} textAlign={"center"}>
+                  <Typography variant="h6">
+                    Communities
+                    <br /> Insured
+                  </Typography>
+                  <Typography variant="subtitle2" color="success">
+                    {insuredCommunities ?? 0}
+                  </Typography>
+                </Stack>
+              </MainCard>
+            ) : (
+              <AppSkeleton
+                row={1}
+                variant={"custom"}
+                width={"100%"}
+                height={"150px"}
+              />
+            )}
           </AppGrid>
           <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
-            <MainCard>
-              <Stack rowGap={4} textAlign={"center"}>
-                <Typography variant="h6">
-                  Insurance <br /> Worth
-                </Typography>
-                <Typography variant="subtitle2" color="success">
-                  $10,000,000
-                </Typography>
-              </Stack>
-            </MainCard>
+            {!isWidgetLoading ? (
+              <MainCard>
+                <Stack rowGap={4} textAlign={"center"}>
+                  <Typography variant="h6">
+                    Insurance <br /> Worth
+                  </Typography>
+                  <Typography variant="subtitle2" color="success">
+                    {totalCoverageValue ?? 0}
+                  </Typography>
+                </Stack>
+              </MainCard>
+            ) : (
+              <AppSkeleton
+                row={1}
+                variant={"custom"}
+                width={"100%"}
+                height={"150px"}
+              />
+            )}
           </AppGrid>
           <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
-            <MainCard>
-              <Stack rowGap={4} textAlign={"center"}>
-                <Typography variant="h6">
-                  Maintenance
-                  <br /> Pending
-                </Typography>
-                <Typography variant="subtitle2" color="success">
-                  2
-                </Typography>
-              </Stack>
-            </MainCard>
+            {!isWidgetLoading ? (
+              <MainCard>
+                <Stack rowGap={4} textAlign={"center"}>
+                  <Typography variant="h6">
+                    Maintenance
+                    <br /> Pending
+                  </Typography>
+                  <Typography variant="subtitle2" color="success">
+                    {totalCommunities ?? 0}
+                  </Typography>
+                </Stack>
+              </MainCard>
+            ) : (
+              <AppSkeleton
+                row={1}
+                variant={"custom"}
+                width={"100%"}
+                height={"150px"}
+              />
+            )}
           </AppGrid>
         </AppGrid>
       </AppGrid>
       <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
-        <MainCard title={"Upcoming Renewals"}>
-          <AppGrid size={{ xs: 12 }} justifyItems={"center"}>
-            <RenewalPieChart />
-          </AppGrid>
-        </MainCard>
+        {!isWidgetLoading ? (
+          <MainCard title={"Upcoming Renewals"}>
+            <AppGrid size={{ xs: 12 }} justifyItems={"center"}>
+              <RenewalPieChart chartData={upcomingRenewals ?? []} />
+            </AppGrid>
+          </MainCard>
+        ) : (
+          <AppSkeleton
+            row={1}
+            variant={"custom"}
+            width={"100%"}
+            height={"370px"}
+          />
+        )}
       </AppGrid>
       <AppModal open={open} onClose={handleClose} height="auto" width="70%">
         <MainCard

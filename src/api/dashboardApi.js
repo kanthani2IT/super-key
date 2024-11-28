@@ -26,8 +26,17 @@ const getActiveAndCompletedTaskByFilter = async (body) => {
   return response;
 };
 
+const getDashboardMetrics = async () => {
+  const response = await http({
+    method: "GET",
+    url: DASHBOARD.getDashboardMetrics,
+  });
+  return response;
+};
+
 export const dashboardApi = {
   getActiveTask,
   getCompletedTask,
   getActiveAndCompletedTaskByFilter,
+  getDashboardMetrics,
 };

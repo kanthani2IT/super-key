@@ -27,7 +27,8 @@ const DASHBOARD = {
   getActiveTask: "/api/tasks",
   getCompletedTask: "api/tasks/history",
   getActiveAndCompletedTaskByFilter: (sort, orderBy) =>
-    `api/tasks/filters?sort=${sort}&orderBy=${orderBy}`,
+    `/api/tasks/filters?sort=${sort}&orderBy=${orderBy}`,
+  getDashboardMetrics: `/api/dashboard/metrics`,
 };
 
 export { COMMON, COMMUNITY, DASHBOARD, LOGIN, ONBOARD };
