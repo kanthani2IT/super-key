@@ -78,7 +78,7 @@ const res = [
       region: defaultCountryCode,
       managementCompanyId: "123456789",
     },
-    insuranceValue: null,
+    insuranceValue: { id: "5000000", name: "500000" },
     insuranceCoverage: "5000000",
   },
 ];
