@@ -1,6 +1,7 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import MessageIcon from "assets/images/dashboard/MessageIcon";
 import Dot from "components/@extended/Dot";
 import AppSkeleton from "components/AppComponents/AppSkeleton";
 import NoDataMessage from "components/NoDataMessage";

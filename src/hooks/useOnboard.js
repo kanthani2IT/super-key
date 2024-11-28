@@ -18,20 +18,44 @@ export const useGetUsers = () => {
   // Return the necessary states: data, isLoading, isError, error
   return { data, isLoading, isError, error };
 };
+
 export const useGetUserById = (id) => {
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["userInfo"],
-    queryFn: api.onboard.getUserById(id),
+  console.log("Received id:", id);
+
+  return useQuery(["userInfo", id], () => api.onboard.getUserById(id), {
+    keepPreviousData: true,
     onSuccess: (data) => {
-      console.log(data);
+      console.log("User data:", data);
+    },
+    onError: (error) => {
+      console.error("Error fetching user data:", error);
+    },
+  });
+};
+
+export const useUpdateUserById = () =>
+  useMutation({
+    mutationKey: ["updateUserById"],
+    mutationFn: ({ id, body }) => api.onboard.updateUserById(id, body),
+    onSuccess: (data) => {
+      console.log(data, "data");
     },
     onError: (error) => {
       console.error(error);
     },
   });
-  // Return the necessary states: data, isLoading, isError, error
-  return { data, isLoading, isError, error };
-};
+export const useDeleteUserById = () =>
+  useMutation({
+    mutationKey: ["deleteUserById"],
+    mutationFn: ({ id, body }) => api.onboard.deleteUserById(id, body),
+    onSuccess: (data) => {
+      console.log(data, "data");
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+// Return the necessary states: data, isLoading, isError, error
 
 export const useOnboardCommunity = (successHandler) => {
   const { updateSnackbar } = useSnackbar();

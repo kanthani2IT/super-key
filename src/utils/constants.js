@@ -23,6 +23,16 @@ export const pManagers = [
   { id: "preeti", name: "Preeti" },
   { id: "kavya", name: "Kavya" },
 ];
+export const insuranceOptions = [
+  { id: "1000000", name: "100000" },
+  { id: "200000", name: "200000" },
+  { id: "3000000", name: "300000" },
+  { id: "400000", name: "400000" },
+  { id: "5000000", name: "500000" },
+  { id: "600000", name: "600000" },
+  { id: "7000000", name: "700000" },
+  { id: "800000", name: "800000" },
+];
 
 export const COIData = [
   { title: "Eagle Ridge Apartments", count: 45 },
