@@ -55,6 +55,7 @@
     "recharts": "^2.13.3",
     "simplebar-react": "^3.2.6",
     "slick-carousel": "^1.8.1",
+    "styled-components": "^6.1.13",
     "swr": "^2.2.5",
     "util": "^0.12.5",
     "vite": "^5.4.10",
