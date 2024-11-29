@@ -240,7 +240,6 @@ export default function UserTable({
     handleMenuAnchorClose();
     openPopup(Id);
   };
-  console.log(rows, "rows");
   const renderMenuComponent = () => {
     return (
       <>
