@@ -8,12 +8,13 @@ import CircularLoader from "components/CircularLoader";
 import { useFormik } from "formik";
 import { useCommunityListQuery, useOnboardCommunity } from "hooks/useCommunity";
 import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
-import UserTable from "pages/dashboard/UserTable";
+import UserTable from "pages/dashboard/CommunityTable";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useGlobalStore } from "store/store";
 import * as Yup from "yup";
 import EditCommunity from "./edit-community";
+import OnboardingIndex from "./onboarding";
 
 const AddNewCommunity = React.lazy(
   () => import("./onboarding/AddNewCommunity")
@@ -95,37 +96,19 @@ const onBoardingStepper = [
   },
 ];
 
-const defaultValue = {
-  onBoardingType: "single",
-  activeStep: 0,
-  modalOpen: false,
-};
+
 const CommunityOnboarding = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { onboarding, updateOnboarding, resetOnboarding } = useGlobalStore();
+  const { resetOnboarding } = useGlobalStore();
 
   const searchParams = new URLSearchParams(location.search);
-  const currentOnboradingType = searchParams.get("type");
-  const currentStep = Number(searchParams.get("cs"));
+  const currentOnboradingType = searchParams.get("type") || 'single';
+  const currentStep = Number(searchParams.get("cs")) || 0;
   const modalOpen = Boolean(searchParams.get("onboarding"));
-  const [show, setShow] = useState("true");
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [activeStep, setActiveStep] = useState(currentStep);
-  const [open, setOpen] = useState(modalOpen);
-  const [onBoardingType, setOnboardingType] = useState(
-    currentOnboradingType || defaultValue.onBoardingType
-  );
-  const finalStep = activeStep == onBoardingStepper?.length - 1;
 
+  const [open, setOpen] = useState(modalOpen);
   const [edit, setEdit] = useState(false);
-  const [validationSchema, setValidationSchema] = useState(
-    onBoardingStepper[activeStep]?.initialValidationSchema || null
-  );
-  const [community, setCommunity] = useState({
-    manager: true,
-    propertyManager: true,
-  });
   const [selectedRows, setSelectedRows] = useState([]);
 
   const {
@@ -133,6 +116,7 @@ const CommunityOnboarding = () => {
     isFetching: communitListFetching,
     refetch,
   } = useCommunityListQuery();
+
   //handlers
   const openDrawer = () => {
     setEdit(true);
@@ -155,167 +139,18 @@ const CommunityOnboarding = () => {
   };
 
   const handleClose = () => {
-    setActiveStep(0);
-    setOnboardingType(defaultValue.onBoardingType);
+    setOpen(false)
     navigate({
       pathname: location.pathname,
       search: "",
-    });
-    setOpen(false);
-    setValidationSchema(null);
-    setCommunity({
-      manager: true,
-      propertyManager: true,
-    });
-    setShow("true");
-    setSelectedFiles([]);
-    resetForm();
-    resetOnboarding();
+    })
   };
 
-  const handleQueryParams = (step) => {
-    searchParams.set("cs", step);
-
-    navigate({
-      pathname: location.pathname,
-      search: searchParams.toString(),
-    });
-  };
-
-  const handleNext = () => {
-    if (activeStep == 0) {
-      searchParams.set("type", onBoardingType);
-
-      navigate({
-        pathname: location.pathname,
-        search: searchParams.toString(),
-      });
-    }
-    if (activeStep < onBoardingStepper.length - 1) {
-      handleQueryParams(activeStep + 1);
-      setValidationSchema(
-        onBoardingStepper[activeStep + 1]?.initialValidationSchema || null
-      );
-      setActiveStep((prevStep) => prevStep + 1);
-    }
-  };
-
-  const handleBack = () => {
-    if (activeStep > 0) {
-      handleQueryParams(activeStep - 1);
-      setValidationSchema(
-        onBoardingStepper[activeStep - 1]?.initialValidationSchema || null
-      );
-      setActiveStep((prevStep) => prevStep - 1);
-      updateOnboarding(values);
-    }
-  };
-
-  const handleOnboardingType = (value) => {
-    setOnboardingType(value);
-    setFieldValue("onBoardingType", value);
-  };
 
   const handleSelectionChange = (selected) => {
     setSelectedRows(selected);
   };
 
-  const successHandler = () => {
-    resetOnboarding();
-    handleNext();
-    refetch();
-  };
-
-  const {
-    mutate,
-    isLoading: communityCreationLoading,
-    isSuccess,
-    isError,
-    data,
-  } = useOnboardCommunity(successHandler);
-
-  const footer = () => {
-    return (
-      <AppRowBox>
-        <AppGrid item size={{ xs: 2 }}>
-          {activeStep && !finalStep ? (
-            <Button
-              fullWidth
-              color="secondary"
-              onClick={handleBack}
-              variant="outlined"
-            >
-              Back
-            </Button>
-          ) : (
-            <div></div>
-          )}
-        </AppGrid>
-        <AppGrid item size={{ xs: 2 }}>
-          <Button
-            fullWidth
-            color="info"
-            type="submit"
-            onClick={() => handleSubmit()}
-            variant="contained"
-            disabled={
-              activeStep === 4 && show == "true" && selectedFiles.length == 0
-            }
-          >
-            {finalStep ? "Done" : "Next"}
-          </Button>
-        </AppGrid>
-      </AppRowBox>
-    );
-  };
-
-  const formik = useFormik({
-    initialValues: onboarding,
-    validationSchema: validationSchema
-      ? Yup.object().shape(validationSchema)
-      : null,
-    enableReinitialize: true,
-    onSubmit: async (values) => {
-      if (activeStep == onBoardingStepper?.length - 2) {
-        let payload = {
-          name: values?.communityName?.name,
-          contactInfo: values?.communityAddress?.label,
-          communityManager: {
-            managerId: values?.communityManager?.managerId,
-            name: values?.communityManager?.name,
-            email: values?.communityManager?.email,
-            phone: values?.communityManager?.phone,
-            region: values?.communityManager?.countryCode?.value,
-            managementCompanyId: values?.communityManager?.managementCompanyId,
-          },
-          // propertyManager: {
-          //   userId: values?.propertyManager?.userId,
-          //   username: values?.propertyManager?.username,
-          //   email: values?.propertyManager?.email,
-          //   phone: values?.propertyManager?.phone,
-          //   region: values?.propertyManager?.countryCode?.value,
-          //   // managementCompanyId: values?.communityManager?.managementCompanyId
-          // },
-          // documents: []
-        };
-        mutate(payload);
-      } else {
-        handleNext(values);
-        updateOnboarding(values);
-      }
-      setTouched({});
-    },
-  });
-  const {
-    values,
-    errors,
-    touched,
-    setFieldValue,
-    handleSubmit,
-    handleChange,
-    setTouched,
-    resetForm,
-  } = formik;
 
   return (
     <AppGrid container spacing={4}>
@@ -372,57 +207,17 @@ const CommunityOnboarding = () => {
       <AppGrid item size={{ xs: 12 }}>
         <UserTable
           height={"80vh"}
-          isLoading={communitListFetching}
+          isLoading={communitListFetching & !communityList?.content?.length}
           communityList={communityList}
           onSelectionChange={handleSelectionChange}
           openPopup={openDrawer}
         />
       </AppGrid>
-      <AppModal
-        height={finalStep ? "40vh" : "auto"}
-        cardHeight={onBoardingStepper[activeStep].height || undefined}
-        open={open}
-        onClose={handleClose}
-        enableCard={!finalStep}
-        title={onBoardingStepper[activeStep].title}
-        activeStep={activeStep}
-        footer={!finalStep && footer()}
-        steps={onBoardingStepper}
-        align={finalStep ? "center" : ""}
-        width={onBoardingStepper[activeStep].width || undefined}
-      >
-        <div
-          style={{ pointerEvents: communityCreationLoading ? "none" : "auto" }}
-        >
-          <Suspense fallback={<CircularLoader />}>
-            {onBoardingStepper[activeStep]?.component &&
-              onBoardingStepper[activeStep]?.component({
-                handleOnboardingType,
-                onBoardingType,
-                formValues: values,
-                errors,
-                touched,
-                setFieldValue,
-                handleChange,
-                community,
-                setShow,
-                show,
-                setSelectedFiles,
-                selectedFiles,
-                handleClose,
-              })}
-          </Suspense>
-        </div>
-      </AppModal>
+      {open && <OnboardingIndex currentOnboradingType={currentOnboradingType} open={open} onClose={handleClose} refetch={refetch} />}
       <Drawer
         open={edit}
         onClose={closeDrawer}
         anchor="right"
-        // PaperProps={{
-        //     sx: {
-        //         padding: 2,
-        //     },
-        // }}
       >
         <EditCommunity onClose={closeDrawer} />
       </Drawer>

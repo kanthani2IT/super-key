@@ -19,7 +19,7 @@ import { ColorBox } from "pages/component-overview/color";
 import { useEffect, useState } from "react";
 import RenewalPieChart from "./RenewalPieChart";
 import TaskTable from "./TaskTable";
-import UserTable from "./UserTable";
+import UserTable from "./CommunityTable";
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 const tabs = [

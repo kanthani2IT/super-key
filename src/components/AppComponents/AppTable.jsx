@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { BoldTypographyHeader } from 'components/StyledComponents';
+import { Box, Checkbox, Pagination, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
+import { BoldTypographyHeader, communityStyles } from 'components/StyledComponents';
+import CircularLoader from 'components/CircularLoader';
+import AppSkeleton from './AppSkeleton';
+import AppPagination from './AppPagination';
 
-const AppTable = ({ columns, rows, rowKey = 'id', getStatus, customStyles = {}, onSelectionChange }) => {
+const AppTable = ({ isLoading, columns, rows, rowKey = 'id', getStatus, customStyles = {}, onSelectionChange, noDataText = 'No Data Found', currentPage, totalItems, pageSize, onPageChange }) => {
   const [selected, setSelected] = useState([]);
 
 
@@ -38,77 +41,95 @@ const AppTable = ({ columns, rows, rowKey = 'id', getStatus, customStyles = {}, 
   };
   return (
     <TableContainer>
-      <Table aria-label="common table">
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ position: "unset !important" }}>
+            <TableCell padding='checkbox'>
               <Checkbox
-                color="#1A9A5C"
+                color="success"
                 indeterminate={numSelected > 0 && numSelected < rowCount}
                 checked={rowCount > 0 && numSelected === rowCount}
                 onChange={onSelectAllClick}
-                inputProps={{
-                  'aria-label': 'select all rows',
-                }}
-                padding='0px'
-                sx={{
-                  padding: '0px',
-                  '&.Mui-checked': {
-                    color: '#1A9A5C',
-                    padding: '0px'
-                  },
-                }}
+
               />
             </TableCell>
             {columns.map((col, index) => (
-              <TableCell key={col.field} sx={{ position: "unset !important", textTransform: 'none' }}>
+              <TableCell key={col.field} >
                 <BoldTypographyHeader>{col.headerName}</BoldTypographyHeader>
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => {
-            const isSelected = selected.indexOf(row[rowKey]) !== -1;
-            return (
-              <TableRow
-                key={row[rowKey]}
-                hover
-                role="checkbox"
-                aria-checked={isSelected}
-                selected={isSelected}
-                onClick={() => handleRowClick(row[rowKey])}
-              >
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    color="primary"
-                    padding='0px'
-                    checked={isSelected}
-                    sx={{
-                      padding: '0px',
-                      '&.Mui-checked': {
-                        color: '#1A9A5C',
-                      },
-                    }}
-                    inputProps={{
-                      'aria-labelledby': `checkbox-${row[rowKey]}`,
-                    }}
+          {isLoading ? (
+            Array.from({ length: 10 }).map((_, index) => (
+              <TableRow key={`skeleton-${index}`}>
+                <TableCell colSpan={columns?.length + 1}>
+                  <AppSkeleton
+                    variant="rounded"
+                    height={30}
+                    animation="wave"
                   />
                 </TableCell>
-                {columns.map((col) => (
-                  <TableCell key={col.field} sx={customStyles[col.field]}>
-                    {col.renderCell
-                      ? col.renderCell(row)
-                      : col.field === 'index' ? index + 1 : col.field === 'status' && getStatus
-                        ? getStatus(row)
-                        : row[col.field] || '-'}
-                  </TableCell>
-                ))}
               </TableRow>
-            );
-          })}
+            ))
+          ) : rows.length > 0 ? (
+            rows.map((row, index) => {
+              const isSelected = selected.indexOf(row[rowKey]) !== -1;
+              return (
+                <TableRow
+                  key={row[rowKey]}
+                  hover
+                  role="checkbox"
+                  aria-checked={isSelected}
+                  selected={isSelected}
+                >
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      color="success"
+                      padding="0px"
+                      checked={isSelected}
+                      onClick={() => handleRowClick(row[rowKey])}
+
+                    // sx={{
+                    //   padding: "0px",
+                    //   "&.Mui-checked": {
+                    //     color: "#1A9A5C",
+                    //   },
+                    // }}
+                    // inputProps={{
+                    //   "aria-labelledby": `checkbox-${row[rowKey]}`,
+                    // }}
+                    />
+                  </TableCell>
+                  {columns.map((col) => (
+                    <TableCell key={col.field} sx={customStyles[col.field]}>
+                      {col.renderCell
+                        ? col.renderCell(row)
+                        : col.field === "index"
+                          ? index + 1
+                          : col.field === "status" && col.getStatus
+                            ? col.getStatus(row)
+                            : row[col.field] || "-"}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              );
+            })
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length + 1} align="center">
+                <Box sx={{ py: 2 }}>
+                  <Typography variant="body1" color="textSecondary">
+                    {noDataText}
+                  </Typography>
+                </Box>
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
+      {totalItems && <AppPagination pageSize={pageSize} currentPage={currentPage} totalItems={totalItems} onPageChange={onPageChange} />}
     </TableContainer>
   );
 };

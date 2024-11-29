@@ -85,7 +85,8 @@ const AppAutoComplete = ({
   const handleBlur = (event) => {
     onBlur?.({ target: { name, value } });
   };
-  const isLoading = options?.length && loading;
+  const isLoading = !options?.length && loading;
+
   return (
     <Autocomplete
       {...props}
@@ -133,7 +134,7 @@ const AppAutoComplete = ({
               ...params.InputProps,
               endAdornment: (
                 <React.Fragment>
-                  {loading ? (
+                  {isLoading ? (
                     <AppToolTip placement="bottom" title="Fetching...">
                       <CircularProgress color="inherit" size={20} />
                     </AppToolTip>
