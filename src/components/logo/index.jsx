@@ -9,18 +9,15 @@ import Logo from 'assets/images/login/logo.png';
 
 const LogoSection = ({ sx, to }) => {
   return (
-    // <ButtonBase disableRipple component={Link} to={!to ? config.defaultPath : to} sx={sx}>
-    <Stack direction="row" spacing={1} alignItems="center">
+    <Stack sx={sx} direction="row" spacing={1} alignItems="center">
       <img src={Logo} />
-
     </Stack>
-    // </ButtonBase>
   );
 };
 
 LogoSection.propTypes = {
   sx: PropTypes.object,
-  to: PropTypes.string
+  to: PropTypes.string,
 };
 
 export default LogoSection;

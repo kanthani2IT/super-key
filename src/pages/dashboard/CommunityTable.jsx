@@ -178,11 +178,6 @@ export default function UserTable({
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
-  console.log(filteredRows);
-  // const paginatedRows = filteredRows.slice(
-  //   (page - 1) * pageSize,
-  //   page * pageSize
-  // );
 
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);

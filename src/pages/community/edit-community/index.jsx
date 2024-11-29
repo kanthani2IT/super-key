@@ -16,7 +16,6 @@ import {
   useCommunityManagersQuery,
   usePropertyManagersQuery,
 } from "hooks/useDropDown";
-
 import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
 
 import { useEffect, useState } from "react";
@@ -96,7 +95,7 @@ const EditCommunity = ({ onClose, communityData }) => {
     isLoading,
     isError,
   } = useGetCommunityById(communityData?.communityId);
-  const { mutate: updateUserById, isLoading: isUpdating } =
+  const { mutate: updateCommunity, isLoading: isUpdating } =
     useUpdateCommunityById();
   const { mutate: deleteUserById } = useDeleteCommunityById();
 
@@ -133,7 +132,7 @@ const EditCommunity = ({ onClose, communityData }) => {
         },
       };
 
-      updateUserById({ id: communityData?.communityId, body: payload });
+      updateCommunity({ id: communityData?.communityId, body: payload });
     },
   });
   const {

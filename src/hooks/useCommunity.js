@@ -7,9 +7,7 @@ export const useGetUsers = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["login"],
     queryFn: api.community.getUsersData,
-    onSuccess: (data) => {
-      console.log(data);
-    },
+    onSuccess: (data) => {},
     onError: (error) => {
       console.error(error);
     },
@@ -19,13 +17,9 @@ export const useGetUsers = () => {
 };
 
 export const useGetCommunityById = (id) => {
-  console.log("Received id:", id);
-
   return useQuery(["userInfo", id], () => api.community.getCommunityById(id), {
     keepPreviousData: true,
-    onSuccess: (data) => {
-      console.log("User data:", data);
-    },
+    onSuccess: (data) => {},
     onError: (error) => {
       console.error("Error fetching user data:", error);
     },
@@ -62,7 +56,6 @@ export const useOnboardCommunity = (successHandler) => {
     mutationKey: ["community-onboarding"],
     mutationFn: (payload) => api.community.createCommunity(payload),
     onSuccess: (data) => {
-      console.log("Mutation successful:", data);
       successHandler?.();
       updateSnackbar({
         message: MESSAGE.communityOnboardedSuccess,
@@ -91,9 +84,7 @@ export const useCommunityListQuery = (search) =>
       // Transform the data here
       return data.data;
     },
-    onSuccess: (data) => {
-      console.log("Locations data:", data);
-    },
+    onSuccess: (data) => {},
     onError: (error) => {
       console.error("Error fetching locations:", error);
     },

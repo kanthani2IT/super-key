@@ -30,6 +30,7 @@ export const PASSWORD_VALIDATION = ({ name }) => {
     .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .matches(/\d/, 'Password must contain at least one digit')
     .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character')
+    .matches(/^\S*$/, 'password must not contain any spaces')
     .required(`${name} Password is required`);
 };
 
@@ -58,9 +59,16 @@ export const LOGIN_CONFIG = [
       name: 'password',
       type: 'password',
       label: 'Password',
-      placeholder: 'Enter password',
+      placeholder: 'Enter Your Password',
       validation: Yup.string()
       .max(255).required('Password is required')
+      .matches(/^\S*$/, 'password must not contain any spaces')
+      .min(8, 'Password must be at least 8 characters')
+      .max(15, 'Password must be at most 15 characters')
+      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .matches(/\d/, 'Password must contain at least one digit')
+      .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character')
     }
 ];
 
