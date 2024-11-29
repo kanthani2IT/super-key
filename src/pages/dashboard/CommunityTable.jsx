@@ -2,18 +2,17 @@ import { MoreVert, SwapVert } from "@mui/icons-material";
 import {
   FormControl,
   FormControlLabel,
+  IconButton,
   Radio,
   RadioGroup,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
 import AppMenu from "components/AppComponents/AppMenu";
-import AppPagination from "components/AppComponents/AppPagination";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
 import { StyledMenuItem } from "components/AppComponents/StyledComponent";
-import CircularLoader from "components/CircularLoader";
 import { communityStyles } from "components/StyledComponents";
 import { useState } from "react";
 
@@ -146,11 +145,6 @@ export default function UserTable({
       headerName: "Property Manager",
     },
     {
-      field: "claims",
-      headerName: "Claims",
-      flex: 1,
-    },
-    {
       field: "insured",
       headerName: "Insured",
       flex: 1,
@@ -162,14 +156,10 @@ export default function UserTable({
     {
       field: "action",
       headerName: "Action",
+      align: "center",
       renderCell: (row) => (
-        <div
-          style={{
-            display: "flex",
-            paddingLeft: "10px",
-            height: "100%",
-          }}
-        >
+
+        <IconButton>
           <MoreVert
             onClick={(e) => {
               e.stopPropagation();
@@ -178,7 +168,7 @@ export default function UserTable({
             }}
             color="secondary"
           />
-        </div>
+        </IconButton>
       ),
     },
   ];

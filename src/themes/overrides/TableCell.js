@@ -25,7 +25,6 @@ export default function TableCell(theme) {
               backgroundColor: theme.palette.success.light, // Optional: Hover effect
             },
           },
-          cursor: "pointer",
         },
       },
     },
