@@ -7,9 +7,7 @@ export const useLocationsQuery = (search) =>
     queryKey: ["allLocationList", search],
     queryFn: () => api.common.getAllLocation({ search }),
     keepPreviousData: true,
-    onSuccess: (data) => {
-      console.log("Locations data:", data);
-    },
+    onSuccess: (data) => {},
     onError: (error) => {
       console.error("Error fetching locations:", error);
     },
@@ -21,9 +19,7 @@ export const useCommunitiesQuery = (search) =>
     queryKey: ["allCommunities", search],
     queryFn: () => api.common.getAllCommunity({ search }),
     keepPreviousData: true,
-    onSuccess: (data) => {
-      console.log("Communities data:", data);
-    },
+    onSuccess: (data) => {},
     onError: (error) => {
       console.error("Error fetching communities:", error);
     },
@@ -35,9 +31,7 @@ export const useCommunityManagersQuery = (search) =>
     queryKey: ["allCommunityMangers", search],
     queryFn: () => api.common.getAllCommunityManager({ search }),
     keepPreviousData: true,
-    onSuccess: (data) => {
-      console.log("Community Managers data:", data);
-    },
+    onSuccess: (data) => {},
     onError: (error) => {
       console.error("Error fetching community managers:", error);
     },
@@ -49,9 +43,7 @@ export const usePropertyManagersQuery = (search) =>
     queryKey: ["allPropertyMangers", search],
     queryFn: () => api.common.getAllPropertyManager({ search }),
     keepPreviousData: true,
-    onSuccess: (data) => {
-      console.log("Property Managers data:", data);
-    },
+    onSuccess: (data) => {},
     onError: (error) => {
       console.error("Error fetching property managers:", error);
     },
@@ -63,9 +55,7 @@ export const useDocumentsQuery = (search) =>
     queryKey: ["allDocumentsMangers", search],
     queryFn: () => api.common.getAllDocTypes({ search }),
     keepPreviousData: true,
-    onSuccess: (data) => {
-      console.log("Documents Managers data:", data);
-    },
+    onSuccess: (data) => {},
     onError: (error) => {
       console.error("Error fetching documents:", error);
     },

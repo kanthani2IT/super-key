@@ -1,43 +1,59 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 // material-ui
-import { Button, Checkbox, FormControlLabel, FormHelperText, Grid, Link, Stack, Typography } from '@mui/material';
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormHelperText,
+  Grid,
+  Link,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 // third party
-import { Formik } from 'formik';
+import { Formik } from "formik";
 
 // project imports
-import AnimateButton from 'components/@extended/AnimateButton';
-import { FormOutLinedField } from 'components/AppComponents/FormOutLinedField';
-import { useLoginUser } from 'hooks/useLogin';
-import { useAuthCookies } from 'utils/cookie';
-import { createValidationSchema } from 'utils/loginUtils';
-
+import AnimateButton from "components/@extended/AnimateButton";
+import { FormOutLinedField } from "components/AppComponents/FormOutLinedField";
+import { useLoginUser } from "hooks/useLogin";
+import { useAuthCookies } from "utils/cookie";
+import { createValidationSchema } from "utils/loginUtils";
 
 export default function AuthLogin(props) {
-  const { fieldsConfig } = props
+  const { fieldsConfig } = props;
   const [checked, setChecked] = useState(false);
-  const loginMutation = useLoginUser()
-  const { getCookie } = useAuthCookies()
-  const user = getCookie("superkey")
+  const loginMutation = useLoginUser();
+  const { getCookie } = useAuthCookies();
+  const user = getCookie("superkey");
   const validationSchema = createValidationSchema(fieldsConfig);
   const handleFormSubmit = (values, { setSubmitting }) => {
     setSubmitting(false);
-    loginMutation.mutate({ values, checked })
+    loginMutation.mutate({ values, checked });
   };
-console.log(user,"user")
+
   return (
     <Formik
       initialValues={{
-        email: !!user?.password?user?.email:"",
+        email: !!user?.password ? user?.email : "",
         password: user?.password,
       }}
       validationSchema={validationSchema}
       onSubmit={handleFormSubmit}
     >
-      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+      {({
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        isSubmitting,
+        touched,
+        values,
+      }) => (
         <form noValidate onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             {fieldsConfig.map((field) => (
@@ -68,7 +84,11 @@ console.log(user,"user")
                     size="small"
                   />
                 }
-                label={<Typography variant="h7" color="#5B738B" fontSize="0.75rem">Remember Password</Typography>}
+                label={
+                  <Typography variant="h7" color="#5B738B" fontSize="0.75rem">
+                    Remember Password
+                  </Typography>
+                }
               />
             </Grid>
 
@@ -80,16 +100,37 @@ console.log(user,"user")
 
             <Grid item xs={12}>
               <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                <Button
+                  disableElevation
+                  disabled={isSubmitting}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                >
                   Login
                 </Button>
               </AnimateButton>
             </Grid>
 
             <Grid item xs={12} sx={{ mt: -1 }}>
-              <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                <Typography variant="h7" color="#5B738B" fontSize="0.75rem">Forgot Password?</Typography>
-                <Link variant="h7" component={RouterLink} color="red" fontWeight={600} to="/reset/forgot">
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+              >
+                <Typography variant="h7" color="#5B738B" fontSize="0.75rem">
+                  Forgot Password?
+                </Typography>
+                <Link
+                  variant="h7"
+                  component={RouterLink}
+                  color="red"
+                  fontWeight={600}
+                  to="/reset/forgot"
+                >
                   Reset Password
                 </Link>
               </Stack>
@@ -102,5 +143,5 @@ console.log(user,"user")
 }
 
 AuthLogin.propTypes = {
-  isDemo: PropTypes.bool
+  isDemo: PropTypes.bool,
 };
