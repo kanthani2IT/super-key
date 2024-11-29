@@ -8,12 +8,10 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
 import AppMenu from "components/AppComponents/AppMenu";
-import AppPagination from "components/AppComponents/AppPagination";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
 import { StyledMenuItem } from "components/AppComponents/StyledComponent";
-import CircularLoader from "components/CircularLoader";
 import { communityStyles } from "components/StyledComponents";
 import { useState } from "react";
 
@@ -114,8 +112,8 @@ export default function UserTable({
   communityList,
   openPopup,
   handleOffBoard,
-  Id,
-  setId,
+  communityInfo,
+  setCommunityInfo,
 }) {
   const theme = useTheme();
   const [page, setPage] = useState(1);
@@ -174,7 +172,7 @@ export default function UserTable({
             onClick={(e) => {
               e.stopPropagation();
               setMenuAnchorEl(e.currentTarget);
-              setId(row?.communityId);
+              setCommunityInfo(row);
             }}
             color="secondary"
           />
@@ -248,9 +246,9 @@ export default function UserTable({
   };
   const handleDrawer = () => {
     handleMenuAnchorClose();
-    openPopup(Id);
+    openPopup(communityInfo);
   };
-  console.log(rows, "rows");
+
   const renderMenuComponent = () => {
     return (
       <>
@@ -264,7 +262,6 @@ export default function UserTable({
 
   return (
     <Box sx={communityStyles.container(height)}>
-
       <>
         <AppTableSearch
           placeholder="Search Documents"
@@ -277,7 +274,6 @@ export default function UserTable({
             },
           ]}
         />
-
 
         <AppTable
           rowKey="communityId"
@@ -292,8 +288,6 @@ export default function UserTable({
           pageSize={pageSize}
           onPageChange={handleChangePage}
         />
-
-
       </>
 
       <AppMenu

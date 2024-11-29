@@ -2,7 +2,8 @@ import { Drawer } from "@mui/material";
 
 import AppGrid from "components/AppComponents/AppGrid";
 import {
-  useCommunityListQuery
+  useCommunityListQuery,
+  useDeleteCommunityById,
 } from "hooks/useCommunity";
 import CommunityTable from "pages/dashboard/CommunityTable";
 import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
@@ -10,10 +11,8 @@ import { useState } from "react";
 import EditCommunity from "./edit-community";
 import OnboardingIndex from "./onboarding";
 
-
 const CommunityOnboarding = () => {
-
-  const [communityId, setCommunityId] = useState("");
+  const [communityData, setCommunitydata] = useState("");
 
   const [edit, setEdit] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -23,12 +22,10 @@ const CommunityOnboarding = () => {
     isFetching: communitListFetching,
     refetch,
   } = useCommunityListQuery();
-
-
+  const { mutate: deleteUserById } = useDeleteCommunityById();
   //handlers
   const openDrawer = (id) => {
-
-    setCommunityId(id);
+    setCommunitydata(id);
     setEdit(true);
   };
   const closeDrawer = () => {
@@ -36,16 +33,15 @@ const CommunityOnboarding = () => {
   };
 
   const handleOffBoard = () => {
-    const userId = "98765432345";
     const payload = {
       mappings: [
         {
-          communityId: "567890987",
-          cmcId: "34567890",
+          communityId: communityData?.communityId,
+          cmcId: communityData?.communityId,
         },
       ],
     };
-    deleteUserById({ id: userId, body: payload });
+    deleteUserById({ id: communityData?.communityId, body: payload });
   };
 
   const handleSelectionChange = (selected) => {
@@ -85,6 +81,7 @@ const CommunityOnboarding = () => {
               width="227px"
               height="50px"
               borderRadius="10px"
+              onClick={handleOffBoard}
               sx={{
                 border: "0.5px solid #E12929",
               }}
@@ -93,7 +90,6 @@ const CommunityOnboarding = () => {
             </RadiusStyledButton>
           )}
           <OnboardingIndex refetch={refetch} />
-
         </AppGrid>
       </AppGrid>
 
@@ -101,21 +97,16 @@ const CommunityOnboarding = () => {
         <CommunityTable
           height={"80vh"}
           isLoading={communitListFetching & !communityList?.content?.length}
-
           communityList={communityList}
           onSelectionChange={handleSelectionChange}
           openPopup={openDrawer}
           handleOffBoard={handleOffBoard}
-          Id={communityId}
-          setId={setCommunityId}
+          communityInfo={communityData}
+          setCommunityInfo={setCommunitydata}
         />
       </AppGrid>
-      <Drawer
-        open={edit}
-        onClose={closeDrawer}
-        anchor="right"
-      >
-        <EditCommunity onClose={closeDrawer} communityId={communityId} />
+      <Drawer open={edit} onClose={closeDrawer} anchor="right">
+        <EditCommunity onClose={closeDrawer} communityData={communityData} />
       </Drawer>
     </AppGrid>
   );

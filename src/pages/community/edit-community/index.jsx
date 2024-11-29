@@ -51,34 +51,6 @@ const initialValues = {
     insuranceCoverage: "",
   },
 };
-const res = [
-  {
-    communityId: "345679056",
-    name: "Carson City",
-    contactInfo: "string",
-    state: "California",
-    city: "Sacramento",
-    zipcode: "96162",
-    communityManager: {
-      managerId: "string",
-      name: "Henry",
-      email: "henry@gmaiol.com",
-      phone: "718 222 2222",
-      region: defaultCountryCode,
-      managementCompanyId: "234567890",
-    },
-    propertyManager: {
-      managerId: "234567890",
-      name: "Lucas",
-      email: "lucas@gmail.com",
-      phone: "717 222 2222",
-      region: defaultCountryCode,
-      managementCompanyId: "123456789",
-    },
-    insuranceValue: { id: "5000000", name: "500000" },
-    insuranceCoverage: "5000000",
-  },
-];
 
 const initialValidationSchema = {
   addressDetails: Yup.object().shape({
@@ -109,7 +81,7 @@ const initialValidationSchema = {
   }),
 };
 
-const EditCommunity = ({ onClose, communityId }) => {
+const EditCommunity = ({ onClose, communityData }) => {
   const [enableEdit, setEnableEdit] = useState(false);
   const [modal, setModal] = useState(false);
   const [offBoard, setOffBoard] = useState(false);
@@ -119,10 +91,10 @@ const EditCommunity = ({ onClose, communityId }) => {
   });
 
   const {
-    data: communityData,
+    data: communityInfo,
     isLoading,
     isError,
-  } = useGetCommunityById(communityId);
+  } = useGetCommunityById(communityData?.communityId);
   const { mutate: updateUserById, isLoading: isUpdating } =
     useUpdateCommunityById();
   const { mutate: deleteUserById } = useDeleteCommunityById();
@@ -139,7 +111,7 @@ const EditCommunity = ({ onClose, communityId }) => {
     validationSchema: Yup.object().shape(initialValidationSchema),
     onSubmit: (values) => {
       const payload = {
-        communityId: communityId,
+        communityId: communityData?.communityId,
         name: values?.addressDetails?.communityName,
         contactInfo: "",
         communityManager: {
@@ -160,7 +132,7 @@ const EditCommunity = ({ onClose, communityId }) => {
         },
       };
 
-      updateUserById({ id: communityId, body: payload });
+      updateUserById({ id: communityData?.communityId, body: payload });
     },
   });
   const {
@@ -222,8 +194,8 @@ const EditCommunity = ({ onClose, communityId }) => {
     }));
   });
   useEffect(() => {
-    if (communityData?.data) {
-      const data = communityData?.data;
+    if (communityInfo?.data) {
+      const data = communityInfo?.data;
 
       setValues((prevValues) => ({
         ...prevValues,
@@ -251,7 +223,7 @@ const EditCommunity = ({ onClose, communityId }) => {
         },
       }));
     }
-  }, [communityData]);
+  }, [communityInfo]);
 
   const onDiscard = () => {
     setOffBoard(false);
@@ -261,16 +233,15 @@ const EditCommunity = ({ onClose, communityId }) => {
     setModal(false);
   };
   const handleOffBoard = () => {
-    const userId = "98765432345";
     const payload = {
       mappings: [
         {
-          communityId: "567890987",
-          cmcId: "34567890",
+          communityId: communityData?.communityId,
+          cmcId: communityData?.communityId,
         },
       ],
     };
-    deleteUserById({ id: communityId, body: payload });
+    deleteUserById({ id: communityData?.communityId, body: payload });
   };
   const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 };
   const mobileSize = { xs: 9, sm: 9, md: 9, lg: 4, xl: 4 };
@@ -294,37 +265,39 @@ const EditCommunity = ({ onClose, communityId }) => {
             Off Board Community
           </RadiusStyledButton>
         </AppGrid>
-        <AppGrid
-          item
-          size={{ sx: 12, lg: 4 }}
-          container
-          sx={{
-            gap: 2,
-          }}
-        >
-          <RadiusStyledButton
-            onClick={onDiscard}
-            color="secondary"
-            variant="outlined"
-            textColor="#8c8c8c"
-            width="140px"
-            height="50px"
-            borderRadius="10px"
+        {enableEdit && (
+          <AppGrid
+            item
+            size={{ sx: 12, lg: 4 }}
+            container
+            sx={{
+              gap: 2,
+            }}
           >
-            Discard
-          </RadiusStyledButton>
-          <RadiusStyledButton
-            color="info"
-            type="submit"
-            onClick={handleSubmit}
-            variant="contained"
-            width="181px"
-            height="50px"
-            borderRadius="10px"
-          >
-            Save Changes
-          </RadiusStyledButton>
-        </AppGrid>
+            <RadiusStyledButton
+              onClick={onDiscard}
+              color="secondary"
+              variant="outlined"
+              textColor="#8c8c8c"
+              width="140px"
+              height="50px"
+              borderRadius="10px"
+            >
+              Discard
+            </RadiusStyledButton>
+            <RadiusStyledButton
+              color="info"
+              type="submit"
+              onClick={handleSubmit}
+              variant="contained"
+              width="181px"
+              height="50px"
+              borderRadius="10px"
+            >
+              Save Changes
+            </RadiusStyledButton>
+          </AppGrid>
+        )}
 
         <ConfirmationModal
           open={modal}
