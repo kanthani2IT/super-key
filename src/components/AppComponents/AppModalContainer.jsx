@@ -41,7 +41,7 @@ const StyledFlexCardContent = styled(CardContent)(({ height, theme, padding, foo
   paddingLeft: padding,
   paddingRight: padding,
   flex: footer ? `1 0 ${height}` : height,
-  marginTop: 3,
+  marginTop: 5,
   marginBottom: 2,
   borderRadius: "8px",
   overflow: "auto "
