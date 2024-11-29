@@ -9,11 +9,9 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
 import AppMenu from "components/AppComponents/AppMenu";
-import AppPagination from "components/AppComponents/AppPagination";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
-import CircularLoader from "components/CircularLoader";
 import { communityStyles } from "components/StyledComponents";
 import { useState } from "react";
 
@@ -171,10 +169,7 @@ export default function UserTable({
               e.stopPropagation();
               setMenuAnchorEl(e.currentTarget);
             }}
-            sx={{
-              cursor: "pointer",
-              color: "#858585",
-            }}
+            color="secondary"
           />
         </div>
       ),
@@ -187,11 +182,6 @@ export default function UserTable({
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
-  console.log(filteredRows);
-  // const paginatedRows = filteredRows.slice(
-  //   (page - 1) * pageSize,
-  //   page * pageSize
-  // );
 
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);
@@ -255,43 +245,34 @@ export default function UserTable({
 
   return (
     <Box sx={communityStyles.container(height)}>
-      {isLoading ? (
-        <CircularLoader />
-      ) : (
-        <>
-          <AppTableSearch
-            placeholder="Search Documents"
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            icons={[
-              {
-                component: <SwapVert />,
-                onClick: (e) => handleSort(e),
-              },
-            ]}
-          />
+      <>
+        <AppTableSearch
+          placeholder="Search Documents"
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          icons={[
+            {
+              component: <SwapVert />,
+              onClick: (e) => handleSort(e),
+            },
+          ]}
+        />
 
-          {filteredRows?.length === 0 ? (
-            <Box sx={communityStyles.noData}>No Communities Found</Box>
-          ) : (
-            <>
-              <AppTable
-                columns={columns}
-                rows={filteredRows}
-                getStatus={getStatus}
-                customStyles={{ claims: communityStyles.claims }}
-                onSelectionChange={onSelectionChange}
-              />
-              <AppPagination
-                currentPage={page}
-                totalItems={filteredRows.length}
-                pageSize={pageSize}
-                onPageChange={handleChangePage}
-              />
-            </>
-          )}
-        </>
-      )}
+        <AppTable
+          rowKey="communityId"
+          isLoading={isLoading}
+          columns={columns}
+          rows={filteredRows || []}
+          getStatus={getStatus}
+          customStyles={{ claims: communityStyles.claims }}
+          onSelectionChange={onSelectionChange}
+          currentPage={page}
+          totalItems={filteredRows?.length}
+          pageSize={pageSize}
+          onPageChange={handleChangePage}
+        />
+      </>
+
       <AppMenu
         anchorEl={menuAnchorEl}
         handleClose={handleMenuAnchorClose}

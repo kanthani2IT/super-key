@@ -15,7 +15,6 @@ const getAllLocation = async (queries) => {
 
 const getAllCommunity = async (queries) => {
   try {
-    console.log(queries);
     const requestUrl = addQueryParams(COMMON.getAllCommunity, queries);
     const response = await getRequest(requestUrl);
     return response;

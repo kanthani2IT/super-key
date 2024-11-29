@@ -1,10 +1,12 @@
 import styled from "@emotion/styled";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Card,
   CardActions,
   CardContent,
   CardHeader,
   Divider,
+  IconButton,
   Paper,
   Stack,
   Typography,
@@ -27,7 +29,7 @@ const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
     width: "50%",
   },
   [theme.breakpoints.up("lg")]: {
-    width: width
+    width: width,
   },
 }));
 
@@ -37,28 +39,31 @@ const StyledFlexCard = styled(Card)(({ theme }) => ({
   height: "100%",
 }));
 
-const StyledFlexCardContent = styled(CardContent)(({ height, theme, padding, footer }) => ({
-  paddingLeft: padding,
-  paddingRight: padding,
-  flex: footer ? `1 0 ${height}` : height,
-  marginTop: 3,
-  marginBottom: 2,
-  borderRadius: "8px",
-  overflow: "auto "
-}));
+const StyledFlexCardContent = styled(CardContent)(
+  ({ height, theme, padding, footer }) => ({
+    paddingLeft: padding,
+    paddingRight: padding,
+    flex: footer ? `1 0 ${height}` : height,
+    marginTop: 5,
+    marginBottom: 2,
+    borderRadius: "8px",
+    overflow: "auto ",
+  })
+);
 
 const AppModalContainer = ({
   children,
-  cardHeight = '70%',
-  height = 'auto',
+  cardHeight = "70%",
+  height = "auto",
   width = "40%",
-  padding = '3%',
+  padding = "3%",
   enableCard = false,
   title,
   footer,
   header,
   stepper,
-  align
+  align,
+  onClose,
 }) => {
   return (
     <StyledPaper width={width} height={height} align={align}>
@@ -67,26 +72,35 @@ const AppModalContainer = ({
           {title && !header && (
             <CardHeader
               title={
-                <Stack textAlign={'center'} justifyContent={'center'} alignItems="center" gap={0.5} >
-                  <Typography variant="h2">{title}
-                  </Typography>
+                <Stack
+                  textAlign={"center"}
+                  justifyContent={"center"}
+                  alignItems="center"
+                  gap={0.5}
+                >
+                  <Typography variant="h2">{title}</Typography>
                   {stepper && stepper()}
                 </Stack>
+              }
+              action={
+                <IconButton onClick={onClose}>
+                  <CloseIcon />
+                </IconButton>
               }
             />
           )}
           {header && !title && header}
           {header && <Divider />}
 
-          <StyledFlexCardContent height={cardHeight} padding={padding} footer={footer}>
+          <StyledFlexCardContent
+            height={cardHeight}
+            padding={padding}
+            footer={footer}
+          >
             {children}
           </StyledFlexCardContent>
 
-          {footer && (
-            <CardActions>
-              {footer}
-            </CardActions>
-          )}
+          {footer && <CardActions>{footer}</CardActions>}
         </StyledFlexCard>
       ) : (
         children
