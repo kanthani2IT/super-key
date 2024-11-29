@@ -54,7 +54,7 @@ const AppTable = ({ isLoading, columns, rows, rowKey = 'id', getStatus, customSt
               />
             </TableCell>
             {columns.map((col, index) => (
-              <TableCell key={col.field} >
+              <TableCell key={col.field} align={index > 0 ? 'center' : 'left'}>
                 <BoldTypographyHeader>{col.headerName}</BoldTypographyHeader>
               </TableCell>
             ))}
@@ -102,8 +102,8 @@ const AppTable = ({ isLoading, columns, rows, rowKey = 'id', getStatus, customSt
                     // }}
                     />
                   </TableCell>
-                  {columns.map((col) => (
-                    <TableCell key={col.field} sx={customStyles[col.field]}>
+                  {columns.map((col, idx) => (
+                    <TableCell key={col.field} sx={customStyles[col.field]} align={idx > 0 ? 'center' : 'left'}>
                       {col.renderCell
                         ? col.renderCell(row)
                         : col.field === "index"

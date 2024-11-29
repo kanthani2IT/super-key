@@ -2,6 +2,7 @@ import { MoreVert, SwapVert } from "@mui/icons-material";
 import {
   FormControl,
   FormControlLabel,
+  IconButton,
   Radio,
   RadioGroup,
 } from "@mui/material";
@@ -144,11 +145,6 @@ export default function UserTable({
       headerName: "Property Manager",
     },
     {
-      field: "claims",
-      headerName: "Claims",
-      flex: 1,
-    },
-    {
       field: "insured",
       headerName: "Insured",
       flex: 1,
@@ -160,14 +156,9 @@ export default function UserTable({
     {
       field: "action",
       headerName: "Action",
+      align: "center",
       renderCell: (row) => (
-        <div
-          style={{
-            display: "flex",
-            paddingLeft: "10px",
-            height: "100%",
-          }}
-        >
+        <IconButton>
           <MoreVert
             onClick={(e) => {
               e.stopPropagation();
@@ -176,7 +167,7 @@ export default function UserTable({
             }}
             color="secondary"
           />
-        </div>
+        </IconButton>
       ),
     },
   ];
@@ -248,7 +239,6 @@ export default function UserTable({
     handleMenuAnchorClose();
     openPopup(communityInfo);
   };
-
   const renderMenuComponent = () => {
     return (
       <>
