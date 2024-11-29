@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import CloseIcon from "@mui/icons-material/Close";
 import {
+  Box,
   Card,
   CardActions,
   CardContent,
@@ -11,6 +12,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { StyledButton } from "pages/community/StyledComponents";
 
 const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
   height: height || "auto",
@@ -70,24 +72,25 @@ const AppModalContainer = ({
       {enableCard ? (
         <StyledFlexCard elevation={0}>
           {title && !header && (
-            <CardHeader
-              title={
-                <Stack
-                  textAlign={"center"}
-                  justifyContent={"center"}
-                  alignItems="center"
-                  gap={0.5}
-                >
-                  <Typography variant="h2">{title}</Typography>
-                  {stepper && stepper()}
-                </Stack>
-              }
-              action={
-                <IconButton onClick={onClose}>
-                  <CloseIcon />
-                </IconButton>
-              }
-            />
+            <>
+              <Box sx={{ display: "flex", justifyContent: "end" }}>
+                <StyledButton onClick={onClose}>Close</StyledButton>
+              </Box>
+              <CardHeader
+                title={
+                  <Stack
+                    textAlign={"center"}
+                    justifyContent={"center"}
+                    alignItems="center"
+                    gap={0.5}
+                  >
+                    <Typography variant="h2">{title}</Typography>
+                    {stepper && stepper()}
+                  </Stack>
+                }
+                sx={{ p: "0px 16px 16px" }}
+              />
+            </>
           )}
           {header && !title && header}
           {header && <Divider />}
