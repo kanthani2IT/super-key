@@ -76,7 +76,6 @@ export const useOnboardCommunity = (successHandler) => {
         message: errorMessage,
         severity: SEVERITY.error,
       });
-      successHandler?.();
     },
   });
 

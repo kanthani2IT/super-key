@@ -171,10 +171,7 @@ export default function UserTable({
               e.stopPropagation();
               setMenuAnchorEl(e.currentTarget);
             }}
-            sx={{
-              cursor: "pointer",
-              color: "#858585",
-            }}
+            color="secondary"
           />
         </div>
       ),
@@ -255,43 +252,38 @@ export default function UserTable({
 
   return (
     <Box sx={communityStyles.container(height)}>
-      {isLoading ? (
-        <CircularLoader />
-      ) : (
-        <>
-          <AppTableSearch
-            placeholder="Search Documents"
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            icons={[
-              {
-                component: <SwapVert />,
-                onClick: (e) => handleSort(e),
-              },
-            ]}
-          />
 
-          {filteredRows?.length === 0 ? (
-            <Box sx={communityStyles.noData}>No Communities Found</Box>
-          ) : (
-            <>
-              <AppTable
-                columns={columns}
-                rows={filteredRows}
-                getStatus={getStatus}
-                customStyles={{ claims: communityStyles.claims }}
-                onSelectionChange={onSelectionChange}
-              />
-              <AppPagination
-                currentPage={page}
-                totalItems={filteredRows.length}
-                pageSize={pageSize}
-                onPageChange={handleChangePage}
-              />
-            </>
-          )}
-        </>
-      )}
+      <>
+        <AppTableSearch
+          placeholder="Search Documents"
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          icons={[
+            {
+              component: <SwapVert />,
+              onClick: (e) => handleSort(e),
+            },
+          ]}
+        />
+
+
+        <AppTable
+          rowKey="communityId"
+          isLoading={isLoading}
+          columns={columns}
+          rows={filteredRows || []}
+          getStatus={getStatus}
+          customStyles={{ claims: communityStyles.claims }}
+          onSelectionChange={onSelectionChange}
+          currentPage={page}
+          totalItems={filteredRows?.length}
+          pageSize={pageSize}
+          onPageChange={handleChangePage}
+        />
+
+
+      </>
+
       <AppMenu
         anchorEl={menuAnchorEl}
         handleClose={handleMenuAnchorClose}

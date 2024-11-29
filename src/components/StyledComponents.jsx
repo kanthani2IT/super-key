@@ -105,13 +105,14 @@ export const communityStyles = {
     padding: '8px',
     backgroundColor: '#F7F9FB',
     marginBottom: '16px',
+    borderRadius: "8px"
   },
   searchInput: {
     width: '240px',
-    backgroundColor: '#FFFFFF',
     '& .MuiOutlinedInput-root': {
+      backgroundColor: '#FFFFFF !important',
+      borderRadius: '6px',
       height: '36px',
-      borderRadius: '8px',
       '&.Mui-focused fieldset': {
         borderColor: '#278B5C',
       },
@@ -153,14 +154,13 @@ export const communityStyles = {
   pagination: {
     position: 'absolute',
     left: '50%',
+    fontSize: "12px",
     transform: 'translateX(-50%)',
     '& .MuiPaginationItem-root': {
-      color: '#333',
+      border: "none"
     },
     '& .Mui-selected': {
-      backgroundColor: '#E6F3ED',
-      color: '#278B5C',
-      border: 'none',
+      fontWeight: 'bold',
     },
   },
 };
