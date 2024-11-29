@@ -8,7 +8,7 @@ import CircularLoader from "components/CircularLoader";
 import { useFormik } from "formik";
 import { useCommunityListQuery, useOnboardCommunity } from "hooks/useCommunity";
 import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
-import UserTable from "pages/dashboard/CommunityTable";
+import CommunityTable from "pages/dashboard/CommunityTable";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useGlobalStore } from "store/store";
@@ -98,16 +98,6 @@ const onBoardingStepper = [
 
 
 const CommunityOnboarding = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { resetOnboarding } = useGlobalStore();
-
-  const searchParams = new URLSearchParams(location.search);
-  const currentOnboradingType = searchParams.get("type") || 'single';
-  const currentStep = Number(searchParams.get("cs")) || 0;
-  const modalOpen = Boolean(searchParams.get("onboarding"));
-
-  const [open, setOpen] = useState(modalOpen);
   const [edit, setEdit] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -125,32 +115,9 @@ const CommunityOnboarding = () => {
     setEdit(false);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
-    resetOnboarding();
-    let queryParams = "?onboarding=true";
-    if (!currentStep) {
-      queryParams = "?onboarding=true&cs=0";
-    }
-    navigate({
-      pathname: location.pathname,
-      search: !open ? queryParams : "",
-    });
-  };
-
-  const handleClose = () => {
-    setOpen(false)
-    navigate({
-      pathname: location.pathname,
-      search: "",
-    })
-  };
-
-
   const handleSelectionChange = (selected) => {
     setSelectedRows(selected);
   };
-
 
   return (
     <AppGrid container spacing={4}>
@@ -192,28 +159,21 @@ const CommunityOnboarding = () => {
               Off Board Community
             </RadiusStyledButton>
           )}
-          <RadiusStyledButton
-            borderRadius="10px"
-            color="info"
-            startIcon={<AddCircle />}
-            variant="contained"
-            onClick={handleOpen}
-          >
-            Add Community
-          </RadiusStyledButton>
+          <OnboardingIndex refetch={refetch} />
+
         </AppGrid>
       </AppGrid>
 
       <AppGrid item size={{ xs: 12 }}>
-        <UserTable
+        <CommunityTable
           height={"80vh"}
           isLoading={communitListFetching & !communityList?.content?.length}
+
           communityList={communityList}
           onSelectionChange={handleSelectionChange}
           openPopup={openDrawer}
         />
       </AppGrid>
-      {open && <OnboardingIndex currentOnboradingType={currentOnboradingType} open={open} onClose={handleClose} refetch={refetch} />}
       <Drawer
         open={edit}
         onClose={closeDrawer}

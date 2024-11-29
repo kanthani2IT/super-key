@@ -87,13 +87,24 @@ const onBoardingStepper = [
     },
 ];
 
+const defaultValue = {
+    modalOpen: false,
+    onboardingType: "single",
+    activeStep: 0
 
-const OnboardingIndex = ({ open, onClose, refetch }) => {
+}
+
+const OnboardingIndex = ({ refetch }) => {
     const navigate = useNavigate();
+    const location = useLocation();
+
     const searchParams = new URLSearchParams(location.search);
-    const currentOnboradingType = searchParams.get("type") || 'single';
-    const currentStep = Number(searchParams.get("cs")) || 0;
+    const currentOnboradingType = searchParams.get("type") || defaultValue.onboardingType;
+    const currentStep = Number(searchParams.get("cs")) || defaultValue.activeStep;
+    const modalOpen = Boolean(searchParams.get("onboarding")) || defaultValue.modalOpen;
+
     const { onboarding, updateOnboarding, resetOnboarding } = useGlobalStore();
+    const [open, setOpen] = useState(modalOpen);
     const [show, setShow] = useState("true");
     const [selectedFiles, setSelectedFiles] = useState([]);
 
@@ -124,6 +135,7 @@ const OnboardingIndex = ({ open, onClose, refetch }) => {
     };
 
     const handleNext = () => {
+        console.log('first')
         if (activeStep == 0) {
             searchParams.set("type", onBoardingType);
 
@@ -132,7 +144,7 @@ const OnboardingIndex = ({ open, onClose, refetch }) => {
                 search: searchParams.toString(),
             });
         }
-        if (activeStep < onBoardingStepper.length - 1) {
+        if (activeStep < onBoardingStepper?.length - 1) {
             handleQueryParams(activeStep + 1);
             setValidationSchema(
                 onBoardingStepper[activeStep + 1]?.initialValidationSchema || null
@@ -158,10 +170,13 @@ const OnboardingIndex = ({ open, onClose, refetch }) => {
     };
 
     const handleClose = () => {
-        onClose();
-
-        setActiveStep(0);
-        setOnboardingType(defaultValue.onBoardingType);
+        setOpen(false)
+        navigate({
+            pathname: location.pathname,
+            search: "",
+        })
+        setActiveStep(defaultValue.activeStep);
+        setOnboardingType(defaultValue.onboardingType);
 
         setValidationSchema(null);
         setShow("true");
@@ -257,42 +272,69 @@ const OnboardingIndex = ({ open, onClose, refetch }) => {
         setTouched,
         resetForm,
     } = formik;
+
+
+    const handleOpen = () => {
+        setOpen(true);
+        resetOnboarding();
+        let queryParams = "?onboarding=true";
+        if (!currentStep) {
+            queryParams = "?onboarding=true&cs=0";
+        }
+        navigate({
+            pathname: location.pathname,
+            search: !open ? queryParams : "",
+        });
+    };
+
+
     return (
-        <AppModal
-            height={finalStep ? "40vh" : "auto"}
-            cardHeight={onBoardingStepper[activeStep]?.height || undefined}
-            open={open}
-            onClose={handleClose}
-            enableCard={!finalStep}
-            title={onBoardingStepper[activeStep]?.title}
-            activeStep={activeStep}
-            footer={!finalStep && footer()}
-            steps={onBoardingStepper}
-            align={finalStep ? "center" : ""}
-            width={onBoardingStepper[activeStep]?.width || undefined}
-        >
-            <div
-                style={{ pointerEvents: communityCreationLoading ? "none" : "auto" }}
+        <>
+            <RadiusStyledButton
+                borderRadius="10px"
+                color="info"
+                startIcon={<AddCircle />}
+                variant="contained"
+                onClick={handleOpen}
             >
-                <Suspense fallback={<CircularLoader />}>
-                    {onBoardingStepper[activeStep]?.component &&
-                        React.createElement(onBoardingStepper[activeStep]?.component, {
-                            handleOnboardingType,
-                            onBoardingType,
-                            formValues: values,
-                            errors,
-                            touched,
-                            setFieldValue,
-                            handleChange,
-                            setShow,
-                            show,
-                            setSelectedFiles,
-                            selectedFiles,
-                            handleClose,
-                        })}
-                </Suspense>
-            </div>
-        </AppModal>
+                Add Community
+            </RadiusStyledButton>
+            <AppModal
+                height={finalStep ? "40vh" : "auto"}
+                cardHeight={onBoardingStepper[activeStep]?.height || undefined}
+                open={open}
+                onClose={handleClose}
+                enableCard={!finalStep}
+                title={onBoardingStepper[activeStep]?.title}
+                activeStep={activeStep}
+                footer={!finalStep && footer()}
+                steps={onBoardingStepper}
+                align={finalStep ? "center" : ""}
+                width={onBoardingStepper[activeStep]?.width || undefined}
+            >
+                <div
+                    style={{ pointerEvents: communityCreationLoading ? "none" : "auto" }}
+                >
+                    <Suspense fallback={<CircularLoader />}>
+                        {onBoardingStepper[activeStep]?.component &&
+                            React.createElement(onBoardingStepper[activeStep]?.component, {
+                                handleOnboardingType,
+                                onBoardingType,
+                                formValues: values,
+                                errors,
+                                touched,
+                                setFieldValue,
+                                handleChange,
+                                setShow,
+                                show,
+                                setSelectedFiles,
+                                selectedFiles,
+                                handleClose,
+                            })}
+                    </Suspense>
+                </div>
+            </AppModal>
+        </>
     )
 }
 
