@@ -127,7 +127,6 @@ const OnboardingIndex = ({ refetch }) => {
 
     const handleQueryParams = (step) => {
         searchParams.set("cs", step);
-
         navigate({
             pathname: location.pathname,
             search: searchParams.toString(),

@@ -12,11 +12,10 @@ const getUsersData = async ({ queryKey }) => {
   });
   return reponse;
 };
-const getUserById = async (id) => {
+const getCommunityById = async (id) => {
   try {
-    const requestUrl = addQueryParams(ONBOARD.getUserById(id));
-    console.log(id, "afteridin api");
-    console.log(requestUrl, "reurl");
+    const requestUrl = addQueryParams(ONBOARD.getCommunityById(id));
+
     const response = await getRequest(requestUrl);
     return response;
   } catch (error) {
@@ -24,9 +23,9 @@ const getUserById = async (id) => {
     throw error;
   }
 };
-const updateUserById = async (id, body) => {
+const updateCommunityById = async (id, body) => {
   try {
-    const requestUrl = ONBOARD.updateUserById(id);
+    const requestUrl = ONBOARD.updateCommunityById(id);
 
     const response = await putRequest(requestUrl, body);
     return response;
@@ -41,9 +40,9 @@ const createCommunity = async (payload) => {
   return reponse;
 };
 
-const deleteUserById = async (id, body) => {
+const deleteCommunityById = async (id, body) => {
   try {
-    const requestUrl = addQueryParams(ONBOARD.updateUserById(id));
+    const requestUrl = addQueryParams(ONBOARD.updateCommunityById(id));
 
     const response = await putRequest(requestUrl, body);
 
@@ -68,9 +67,9 @@ const getAllCommunityList = async (queries) => {
 
 export const communityApi = {
   getUsersData,
-  getUserById,
-  updateUserById,
-  deleteUserById,
+  getCommunityById,
+  updateCommunityById,
+  deleteCommunityById,
   createCommunity,
   getAllCommunityList,
 };

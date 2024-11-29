@@ -1,103 +1,20 @@
-import { AddCircle } from "@mui/icons-material";
-import { Button, Drawer } from "@mui/material";
+import { Drawer } from "@mui/material";
 
 import AppGrid from "components/AppComponents/AppGrid";
-import AppModal from "components/AppComponents/AppModal";
-import AppRowBox from "components/AppComponents/AppRowBox";
-import CircularLoader from "components/CircularLoader";
-import { useFormik } from "formik";
-import { useCommunityListQuery, useOnboardCommunity } from "hooks/useCommunity";
-import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
+import {
+  useCommunityListQuery
+} from "hooks/useCommunity";
 import CommunityTable from "pages/dashboard/CommunityTable";
-import React, { Suspense, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
-import { useGlobalStore } from "store/store";
-import * as Yup from "yup";
+import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
+import { useState } from "react";
 import EditCommunity from "./edit-community";
 import OnboardingIndex from "./onboarding";
 
-const AddNewCommunity = React.lazy(
-  () => import("./onboarding/AddNewCommunity")
-);
-const CommunityAddress = React.lazy(
-  () => import("./onboarding/CommunityAddress")
-);
-const CommunityDetails = React.lazy(
-  () => import("./onboarding/CommunityDetails")
-);
-const CommunityName = React.lazy(() => import("./onboarding/CommunityName"));
-const InsuranceUpload = React.lazy(() => import("./onboarding/InsuranceTable"));
-const SuccessScreen = React.lazy(() => import("./onboarding/SuccessScreen"));
-
-const onBoardingStepper = [
-  {
-    title: "Add New Community",
-    component: (props) => <AddNewCommunity {...props} />,
-    height: "25vh",
-  },
-  {
-    title: "Community Address",
-    component: (props) => <CommunityAddress {...props} />,
-    initialValidationSchema: {
-      communityAddress: Yup.object().required("Community Address is required"),
-    },
-    height: "60vh",
-  },
-  {
-    title: "Community Name",
-    component: (props) => <CommunityName {...props} />,
-    initialValidationSchema: {
-      communityName: Yup.object().required("Community Name is required"),
-    },
-    height: "40vh",
-  },
-  {
-    title: "Community Details",
-    component: (props) => <CommunityDetails {...props} />,
-    initialValidationSchema: {
-      communityManager: Yup.object().shape({
-        name: Yup.string().required("Name is required"),
-        email: Yup.string()
-          .email("Invalid email format")
-          .required("Email is required"),
-        phone: Yup.string()
-          .min(10, "Mobile number must be at least 10 digits.")
-          .max(15, "Mobile number cannot exceed 15 digits.")
-          .required("Mobile number is required"),
-      }),
-      propertyManager: Yup.object().shape({
-        username: Yup.string().required("Name is required"),
-        email: Yup.string()
-          .email("Invalid email format")
-          .required("Email is required"),
-        phone: Yup.string()
-          .min(10, "Mobile number must be at least 10 digits.")
-          .max(15, "Mobile number cannot exceed 15 digits.")
-          .required("Mobile number is required"),
-      }),
-    },
-    height: "60vh",
-  },
-  {
-    title: "Insurance Documentation",
-    component: (props) => <InsuranceUpload {...props} />,
-    height: "auto",
-    width: "60%",
-  },
-  {
-    title: "",
-    component: ({ handleClose }) => (
-      <SuccessScreen
-        title="Your Community Onboarded Successfully!"
-        handleClose={handleClose}
-      />
-    ),
-    height: "100vh",
-  },
-];
-
 
 const CommunityOnboarding = () => {
+
+  const [communityId, setCommunityId] = useState("");
+
   const [edit, setEdit] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -107,12 +24,28 @@ const CommunityOnboarding = () => {
     refetch,
   } = useCommunityListQuery();
 
+
   //handlers
-  const openDrawer = () => {
+  const openDrawer = (id) => {
+
+    setCommunityId(id);
     setEdit(true);
   };
   const closeDrawer = () => {
     setEdit(false);
+  };
+
+  const handleOffBoard = () => {
+    const userId = "98765432345";
+    const payload = {
+      mappings: [
+        {
+          communityId: "567890987",
+          cmcId: "34567890",
+        },
+      ],
+    };
+    deleteUserById({ id: userId, body: payload });
   };
 
   const handleSelectionChange = (selected) => {
@@ -172,6 +105,9 @@ const CommunityOnboarding = () => {
           communityList={communityList}
           onSelectionChange={handleSelectionChange}
           openPopup={openDrawer}
+          handleOffBoard={handleOffBoard}
+          Id={communityId}
+          setId={setCommunityId}
         />
       </AppGrid>
       <Drawer
@@ -179,7 +115,7 @@ const CommunityOnboarding = () => {
         onClose={closeDrawer}
         anchor="right"
       >
-        <EditCommunity onClose={closeDrawer} />
+        <EditCommunity onClose={closeDrawer} communityId={communityId} />
       </Drawer>
     </AppGrid>
   );

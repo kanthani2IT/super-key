@@ -2,7 +2,6 @@ import { MoreVert, SwapVert } from "@mui/icons-material";
 import {
   FormControl,
   FormControlLabel,
-  MenuItem,
   Radio,
   RadioGroup,
 } from "@mui/material";
@@ -13,6 +12,7 @@ import AppPagination from "components/AppComponents/AppPagination";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
+import { StyledMenuItem } from "components/AppComponents/StyledComponent";
 import CircularLoader from "components/CircularLoader";
 import { communityStyles } from "components/StyledComponents";
 import { useState } from "react";
@@ -113,6 +113,9 @@ export default function UserTable({
   onSelectionChange,
   communityList,
   openPopup,
+  handleOffBoard,
+  Id,
+  setId,
 }) {
   const theme = useTheme();
   const [page, setPage] = useState(1);
@@ -121,6 +124,7 @@ export default function UserTable({
   const [searchTerm, setSearchTerm] = useState("");
   const pageSize = 10;
   const [selectedValue, setSelectedValue] = useState("");
+  // const [communittyId, setCommunityId] = useState("");
 
   const columns = [
     {
@@ -170,6 +174,7 @@ export default function UserTable({
             onClick={(e) => {
               e.stopPropagation();
               setMenuAnchorEl(e.currentTarget);
+              setId(row?.communityId);
             }}
             color="secondary"
           />
@@ -208,7 +213,7 @@ export default function UserTable({
 
   const renderSortComponent = () => {
     return (
-      <FormControl sx={{ p: 1, ml: 2 }}>
+      <FormControl sx={{ m: 1 }}>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
           defaultValue=""
@@ -217,6 +222,7 @@ export default function UserTable({
           onChange={handleChangeRadio}
         >
           {options.map(({ value, label }) => (
+            // <StyledMenuItem sx={{ padding: "0", margin: "0" }}>
             <FormControlLabel
               key={value}
               value={value}
@@ -226,12 +232,15 @@ export default function UserTable({
                 borderRadius: "10px",
                 pl: 1,
                 pr: 1,
+                m: 1,
+                width: "90%",
                 backgroundColor:
                   selectedValue === value
                     ? theme.palette.blue[100]
                     : "transparent",
               }}
             />
+            // </StyledMenuItem>
           ))}
         </RadioGroup>
       </FormControl>
@@ -239,13 +248,16 @@ export default function UserTable({
   };
   const handleDrawer = () => {
     handleMenuAnchorClose();
-    openPopup();
+    openPopup(Id);
   };
+  console.log(rows, "rows");
   const renderMenuComponent = () => {
     return (
       <>
-        <MenuItem onClick={handleDrawer}>View details</MenuItem>
-        <MenuItem>Off-board Community</MenuItem>
+        <StyledMenuItem onClick={handleDrawer}>View details</StyledMenuItem>
+        <StyledMenuItem onClick={handleOffBoard}>
+          Off-board Community
+        </StyledMenuItem>
       </>
     );
   };
