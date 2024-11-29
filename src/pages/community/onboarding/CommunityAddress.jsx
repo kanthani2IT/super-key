@@ -13,6 +13,7 @@ const options = [
   { label: "New ", value: " lj" },
 ];
 
+
 const CommunityAddress = ({ handleChange, formValues, touched, errors }) => {
   const [address, setAddress] = useState("");
 
@@ -43,7 +44,7 @@ const CommunityAddress = ({ handleChange, formValues, touched, errors }) => {
             onChange={handleChange}
             value={formValues.communityAddress}
             options={options}
-            placeholder="Search your address"
+            placeholder="Enter your address"
             onSearch={onSearch}
           />
         </AppLabelComponent>

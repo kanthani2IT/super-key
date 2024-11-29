@@ -59,7 +59,7 @@ export const LOGIN_CONFIG = [
       name: 'password',
       type: 'password',
       label: 'Password',
-      placeholder: 'Enter password',
+      placeholder: 'Enter Your Password',
       validation: Yup.string()
       .max(255).required('Password is required')
       .matches(/^\S*$/, 'password must not contain any spaces')
