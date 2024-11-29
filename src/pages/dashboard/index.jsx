@@ -10,11 +10,11 @@ import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import AppSkeleton from "components/AppComponents/AppSkeleton";
 import MainTabs from "components/MainTabs";
+import { useGetUsers } from "hooks/useCommunity";
 import {
   useGetActiveAndCompletedTaskByFilter,
   useGetDashboardMetrics,
 } from "hooks/useDashboard";
-import { useGetUsers } from "hooks/useCommunity";
 import { ColorBox } from "pages/component-overview/color";
 import { useEffect, useState } from "react";
 import RenewalPieChart from "./RenewalPieChart";
@@ -38,6 +38,7 @@ export default function DashboardDefault() {
     insuredCommunities,
     totalCommunities,
     totalCoverageValue,
+    totalPremium,
     upcomingRenewals,
   } = dashboardData?.data ?? {};
 
@@ -104,12 +105,12 @@ export default function DashboardDefault() {
       <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
         <AppGrid container rowSpacing={2} columnSpacing={2}>
           <AppGrid size={{ xs: 12 }}>
-            {!isLoading ? (
+            {!isWidgetLoading ? (
               <MainCard title="Communities" secondary={"Full View"}>
                 <Stack spacing={2}>
-                  <Typography variant="h6">Community Users</Typography>
+                  <Typography variant="h6">Communities Managed</Typography>
                   <Typography variant="subtitle2" color="success">
-                    {data?.data?.totalSize ?? data?.data?.length ?? 0}
+                    {totalCommunities ?? 0}
                   </Typography>
                 </Stack>
               </MainCard>
@@ -149,10 +150,10 @@ export default function DashboardDefault() {
               <MainCard>
                 <Stack rowGap={4} textAlign={"center"}>
                   <Typography variant="h6">
-                    Insurance <br /> Worth
+                    Total Gross <br /> Premiums
                   </Typography>
                   <Typography variant="subtitle2" color="success">
-                    {totalCoverageValue ?? 0}
+                    {totalPremium ?? 0}
                   </Typography>
                 </Stack>
               </MainCard>
@@ -174,7 +175,7 @@ export default function DashboardDefault() {
                     <br /> Pending
                   </Typography>
                   <Typography variant="subtitle2" color="success">
-                    {totalCommunities ?? 0}
+                    {totalCoverageValue ?? 0}
                   </Typography>
                 </Stack>
               </MainCard>
