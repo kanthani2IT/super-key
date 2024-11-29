@@ -5,6 +5,7 @@ import AppCard from "components/AppComponents/AppCard";
 import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
 import AppGrid from "components/AppComponents/AppGrid";
 import AppLabelComponent from "components/AppComponents/AppLabelComponent";
+import AppRowBox from "components/AppComponents/AppRowBox";
 import { useFormik } from "formik";
 import {
   useDeleteCommunityById,
@@ -250,55 +251,53 @@ const EditCommunity = ({ onClose, communityData }) => {
   const Footer = () => {
     return (
       <>
-        <AppGrid item size={{ sx: 12, lg: 8 }}>
-          <RadiusStyledButton
-            color="#FFFFFF"
-            textColor="#E12929"
-            width="227px"
-            height="50px"
-            borderRadius="10px"
-            onClick={onReset}
-            sx={{
-              border: "0.5px solid #E12929",
-            }}
-          >
-            Off Board Community
-          </RadiusStyledButton>
-        </AppGrid>
-        {enableEdit && (
-          <AppGrid
-            item
-            size={{ sx: 12, lg: 4 }}
-            container
-            sx={{
-              gap: 2,
-            }}
-          >
+        <AppRowBox>
+          <AppGrid item >
             <RadiusStyledButton
-              onClick={onDiscard}
-              color="secondary"
-              variant="outlined"
-              textColor="#8c8c8c"
-              width="140px"
+              color="#FFFFFF"
+              textColor="#E12929"
+              width="227px"
               height="50px"
               borderRadius="10px"
+              onClick={onReset}
+              sx={{
+                border: "0.5px solid #E12929",
+              }}
             >
-              Discard
-            </RadiusStyledButton>
-            <RadiusStyledButton
-              color="info"
-              type="submit"
-              onClick={handleSubmit}
-              variant="contained"
-              width="181px"
-              height="50px"
-              borderRadius="10px"
-            >
-              Save Changes
+              Off Board Community
             </RadiusStyledButton>
           </AppGrid>
-        )}
-
+          {enableEdit && (
+            <AppGrid
+              item
+              container
+              spacing={2}
+            >
+              <RadiusStyledButton
+                onClick={onDiscard}
+                color="secondary"
+                variant="outlined"
+                textColor="#8c8c8c"
+                width="140px"
+                height="50px"
+                borderRadius="10px"
+              >
+                Discard
+              </RadiusStyledButton>
+              <RadiusStyledButton
+                color="info"
+                type="submit"
+                onClick={handleSubmit}
+                variant="contained"
+                width="181px"
+                height="50px"
+                borderRadius="10px"
+              >
+                Save Changes
+              </RadiusStyledButton>
+            </AppGrid>
+          )}
+        </AppRowBox>
         <ConfirmationModal
           open={modal}
           onClose={handleModal}
@@ -339,8 +338,8 @@ const EditCommunity = ({ onClose, communityData }) => {
             textColor="blue"
             color="white"
             startIcon={<EditFilled />}
-            width="181px"
-            height="50px"
+            width="170px"
+            height="45px"
             borderRadius="10px"
           >
             Edit Details
@@ -426,7 +425,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.addressDetails?.zipcode &&
-                    errors.addressDetails?.zipcode
+                  errors.addressDetails?.zipcode
                 )}
                 helperText={
                   touched.addressDetails?.zipcode &&
@@ -481,7 +480,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.communityManager?.email &&
-                    errors.communityManager?.email
+                  errors.communityManager?.email
                 )}
                 helperText={
                   touched.communityManager?.email &&
@@ -523,7 +522,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.communityManager?.phone &&
-                      errors.communityManager?.phone
+                    errors.communityManager?.phone
                   )}
                   helperText={
                     touched.communityManager?.phone &&
@@ -573,7 +572,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.propertyManager?.email &&
-                    errors.propertyManager?.email
+                  errors.propertyManager?.email
                 )}
                 helperText={
                   touched.propertyManager?.email &&
@@ -615,7 +614,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.propertyManager?.phone &&
-                      errors.propertyManager?.phone
+                    errors.propertyManager?.phone
                   )}
                   helperText={
                     touched.propertyManager?.phone &&
@@ -677,7 +676,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.insuranceDetails?.insuranceCoverage &&
-                    errors.insuranceDetails?.insuranceCoverage
+                  errors.insuranceDetails?.insuranceCoverage
                 )}
                 helperText={
                   touched.insuranceDetails?.insuranceCoverage &&

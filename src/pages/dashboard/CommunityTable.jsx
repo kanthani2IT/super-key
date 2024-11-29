@@ -271,7 +271,6 @@ export default function UserTable({
           columns={columns}
           rows={filteredRows || []}
           getStatus={getStatus}
-          customStyles={{ claims: communityStyles.claims }}
           onSelectionChange={onSelectionChange}
           currentPage={page}
           totalItems={filteredRows?.length}

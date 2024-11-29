@@ -29,6 +29,7 @@ import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
 import SettingOutlined from '@ant-design/icons/SettingOutlined';
 import avatar1 from 'assets/images/users/avatar-1.png';
 import { useNavigate } from 'react-router';
+import { useAuthCookies } from 'utils/cookie';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -50,7 +51,8 @@ function a11yProps(index) {
 
 export default function Profile() {
   const theme = useTheme();
-  const Navigate=useNavigate()
+  const { removeAuthCookie } = useAuthCookies()
+  const navigate = useNavigate()
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const handleToggle = () => {
@@ -69,7 +71,11 @@ export default function Profile() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const handleLogout = () => {
+    removeAuthCookie('token');
+    navigate('/');
 
+  }
   const iconBackColorOpen = 'grey.100';
 
   return (
@@ -133,7 +139,7 @@ export default function Profile() {
                       </Grid>
                       <Grid>
                         <Tooltip title="Logout">
-                          <IconButton size="large" sx={{ color: 'text.primary' }} onClick={()=>{Navigate("/")}}>
+                          <IconButton size="large" sx={{ color: 'text.primary' }} onClick={handleLogout}>
                             <LogoutOutlined />
                           </IconButton>
                         </Tooltip>
