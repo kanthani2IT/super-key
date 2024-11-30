@@ -1,10 +1,11 @@
 import { EditFilled } from "@ant-design/icons";
-import { TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import AppAutoComplete from "components/AppComponents/AppAutoComplete";
 import AppCard from "components/AppComponents/AppCard";
 import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
 import AppGrid from "components/AppComponents/AppGrid";
 import AppLabelComponent from "components/AppComponents/AppLabelComponent";
+import AppRowBox from "components/AppComponents/AppRowBox";
 import { useFormik } from "formik";
 import {
   useDeleteCommunityById,
@@ -250,55 +251,52 @@ const EditCommunity = ({ onClose, communityData }) => {
   const Footer = () => {
     return (
       <>
-        <AppGrid item size={{ sx: 12, lg: 8 }}>
-          <RadiusStyledButton
-            color="#FFFFFF"
-            textColor="#E12929"
-            width="227px"
-            height="50px"
-            borderRadius="10px"
-            onClick={onReset}
-            sx={{
-              border: "0.5px solid #E12929",
-            }}
-          >
-            Off Board Community
-          </RadiusStyledButton>
-        </AppGrid>
-        {enableEdit && (
-          <AppGrid
-            item
-            size={{ sx: 12, lg: 4 }}
-            container
-            sx={{
-              gap: 2,
-            }}
-          >
+        <AppRowBox>
+          <AppGrid item size={{ xs: 6, sx: 6, lg: 8 }}>
             <RadiusStyledButton
-              onClick={onDiscard}
-              color="secondary"
-              variant="outlined"
-              textColor="#8c8c8c"
-              width="140px"
+              color="#FFFFFF"
+              textColor="#E12929"
+              width="30%"
               height="50px"
               borderRadius="10px"
+              onClick={onReset}
+              sx={{
+                border: "0.5px solid #E12929",
+              }}
             >
-              Discard
-            </RadiusStyledButton>
-            <RadiusStyledButton
-              color="info"
-              type="submit"
-              onClick={handleSubmit}
-              variant="contained"
-              width="181px"
-              height="50px"
-              borderRadius="10px"
-            >
-              Save Changes
+              Off Board Community
             </RadiusStyledButton>
           </AppGrid>
-        )}
+          {enableEdit && (
+            <AppGrid item size={{ xs: 6, sx: 6, lg: 4 }}>
+              <Box sx={{ display: "flex", gap: "10px", justifyContent: "end" }}>
+                <RadiusStyledButton
+                  onClick={onDiscard}
+                  color="secondary"
+                  variant="outlined"
+                  textColor="#8c8c8c"
+                  width="50%"
+                  height="50px"
+                  borderRadius="10px"
+                >
+                  Discard
+                </RadiusStyledButton>
 
+                <RadiusStyledButton
+                  color="info"
+                  type="submit"
+                  onClick={handleSubmit}
+                  variant="contained"
+                  width="50%"
+                  height="50px"
+                  borderRadius="10px"
+                >
+                  Save Changes
+                </RadiusStyledButton>
+              </Box>
+            </AppGrid>
+          )}
+        </AppRowBox>
         <ConfirmationModal
           open={modal}
           onClose={handleModal}
