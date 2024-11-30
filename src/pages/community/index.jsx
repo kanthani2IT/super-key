@@ -74,7 +74,7 @@ const CommunityOnboarding = () => {
         </AppGrid>
 
         <AppGrid item sx={{ display: "flex", gap: 2 }}>
-          {selectedRows.length > 0 && (
+          {selectedRows.length > 0 ?
             <RadiusStyledButton
               color="#FFFFFF"
               textColor="#E12929"
@@ -88,8 +88,9 @@ const CommunityOnboarding = () => {
             >
               Off Board Community
             </RadiusStyledButton>
-          )}
-          <OnboardingIndex refetch={refetch} />
+            : <OnboardingIndex refetch={refetch} />
+          }
+
         </AppGrid>
       </AppGrid>
 

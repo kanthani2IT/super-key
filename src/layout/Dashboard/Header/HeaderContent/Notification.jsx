@@ -18,6 +18,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
+
 // project import
 import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
@@ -81,7 +82,7 @@ export default function Notification() {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <Badge badgeContent={read} color="primary">
+        <Badge badgeContent={read} color="error" >
           <BellOutlined />
         </Badge>
       </IconButton>

@@ -2,19 +2,21 @@ import {
   Card,
   CardActions,
   CardContent,
+  CardHeader,
   Divider,
   Typography,
 } from "@mui/material";
 import { StyledButton } from "pages/community/StyledComponents";
+import AppRowBox from "./AppRowBox";
 
 const AppCard = ({ onClose, children, title, footer }) => {
   const Header = () => {
     return (
-      <>
+      <AppRowBox>
         <Typography variant="h4">{title}</Typography>
 
         <StyledButton onClick={onClose}>Close</StyledButton>
-      </>
+      </AppRowBox>
     );
   };
 
@@ -24,16 +26,13 @@ const AppCard = ({ onClose, children, title, footer }) => {
         boxShadow: "none",
       }}
     >
-      <CardContent
+      <CardHeader
+        title={<Header />}
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
           height: "5vh",
-          alignItems: "center",
         }}
-      >
-        <Header />
-      </CardContent>
+      />
+
       <Divider />
       <CardContent sx={{ height: "85vh", overflowY: "auto" }}>
         {children}

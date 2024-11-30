@@ -4,8 +4,6 @@ import { COMMUNITY, ONBOARD } from "utils/endpoints";
 import { addQueryParams } from "utils/helpers";
 
 const getUsersData = async ({ queryKey }) => {
-  console.log(queryKey);
-
   const reponse = await http({
     method: "GET",
     url: ONBOARD.getUsers,
@@ -55,7 +53,6 @@ const deleteCommunityById = async (id, body) => {
 
 const getAllCommunityList = async (queries) => {
   try {
-    console.log(queries);
     const requestUrl = addQueryParams(COMMUNITY.getAllCommunityList, queries);
     const response = await getRequest(requestUrl);
     return response;
