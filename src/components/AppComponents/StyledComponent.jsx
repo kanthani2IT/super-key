@@ -1,4 +1,4 @@
-import { Menu, MenuItem, styled } from "@mui/material";
+import { Menu, MenuItem, Step, StepConnector, styled } from "@mui/material";
 
 export const StyledMenu = styled(Menu)(({ theme }) => ({
   borderRadius: "0.625rem",
@@ -14,4 +14,25 @@ export const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 
   padding: "10px",
   color: "#656565",
+}));
+
+export const CustomStep = styled(Step)(({ theme }) => ({
+  "&:not(:last-of-type)": {
+    marginRight: "2px",
+  },
+}));
+
+export const CustomConnector = styled(StepConnector)(({ theme }) => ({
+  "& .MuiStepConnector-line": {
+    height: 9,
+    border: 0,
+    borderRadius: 10,
+    backgroundColor: "#B0B0B0",
+    width: "5vw",
+  },
+  "&.Mui-active, &.Mui-completed": {
+    "& .MuiStepConnector-line": {
+      backgroundColor: theme.palette.success.dark,
+    },
+  },
 }));
