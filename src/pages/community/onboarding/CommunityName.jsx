@@ -84,7 +84,7 @@ const CommunityName = ({ handleChange, formValues, touched, errors }) => {
             onChange={handleChange}
             value={formValues.communityName}
             options={communityList?.data || []}
-            placeholder="Search your Community"
+            placeholder="Enter your Community Name"
             onSearch={onSearch}
           />
         </AppLabelComponent>

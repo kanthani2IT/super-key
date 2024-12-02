@@ -7,9 +7,9 @@ const LOGIN = {
 };
 const ONBOARD = {
   getUsers: "/api/veruna/users",
-  getUserById: (id) => `/api/community/${id}`,
-  updateUserById: (id) => `/api/community/${id}`,
-  deleteUserById: (id) => `/api/community/${id}`,
+  getCommunityById: (id) => `/api/community/${id}`,
+  updateCommunityById: (id) => `/api/community/${id}`,
+  deleteCommunityById: (id) => `/api/community/${id}`,
 };
 const COMMUNITY = {
   getAll: "/api/community",

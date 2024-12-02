@@ -16,8 +16,8 @@ export const useGetUsers = () => {
   return { data, isLoading, isError, error };
 };
 
-export const useGetUserById = (id) => {
-  return useQuery(["userInfo", id], () => api.community.getUserById(id), {
+export const useGetCommunityById = (id) => {
+  return useQuery(["userInfo", id], () => api.community.getCommunityById(id), {
     keepPreviousData: true,
     onSuccess: (data) => {},
     onError: (error) => {
@@ -26,20 +26,24 @@ export const useGetUserById = (id) => {
   });
 };
 
-export const useUpdateUserById = () =>
+export const useUpdateCommunityById = () =>
   useMutation({
-    mutationKey: ["updateUserById"],
-    mutationFn: ({ id, body }) => api.community.updateUserById(id, body),
-    onSuccess: (data) => {},
+    mutationKey: ["updateCommunityById"],
+    mutationFn: ({ id, body }) => api.community.updateCommunityById(id, body),
+    onSuccess: (data) => {
+      console.log(data, "data");
+    },
     onError: (error) => {
       console.error(error);
     },
   });
-export const useDeleteUserById = () =>
+export const useDeleteCommunityById = () =>
   useMutation({
-    mutationKey: ["deleteUserById"],
-    mutationFn: ({ id, body }) => api.community.deleteUserById(id, body),
-    onSuccess: (data) => {},
+    mutationKey: ["deleteCommunityById"],
+    mutationFn: ({ id, body }) => api.community.deleteCommunityById(id, body),
+    onSuccess: (data) => {
+      console.log(data, "data");
+    },
     onError: (error) => {
       console.error(error);
     },

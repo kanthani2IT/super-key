@@ -14,26 +14,33 @@ import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import WalletOutlined from '@ant-design/icons/WalletOutlined';
 import { Navigate, useNavigate } from 'react-router';
+import { useAuthCookies } from 'utils/cookie';
 
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
 export default function ProfileTab() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const Navigate=useNavigate()
+  const navigate = useNavigate()
+  const { removeAuthCookie } = useAuthCookies()
 
   const handleListItemClick = (index) => {
     setSelectedIndex(index);
   };
+  const handleLogout = () => {
+    removeAuthCookie('token');
+    navigate('/');
+
+  }
 
   return (
     <List component="nav" sx={{ p: 0, '& .MuiListItemIcon-root': { minWidth: 32 } }}>
-      <ListItemButton selected={selectedIndex === 0}  onClick={()=>{Navigate("/reset/change")}}>
+      <ListItemButton selected={selectedIndex === 0} onClick={() => { navigate("/reset/change") }}>
         <ListItemIcon>
           <EditOutlined />
         </ListItemIcon>
         <ListItemText primary="Reset Password" />
       </ListItemButton>
-      <ListItemButton selected={selectedIndex === 2}  onClick={()=>{Navigate("/login")}}>
+      <ListItemButton selected={selectedIndex === 2} onClick={handleLogout}>
         <ListItemIcon>
           <LogoutOutlined />
         </ListItemIcon>

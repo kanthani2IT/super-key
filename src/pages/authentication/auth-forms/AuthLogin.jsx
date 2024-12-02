@@ -35,7 +35,6 @@ export default function AuthLogin(props) {
     setSubmitting(false);
     loginMutation.mutate({ values, checked });
   };
-
   return (
     <Formik
       initialValues={{
@@ -67,8 +66,8 @@ export default function AuthLogin(props) {
                   handleChange={handleChange}
                   placeholder={field.placeholder}
                   label={field.label}
-                  touched={touched[field.name]}
-                  error={errors[field.name]}
+                  // touched={touched[field.name]}
+                  error={touched[field.name] && errors[field.name]}
                 />
               </Grid>
             ))}

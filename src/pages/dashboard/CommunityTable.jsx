@@ -2,7 +2,7 @@ import { MoreVert, SwapVert } from "@mui/icons-material";
 import {
   FormControl,
   FormControlLabel,
-  MenuItem,
+  IconButton,
   Radio,
   RadioGroup,
 } from "@mui/material";
@@ -12,6 +12,7 @@ import AppMenu from "components/AppComponents/AppMenu";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
+import { StyledMenuItem } from "components/AppComponents/StyledComponent";
 import { communityStyles } from "components/StyledComponents";
 import { useState } from "react";
 
@@ -111,6 +112,9 @@ export default function UserTable({
   onSelectionChange,
   communityList,
   openPopup,
+  handleOffBoard,
+  communityInfo,
+  setCommunityInfo,
 }) {
   const theme = useTheme();
   const [page, setPage] = useState(1);
@@ -119,6 +123,7 @@ export default function UserTable({
   const [searchTerm, setSearchTerm] = useState("");
   const pageSize = 10;
   const [selectedValue, setSelectedValue] = useState("");
+  // const [communittyId, setCommunityId] = useState("");
 
   const columns = [
     {
@@ -140,11 +145,6 @@ export default function UserTable({
       headerName: "Property Manager",
     },
     {
-      field: "claims",
-      headerName: "Claims",
-      flex: 1,
-    },
-    {
       field: "insured",
       headerName: "Insured",
       flex: 1,
@@ -156,22 +156,18 @@ export default function UserTable({
     {
       field: "action",
       headerName: "Action",
+      align: "center",
       renderCell: (row) => (
-        <div
-          style={{
-            display: "flex",
-            paddingLeft: "10px",
-            height: "100%",
-          }}
-        >
+        <IconButton>
           <MoreVert
             onClick={(e) => {
               e.stopPropagation();
               setMenuAnchorEl(e.currentTarget);
+              setCommunityInfo(row);
             }}
             color="secondary"
           />
-        </div>
+        </IconButton>
       ),
     },
   ];
@@ -202,7 +198,7 @@ export default function UserTable({
 
   const renderSortComponent = () => {
     return (
-      <FormControl sx={{ p: 1, ml: 2 }}>
+      <FormControl sx={{ m: 1 }}>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
           defaultValue=""
@@ -211,6 +207,7 @@ export default function UserTable({
           onChange={handleChangeRadio}
         >
           {options.map(({ value, label }) => (
+            // <StyledMenuItem sx={{ padding: "0", margin: "0" }}>
             <FormControlLabel
               key={value}
               value={value}
@@ -220,12 +217,15 @@ export default function UserTable({
                 borderRadius: "10px",
                 pl: 1,
                 pr: 1,
+                m: 1,
+                width: "90%",
                 backgroundColor:
                   selectedValue === value
                     ? theme.palette.blue[100]
                     : "transparent",
               }}
             />
+            // </StyledMenuItem>
           ))}
         </RadioGroup>
       </FormControl>
@@ -233,13 +233,15 @@ export default function UserTable({
   };
   const handleDrawer = () => {
     handleMenuAnchorClose();
-    openPopup();
+    openPopup(communityInfo);
   };
   const renderMenuComponent = () => {
     return (
       <>
-        <MenuItem onClick={handleDrawer}>View details</MenuItem>
-        <MenuItem>Off-board Community</MenuItem>
+        <StyledMenuItem onClick={handleDrawer}>View details</StyledMenuItem>
+        <StyledMenuItem onClick={handleOffBoard}>
+          Off-board Community
+        </StyledMenuItem>
       </>
     );
   };
@@ -272,7 +274,6 @@ export default function UserTable({
           columns={columns}
           rows={flatRows || []}
           getStatus={getStatus}
-          customStyles={{ claims: communityStyles.claims }}
           onSelectionChange={onSelectionChange}
           currentPage={page}
           totalItems={filteredRows?.length}

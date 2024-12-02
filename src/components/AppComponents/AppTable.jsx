@@ -82,7 +82,7 @@ const AppTable = ({
               />
             </TableCell>
             {columns.map((col, index) => (
-              <TableCell key={col.field}>
+              <TableCell key={col.field} align={index > 1 ? "center" : "left"}>
                 <BoldTypographyHeader>{col.headerName}</BoldTypographyHeader>
               </TableCell>
             ))}
@@ -114,20 +114,14 @@ const AppTable = ({
                       padding="0px"
                       checked={isSelected}
                       onClick={() => handleRowClick(row[rowKey])}
-
-                      // sx={{
-                      //   padding: "0px",
-                      //   "&.Mui-checked": {
-                      //     color: "#1A9A5C",
-                      //   },
-                      // }}
-                      // inputProps={{
-                      //   "aria-labelledby": `checkbox-${row[rowKey]}`,
-                      // }}
                     />
                   </TableCell>
-                  {columns.map((col) => (
-                    <TableCell key={col.field} sx={customStyles[col.field]}>
+                  {columns.map((col, idx) => (
+                    <TableCell
+                      key={col.field}
+                      sx={customStyles[col.field]}
+                      align={idx > 1 ? "center" : "left"}
+                    >
                       {col.renderCell
                         ? col.renderCell(row)
                         : col.field === "index"
