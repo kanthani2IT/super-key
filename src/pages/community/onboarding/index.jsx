@@ -212,7 +212,6 @@ const OnboardingIndex = ({ refetch }) => {
       </AppRowBox>
     );
   };
-
   const { mutate, isLoading: communityCreationLoading } =
     useOnboardCommunity(successHandler);
 
@@ -227,14 +226,20 @@ const OnboardingIndex = ({ refetch }) => {
         let payload = {
           name: values?.communityName?.name,
           contactInfo: values?.communityAddress?.label,
-          communityManager: {
-            managerId: values?.communityManager?.managerId,
-            name: values?.communityManager?.name,
-            email: values?.communityManager?.email,
-            phone: values?.communityManager?.phone,
-            region: values?.communityManager?.countryCode?.value,
-            managementCompanyId: values?.communityManager?.managementCompanyId,
-          },
+          propertyManagerId: values?.propertyManager?.userId,
+          communityManagerId: values?.communityManager?.managerId,
+          claims: 0,
+          insured: 0,
+          status: "ACTIVE",
+
+          // communityManager: {
+          //   managerId: values?.communityManager?.managerId,
+          //   name: values?.communityManager?.name,
+          //   email: values?.communityManager?.email,
+          //   phone: values?.communityManager?.phone,
+          //   region: values?.communityManager?.countryCode?.value,
+          //   managementCompanyId: values?.communityManager?.managementCompanyId,
+          // },
           // propertyManager: {
           //   userId: values?.propertyManager?.userId,
           //   username: values?.propertyManager?.username,

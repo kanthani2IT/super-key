@@ -96,7 +96,6 @@ const onBoardingStepper = [
   },
 ];
 
-
 const CommunityOnboarding = () => {
   const [edit, setEdit] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -118,7 +117,7 @@ const CommunityOnboarding = () => {
   const handleSelectionChange = (selected) => {
     setSelectedRows(selected);
   };
-
+  console.log(communityList, "####");
   return (
     <AppGrid container spacing={4}>
       <AppGrid
@@ -160,7 +159,6 @@ const CommunityOnboarding = () => {
             </RadiusStyledButton>
           )}
           <OnboardingIndex refetch={refetch} />
-
         </AppGrid>
       </AppGrid>
 
@@ -168,17 +166,12 @@ const CommunityOnboarding = () => {
         <CommunityTable
           height={"80vh"}
           isLoading={communitListFetching & !communityList?.content?.length}
-
           communityList={communityList}
           onSelectionChange={handleSelectionChange}
           openPopup={openDrawer}
         />
       </AppGrid>
-      <Drawer
-        open={edit}
-        onClose={closeDrawer}
-        anchor="right"
-      >
+      <Drawer open={edit} onClose={closeDrawer} anchor="right">
         <EditCommunity onClose={closeDrawer} />
       </Drawer>
     </AppGrid>

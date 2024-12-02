@@ -22,33 +22,11 @@ import PreviewButton from "components/AppComponents/PreviewButton";
 import { useDocumentsQuery } from "hooks/useDropDown";
 import { useEffect, useState } from "react";
 import InsuranceDocument from "../../../components/AppComponents/UploadDocument";
-import FilePreview from "./FilePreview";
 import { truncateFileName } from "./utils";
+import FilePreview from "components/AppComponents/AppFilePreview";
 
 // Document types
 export const documentTypes = [{ name: "Endorsement", value: "Endosement" }];
-
-// Styled components
-const StyledSelect = styled(Select)({
-  border: "none",
-  "& .MuiSelect-select": {
-    border: "none !important",
-    borderRadius: "0.7rem",
-    fontSize: "0.85rem",
-    fontWeight: "400",
-    background: "#F2F2F2",
-    padding: "0.4rem",
-    maxWidth: "8rem",
-    width: "8rem",
-    backgroundColor: "#F2F2F2 !important",
-  },
-  "& fieldset": { border: "none", fontSize: "400" },
-  "& .MuiOutlinedInput-notchedOutline": { borderColor: "transparent" },
-  "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "transparent" },
-  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    borderColor: "transparent",
-  },
-});
 
 const StyledBox = styled(Box)({
   maxHeight: "400px",
@@ -132,7 +110,7 @@ const DocumentTypeDropdown = ({ value, onChange, documentTypesData }) => (
       options={documentTypesData}
       placeholder="Select Manager"
       size="small"
-    // onSearch={onSearch}
+      // onSearch={onSearch}
     />
   </>
 );
@@ -277,7 +255,7 @@ const InsuranceUpload = ({
 
   const handleRemoveFile = (index) => {
     setFiles(files.filter((_, i) => i !== index));
-    let updatedFiles = selectedFiles.filter((_, i) => i !== index)
+    let updatedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(updatedFiles);
     if (!updatedFiles?.length) {
       setDocType(documentTypesData?.data[0]);
@@ -340,7 +318,7 @@ const InsuranceUpload = ({
             </>
           ) : (
             <Typography variant="h5" color="gray">
-              update the Document types for the uploaded files
+              Update the Document types for the uploaded files
             </Typography>
           )}
         </Stack>
@@ -424,20 +402,17 @@ const InsuranceUpload = ({
             Upload
           </Button>
         </Box>
-      )
-      }
-      {
-        selectedFiles.length > 0 && (
-          <FilePreview
-            setIsModalOpen={setIsModalOpen}
-            isModalOpen={isModalOpen}
-            selectedFiles={selectedFiles}
-            selected={selected}
-            setSelected={setSelected}
-          />
-        )
-      }
-    </Grid >
+      )}
+      {selectedFiles.length > 0 && (
+        <FilePreview
+          setIsModalOpen={setIsModalOpen}
+          isModalOpen={isModalOpen}
+          selectedFiles={selectedFiles}
+          selected={selected}
+          setSelected={setSelected}
+        />
+      )}
+    </Grid>
   );
 };
 
