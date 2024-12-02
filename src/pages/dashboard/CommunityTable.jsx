@@ -137,11 +137,11 @@ export default function UserTable({
       flex: 1,
     },
     {
-      field: "communityManager",
+      field: `communityManagerName`,
       headerName: "Community Manager",
     },
     {
-      field: "propertyManager",
+      field: "propertyManagerName",
       headerName: "Property Manager",
     },
     {
@@ -173,12 +173,13 @@ export default function UserTable({
   ];
 
   const handleChangePage = (event, newPage) => setPage(newPage);
+  console.log(communityList?.content, "#####222");
   const filteredRows = communityList?.content?.filter((row) =>
     Object.values(row).some((value) =>
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
-
+  console.log(filteredRows, "#### 2222 @@@@");
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);
   };
@@ -245,6 +246,13 @@ export default function UserTable({
     );
   };
 
+  // Flatten the rows
+  const flatRows = filteredRows?.map((row) => ({
+    ...row,
+    communityManagerName: row.communityManager?.name || "",
+    propertyManagerName: row.propertyManager?.name || "",
+  }));
+
   return (
     <Box sx={communityStyles.container(height)}>
       <>
@@ -264,7 +272,7 @@ export default function UserTable({
           rowKey="communityId"
           isLoading={isLoading}
           columns={columns}
-          rows={filteredRows || []}
+          rows={flatRows || []}
           getStatus={getStatus}
           onSelectionChange={onSelectionChange}
           currentPage={page}
