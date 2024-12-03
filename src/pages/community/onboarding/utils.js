@@ -51,3 +51,8 @@ export const getContactInfo = (addressDetails) => {
 export const removeExtraSpaces = (input = "") => {
   return input.replace(/\s+/g, " ").trim();
 };
+
+// Dollar formatting function
+export const formatAsDollar = (number) => {
+  return `${new Intl.NumberFormat('en-US').format(number)}`;
+};

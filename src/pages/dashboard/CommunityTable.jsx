@@ -16,6 +16,7 @@ import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
 import { StyledMenuItem } from "components/AppComponents/StyledComponent";
 import { communityStyles } from "components/StyledComponents";
+import { formatAsDollar } from "pages/community/onboarding/utils";
 import { useState } from "react";
 
 const options = [
@@ -79,10 +80,10 @@ export default function UserTable({
     //   },
     // },
     {
-      field: "insured",
+      field: "insuredCoverage",
       headerName: "Insured",
       renderCell: (row) => {
-        return <Typography>{row?.insured ?? "-"}</Typography>;
+        return <Typography>{formatAsDollar(row?.insuredCoverage) ?? "-"}</Typography>;
       },
     },
     {
