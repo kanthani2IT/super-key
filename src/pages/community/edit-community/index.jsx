@@ -327,7 +327,7 @@ const EditCommunity = ({ onClose, communityData }) => {
       >
         <AppGrid container sx={{ justifyContent: "space-between" }}>
           <Typography variant="h3" sx={{ mb: 2 }}>
-            {"AddressDetails"}
+            {"Address Details"}
           </Typography>
 
           <RadiusStyledButton
@@ -423,7 +423,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.addressDetails?.zipcode &&
-                    errors.addressDetails?.zipcode
+                  errors.addressDetails?.zipcode
                 )}
                 helperText={
                   touched.addressDetails?.zipcode &&
@@ -442,7 +442,7 @@ const EditCommunity = ({ onClose, communityData }) => {
         direction={"column"}
       >
         <Typography variant="h3" sx={{ mb: 2 }}>
-          {"CommunityManager"}
+          {"Community Manager"}
         </Typography>
         <AppGrid container columnSpacing={5} rowSpacing={2}>
           <AppGrid item size={size}>
@@ -478,7 +478,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.communityManager?.email &&
-                    errors.communityManager?.email
+                  errors.communityManager?.email
                 )}
                 helperText={
                   touched.communityManager?.email &&
@@ -520,7 +520,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.communityManager?.phone &&
-                      errors.communityManager?.phone
+                    errors.communityManager?.phone
                   )}
                   helperText={
                     touched.communityManager?.phone &&
@@ -534,7 +534,7 @@ const EditCommunity = ({ onClose, communityData }) => {
       </AppGrid>
       <AppGrid container size={{ xs: 12 }} padding={1} direction={"column"}>
         <Typography variant="h3" sx={{ mb: 2 }}>
-          {"PropertyManager"}
+          {"Property Manager"}
         </Typography>
         <AppGrid container columnSpacing={5} rowSpacing={2}>
           <AppGrid item size={size}>
@@ -570,7 +570,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.propertyManager?.email &&
-                    errors.propertyManager?.email
+                  errors.propertyManager?.email
                 )}
                 helperText={
                   touched.propertyManager?.email &&
@@ -612,7 +612,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.propertyManager?.phone &&
-                      errors.propertyManager?.phone
+                    errors.propertyManager?.phone
                   )}
                   helperText={
                     touched.propertyManager?.phone &&
@@ -632,7 +632,7 @@ const EditCommunity = ({ onClose, communityData }) => {
         direction={"column"}
       >
         <Typography variant="h3" sx={{ mb: 2 }}>
-          {"InsuranceDetails"}
+          {"Insurance Details"}
         </Typography>
         <AppGrid container columnSpacing={5} rowSpacing={2}>
           <AppGrid item size={size}>
@@ -674,7 +674,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.insuranceDetails?.insuranceCoverage &&
-                    errors.insuranceDetails?.insuranceCoverage
+                  errors.insuranceDetails?.insuranceCoverage
                 )}
                 helperText={
                   touched.insuranceDetails?.insuranceCoverage &&
