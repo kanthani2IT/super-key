@@ -107,7 +107,11 @@ const CommunityOnboarding = () => {
         />
       </AppGrid>
       <Drawer open={edit} onClose={closeDrawer} anchor="right">
-        <EditCommunity onClose={closeDrawer} communityData={communityData} />
+        <EditCommunity
+          onClose={closeDrawer}
+          communityData={communityData}
+          refetch={refetch}
+        />
       </Drawer>
     </AppGrid>
   );

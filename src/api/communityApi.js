@@ -1,5 +1,5 @@
 import http from "http/http";
-import { getRequest, putRequest } from "http/request";
+import { getRequest, postFormRequest, putRequest } from "http/request";
 import { COMMUNITY } from "utils/endpoints";
 import { addQueryParams } from "utils/helpers";
 

@@ -11,8 +11,8 @@ const COMMUNITY = {
   createCommunity: "/api/community/createWithFile",
   getAllCommunityList: "/api/community/paging",
   getUsers: "/api/veruna/users",
-  getCommunityById: (id) => `/api/community/update/${id}`,
-  updateCommunityById: (id) => `/api/community/${id}`,
+  getCommunityById: (id) => `/api/community/${id}`,
+  updateCommunityById: (id) => `/api/community/update/${id}`,
   deleteCommunityById: (id) => `/api/community/${id}`,
 };
 const COMMON = {

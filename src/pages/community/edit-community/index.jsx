@@ -81,7 +81,7 @@ const initialValidationSchema = {
   }),
 };
 
-const EditCommunity = ({ onClose, communityData }) => {
+const EditCommunity = ({ onClose, communityData, refetch }) => {
   const [enableEdit, setEnableEdit] = useState(false);
   const [modal, setModal] = useState(false);
   const [offBoard, setOffBoard] = useState(false);
@@ -89,14 +89,16 @@ const EditCommunity = ({ onClose, communityData }) => {
     communityManager: "",
     propertyManager: "",
   });
-
+  const successHandler = () => {
+    refetch();
+  };
   const {
     data: communityInfo,
     isLoading,
     isError,
   } = useGetCommunityById(communityData?.communityId);
   const { mutate: updateCommunity, isLoading: isUpdating } =
-    useUpdateCommunityById();
+    useUpdateCommunityById(successHandler);
   const { mutate: deleteUserById } = useDeleteCommunityById();
 
   const { data: communityManagerData } = useCommunityManagersQuery(
@@ -114,27 +116,16 @@ const EditCommunity = ({ onClose, communityData }) => {
         communityId: communityData?.communityId,
         name: values?.addressDetails?.communityName,
         contactInfo: "",
-        communityManager: {
-          managerId: values?.communityManager?.managerId,
-          name: values?.communityManager?.name,
-          email: values?.communityManager?.email,
-          phone: values?.communityManager?.phone,
-          region: values?.communityManager?.code?.value,
-          managementCompanyId: values?.communityManager?.managementCompanyId,
-        },
-        propertyManager: {
-          managerId: values?.propertyManager?.userId,
-          name: values?.propertyManager?.username,
-          email: values?.propertyManager?.email,
-          phone: values?.propertyManager?.phone,
-          region: values?.propertyManager?.code?.value,
-          // managementCompanyId: "string",
-        },
+        communityManagerId: values?.communityManager?.managerId,
+        companyId: values?.communityManager?.managementCompanyId,
+        propertyManagerId: values?.propertyManager?.userId,
+        // insuredCoverage: values?.insuranceDetails?.insuranceCoverage,
       };
 
       updateCommunity({ id: communityData?.communityId, body: payload });
     },
   });
+  console.log(communityData, "communityData");
   const {
     values,
     errors,
@@ -212,7 +203,7 @@ const EditCommunity = ({ onClose, communityData }) => {
           code: data?.communityManager?.region || defaultCountryCode,
         },
         propertyManager: {
-          username: data?.propertyManager?.username || "Lucas",
+          username: data?.propertyManager?.name || "Lucas",
           email: data?.propertyManager?.email || "lucas@gmail.com",
           phone: data?.propertyManager?.phone || "717 222 2222",
           code: data?.propertyManager?.region || defaultCountryCode,
@@ -237,7 +228,7 @@ const EditCommunity = ({ onClose, communityData }) => {
       mappings: [
         {
           communityId: communityData?.communityId,
-          cmcId: communityData?.communityId,
+          cmcId: communityData?.communityManager?.managementCompanyId,
         },
       ],
     };
