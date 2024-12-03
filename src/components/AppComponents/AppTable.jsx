@@ -120,7 +120,7 @@ const AppTable = ({
                       align={idx > 1 ? "center" : "left"}
                     >
                       {col.renderCell
-                        ? col.renderCell(row)
+                        ? col.renderCell(row, index)
                         : col.field === "index"
                           ? index + 1
                           : col.field === "status" && col.getStatus

@@ -53,6 +53,9 @@ export default function UserTable({
       field: "index",
       headerName: "S.No",
       headerClassName: "bold-header",
+      renderCell: (row, indx) => {
+        return <Typography>{(page - 1) * pageSize + indx + 1}</Typography>;
+      },
     },
     {
       field: "name",
