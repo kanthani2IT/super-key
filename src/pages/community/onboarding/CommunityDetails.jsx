@@ -30,7 +30,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
 
   const [values, setValues] = useState({
     communityManager: {
-      name: "",
+      username: "",
       email: "",
       phone: "",
       countryCode: "",
@@ -143,18 +143,18 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
           <AppGrid item size={size}>
             <AppLabelComponent label={"Name"}>
               <AppAutoComplete
-                name="communityManager.name"
+                name="communityManager.username"
                 freeSolo={false}
                 error={
-                  touched.communityManager?.name &&
-                  errors.communityManager?.name
+                  touched.communityManager?.username                  &&
+                  errors.communityManager?.username
                 }
                 onChange={handleManger}
-                nameParam="name"
+                nameParam="username"
                 valueParam="managerId"
                 searchKey="communityManager"
                 loading={communityManagerFetching}
-                value={values?.communityManager?.name || ""}
+                value={values?.communityManager?.username                  || ""}
                 options={communityManagerList?.data}
                 placeholder="Select Manager"
                 onSearch={onSearch}

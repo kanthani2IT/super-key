@@ -44,7 +44,7 @@ const onBoardingStepper = [
     component: CommunityDetails,
     initialValidationSchema: {
       communityManager: Yup.object().shape({
-        name: Yup.string().required("Name is required"),
+        username: Yup.string().required("Name is required"),
         email: Yup.string()
           .email("Invalid email format")
           .required("Email is required"),

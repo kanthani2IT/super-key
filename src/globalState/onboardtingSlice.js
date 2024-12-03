@@ -8,7 +8,7 @@ const initialOnboardingValues = {
   communityName: "",
   communityManager: {
     managerId: "",
-    name: "",
+    username: "",
     email: "",
     phone: "",
     countryCode: defaultCountryCode,
