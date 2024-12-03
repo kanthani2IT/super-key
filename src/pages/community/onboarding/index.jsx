@@ -232,9 +232,6 @@ const OnboardingIndex = ({ refetch }) => {
           propertyManagerId: values?.propertyManager?.userId,
           communityManagerId: values?.communityManager?.managerId,
           companyId: values?.communityManager?.managementCompanyId,
-          claims: 0,
-          insured: 0,
-          status: "ACTIVE",
           documents: transformDocuments(selectedFiles),
         };
         formData.append("community", JSON.stringify(payload));

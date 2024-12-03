@@ -144,14 +144,14 @@ const AppTable = ({
           )}
         </TableBody>
       </Table>
-      {totalItems && (
+      {totalItems ? (
         <AppPagination
           pageSize={pageSize}
           currentPage={currentPage}
           totalItems={totalItems}
           onPageChange={onPageChange}
         />
-      )}
+      ):null}
     </TableContainer>
   );
 };

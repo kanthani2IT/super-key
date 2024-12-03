@@ -67,13 +67,14 @@ export default function UserTable({
       field: "propertyManagerName",
       headerName: "Property Manager",
     },
-    {
-      field: "claims",
-      headerName: "Claims",
-      renderCell: (row) => {
-        return <Typography color="success">{row?.claims}</Typography>;
-      },
-    },
+    //Future use
+    // {
+    //   field: "claims",
+    //   headerName: "Claims",
+    //   renderCell: (row) => {
+    //     return <Typography color="success">{row?.claims}</Typography>;
+    //   },
+    // },
     {
       field: "insured",
       headerName: "Insured",
@@ -96,7 +97,7 @@ export default function UserTable({
               gap={0.5}
             >
               <FiberManualRecordIcon fontSize="12px" />
-              {row?.status}
+              {row?.status === "ACTIVE"?"Active":"Inactive"}
             </Typography>
           );
         } else {

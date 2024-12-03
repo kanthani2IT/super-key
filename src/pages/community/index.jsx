@@ -36,7 +36,7 @@ const CommunityOnboarding = () => {
 
   const { content } = communityListData?.data ?? {};
   const handleChangePage = (event, newPage) => {
-    fetchData({ page: newPage });
+    fetchData(filters.sort, filters.search, newPage);
     setPage(newPage);
   };
   //handlers
@@ -70,13 +70,13 @@ const CommunityOnboarding = () => {
     fetchData(value);
   };
 
-  const fetchData = (sort, search) => {
+  const fetchData = (sort, search, page=filters.page) => {
     const sortData = sort === "ACTIVE" || sort === "INACTIVE" ? "" : "name";
     const orderByData =
       sort === "lowToHigh" ? "asc" : sort === "highToLow" ? "desc" : "";
     const statusData = sort === "ACTIVE" || sort === "INACTIVE" ? sort : "";
     const body = {
-      page: filters.page,
+      page: page,
       size: filters.size,
       sortBy: sortData,
       orderBy: orderByData,
