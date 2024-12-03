@@ -20,7 +20,7 @@ const initialValue = {
 
 const CommunityOnboarding = () => {
   const [communityData, setCommunitydata] = useState("");
-
+  const [page, setPage] = useState(1);
   const [edit, setEdit] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [filters, setFilters] = useState(initialValue);
@@ -34,6 +34,11 @@ const CommunityOnboarding = () => {
     isLoading: communityListLoading,
   } = useCommunityList();
 
+  const { content } = communityListData?.data ?? {};
+  const handleChangePage = (event, newPage) => {
+    fetchData({ page: newPage });
+    setPage(newPage);
+  };
   //handlers
   const openDrawer = (id) => {
     setCommunitydata(id);
@@ -155,6 +160,9 @@ const CommunityOnboarding = () => {
           filters={filters}
           handleChangeRadio={handleChangeRadio}
           handleSearch={handleSearch}
+          handleChangePage={handleChangePage}
+          page={page}
+          setPage={setPage}
         />
       </AppGrid>
       <Drawer open={edit} onClose={closeDrawer} anchor="right">
