@@ -123,7 +123,8 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
         companyId: values?.communityManager?.managementCompanyId,
         propertyManagerId: values?.propertyManager?.userId,
         insuredCoverage: values?.insuranceDetails?.insuranceCoverage,
-        status:"ACTIVE"
+        // insuranceValue: values?.insuranceDetails?.insuranceValue?.name,
+        status: "ACTIVE"
       };
 
       updateCommunity({ id: communityData?.communityId, body: payload });
@@ -208,14 +209,14 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
         },
         communityManager: {
           username: data?.communityManager?.username || "Henry",
-          userId:data?.communityManager?.managerId,
+          userId: data?.communityManager?.managerId,
           email: data?.communityManager?.email || "henry@gmaiol.com",
           phone: data?.communityManager?.phone || "718 222 2222",
           code: data?.communityManager?.region || defaultCountryCode,
         },
         propertyManager: {
           username: data?.propertyManager?.username || "Lucas",
-          userId:data?.propertyManager?.userId,
+          userId: data?.propertyManager?.managerId,
           email: data?.propertyManager?.email || "lucas@gmail.com",
           phone: data?.propertyManager?.phone || "717 222 2222",
           code: data?.propertyManager?.region || defaultCountryCode,
@@ -427,7 +428,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.addressDetails?.zipcode &&
-                    errors.addressDetails?.zipcode
+                  errors.addressDetails?.zipcode
                 )}
                 helperText={
                   touched.addressDetails?.zipcode &&
@@ -482,7 +483,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.communityManager?.email &&
-                    errors.communityManager?.email
+                  errors.communityManager?.email
                 )}
                 helperText={
                   touched.communityManager?.email &&
@@ -524,7 +525,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.communityManager?.phone &&
-                      errors.communityManager?.phone
+                    errors.communityManager?.phone
                   )}
                   helperText={
                     touched.communityManager?.phone &&
@@ -574,7 +575,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.propertyManager?.email &&
-                    errors.propertyManager?.email
+                  errors.propertyManager?.email
                 )}
                 helperText={
                   touched.propertyManager?.email &&
@@ -616,7 +617,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.propertyManager?.phone &&
-                      errors.propertyManager?.phone
+                    errors.propertyManager?.phone
                   )}
                   helperText={
                     touched.propertyManager?.phone &&
@@ -678,7 +679,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.insuranceDetails?.insuranceCoverage &&
-                    errors.insuranceDetails?.insuranceCoverage
+                  errors.insuranceDetails?.insuranceCoverage
                 )}
                 helperText={
                   touched.insuranceDetails?.insuranceCoverage &&
