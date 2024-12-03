@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
+import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
 import AppMenu from "components/AppComponents/AppMenu";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
@@ -101,7 +102,7 @@ export default function UserTable({
               gap={0.5}
             >
               <FiberManualRecordIcon fontSize="12px" />
-              {row?.status === "ACTIVE"?"Active":"Inactive"}
+              {row?.status === "ACTIVE" ? "Active" : "Inactive"}
             </Typography>
           );
         } else {
@@ -153,6 +154,8 @@ export default function UserTable({
     setMenuAnchorEl(null);
   };
 
+
+
   const renderSortComponent = () => {
     return (
       <FormControl sx={{ m: 1 }}>
@@ -196,11 +199,15 @@ export default function UserTable({
     return (
       <>
         <StyledMenuItem onClick={handleDrawer}>View details</StyledMenuItem>
-        <StyledMenuItem onClick={handleOffBoard}>
+        <StyledMenuItem onClick={handleModal}>
           Off-board Community
         </StyledMenuItem>
       </>
     );
+  };
+  const [modal, setModal] = useState(false)
+  const handleModal = () => {
+    setModal(!modal);
   };
 
   return (
@@ -241,6 +248,19 @@ export default function UserTable({
         anchorEl={anchorEl}
         handleClose={handleClose}
         renderComponent={renderSortComponent()}
+      />
+
+      <ConfirmationModal
+        open={modal}
+        onClose={handleModal}
+        message={
+          "Do you want to off-board the community?"
+
+        }
+        confirmLabel={"Yes"}
+        cancelLabel={"No"}
+        onConfirm={handleModal}
+        onCancel={handleModal}
       />
     </Box>
   );

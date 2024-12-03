@@ -254,12 +254,12 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   const Footer = () => {
     return (
       <>
-        <AppRowBox>
+        <AppRowBox >
           <AppGrid item size={{ xs: 6, sx: 6, lg: 8 }}>
             <RadiusStyledButton
               color="#FFFFFF"
               textColor="#E12929"
-              width="30%"
+              // width="30%"
               height="50px"
               borderRadius="10px"
               onClick={onReset}
@@ -290,7 +290,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   type="submit"
                   onClick={handleSubmit}
                   variant="contained"
-                  width="50%"
+                  // width="50%"
                   height="50px"
                   borderRadius="10px"
                 >
