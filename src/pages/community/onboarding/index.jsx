@@ -125,7 +125,7 @@ const OnboardingIndex = ({ refetch }) => {
 
     navigate({
       pathname: location.pathname,
-      search: searchParams.toString(),
+      search: searchParams?.toString(),
     });
   };
 
@@ -135,7 +135,7 @@ const OnboardingIndex = ({ refetch }) => {
 
       navigate({
         pathname: location.pathname,
-        search: searchParams.toString(),
+        search: searchParams?.toString(),
       });
     }
     if (activeStep < onBoardingStepper?.length - 1) {
@@ -233,7 +233,7 @@ const OnboardingIndex = ({ refetch }) => {
           communityManagerId: values?.communityManager?.managerId,
           companyId: values?.communityManager?.managementCompanyId,
           documents: transformDocuments(selectedFiles),
-          status:"ACTIVE"
+          status: "ACTIVE"
         };
         formData.append("community", JSON.stringify(payload));
         selectedFiles.forEach((item) => formData.append("file", item.file));

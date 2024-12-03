@@ -5,7 +5,7 @@ export function addQueryParams(baseUrl, params = {}) {
     ([key, value]) => value !== "" && value != null && value !== undefined
   );
 
-  const query = new URLSearchParams(filteredParams).toString();
+  const query = new URLSearchParams(filteredParams)?.toString();
   return query ? `${baseUrl}?${query}` : baseUrl;
 }
 
