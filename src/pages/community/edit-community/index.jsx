@@ -208,12 +208,14 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
         },
         communityManager: {
           username: data?.communityManager?.username || "Henry",
+          userId:data?.communityManager?.managerId,
           email: data?.communityManager?.email || "henry@gmaiol.com",
           phone: data?.communityManager?.phone || "718 222 2222",
           code: data?.communityManager?.region || defaultCountryCode,
         },
         propertyManager: {
           username: data?.propertyManager?.username || "Lucas",
+          userId:data?.propertyManager?.userId,
           email: data?.propertyManager?.email || "lucas@gmail.com",
           phone: data?.propertyManager?.phone || "717 222 2222",
           code: data?.propertyManager?.region || defaultCountryCode,
