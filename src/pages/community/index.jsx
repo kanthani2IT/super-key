@@ -167,6 +167,7 @@ const CommunityOnboarding = () => {
           handleSearch={handleSearch}
           handleChangePage={handleChangePage}
           page={page}
+          selectedRows={selectedRows}
           setPage={setPage}
         />
       </AppGrid>

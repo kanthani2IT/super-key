@@ -42,12 +42,15 @@ export default function UserTable({
   handleChangePage,
   page,
   setPage,
+  selectedRows
 }) {
   const theme = useTheme();
   // const [page, setPage] = useState(1);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [modal, setModal] = useState(false)
+
   const pageSize = 10;
 
   const columns = [
@@ -119,6 +122,7 @@ export default function UserTable({
           <MoreVert
             onClick={(e) => {
               e.stopPropagation();
+              onSelectionChange([])
               setMenuAnchorEl(e.currentTarget);
               setCommunityInfo(row);
             }}
@@ -152,6 +156,9 @@ export default function UserTable({
 
   const handleMenuAnchorClose = () => {
     setMenuAnchorEl(null);
+  };
+  const handleModal = () => {
+    setModal(!modal);
   };
 
 
@@ -205,10 +212,6 @@ export default function UserTable({
       </>
     );
   };
-  const [modal, setModal] = useState(false)
-  const handleModal = () => {
-    setModal(!modal);
-  };
 
   return (
     <Box sx={communityStyles.container(height)}>
@@ -236,6 +239,7 @@ export default function UserTable({
           totalItems={communityList?.totalElements}
           pageSize={pageSize}
           onPageChange={handleChangePage}
+          selected={selectedRows}
         />
       </>
 
