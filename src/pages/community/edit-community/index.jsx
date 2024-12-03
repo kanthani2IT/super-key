@@ -33,7 +33,7 @@ const initialValues = {
     zipcode: "",
   },
   communityManager: {
-    name: "",
+    username: "",
     code: defaultCountryCode,
     phone: "",
 
@@ -60,7 +60,7 @@ const initialValidationSchema = {
     zipcode: Yup.string().required("Zipcode is required"),
   }),
   communityManager: Yup.object().shape({
-    name: Yup.string().required("Name is required"),
+    username: Yup.string().required("Name is required"),
     phone: Yup.string().required("Contact Number is required"),
     code: Yup.object().required("Country Code is required"),
     email: Yup.string()
@@ -197,7 +197,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
           zipcode: data?.zipcode || "96162",
         },
         communityManager: {
-          name: data?.communityManager?.name || "Henry",
+          username: data?.communityManager?.name || "Henry",
           email: data?.communityManager?.email || "henry@gmaiol.com",
           phone: data?.communityManager?.phone || "718 222 2222",
           code: data?.communityManager?.region || defaultCountryCode,
@@ -414,7 +414,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.addressDetails?.zipcode &&
-                  errors.addressDetails?.zipcode
+                    errors.addressDetails?.zipcode
                 )}
                 helperText={
                   touched.addressDetails?.zipcode &&
@@ -439,18 +439,18 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
           <AppGrid item size={size}>
             <AppLabelComponent label={"Name"}>
               <AppAutoComplete
-                name="communityManager.name"
+                name="communityManager.username"
                 freeSolo={false}
                 disabled={!enableEdit}
                 error={
-                  touched.communityManager?.name &&
-                  errors.communityManager?.name
+                  touched.communityManager?.username &&
+                  errors.communityManager?.username
                 }
                 onChange={handleManager}
                 // onBlur={handleBlur}
-                nameParam="name"
+                nameParam="username"
                 searchKey="communityManager"
-                value={values?.communityManager?.name}
+                value={values?.communityManager?.username}
                 options={communityManagerData?.data}
                 valueParam="managerId"
                 placeholder="Select Manager"
@@ -469,7 +469,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.communityManager?.email &&
-                  errors.communityManager?.email
+                    errors.communityManager?.email
                 )}
                 helperText={
                   touched.communityManager?.email &&
@@ -511,7 +511,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.communityManager?.phone &&
-                    errors.communityManager?.phone
+                      errors.communityManager?.phone
                   )}
                   helperText={
                     touched.communityManager?.phone &&
@@ -561,7 +561,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.propertyManager?.email &&
-                  errors.propertyManager?.email
+                    errors.propertyManager?.email
                 )}
                 helperText={
                   touched.propertyManager?.email &&
@@ -603,7 +603,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.propertyManager?.phone &&
-                    errors.propertyManager?.phone
+                      errors.propertyManager?.phone
                   )}
                   helperText={
                     touched.propertyManager?.phone &&
@@ -665,7 +665,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.insuranceDetails?.insuranceCoverage &&
-                  errors.insuranceDetails?.insuranceCoverage
+                    errors.insuranceDetails?.insuranceCoverage
                 )}
                 helperText={
                   touched.insuranceDetails?.insuranceCoverage &&
