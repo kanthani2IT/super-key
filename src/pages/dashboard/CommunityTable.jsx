@@ -173,13 +173,11 @@ export default function UserTable({
   ];
 
   const handleChangePage = (event, newPage) => setPage(newPage);
-  console.log(communityList?.content, "#####222");
   const filteredRows = communityList?.content?.filter((row) =>
     Object.values(row).some((value) =>
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
-  console.log(filteredRows, "#### 2222 @@@@");
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);
   };

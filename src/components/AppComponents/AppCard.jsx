@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardActions,
   CardContent,
@@ -6,7 +7,6 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { StyledButton } from "pages/community/StyledComponents";
 import AppRowBox from "./AppRowBox";
 
 const AppCard = ({ onClose, children, title, footer }) => {
@@ -15,7 +15,7 @@ const AppCard = ({ onClose, children, title, footer }) => {
       <AppRowBox>
         <Typography variant="h4">{title}</Typography>
 
-        <StyledButton onClick={onClose}>Close</StyledButton>
+        <Button onClick={onClose} disableTouchRipple variant="text" size="small" color="secondary">Close</Button>
       </AppRowBox>
     );
   };

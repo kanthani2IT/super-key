@@ -47,7 +47,6 @@ const CommunityOnboarding = () => {
   const handleSelectionChange = (selected) => {
     setSelectedRows(selected);
   };
-  console.log(communityList, "####");
   return (
     <AppGrid container spacing={4}>
       <AppGrid
