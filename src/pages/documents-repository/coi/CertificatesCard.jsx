@@ -1,5 +1,6 @@
 import { Button, Grid2 as Grid, Stack, Typography } from '@mui/material'
 import CardGrid from 'components/AppComponents/AppDataCard'
+import AppGrid from 'components/AppComponents/AppGrid'
 import AppModalContainer from 'components/AppComponents/AppModalContainer'
 import AppRowBox from 'components/AppComponents/AppRowBox'
 import React from 'react'
@@ -21,16 +22,16 @@ const CertificatesCard = ({ title, certificateData, handleCertificates, handleEm
 
 
     return (
-        <AppModalContainer enableCard height='auto' width={'100%'}
+        <AppModalContainer fullWidth enableCard height='auto' width='100%'
             header={header(title, handleCertificates, certificateData?.length)} padding='1%'>
-            <Grid container rowSpacing={2}>
-                <Grid item size={{ xs: 12 }}>
+            <AppGrid container rowSpacing={2}>
+                <AppGrid item size={{ xs: 12 }}>
                     <Typography variant="h5">Certificates</Typography>
-                </Grid>
-                <Grid item size={{ xs: 12 }}>
+                </AppGrid>
+                <AppGrid item size={{ xs: 12, md: 12 }}>
                     <CardGrid handleClick={handleEmail} fullWidth data={certificateData} actionTitle />
-                </Grid>
-            </Grid>
+                </AppGrid>
+            </AppGrid>
         </AppModalContainer>
     )
 }

@@ -27,7 +27,11 @@ const CommunityOnboarding = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [filters, setFilters] = useState(initialValue);
 
-  const { refetch } = useCommunityListQuery();
+  const {
+    refetch,
+    data: communityList,
+    isFetching: communityListFetching,
+  } = useCommunityListQuery();
 
   const { mutate: deleteUserById } = useDeleteCommunityById();
   const {
@@ -134,7 +138,7 @@ const CommunityOnboarding = () => {
         <CommunityTable
           height={"80vh"}
           isLoading={communityListLoading}
-          communityList={content || []}
+          communityList={communityList}
           onSelectionChange={handleSelectionChange}
           openPopup={openDrawer}
           handleOffBoard={handleOffBoard}

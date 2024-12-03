@@ -56,11 +56,11 @@ export default function UserTable({
       flex: 1,
     },
     {
-      field: `communityManager`,
+      field: `communityManagerName`,
       headerName: "Community Manager",
     },
     {
-      field: "propertyManager",
+      field: "propertyManagerName",
       headerName: "Property Manager",
     },
     {
@@ -114,6 +114,19 @@ export default function UserTable({
       ),
     },
   ];
+
+  const filteredRows = communityList?.content?.filter((row) =>
+    Object.values(row).some((value) =>
+      String(value).toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
+  // Flatten the rows
+  const flatRows = filteredRows?.map((row) => ({
+    ...row,
+    communityManagerName: row.communityManager?.name || "",
+    propertyManagerName: row.propertyManager?.name || "",
+  }));
 
   const handleChangePage = (event, newPage) => setPage(newPage);
 
@@ -198,7 +211,7 @@ export default function UserTable({
           rowKey="communityId"
           isLoading={isLoading}
           columns={columns}
-          rows={communityList || []}
+          rows={flatRows || []}
           getStatus={getStatus}
           onSelectionChange={onSelectionChange}
           currentPage={page}
