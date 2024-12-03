@@ -92,6 +92,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   });
   const successHandler = () => {
     refetch();
+    onClose();
   };
   const {
     data: communityInfo,
@@ -195,9 +196,15 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
         ...prevValues,
         addressDetails: {
           communityName: data?.name || "",
-          city: data?.city || "Sacramento",
-          state: data?.state || "California",
-          zipcode: data?.zipcode || "96162",
+          city: data?.contactInfo
+            ? data?.contactInfo.split(",")[1]
+            : "Sacramento",
+          state: data?.contactInfo
+            ? data?.contactInfo.split(",")[0]
+            : "California",
+          zipcode: data?.contactInfo
+            ? data?.contactInfo.split(",")[2]
+            : "96162",
         },
         communityManager: {
           username: data?.communityManager?.username || "Henry",
@@ -225,6 +232,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   };
   const handleModal = () => {
     setModal(false);
+    onClose();
   };
   const handleOffBoard = () => {
     const payload = {
@@ -300,7 +308,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
           }
           confirmLabel={offBoard ? "Yes" : "Save"}
           cancelLabel={offBoard ? "No" : "Yes, Discard"}
-          onConfirm={handleOffBoard}
+          onConfirm={offBoard ? handleOffBoard : handleModal}
           onCancel={handleModal}
         />
       </>
