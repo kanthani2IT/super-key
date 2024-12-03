@@ -193,9 +193,15 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
         ...prevValues,
         addressDetails: {
           communityName: data?.name || "",
-          city: data?.city || "Sacramento",
-          state: data?.state || "California",
-          zipcode: data?.zipcode || "96162",
+          city: data?.contactInfo
+            ? data?.contactInfo.split(",")[1]
+            : "Sacramento",
+          state: data?.contactInfo
+            ? data?.contactInfo.split(",")[0]
+            : "California",
+          zipcode: data?.contactInfo
+            ? data?.contactInfo.split(",")[2]
+            : "96162",
         },
         communityManager: {
           username: data?.communityManager?.name || "Henry",
