@@ -1,25 +1,18 @@
-import React, { useState } from "react";
 import {
   Box,
   Checkbox,
-  Pagination,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableFooter,
   TableHead,
-  TablePagination,
   TableRow,
   Typography,
 } from "@mui/material";
-import {
-  BoldTypographyHeader,
-  communityStyles,
-} from "components/StyledComponents";
-import CircularLoader from "components/CircularLoader";
-import AppSkeleton from "./AppSkeleton";
+import { BoldTypographyHeader } from "components/StyledComponents";
+import { useState } from "react";
 import AppPagination from "./AppPagination";
+import AppSkeleton from "./AppSkeleton";
 
 const AppTable = ({
   isLoading,
@@ -30,7 +23,7 @@ const AppTable = ({
   customStyles = {},
   onSelectionChange,
   noDataText = "No Data Found",
-  currentPage,
+  currentPage = 1,
   totalItems,
   pageSize,
   onPageChange,
@@ -90,13 +83,17 @@ const AppTable = ({
         </TableHead>
         <TableBody>
           {isLoading ? (
-            Array.from({ length: 10 }).map((_, index) => (
-              <TableRow key={`skeleton-${index}`}>
-                <TableCell colSpan={columns?.length + 1}>
-                  <AppSkeleton variant="rounded" height={30} animation="wave" />
-                </TableCell>
-              </TableRow>
-            ))
+            <TableRow>
+              <TableCell colSpan={columns?.length + 1}>
+                <AppSkeleton
+                  variant="rounded"
+                  height={50}
+                  animation="wave"
+                  row={6}
+                  gap={2}
+                />
+              </TableCell>
+            </TableRow>
           ) : rows.length > 0 ? (
             rows.map((row, index) => {
               const isSelected = selected.indexOf(row[rowKey]) !== -1;

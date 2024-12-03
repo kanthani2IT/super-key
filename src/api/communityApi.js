@@ -1,5 +1,5 @@
 import http from "http/http";
-import { getRequest, postFormRequest, postRequest, putRequest } from "http/request";
+import { getRequest, postFormRequest, putRequest } from "http/request";
 import { COMMUNITY, ONBOARD } from "utils/endpoints";
 import { addQueryParams } from "utils/helpers";
 
@@ -62,6 +62,21 @@ const getAllCommunityList = async (queries) => {
   }
 };
 
+const getCommunityList = async (body) => {
+  const response = await http({
+    method: "GET",
+    url: COMMUNITY.getCommunityList(
+      body.page,
+      body.size,
+      body.sortBy,
+      body.orderBy,
+      body.status,
+      body.search
+    ),
+  });
+  return response;
+};
+
 export const communityApi = {
   getUsersData,
   getCommunityById,
@@ -69,4 +84,5 @@ export const communityApi = {
   deleteCommunityById,
   createCommunity,
   getAllCommunityList,
+  getCommunityList,
 };

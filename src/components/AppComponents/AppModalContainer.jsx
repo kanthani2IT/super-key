@@ -1,20 +1,18 @@
 import styled from "@emotion/styled";
-import CloseIcon from "@mui/icons-material/Close";
 import {
   Box,
+  Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   Divider,
-  IconButton,
   Paper,
   Stack,
-  Typography,
+  Typography
 } from "@mui/material";
-import { StyledButton } from "pages/community/StyledComponents";
 
-const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
+const StyledPaper = styled(Paper)(({ theme, width, height, align, fullWidth }) => ({
   height: height || "auto",
   padding: "1%",
   alignContent: align,
@@ -22,13 +20,13 @@ const StyledPaper = styled(Paper)(({ theme, width, height, align }) => ({
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[6],
   [theme.breakpoints.up("xs")]: {
-    width: "75%",
+    width: fullWidth ? width : "75%",
   },
   [theme.breakpoints.up("sm")]: {
-    width: "75%",
+    width: fullWidth ? width : "75%",
   },
   [theme.breakpoints.up("md")]: {
-    width: "50%",
+    width: fullWidth ? width : "50%",
   },
   [theme.breakpoints.up("lg")]: {
     width: width,
@@ -66,15 +64,16 @@ const AppModalContainer = ({
   stepper,
   align,
   onClose,
+  fullWidth = false,
 }) => {
   return (
-    <StyledPaper width={width} height={height} align={align}>
+    <StyledPaper fullWidth={fullWidth} width={width} height={height} align={align}>
       {enableCard ? (
         <StyledFlexCard elevation={0}>
           {title && !header && (
             <>
               <Box sx={{ display: "flex", justifyContent: "end" }}>
-                <StyledButton onClick={onClose}>Close</StyledButton>
+                <Button onClick={onClose} disableTouchRipple variant="text" size="small" color="secondary" >Close</Button>
               </Box>
               <CardHeader
                 title={
