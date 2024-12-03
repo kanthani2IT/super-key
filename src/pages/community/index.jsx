@@ -1,23 +1,21 @@
 import { Drawer } from "@mui/material";
 
 import AppGrid from "components/AppComponents/AppGrid";
-import {
-  useCommunityList,
-  useCommunityListQuery,
-  useDeleteCommunityById,
-} from "hooks/useCommunity";
+import { useCommunityList, useDeleteCommunityById } from "hooks/useCommunity";
 import CommunityTable from "pages/dashboard/CommunityTable";
 import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
 import { useEffect, useState } from "react";
+import { useDebounceFn } from "utils/helpers";
 import EditCommunity from "./edit-community";
 import OnboardingIndex from "./onboarding";
 
 const initialValue = {
-  page: 0,
+  page: 1,
   size: 10,
   sort: "",
   order: "",
   status: "",
+  search: "",
 };
 
 const CommunityOnboarding = () => {
@@ -27,11 +25,7 @@ const CommunityOnboarding = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [filters, setFilters] = useState(initialValue);
 
-  const {
-    refetch,
-    data: communityList,
-    isFetching: communityListFetching,
-  } = useCommunityListQuery();
+  // const { refetch } = useCommunityListQuery();
 
   const { mutate: deleteUserById } = useDeleteCommunityById();
   const {
@@ -39,8 +33,6 @@ const CommunityOnboarding = () => {
     data: communityListData,
     isLoading: communityListLoading,
   } = useCommunityList();
-
-  const { content } = communityListData?.data ?? {};
 
   //handlers
   const openDrawer = (id) => {
@@ -73,21 +65,37 @@ const CommunityOnboarding = () => {
     fetchData(value);
   };
 
-  const fetchData = (sort) => {
+  const fetchData = (sort, search) => {
+    const sortData = sort === "ACTIVE" || sort === "INACTIVE" ? "" : "name";
+    const orderByData =
+      sort === "lowToHigh" ? "asc" : sort === "highToLow" ? "desc" : "";
+    const statusData = sort === "ACTIVE" || sort === "INACTIVE" ? sort : "";
     const body = {
-      page: 0,
-      size: 10,
-      sortBy: sort === "inActive" && "active" ? "" : "name",
-      orderBy: "",
-      status: "",
+      page: filters.page,
+      size: filters.size,
+      sortBy: sortData,
+      orderBy: orderByData,
+      status: statusData,
+      search: search || "",
     };
     getCommunityList(body);
   };
 
-  useEffect(() => {
-    fetchData(filters.sort);
-  }, []);
+  const onSearch = useDebounceFn((searchString) => {
+    fetchData(filters.sort, searchString);
+  }, 500);
 
+  const handleSearch = (value) => {
+    setFilters({ ...filters, search: value });
+    onSearch(value);
+  };
+
+  useEffect(() => {
+    fetchData(filters.sort, filters.search);
+  }, []);
+  const refetch = () => {
+    fetchData(filters.sort, filters.search);
+  };
   return (
     <AppGrid container spacing={4}>
       <AppGrid
@@ -138,7 +146,7 @@ const CommunityOnboarding = () => {
         <CommunityTable
           height={"80vh"}
           isLoading={communityListLoading}
-          communityList={communityList}
+          communityList={communityListData?.data || []}
           onSelectionChange={handleSelectionChange}
           openPopup={openDrawer}
           handleOffBoard={handleOffBoard}
@@ -146,6 +154,7 @@ const CommunityOnboarding = () => {
           setCommunityInfo={setCommunitydata}
           filters={filters}
           handleChangeRadio={handleChangeRadio}
+          handleSearch={handleSearch}
         />
       </AppGrid>
       <Drawer open={edit} onClose={closeDrawer} anchor="right">

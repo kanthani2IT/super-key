@@ -19,8 +19,8 @@ import { communityStyles } from "components/StyledComponents";
 import { useState } from "react";
 
 const options = [
-  { value: "active", label: "Status:Active" },
-  { value: "inActive", label: "Status:Inactive" },
+  { value: "ACTIVE", label: "Status:Active" },
+  { value: "INACTIVE", label: "Status:Inactive" },
   { value: "highToLow", label: "Insured Value:High to Low" },
   { value: "lowToHigh", label: "Insured value:Low to High" },
 ];
@@ -36,6 +36,7 @@ export default function UserTable({
   setCommunityInfo,
   filters,
   handleChangeRadio,
+  handleSearch,
 }) {
   const theme = useTheme();
   const [page, setPage] = useState(1);
@@ -82,18 +83,22 @@ export default function UserTable({
       headerName: "Status",
       align: "center",
       renderCell: (row) => {
-        return (
-          <Typography
-            color={row?.status === "ACTIVE" ? "success" : "error"}
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            gap={0.5}
-          >
-            <FiberManualRecordIcon fontSize="12px" />
-            {row?.status === "ACTIVE" ? "Active" : "Inactive"}
-          </Typography>
-        );
+        if (row?.status != null && row?.status != "null") {
+          return (
+            <Typography
+              color={row?.status === "ACTIVE" ? "success" : "error"}
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              gap={0.5}
+            >
+              <FiberManualRecordIcon fontSize="12px" />
+              {row?.status}
+            </Typography>
+          );
+        } else {
+          return "-";
+        }
       },
     },
     {
@@ -197,8 +202,8 @@ export default function UserTable({
       <>
         <AppTableSearch
           placeholder="Search Documents"
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
+          searchTerm={filters.search}
+          onSearchChange={handleSearch}
           icons={[
             {
               component: <SwapVert />,

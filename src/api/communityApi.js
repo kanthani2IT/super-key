@@ -1,5 +1,5 @@
 import http from "http/http";
-import { getRequest, postFormRequest, postRequest, putRequest } from "http/request";
+import { getRequest, postFormRequest, putRequest } from "http/request";
 import { COMMUNITY, ONBOARD } from "utils/endpoints";
 import { addQueryParams } from "utils/helpers";
 
@@ -70,7 +70,8 @@ const getCommunityList = async (body) => {
       body.size,
       body.sortBy,
       body.orderBy,
-      body.status
+      body.status,
+      body.search
     ),
   });
   return response;

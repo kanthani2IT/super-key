@@ -15,8 +15,8 @@ const COMMUNITY = {
   getAll: "/api/community",
   createCommunity: "/api/community/createWithFile",
   getAllCommunityList: "/api/community/paging",
-  getCommunityList: (page, size, sortBy, orderBy, status) =>
-    `/api/community/paging?page=${page}&size=${size}&sortBy=${sortBy}&direction=${orderBy}&status=${status}`,
+  getCommunityList: (page, size, sortBy, orderBy, status, search) =>
+    `/api/community/paging?page=${page}&size=${size}&sortBy=${sortBy}&direction=${orderBy}&status=${status}&name=${search}`,
 };
 const COMMON = {
   getAllLocation: `/api/autocomplete`,

@@ -92,7 +92,7 @@ export const useCommunityListQuery = (search) =>
 
 export const useCommunityList = () => {
   return useMutation({
-    mutationFn: (body) => api.community.getAllCommunityList(body),
+    mutationFn: (body) => api.community.getCommunityList(body),
   });
 };
 

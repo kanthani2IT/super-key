@@ -223,9 +223,9 @@ const OnboardingIndex = ({ refetch }) => {
       : null,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      if (activeStep == onBoardingStepper?.length -2) {
+      if (activeStep == onBoardingStepper?.length - 2) {
         const formData = new FormData();
-        
+
         let payload = {
           name: values?.communityName?.name,
           contactInfo: values?.communityAddress?.label,
@@ -235,10 +235,10 @@ const OnboardingIndex = ({ refetch }) => {
           claims: 0,
           insured: 0,
           status: "ACTIVE",
-          documents: transformDocuments(selectedFiles)
+          documents: transformDocuments(selectedFiles),
         };
-        formData.append('community',JSON.stringify(payload));
-        selectedFiles.forEach(item => formData.append("file",item.file));
+        formData.append("community", JSON.stringify(payload));
+        selectedFiles.forEach((item) => formData.append("file", item.file));
         mutate(formData);
       } else {
         handleNext(values);
