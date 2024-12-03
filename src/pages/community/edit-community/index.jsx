@@ -91,6 +91,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   });
   const successHandler = () => {
     refetch();
+    onClose();
   };
   const {
     data: communityInfo,
@@ -222,6 +223,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   };
   const handleModal = () => {
     setModal(false);
+    onClose();
   };
   const handleOffBoard = () => {
     const payload = {
@@ -297,7 +299,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
           }
           confirmLabel={offBoard ? "Yes" : "Save"}
           cancelLabel={offBoard ? "No" : "Yes, Discard"}
-          onConfirm={handleOffBoard}
+          onConfirm={offBoard ? handleOffBoard : handleModal}
           onCancel={handleModal}
         />
       </>
