@@ -1,10 +1,12 @@
 import { MoreVert, SwapVert } from "@mui/icons-material";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import {
   FormControl,
   FormControlLabel,
   IconButton,
   Radio,
   RadioGroup,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
@@ -123,7 +125,6 @@ export default function UserTable({
   const [searchTerm, setSearchTerm] = useState("");
   const pageSize = 10;
   const [selectedValue, setSelectedValue] = useState("");
-  // const [communittyId, setCommunityId] = useState("");
 
   const columns = [
     {
@@ -137,21 +138,45 @@ export default function UserTable({
       flex: 1,
     },
     {
-      field: `communityManagerName`,
+      field: `communityManager`,
       headerName: "Community Manager",
     },
     {
-      field: "propertyManagerName",
+      field: "propertyManager",
       headerName: "Property Manager",
+    },
+    {
+      field: "claims",
+      headerName: "Claims",
+      renderCell: (row) => {
+        return <Typography color="success">{row?.claims}</Typography>;
+      },
     },
     {
       field: "insured",
       headerName: "Insured",
-      flex: 1,
+      renderCell: (row) => {
+        return <Typography>{row?.insured ?? "-"}</Typography>;
+      },
     },
     {
       field: "status",
       headerName: "Status",
+      align: "center",
+      renderCell: (row) => {
+        return (
+          <Typography
+            color={row?.status === "ACTIVE" ? "success" : "error"}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            gap={0.5}
+          >
+            <FiberManualRecordIcon fontSize="12px" />
+            {row?.status === "ACTIVE" ? "Active" : "Inactive"}
+          </Typography>
+        );
+      },
     },
     {
       field: "action",
@@ -173,13 +198,12 @@ export default function UserTable({
   ];
 
   const handleChangePage = (event, newPage) => setPage(newPage);
-  console.log(communityList?.content, "#####222");
   const filteredRows = communityList?.content?.filter((row) =>
     Object.values(row).some((value) =>
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
-  console.log(filteredRows, "#### 2222 @@@@");
+
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);
   };
@@ -195,6 +219,8 @@ export default function UserTable({
   const handleChangeRadio = (e) => {
     setSelectedValue(e.target.value);
   };
+
+  console.log(communityList, "@@@@@@@@@@@@@@@@");
 
   const renderSortComponent = () => {
     return (
