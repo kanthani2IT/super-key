@@ -25,89 +25,6 @@ const options = [
   { value: "lowToHigh", label: "Insured value:Low to High" },
 ];
 
-const rows = [
-  {
-    id: 1,
-    name: "Desert Springs",
-    propertyManager: "Sarah Johnson",
-    claims: 3,
-    insured: "$200,000",
-    status: 1,
-  },
-  {
-    id: 2,
-    name: "Rose Dale",
-    propertyManager: "Micheal lee",
-    claims: 2,
-    insured: "$200,000",
-    status: 0,
-  },
-  {
-    id: 3,
-    name: "Prestige",
-    propertyManager: "Emily Davis",
-    claims: 1,
-    insured: "$200,000",
-    status: 1,
-  },
-  {
-    id: 4,
-    name: "Oak Ridge Estates",
-    propertyManager: "David Kim",
-    claims: 2,
-    insured: "$200,000",
-    status: 0,
-  },
-  {
-    id: 5,
-    name: "Mountain Vista",
-    propertyManager: "",
-    claims: 3,
-    insured: "$200,000",
-    status: 1,
-  },
-  {
-    id: 6,
-    name: "Willow Creek",
-    propertyManager: "Christopher Allen",
-    claims: 1,
-    insured: "$200,000",
-    status: 1,
-  },
-  {
-    id: 7,
-    name: "Uptown Plazza",
-    propertyManager: "Ashley Tailor",
-    claims: 1,
-    insured: "$200,000",
-    status: 0,
-  },
-  {
-    id: 8,
-    name: "Farmland Estates",
-    propertyManager: "Ethen Carter",
-    claims: 2,
-    insured: "$200,000",
-    status: 0,
-  },
-  {
-    id: 9,
-    name: "Rv Park",
-    propertyManager: "Olivia Harris",
-    claims: 2,
-    insured: "$200,000",
-    status: 1,
-  },
-  {
-    id: 10,
-    name: "Tech Campus Housing",
-    propertyManager: "Samuel Wilson",
-    claims: 2,
-    insured: "$200,000",
-    status: 1,
-  },
-];
-
 export default function UserTable({
   isLoading,
   height = 400,
@@ -117,6 +34,8 @@ export default function UserTable({
   handleOffBoard,
   communityInfo,
   setCommunityInfo,
+  filters,
+  handleChangeRadio,
 }) {
   const theme = useTheme();
   const [page, setPage] = useState(1);
@@ -124,7 +43,6 @@ export default function UserTable({
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const pageSize = 10;
-  const [selectedValue, setSelectedValue] = useState("");
 
   const columns = [
     {
@@ -198,11 +116,6 @@ export default function UserTable({
   ];
 
   const handleChangePage = (event, newPage) => setPage(newPage);
-  const filteredRows = communityList?.content?.filter((row) =>
-    Object.values(row).some((value) =>
-      String(value).toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
 
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);
@@ -216,12 +129,6 @@ export default function UserTable({
     setMenuAnchorEl(null);
   };
 
-  const handleChangeRadio = (e) => {
-    setSelectedValue(e.target.value);
-  };
-
-  console.log(communityList, "@@@@@@@@@@@@@@@@");
-
   const renderSortComponent = () => {
     return (
       <FormControl sx={{ m: 1 }}>
@@ -229,10 +136,10 @@ export default function UserTable({
           aria-labelledby="demo-radio-buttons-group-label"
           defaultValue=""
           name="radio-buttons-group"
-          value={selectedValue}
+          value={filters.sort}
           onChange={handleChangeRadio}
         >
-          {options.map(({ value, label }) => (
+          {options?.map(({ value, label }) => (
             // <StyledMenuItem sx={{ padding: "0", margin: "0" }}>
             <FormControlLabel
               key={value}
@@ -246,7 +153,7 @@ export default function UserTable({
                 m: 1,
                 width: "90%",
                 backgroundColor:
-                  selectedValue === value
+                  filters?.sort === value
                     ? theme.palette.blue[100]
                     : "transparent",
               }}
@@ -272,13 +179,6 @@ export default function UserTable({
     );
   };
 
-  // Flatten the rows
-  const flatRows = filteredRows?.map((row) => ({
-    ...row,
-    communityManagerName: row.communityManager?.name || "",
-    propertyManagerName: row.propertyManager?.name || "",
-  }));
-
   return (
     <Box sx={communityStyles.container(height)}>
       <>
@@ -298,11 +198,11 @@ export default function UserTable({
           rowKey="communityId"
           isLoading={isLoading}
           columns={columns}
-          rows={flatRows || []}
+          rows={communityList || []}
           getStatus={getStatus}
           onSelectionChange={onSelectionChange}
           currentPage={page}
-          totalItems={filteredRows?.length}
+          totalItems={communityList?.length}
           pageSize={pageSize}
           onPageChange={handleChangePage}
         />

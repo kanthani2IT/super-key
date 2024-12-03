@@ -90,6 +90,12 @@ export const useCommunityListQuery = (search) =>
     },
   });
 
+export const useCommunityList = () => {
+  return useMutation({
+    mutationFn: (body) => api.community.getAllCommunityList(body),
+  });
+};
+
 // export const useLoginUser = () => {
 //   const navigate = useNavigate();
 //   const {setAuthCookie}=useAuthCookies()

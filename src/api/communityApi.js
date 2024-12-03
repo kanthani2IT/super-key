@@ -62,6 +62,20 @@ const getAllCommunityList = async (queries) => {
   }
 };
 
+const getCommunityList = async (body) => {
+  const response = await http({
+    method: "GET",
+    url: COMMUNITY.getCommunityList(
+      body.page,
+      body.size,
+      body.sortBy,
+      body.orderBy,
+      body.status
+    ),
+  });
+  return response;
+};
+
 export const communityApi = {
   getUsersData,
   getCommunityById,
@@ -69,4 +83,5 @@ export const communityApi = {
   deleteCommunityById,
   createCommunity,
   getAllCommunityList,
+  getCommunityList,
 };

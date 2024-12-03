@@ -2,27 +2,42 @@ import { Drawer } from "@mui/material";
 
 import AppGrid from "components/AppComponents/AppGrid";
 import {
+  useCommunityList,
   useCommunityListQuery,
   useDeleteCommunityById,
 } from "hooks/useCommunity";
 import CommunityTable from "pages/dashboard/CommunityTable";
 import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditCommunity from "./edit-community";
 import OnboardingIndex from "./onboarding";
+
+const initialValue = {
+  page: 0,
+  size: 10,
+  sort: "",
+  order: "",
+  status: "",
+};
 
 const CommunityOnboarding = () => {
   const [communityData, setCommunitydata] = useState("");
 
   const [edit, setEdit] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [filters, setFilters] = useState(initialValue);
 
-  const {
-    data: communityList,
-    isFetching: communitListFetching,
-    refetch,
-  } = useCommunityListQuery();
+  const { refetch } = useCommunityListQuery();
+
   const { mutate: deleteUserById } = useDeleteCommunityById();
+  const {
+    mutate: getCommunityList,
+    data: communityListData,
+    isLoading: communityListLoading,
+  } = useCommunityList();
+
+  const { content } = communityListData?.data ?? {};
+
   //handlers
   const openDrawer = (id) => {
     setCommunitydata(id);
@@ -47,7 +62,28 @@ const CommunityOnboarding = () => {
   const handleSelectionChange = (selected) => {
     setSelectedRows(selected);
   };
-  console.log(communityList, "####");
+
+  const handleChangeRadio = (e) => {
+    const { value } = e.target;
+    setFilters({ ...filters, sort: value });
+    fetchData(value);
+  };
+
+  const fetchData = (sort) => {
+    const body = {
+      page: 0,
+      size: 10,
+      sortBy: sort === "inActive" && "active" ? "" : "name",
+      orderBy: "",
+      status: "",
+    };
+    getCommunityList(body);
+  };
+
+  useEffect(() => {
+    fetchData(filters.sort);
+  }, []);
+
   return (
     <AppGrid container spacing={4}>
       <AppGrid
@@ -97,13 +133,15 @@ const CommunityOnboarding = () => {
       <AppGrid item size={{ xs: 12 }}>
         <CommunityTable
           height={"80vh"}
-          isLoading={communitListFetching & !communityList?.content?.length}
-          communityList={communityList}
+          isLoading={communityListLoading}
+          communityList={content || []}
           onSelectionChange={handleSelectionChange}
           openPopup={openDrawer}
           handleOffBoard={handleOffBoard}
           communityInfo={communityData}
           setCommunityInfo={setCommunitydata}
+          filters={filters}
+          handleChangeRadio={handleChangeRadio}
         />
       </AppGrid>
       <Drawer open={edit} onClose={closeDrawer} anchor="right">
