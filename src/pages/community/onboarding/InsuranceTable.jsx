@@ -108,9 +108,9 @@ const DocumentTypeDropdown = ({ value, onChange, documentTypesData }) => (
       searchKey="communityManager"
       value={value}
       options={documentTypesData}
-      placeholder="Select Manager"
+      placeholder="Select Document Type"
       size="small"
-      // onSearch={onSearch}
+    // onSearch={onSearch}
     />
   </>
 );
@@ -174,6 +174,7 @@ const FileRow = ({
     </EllipsisCell>
     <EllipsisCell>
       <DocumentTypeDropdown
+
         value={files.docType}
         onChange={({ target }, data) => onTypeChange(index, target.value)}
         documentTypesData={documentTypesData}

@@ -13,7 +13,7 @@ const ONBOARD = {
 };
 const COMMUNITY = {
   getAll: "/api/community",
-  createCommunity: "/api/community/create",
+  createCommunity: "/api/community/createWithFile",
   getAllCommunityList: "/api/community/paging",
 };
 const COMMON = {
