@@ -48,8 +48,8 @@ const initialValues = {
     email: "",
   },
   insuranceDetails: {
-    insuranceValue: null,
-    insuranceCoverage: "",
+    premiumAmount: null,
+    insuredCoverage: "",
   },
 };
 
@@ -77,8 +77,8 @@ const initialValidationSchema = {
       .required("Email is required"),
   }),
   insuranceDetails: Yup.object().shape({
-    insuranceValue: Yup.object().required("Insurance Value is required"),
-    insuranceCoverage: Yup.string().required("Insurance Coverage is required"),
+    premiumAmount: Yup.object().required("Insurance Value is required"),
+    insuredCoverage: Yup.string().required("Insurance Coverage is required"),
   }),
 };
 
@@ -122,8 +122,8 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
         communityManagerId: values?.communityManager?.managerId,
         companyId: values?.communityManager?.managementCompanyId,
         propertyManagerId: values?.propertyManager?.userId,
-        insuredCoverage: values?.insuranceDetails?.insuranceCoverage,
-        // insuranceValue: values?.insuranceDetails?.insuranceValue?.name,
+        insuredCoverage: values?.insuranceDetails?.insuredCoverage,
+        premiumAmount: values?.insuranceDetails?.premiumAmount.name,
         status: "ACTIVE"
       };
 
@@ -192,7 +192,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   useEffect(() => {
     if (communityInfo?.data) {
       const data = communityInfo?.data;
-
+console.log(data,"$$$ data")
       setValues((prevValues) => ({
         ...prevValues,
         addressDetails: {
@@ -222,8 +222,8 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
           code: data?.propertyManager?.region || defaultCountryCode,
         },
         insuranceDetails: {
-          insuranceValue: data?.insuranceValue || "",
-          insuranceCoverage: data?.insuranceCoverage || "10000000",
+          premiumAmount: data?.premiumAmount || "",
+          insuredCoverage: data?.insuredCoverage || 10000000,
         },
       }));
     }
@@ -320,7 +320,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   const handleEdit = () => {
     setEnableEdit(true);
   };
-
+console.log(values,"$$$$ values 333")
   return (
     <AppCard title={"Desert Springs"} footer={<Footer />} onClose={onClose}>
       <AppGrid
@@ -647,18 +647,18 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               variant="body2"
             >
               <AppAutoComplete
-                name="insuranceDetails.insuranceValue"
+                name="insuranceDetails.premiumAmount"
                 freeSolo={false}
                 disabled={!enableEdit}
                 error={
-                  touched.insuranceDetails?.insuranceValue &&
-                  errors.insuranceDetails?.insuranceValue
+                  touched.insuranceDetails?.premiumAmount &&
+                  errors.insuranceDetails?.premiumAmount
                 }
                 onChange={handleChange}
                 onBlur={handleBlur}
                 nameParam="name"
                 searchKey="propertyManager"
-                value={values?.insuranceDetails?.insuranceValue || ""}
+                value={values?.insuranceDetails?.premiumAmount.toString() || ""}
                 options={insuranceOptions}
                 placeholder="Select Insurance Value"
               />
@@ -671,19 +671,19 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               variant="body2"
             >
               <TextField
-                value={values?.insuranceDetails?.insuranceCoverage}
+                value={values?.insuranceDetails?.insuredCoverage}
                 placeholder="Eg : 1,00,000"
                 fullWidth
                 onChange={handleChange}
-                name="insuranceDetails.insuranceCoverage"
+                name="insuranceDetails.insuredCoverage"
                 disabled={!enableEdit}
                 error={Boolean(
-                  touched.insuranceDetails?.insuranceCoverage &&
-                  errors.insuranceDetails?.insuranceCoverage
+                  touched.insuranceDetails?.insuredCoverage &&
+                  errors.insuranceDetails?.insuredCoverage
                 )}
                 helperText={
-                  touched.insuranceDetails?.insuranceCoverage &&
-                  errors.insuranceDetails?.insuranceCoverage
+                  touched.insuranceDetails?.insuredCoverage &&
+                  errors.insuranceDetails?.insuredCoverage
                 }
               />
             </AppLabelComponent>
