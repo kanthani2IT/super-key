@@ -192,7 +192,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   useEffect(() => {
     if (communityInfo?.data) {
       const data = communityInfo?.data;
-console.log(data,"$$$ data")
+      console.log(data, "$$$ data")
       setValues((prevValues) => ({
         ...prevValues,
         addressDetails: {
@@ -320,7 +320,7 @@ console.log(data,"$$$ data")
   const handleEdit = () => {
     setEnableEdit(true);
   };
-console.log(values,"$$$$ values 333")
+  console.log(values, "$$$$ values 333")
   return (
     <AppCard title={"Desert Springs"} footer={<Footer />} onClose={onClose}>
       <AppGrid
@@ -658,7 +658,7 @@ console.log(values,"$$$$ values 333")
                 onBlur={handleBlur}
                 nameParam="name"
                 searchKey="propertyManager"
-                value={values?.insuranceDetails?.premiumAmount.toString() || ""}
+                value={values?.insuranceDetails?.premiumAmount?.toString() || ""}
                 options={insuranceOptions}
                 placeholder="Select Insurance Value"
               />
