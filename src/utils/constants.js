@@ -24,7 +24,7 @@ export const pManagers = [
   { id: "kavya", name: "Kavya" },
 ];
 export const insuranceOptions = [
-  { id: "1000000", name: "100000" },
+  { id: "100000", name: "100000" },
   { id: "200000", name: "200000" },
   { id: "3000000", name: "300000" },
   { id: "400000", name: "400000" },

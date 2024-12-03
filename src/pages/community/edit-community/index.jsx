@@ -222,7 +222,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
           code: data?.propertyManager?.region || defaultCountryCode,
         },
         insuranceDetails: {
-          premiumAmount: data?.premiumAmount || "",
+          premiumAmount: data?.premiumAmount ? { id: data?.premiumAmount, name: data?.premiumAmount } : "",
           insuredCoverage: data?.insuredCoverage || 10000000,
         },
       }));
@@ -235,7 +235,6 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   };
   const handleModal = () => {
     setModal(false);
-    onClose();
   };
   const handleOffBoard = () => {
     const payload = {
@@ -309,7 +308,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               ? "Do you want to off-board the community?"
               : "Are you sure you want to discard the changes?"
           }
-          confirmLabel={offBoard ? "Yes" : "Save"}
+          confirmLabel={offBoard ? "Yes" : "No"}
           cancelLabel={offBoard ? "No" : "Yes, Discard"}
           onConfirm={offBoard ? handleOffBoard : handleModal}
           onCancel={handleModal}
@@ -658,7 +657,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 onBlur={handleBlur}
                 nameParam="name"
                 searchKey="propertyManager"
-                value={values?.insuranceDetails?.premiumAmount?.toString() || ""}
+                value={values?.insuranceDetails?.premiumAmount || null}
                 options={insuranceOptions}
                 placeholder="Select Insurance Value"
               />
