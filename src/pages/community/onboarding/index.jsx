@@ -12,6 +12,7 @@ import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import * as Yup from "yup";
+import { transformDocuments } from "./utils";
 
 const AddNewCommunity = React.lazy(() => import("./AddNewCommunity"));
 const CommunityAddress = React.lazy(() => import("./CommunityAddress"));
@@ -222,35 +223,23 @@ const OnboardingIndex = ({ refetch }) => {
       : null,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      if (activeStep == onBoardingStepper?.length - 2) {
+      if (activeStep == onBoardingStepper?.length -2) {
+        const formData = new FormData();
+        
         let payload = {
           name: values?.communityName?.name,
           contactInfo: values?.communityAddress?.label,
           propertyManagerId: values?.propertyManager?.userId,
           communityManagerId: values?.communityManager?.managerId,
+          companyId: values?.communityManager?.managementCompanyId,
           claims: 0,
           insured: 0,
           status: "ACTIVE",
-
-          // communityManager: {
-          //   managerId: values?.communityManager?.managerId,
-          //   name: values?.communityManager?.name,
-          //   email: values?.communityManager?.email,
-          //   phone: values?.communityManager?.phone,
-          //   region: values?.communityManager?.countryCode?.value,
-          //   managementCompanyId: values?.communityManager?.managementCompanyId,
-          // },
-          // propertyManager: {
-          //   userId: values?.propertyManager?.userId,
-          //   username: values?.propertyManager?.username,
-          //   email: values?.propertyManager?.email,
-          //   phone: values?.propertyManager?.phone,
-          //   region: values?.propertyManager?.countryCode?.value,
-          //   // managementCompanyId: values?.communityManager?.managementCompanyId
-          // },
-          // documents: []
+          documents: transformDocuments(selectedFiles)
         };
-        mutate(payload);
+        formData.append('community',JSON.stringify(payload));
+        selectedFiles.forEach(item => formData.append("file",item.file));
+        mutate(formData);
       } else {
         handleNext(values);
         updateOnboarding(values);
