@@ -36,9 +36,12 @@ export default function UserTable({
   setCommunityInfo,
   filters,
   handleChangeRadio,
+  handleChangePage,
+  page,
+  setPage,
 }) {
   const theme = useTheme();
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -127,9 +130,7 @@ export default function UserTable({
     communityManagerName: row.communityManager?.name || "",
     propertyManagerName: row.propertyManager?.name || "",
   }));
-
-  const handleChangePage = (event, newPage) => setPage(newPage);
-
+  console.log(filteredRows, communityList, "$$$$$");
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);
   };
@@ -215,7 +216,7 @@ export default function UserTable({
           getStatus={getStatus}
           onSelectionChange={onSelectionChange}
           currentPage={page}
-          totalItems={communityList?.length}
+          totalItems={communityList?.totalElements}
           pageSize={pageSize}
           onPageChange={handleChangePage}
         />

@@ -22,7 +22,7 @@ const initialValue = {
 
 const CommunityOnboarding = () => {
   const [communityData, setCommunitydata] = useState("");
-
+  const [page, setPage] = useState(1);
   const [edit, setEdit] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [filters, setFilters] = useState(initialValue);
@@ -41,7 +41,10 @@ const CommunityOnboarding = () => {
   } = useCommunityList();
 
   const { content } = communityListData?.data ?? {};
-
+  const handleChangePage = (event, newPage) => {
+    fetchData({ page: newPage });
+    setPage(newPage);
+  };
   //handlers
   const openDrawer = (id) => {
     setCommunitydata(id);
@@ -73,9 +76,9 @@ const CommunityOnboarding = () => {
     fetchData(value);
   };
 
-  const fetchData = (sort) => {
+  const fetchData = ({ sort, page }) => {
     const body = {
-      page: 0,
+      page: page,
       size: 10,
       sortBy: sort === "inActive" && "active" ? "" : "name",
       orderBy: "",
@@ -87,7 +90,7 @@ const CommunityOnboarding = () => {
   useEffect(() => {
     fetchData(filters.sort);
   }, []);
-
+  console.log(content, "::::");
   return (
     <AppGrid container spacing={4}>
       <AppGrid
@@ -138,7 +141,7 @@ const CommunityOnboarding = () => {
         <CommunityTable
           height={"80vh"}
           isLoading={communityListLoading}
-          communityList={communityList}
+          communityList={communityListData?.data}
           onSelectionChange={handleSelectionChange}
           openPopup={openDrawer}
           handleOffBoard={handleOffBoard}
@@ -146,6 +149,9 @@ const CommunityOnboarding = () => {
           setCommunityInfo={setCommunitydata}
           filters={filters}
           handleChangeRadio={handleChangeRadio}
+          handleChangePage={handleChangePage}
+          page={page}
+          setPage={setPage}
         />
       </AppGrid>
       <Drawer open={edit} onClose={closeDrawer} anchor="right">

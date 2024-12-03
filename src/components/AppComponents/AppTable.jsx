@@ -23,7 +23,7 @@ const AppTable = ({
   customStyles = {},
   onSelectionChange,
   noDataText = "No Data Found",
-  currentPage,
+  currentPage = 1,
   totalItems,
   pageSize,
   onPageChange,
