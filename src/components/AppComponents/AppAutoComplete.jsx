@@ -64,7 +64,7 @@ const AppAutoComplete = ({
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const handleAddManually = (customOption) => {
-    onChange?.({ target: { name, value: customOption?.trim() } });
+    onChange?.({ target: { name, value: customOption } });
     onSearch?.("");
 
     setOpen(false);

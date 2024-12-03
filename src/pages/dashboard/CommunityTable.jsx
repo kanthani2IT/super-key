@@ -133,8 +133,8 @@ export default function UserTable({
   // Flatten the rows
   const flatRows = filteredRows?.map((row) => ({
     ...row,
-    communityManagerName: row.communityManager?.name || "",
-    propertyManagerName: row.propertyManager?.name || "",
+    communityManagerName: row.communityManager?.username || "",
+    propertyManagerName: row.propertyManager?.username || "",
   }));
 
   const handleSort = (e) => {

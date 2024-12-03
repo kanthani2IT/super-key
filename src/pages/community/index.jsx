@@ -38,6 +38,7 @@ const CommunityOnboarding = () => {
   const handleChangePage = (event, newPage) => {
     fetchData(filters.sort, filters.search, newPage);
     setPage(newPage);
+    setFilters({...filters, page:newPage})
   };
   //handlers
   const openDrawer = (id) => {
@@ -67,7 +68,8 @@ const CommunityOnboarding = () => {
   const handleChangeRadio = (e) => {
     const { value } = e.target;
     setFilters({ ...filters, sort: value });
-    fetchData(value);
+    fetchData(value, filters.search, 1);
+    setPage(1)
   };
 
   const fetchData = (sort, search, page=filters.page) => {
@@ -87,11 +89,13 @@ const CommunityOnboarding = () => {
   };
 
   const onSearch = useDebounceFn((searchString) => {
-    fetchData(filters.sort, searchString);
+    fetchData(filters.sort, searchString, 1);
+    setPage(1)
   }, 500);
 
   const handleSearch = (value) => {
-    setFilters({ ...filters, search: value });
+    setFilters({ ...filters, page:1,search: value });
+    
     onSearch(value);
   };
 
@@ -166,7 +170,11 @@ const CommunityOnboarding = () => {
         />
       </AppGrid>
       <Drawer open={edit} onClose={closeDrawer} anchor="right">
-        <EditCommunity onClose={closeDrawer} communityData={communityData} />
+        <EditCommunity
+          onClose={closeDrawer}
+          communityData={communityData}
+          refetch={refetch}
+        />
       </Drawer>
     </AppGrid>
   );

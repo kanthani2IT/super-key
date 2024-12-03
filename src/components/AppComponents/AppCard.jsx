@@ -34,12 +34,11 @@ const AppCard = ({ onClose, children, title, footer }) => {
       />
 
       <Divider />
-      <CardContent sx={{ height: "87vh", overflowY: "auto" }}>
+      <CardContent sx={{ height: "85vh", overflowY: "auto" }}>
         {children}
       </CardContent>
-      <CardActions sx={{ height: "5vh" }}>
-        {footer}
-      </CardActions>
+
+      <CardActions sx={{ height: "10vh" }}>{footer}</CardActions>
     </Card>
   );
 };

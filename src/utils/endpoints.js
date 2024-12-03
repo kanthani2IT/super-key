@@ -5,18 +5,17 @@ const LOGIN = {
   newPassword: "/api/auth/setNewPassword",
   enableMailChecking: (email) => `/api/auth/email?email=${email}`,
 };
-const ONBOARD = {
-  getUsers: "/api/veruna/users",
-  getCommunityById: (id) => `/api/community/${id}`,
-  updateCommunityById: (id) => `/api/community/${id}`,
-  deleteCommunityById: (id) => `/api/community/${id}`,
-};
+
 const COMMUNITY = {
   getAll: "/api/community",
   createCommunity: "/api/community/createWithFile",
   getAllCommunityList: "/api/community/paging",
   getCommunityList: (page, size, sortBy, orderBy, status, search) =>
     `/api/community/paging?page=${page}&size=${size}&sortBy=${sortBy}&direction=${orderBy}&status=${status}&name=${search}`,
+  getUsers: "/api/veruna/users",
+  getCommunityById: (id) => `/api/community/${id}`,
+  updateCommunityById: (id) => `/api/community/update/${id}`,
+  deleteCommunityById: (id) => `/api/community/${id}`,
 };
 const COMMON = {
   getAllLocation: `/api/autocomplete`,
@@ -34,4 +33,4 @@ const DASHBOARD = {
   getDashboardMetrics: `/api/dashboard/metrics`,
 };
 
-export { COMMON, COMMUNITY, DASHBOARD, LOGIN, ONBOARD };
+export { COMMON, COMMUNITY, DASHBOARD, LOGIN };

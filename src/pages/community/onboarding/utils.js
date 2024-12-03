@@ -39,3 +39,11 @@ export const transformDocuments = (inputData) => {
     type: item.docType.documentId  // Extract documentId as type
   }));
 };
+
+export const getContactInfo = (addressDetails) => {
+  const { city, state, zipcode } = addressDetails;
+
+  const addressParts = [city, state, zipcode].filter(Boolean);
+
+  return addressParts.join(", ");
+};

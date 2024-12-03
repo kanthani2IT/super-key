@@ -1,5 +1,5 @@
 import { EditFilled } from "@ant-design/icons";
-import { TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import AppAutoComplete from "components/AppComponents/AppAutoComplete";
 import AppCard from "components/AppComponents/AppCard";
 import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
@@ -23,6 +23,7 @@ import { useEffect, useState } from "react";
 import { countryPhoneCodes, insuranceOptions } from "utils/constants";
 import { useDebounceFn } from "utils/helpers";
 import * as Yup from "yup";
+import { getContactInfo } from "../onboarding/utils";
 const defaultCountryCode = { label: "+1", value: "+1" };
 
 const initialValues = {
@@ -33,7 +34,7 @@ const initialValues = {
     zipcode: "",
   },
   communityManager: {
-    name: "",
+    username: "",
     code: defaultCountryCode,
     phone: "",
 
@@ -60,7 +61,7 @@ const initialValidationSchema = {
     zipcode: Yup.string().required("Zipcode is required"),
   }),
   communityManager: Yup.object().shape({
-    name: Yup.string().required("Name is required"),
+    username: Yup.string().required("Name is required"),
     phone: Yup.string().required("Contact Number is required"),
     code: Yup.object().required("Country Code is required"),
     email: Yup.string()
@@ -81,7 +82,7 @@ const initialValidationSchema = {
   }),
 };
 
-const EditCommunity = ({ onClose, communityData }) => {
+const EditCommunity = ({ onClose, communityData, refetch }) => {
   const [enableEdit, setEnableEdit] = useState(false);
   const [modal, setModal] = useState(false);
   const [offBoard, setOffBoard] = useState(false);
@@ -89,14 +90,16 @@ const EditCommunity = ({ onClose, communityData }) => {
     communityManager: "",
     propertyManager: "",
   });
-
+  const successHandler = () => {
+    refetch();
+  };
   const {
     data: communityInfo,
     isLoading,
     isError,
   } = useGetCommunityById(communityData?.communityId);
   const { mutate: updateCommunity, isLoading: isUpdating } =
-    useUpdateCommunityById();
+    useUpdateCommunityById(successHandler);
   const { mutate: deleteUserById } = useDeleteCommunityById();
 
   const { data: communityManagerData } = useCommunityManagersQuery(
@@ -110,31 +113,22 @@ const EditCommunity = ({ onClose, communityData }) => {
     initialValues: initialValues,
     validationSchema: Yup.object().shape(initialValidationSchema),
     onSubmit: (values) => {
+      let contactInfo = getContactInfo(values?.addressDetails)
+      console.log(values,"$$$$")
       const payload = {
         communityId: communityData?.communityId,
         name: values?.addressDetails?.communityName,
-        contactInfo: "",
-        communityManager: {
-          managerId: values?.communityManager?.managerId,
-          name: values?.communityManager?.name,
-          email: values?.communityManager?.email,
-          phone: values?.communityManager?.phone,
-          region: values?.communityManager?.code?.value,
-          managementCompanyId: values?.communityManager?.managementCompanyId,
-        },
-        propertyManager: {
-          managerId: values?.propertyManager?.userId,
-          name: values?.propertyManager?.username,
-          email: values?.propertyManager?.email,
-          phone: values?.propertyManager?.phone,
-          region: values?.propertyManager?.code?.value,
-          // managementCompanyId: "string",
-        },
+        contactInfo,
+        communityManagerId: values?.communityManager?.managerId,
+        companyId: values?.communityManager?.managementCompanyId,
+        propertyManagerId: values?.propertyManager?.userId,
+        insuredCoverage: values?.insuranceDetails?.insuranceCoverage,
       };
 
       updateCommunity({ id: communityData?.communityId, body: payload });
     },
   });
+  console.log(communityData, "communityData");
   const {
     values,
     errors,
@@ -206,7 +200,7 @@ const EditCommunity = ({ onClose, communityData }) => {
           zipcode: data?.zipcode || "96162",
         },
         communityManager: {
-          name: data?.communityManager?.name || "Henry",
+          username: data?.communityManager?.username || "Henry",
           email: data?.communityManager?.email || "henry@gmaiol.com",
           phone: data?.communityManager?.phone || "718 222 2222",
           code: data?.communityManager?.region || defaultCountryCode,
@@ -237,7 +231,7 @@ const EditCommunity = ({ onClose, communityData }) => {
       mappings: [
         {
           communityId: communityData?.communityId,
-          cmcId: communityData?.communityId,
+          cmcId: communityData?.communityManager?.managementCompanyId,
         },
       ],
     };
@@ -251,11 +245,11 @@ const EditCommunity = ({ onClose, communityData }) => {
     return (
       <>
         <AppRowBox>
-          <AppGrid item >
+          <AppGrid item size={{ xs: 6, sx: 6, lg: 8 }}>
             <RadiusStyledButton
               color="#FFFFFF"
               textColor="#E12929"
-              width="227px"
+              width="30%"
               height="50px"
               borderRadius="10px"
               onClick={onReset}
@@ -267,33 +261,32 @@ const EditCommunity = ({ onClose, communityData }) => {
             </RadiusStyledButton>
           </AppGrid>
           {enableEdit && (
-            <AppGrid
-              item
-              container
-              spacing={2}
-            >
-              <RadiusStyledButton
-                onClick={onDiscard}
-                color="secondary"
-                variant="outlined"
-                textColor="#8c8c8c"
-                width="140px"
-                height="50px"
-                borderRadius="10px"
-              >
-                Discard
-              </RadiusStyledButton>
-              <RadiusStyledButton
-                color="info"
-                type="submit"
-                onClick={handleSubmit}
-                variant="contained"
-                width="181px"
-                height="50px"
-                borderRadius="10px"
-              >
-                Save Changes
-              </RadiusStyledButton>
+            <AppGrid item size={{ xs: 6, sx: 6, lg: 4 }}>
+              <Box sx={{ display: "flex", gap: "10px", justifyContent: "end" }}>
+                <RadiusStyledButton
+                  onClick={onDiscard}
+                  color="secondary"
+                  variant="outlined"
+                  textColor="#8c8c8c"
+                  width="50%"
+                  height="50px"
+                  borderRadius="10px"
+                >
+                  Discard
+                </RadiusStyledButton>
+
+                <RadiusStyledButton
+                  color="info"
+                  type="submit"
+                  onClick={handleSubmit}
+                  variant="contained"
+                  width="50%"
+                  height="50px"
+                  borderRadius="10px"
+                >
+                  Save Changes
+                </RadiusStyledButton>
+              </Box>
             </AppGrid>
           )}
         </AppRowBox>
@@ -328,7 +321,7 @@ const EditCommunity = ({ onClose, communityData }) => {
       >
         <AppGrid container sx={{ justifyContent: "space-between" }}>
           <Typography variant="h3" sx={{ mb: 2 }}>
-            {"AddressDetails"}
+            {"Address Details"}
           </Typography>
 
           <RadiusStyledButton
@@ -424,7 +417,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.addressDetails?.zipcode &&
-                  errors.addressDetails?.zipcode
+                    errors.addressDetails?.zipcode
                 )}
                 helperText={
                   touched.addressDetails?.zipcode &&
@@ -443,24 +436,24 @@ const EditCommunity = ({ onClose, communityData }) => {
         direction={"column"}
       >
         <Typography variant="h3" sx={{ mb: 2 }}>
-          {"CommunityManager"}
+          {"Community Manager"}
         </Typography>
         <AppGrid container columnSpacing={5} rowSpacing={2}>
           <AppGrid item size={size}>
             <AppLabelComponent label={"Name"}>
               <AppAutoComplete
-                name="communityManager.name"
+                name="communityManager.username"
                 freeSolo={false}
                 disabled={!enableEdit}
                 error={
-                  touched.communityManager?.name &&
-                  errors.communityManager?.name
+                  touched.communityManager?.username &&
+                  errors.communityManager?.username
                 }
                 onChange={handleManager}
                 // onBlur={handleBlur}
-                nameParam="name"
+                nameParam="username"
                 searchKey="communityManager"
-                value={values?.communityManager?.name}
+                value={values?.communityManager?.username}
                 options={communityManagerData?.data}
                 valueParam="managerId"
                 placeholder="Select Manager"
@@ -479,7 +472,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.communityManager?.email &&
-                  errors.communityManager?.email
+                    errors.communityManager?.email
                 )}
                 helperText={
                   touched.communityManager?.email &&
@@ -521,7 +514,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.communityManager?.phone &&
-                    errors.communityManager?.phone
+                      errors.communityManager?.phone
                   )}
                   helperText={
                     touched.communityManager?.phone &&
@@ -535,7 +528,7 @@ const EditCommunity = ({ onClose, communityData }) => {
       </AppGrid>
       <AppGrid container size={{ xs: 12 }} padding={1} direction={"column"}>
         <Typography variant="h3" sx={{ mb: 2 }}>
-          {"PropertyManager"}
+          {"Property Manager"}
         </Typography>
         <AppGrid container columnSpacing={5} rowSpacing={2}>
           <AppGrid item size={size}>
@@ -571,7 +564,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.propertyManager?.email &&
-                  errors.propertyManager?.email
+                    errors.propertyManager?.email
                 )}
                 helperText={
                   touched.propertyManager?.email &&
@@ -613,7 +606,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.propertyManager?.phone &&
-                    errors.propertyManager?.phone
+                      errors.propertyManager?.phone
                   )}
                   helperText={
                     touched.propertyManager?.phone &&
@@ -633,7 +626,7 @@ const EditCommunity = ({ onClose, communityData }) => {
         direction={"column"}
       >
         <Typography variant="h3" sx={{ mb: 2 }}>
-          {"InsuranceDetails"}
+          {"Insurance Details"}
         </Typography>
         <AppGrid container columnSpacing={5} rowSpacing={2}>
           <AppGrid item size={size}>
@@ -675,7 +668,7 @@ const EditCommunity = ({ onClose, communityData }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.insuranceDetails?.insuranceCoverage &&
-                  errors.insuranceDetails?.insuranceCoverage
+                    errors.insuranceDetails?.insuranceCoverage
                 )}
                 helperText={
                   touched.insuranceDetails?.insuranceCoverage &&

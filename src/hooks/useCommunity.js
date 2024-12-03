@@ -26,17 +26,29 @@ export const useGetCommunityById = (id) => {
   });
 };
 
-export const useUpdateCommunityById = () =>
-  useMutation({
+export const useUpdateCommunityById = (successHandler) => {
+  const { updateSnackbar } = useSnackbar();
+  const mutation = useMutation({
     mutationKey: ["updateCommunityById"],
     mutationFn: ({ id, body }) => api.community.updateCommunityById(id, body),
     onSuccess: (data) => {
-      console.log(data, "data");
+      successHandler?.();
+      updateSnackbar({
+        message: MESSAGE.communityOnboardedSuccess,
+        severity: SEVERITY.success,
+      });
     },
     onError: (error) => {
-      console.error(error);
+      const errorMessage = error?.response?.data?.token || "An error occurred.";
+      console.error("Mutation error:", errorMessage);
+      updateSnackbar({
+        message: errorMessage,
+        severity: SEVERITY.error,
+      });
     },
   });
+  return mutation;
+};
 export const useDeleteCommunityById = () =>
   useMutation({
     mutationKey: ["deleteCommunityById"],
