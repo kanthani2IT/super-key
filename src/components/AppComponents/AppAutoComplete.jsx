@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import AppToolTip from "./AppToolTip";
+import { removeExtraSpaces } from "pages/community/onboarding/utils";
 
 const AddManuallyButton = styled(Typography)({
   color: "#2954E1",
@@ -64,7 +65,12 @@ const AppAutoComplete = ({
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const handleAddManually = (customOption) => {
-    onChange?.({ target: { name, value: customOption } });
+    const optionValue = customOption[nameParam]
+    const newOption = {
+      ...customOption,
+      [nameParam]: removeExtraSpaces(optionValue),
+    };
+    onChange?.({ target: { name, value: newOption } });
     onSearch?.("");
 
     setOpen(false);

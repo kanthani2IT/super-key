@@ -3,7 +3,7 @@ export const importPolicyData = {
   instructions: "Select or drag and drop here. Can bulk upload",
   footerText:
     "Support file under 100 MB. 20 files per upload. Import files in DOCX, XLSX, CSV",
-  fileTypes: [".docx", ".xlsx", ".csv", ".pdf",],
+  fileTypes: [".docx", ".xlsx", ".csv", ".pdf"],
 };
 
 export const truncateFileName = (
@@ -33,10 +33,10 @@ export const truncateFileName = (
 
 // Function to transform the data
 export const transformDocuments = (inputData) => {
-  return inputData.map(item => ({
-    name: item.file.name,  // Extract file name
-    status: item.active?"APPROVED":"UNAPPROVED",    // Fixed status
-    type: item.docType.documentId  // Extract documentId as type
+  return inputData.map((item) => ({
+    name: item.file.name, // Extract file name
+    status: item.active ? "APPROVED" : "UNAPPROVED", // Fixed status
+    type: item.docType.documentId, // Extract documentId as type
   }));
 };
 
@@ -46,4 +46,8 @@ export const getContactInfo = (addressDetails) => {
   const addressParts = [city, state, zipcode].filter(Boolean);
 
   return addressParts.join(", ");
+};
+
+export const removeExtraSpaces = (input = "") => {
+  return input.replace(/\s+/g, " ").trim();
 };

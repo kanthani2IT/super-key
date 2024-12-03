@@ -103,7 +103,7 @@ const CommunityOnboarding = () => {
     fetchData(filters.sort, filters.search);
   }, []);
   const refetch = () => {
-    fetchData(filters.sort, filters.search);
+    fetchData(filters.sort, filters.search, 1);
   };
   return (
     <AppGrid container spacing={4}>
