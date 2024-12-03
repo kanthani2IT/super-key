@@ -1,4 +1,4 @@
-import http from "http/http";
+import http, { formDataHttp } from "http/http";
 
 const getRequest = (url, config = {}) => {
   return http.get(url, config);
@@ -16,4 +16,8 @@ const deleteRequest = (url, config = {}) => {
   return http.delete(url, config);
 };
 
-export { getRequest, postRequest, putRequest, deleteRequest };
+const postFormRequest = (url, data, config = {}) => {
+  return formDataHttp.post(url, data, config);
+};
+
+export { getRequest, postRequest, putRequest, deleteRequest,postFormRequest };

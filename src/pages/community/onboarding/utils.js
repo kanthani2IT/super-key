@@ -30,3 +30,12 @@ export const truncateFileName = (
   // Return the new file name with the extension
   return extensionNeeded ? `${truncatedName}.${extension}` : truncatedName;
 };
+
+// Function to transform the data
+export const transformDocuments = (inputData) => {
+  return inputData.map(item => ({
+    name: item.file.name,  // Extract file name
+    status: item.active?"APPROVED":"UNAPPROVED",    // Fixed status
+    type: item.docType.documentId  // Extract documentId as type
+  }));
+};
