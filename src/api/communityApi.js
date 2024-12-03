@@ -1,18 +1,18 @@
 import http from "http/http";
 import { getRequest, postRequest, putRequest } from "http/request";
-import { COMMUNITY, ONBOARD } from "utils/endpoints";
+import { COMMUNITY } from "utils/endpoints";
 import { addQueryParams } from "utils/helpers";
 
 const getUsersData = async ({ queryKey }) => {
   const reponse = await http({
     method: "GET",
-    url: ONBOARD.getUsers,
+    url: COMMUNITY.getUsers,
   });
   return reponse;
 };
 const getCommunityById = async (id) => {
   try {
-    const requestUrl = addQueryParams(ONBOARD.getCommunityById(id));
+    const requestUrl = addQueryParams(COMMUNITY.getCommunityById(id));
 
     const response = await getRequest(requestUrl);
     return response;
@@ -23,7 +23,7 @@ const getCommunityById = async (id) => {
 };
 const updateCommunityById = async (id, body) => {
   try {
-    const requestUrl = ONBOARD.updateCommunityById(id);
+    const requestUrl = COMMUNITY.updateCommunityById(id);
 
     const response = await putRequest(requestUrl, body);
     return response;
@@ -40,7 +40,7 @@ const createCommunity = async (payload) => {
 
 const deleteCommunityById = async (id, body) => {
   try {
-    const requestUrl = addQueryParams(ONBOARD.updateCommunityById(id));
+    const requestUrl = addQueryParams(COMMUNITY.updateCommunityById(id));
 
     const response = await putRequest(requestUrl, body);
 
