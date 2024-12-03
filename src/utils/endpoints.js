@@ -8,7 +8,7 @@ const LOGIN = {
 
 const COMMUNITY = {
   getAll: "/api/community",
-  createCommunity: "/api/community/create",
+  createCommunity: "/api/community/createWithFile",
   getAllCommunityList: "/api/community/paging",
   getUsers: "/api/veruna/users",
   getCommunityById: (id) => `/api/community/update/${id}`,

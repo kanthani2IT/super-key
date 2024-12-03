@@ -1,5 +1,5 @@
 import http from "http/http";
-import { getRequest, postRequest, putRequest } from "http/request";
+import { getRequest, putRequest } from "http/request";
 import { COMMUNITY } from "utils/endpoints";
 import { addQueryParams } from "utils/helpers";
 
@@ -34,7 +34,7 @@ const updateCommunityById = async (id, body) => {
 };
 
 const createCommunity = async (payload) => {
-  const reponse = await postRequest(COMMUNITY.createCommunity, payload);
+  const reponse = await postFormRequest(COMMUNITY.createCommunity, payload);
   return reponse;
 };
 
