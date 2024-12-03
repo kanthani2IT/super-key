@@ -135,7 +135,7 @@ export default function UserTable({
     communityManagerName: row.communityManager?.name || "",
     propertyManagerName: row.propertyManager?.name || "",
   }));
-  console.log(filteredRows, communityList, "$$$$$");
+
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);
   };
