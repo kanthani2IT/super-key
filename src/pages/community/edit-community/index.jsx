@@ -115,7 +115,6 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     validationSchema: Yup.object().shape(initialValidationSchema),
     onSubmit: (values) => {
       let contactInfo = getContactInfo(values?.addressDetails)
-      console.log(values,"$$$$")
       const payload = {
         communityId: communityData?.communityId,
         name: values?.addressDetails?.communityName,
@@ -124,6 +123,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
         companyId: values?.communityManager?.managementCompanyId,
         propertyManagerId: values?.propertyManager?.userId,
         insuredCoverage: values?.insuranceDetails?.insuranceCoverage,
+        status:"ACTIVE"
       };
 
       updateCommunity({ id: communityData?.communityId, body: payload });
