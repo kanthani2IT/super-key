@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import FileUploadButton from 'components/AppComponents/FileUploadButton';  // Importing the common button component
-import FileDetails from 'components/AppComponents/FileDetails';  // Component to display file details
-import { importPolicyData } from '../../pages/community/onboarding/utils';  // Importing the data
 import UploadIcon from 'assets/images/icons/NavIcons/UploadIcon';
-import { documentTypes } from 'pages/community/onboarding/InsuranceTable';
+import FileUploadButton from 'components/AppComponents/FileUploadButton'; // Importing the common button component
+import { importPolicyData } from '../../pages/community/onboarding/utils'; // Importing the data
 
-const InsuranceDocument = ({ enable = true, selectedFiles, setSelectedFiles, documentTypesData }) => {
+const InsuranceDocument = ({ enable = true, selectedFiles, setSelectedFiles, documentTypesData = [] }) => {
 
 
   const handleFileUpload = (event) => {
     const fileList = event.target.files;
     const filesArray = Array.from(fileList).map((file) => ({
       file, // The original file object
-      docType: documentTypesData[0] || [], // Default value for docType
+      docType: documentTypesData?.[0] || [], // Default value for docType
       active: false, // Default value for active
     }));
     const totalFiles = selectedFiles.length + filesArray.length;

@@ -132,7 +132,7 @@ export default function Profile() {
                           <Stack>
                             <Typography variant="h6">Vijayaraj</Typography>
                             <Typography variant="body2" color="text.secondary">
-                              Developer
+                              CMC Manager
                             </Typography>
                           </Stack>
                         </Stack>
