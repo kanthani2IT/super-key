@@ -10,7 +10,7 @@ import DrawerContent from "./DrawerContent";
 import DrawerHeader from "./DrawerHeader";
 import MiniDrawerStyled from "./MiniDrawerStyled";
 
-import { handlerDrawerOpen, useGetMenuMaster } from "api/menu";
+import { useGetMenuMaster } from "api/menu";
 import { drawerWidth } from "config";
 
 // ==============================|| MAIN LAYOUT - DRAWER ||============================== //
@@ -45,7 +45,7 @@ export default function MainDrawer({ window }) {
       ) : (
         <Drawer
           container={container}
-          variant="temporary"
+          variant="persistent"
           open={drawerOpen}
           onClose={() => handlerDrawerOpen(!drawerOpen)}
           ModalProps={{ keepMounted: true }}

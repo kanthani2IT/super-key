@@ -45,7 +45,6 @@ export default function UserTable({
   selectedRows
 }) {
   const theme = useTheme();
-  // const [page, setPage] = useState(1);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
