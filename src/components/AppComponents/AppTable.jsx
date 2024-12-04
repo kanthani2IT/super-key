@@ -27,8 +27,8 @@ const AppTable = ({
   totalItems,
   pageSize,
   onPageChange,
+  selected = []
 }) => {
-  const [selected, setSelected] = useState([]);
 
   const rowCount = rows.length;
   const numSelected = selected.length;
@@ -37,7 +37,7 @@ const AppTable = ({
     const newSelected = event.target.checked
       ? rows.map((row) => row[rowKey])
       : [];
-    setSelected(newSelected);
+
     onSelectionChange?.(newSelected);
   };
 
@@ -58,7 +58,7 @@ const AppTable = ({
       );
     }
 
-    setSelected(newSelected);
+
     onSelectionChange?.(newSelected);
   };
   return (
@@ -151,7 +151,7 @@ const AppTable = ({
           totalItems={totalItems}
           onPageChange={onPageChange}
         />
-      ):null}
+      ) : null}
     </TableContainer>
   );
 };

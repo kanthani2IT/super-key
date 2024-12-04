@@ -48,8 +48,8 @@ const initialValues = {
     email: "",
   },
   insuranceDetails: {
-    insuranceValue: null,
-    insuranceCoverage: "",
+    premiumAmount: null,
+    insuredCoverage: "",
   },
 };
 
@@ -77,8 +77,8 @@ const initialValidationSchema = {
       .required("Email is required"),
   }),
   insuranceDetails: Yup.object().shape({
-    insuranceValue: Yup.object().required("Insurance Value is required"),
-    insuranceCoverage: Yup.string().required("Insurance Coverage is required"),
+    premiumAmount: Yup.object().required("Insurance Value is required"),
+    insuredCoverage: Yup.string().required("Insurance Coverage is required"),
   }),
 };
 
@@ -92,6 +92,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   });
   const successHandler = () => {
     refetch();
+    onClose();
   };
   const {
     data: communityInfo,
@@ -114,7 +115,6 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     validationSchema: Yup.object().shape(initialValidationSchema),
     onSubmit: (values) => {
       let contactInfo = getContactInfo(values?.addressDetails)
-      console.log(values,"$$$$")
       const payload = {
         communityId: communityData?.communityId,
         name: values?.addressDetails?.communityName,
@@ -122,13 +122,14 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
         communityManagerId: values?.communityManager?.managerId,
         companyId: values?.communityManager?.managementCompanyId,
         propertyManagerId: values?.propertyManager?.userId,
-        insuredCoverage: values?.insuranceDetails?.insuranceCoverage,
+        insuredCoverage: values?.insuranceDetails?.insuredCoverage,
+        premiumAmount: values?.insuranceDetails?.premiumAmount.name,
+        status: "ACTIVE"
       };
 
       updateCommunity({ id: communityData?.communityId, body: payload });
     },
   });
-  console.log(communityData, "communityData");
   const {
     values,
     errors,
@@ -190,30 +191,38 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   useEffect(() => {
     if (communityInfo?.data) {
       const data = communityInfo?.data;
-
+      console.log(data, "$$$ data")
       setValues((prevValues) => ({
         ...prevValues,
         addressDetails: {
           communityName: data?.name || "",
-          city: data?.city || "Sacramento",
-          state: data?.state || "California",
-          zipcode: data?.zipcode || "96162",
+          city: data?.contactInfo
+            ? data?.contactInfo.split(",")[1]
+            : "Sacramento",
+          state: data?.contactInfo
+            ? data?.contactInfo.split(",")[0]
+            : "California",
+          zipcode: data?.contactInfo
+            ? data?.contactInfo.split(",")[2]
+            : "96162",
         },
         communityManager: {
           username: data?.communityManager?.username || "Henry",
+          userId: data?.communityManager?.managerId,
           email: data?.communityManager?.email || "henry@gmaiol.com",
           phone: data?.communityManager?.phone || "718 222 2222",
           code: data?.communityManager?.region || defaultCountryCode,
         },
         propertyManager: {
           username: data?.propertyManager?.username || "Lucas",
+          userId: data?.propertyManager?.managerId,
           email: data?.propertyManager?.email || "lucas@gmail.com",
           phone: data?.propertyManager?.phone || "717 222 2222",
           code: data?.propertyManager?.region || defaultCountryCode,
         },
         insuranceDetails: {
-          insuranceValue: data?.insuranceValue || "",
-          insuranceCoverage: data?.insuranceCoverage || "10000000",
+          premiumAmount: data?.premiumAmount ? { id: data?.premiumAmount, name: data?.premiumAmount } : "",
+          insuredCoverage: data?.insuredCoverage || 10000000,
         },
       }));
     }
@@ -238,18 +247,18 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     deleteUserById({ id: communityData?.communityId, body: payload });
   };
   const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 };
-  const mobileSize = { xs: 9, sm: 9, md: 9, lg: 4, xl: 4 };
+  const mobileSize = { xs: 8, sm: 8, md: 8, lg: 4, xl: 4 };
   const size = { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 };
 
   const Footer = () => {
     return (
       <>
-        <AppRowBox>
+        <AppRowBox >
           <AppGrid item size={{ xs: 6, sx: 6, lg: 8 }}>
             <RadiusStyledButton
               color="#FFFFFF"
               textColor="#E12929"
-              width="30%"
+              // width="30%"
               height="50px"
               borderRadius="10px"
               onClick={onReset}
@@ -280,7 +289,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   type="submit"
                   onClick={handleSubmit}
                   variant="contained"
-                  width="50%"
+                  // width="50%"
                   height="50px"
                   borderRadius="10px"
                 >
@@ -298,9 +307,9 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               ? "Do you want to off-board the community?"
               : "Are you sure you want to discard the changes?"
           }
-          confirmLabel={offBoard ? "Yes" : "Save"}
+          confirmLabel={offBoard ? "Yes" : "No"}
           cancelLabel={offBoard ? "No" : "Yes, Discard"}
-          onConfirm={handleOffBoard}
+          onConfirm={offBoard ? handleOffBoard : handleModal}
           onCancel={handleModal}
         />
       </>
@@ -309,18 +318,11 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   const handleEdit = () => {
     setEnableEdit(true);
   };
-
   return (
     <AppCard title={"Desert Springs"} footer={<Footer />} onClose={onClose}>
-      <AppGrid
-        container
-        size={{ xs: 12 }}
-        padding={1}
-        spacing={1}
-        direction={"column"}
-      >
-        <AppGrid container sx={{ justifyContent: "space-between" }}>
-          <Typography variant="h3" sx={{ mb: 2 }}>
+      <AppGrid container size={{ xs: 12 }} rowSpacing={4}>
+        <AppGrid item size={{ xs: 12 }} container justifyContent={'space-between'}>
+          <Typography variant="h3">
             {"Address Details"}
           </Typography>
 
@@ -337,7 +339,9 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
             Edit Details
           </RadiusStyledButton>
         </AppGrid>
-        <AppGrid container columnSpacing={5} rowSpacing={2}>
+        {/* Community Manager */}
+
+        <AppGrid container columnSpacing={4} rowSpacing={2}>
           <AppGrid item size={size}>
             <AppLabelComponent
               label="Community Name"
@@ -417,7 +421,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.addressDetails?.zipcode &&
-                    errors.addressDetails?.zipcode
+                  errors.addressDetails?.zipcode
                 )}
                 helperText={
                   touched.addressDetails?.zipcode &&
@@ -427,255 +431,263 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
             </AppLabelComponent>
           </AppGrid>
         </AppGrid>
-      </AppGrid>
-      <AppGrid
-        container
-        size={{ xs: 12 }}
-        padding={1}
-        spacing={1}
-        direction={"column"}
-      >
-        <Typography variant="h3" sx={{ mb: 2 }}>
-          {"Community Manager"}
-        </Typography>
-        <AppGrid container columnSpacing={5} rowSpacing={2}>
-          <AppGrid item size={size}>
-            <AppLabelComponent label={"Name"}>
-              <AppAutoComplete
-                name="communityManager.username"
-                freeSolo={false}
-                disabled={!enableEdit}
-                error={
-                  touched.communityManager?.username &&
-                  errors.communityManager?.username
-                }
-                onChange={handleManager}
-                // onBlur={handleBlur}
-                nameParam="username"
-                searchKey="communityManager"
-                value={values?.communityManager?.username}
-                options={communityManagerData?.data}
-                valueParam="managerId"
-                placeholder="Select Manager"
-                onSearch={onSearch}
-              />
-            </AppLabelComponent>
+        <AppGrid
+          container
+          size={{ xs: 12 }}
+          spacing={1}
+        >
+          <AppGrid item size={{ xs: 12 }}>
+            <Typography variant="h3" sx={{ mb: 2 }}>
+              {"Community Manager"}
+            </Typography>
           </AppGrid>
-          <AppGrid item size={size}>
-            <AppLabelComponent label={"Email"}>
-              <TextField
-                value={values?.communityManager?.email || ""}
-                fullWidth
-                onChange={handleChange}
-                name="communityManager.email"
-                placeholder="Eg : SarahJohnson@gmail.com"
-                disabled={!enableEdit}
-                error={Boolean(
-                  touched.communityManager?.email &&
-                    errors.communityManager?.email
-                )}
-                helperText={
-                  touched.communityManager?.email &&
-                  errors.communityManager?.email
-                }
-              />
-            </AppLabelComponent>
-          </AppGrid>
-          <AppGrid item size={{ xs: 12 }} spacing={2} container>
-            <AppGrid item size={countryCodeSize}>
-              <AppLabelComponent label={"Code"}>
+          <AppGrid item container size={{ xs: 12 }} columnSpacing={4} rowSpacing={2}>
+            <AppGrid item size={size}>
+              <AppLabelComponent label={"Name"}>
                 <AppAutoComplete
-                  name="communityManager.code"
+                  name="communityManager.username"
                   freeSolo={false}
                   disabled={!enableEdit}
                   error={
-                    touched.communityManager?.code &&
-                    errors.communityManager?.code
+                    touched.communityManager?.username &&
+                    errors.communityManager?.username
                   }
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  disableClearable
-                  nameParam="label"
+                  onChange={handleManager}
+                  // onBlur={handleBlur}
+                  nameParam="username"
                   searchKey="communityManager"
-                  value={values?.communityManager?.code || ""}
-                  options={countryPhoneCodes}
-                  placeholder="+1"
+                  value={values?.communityManager?.username}
+                  options={communityManagerData?.data}
+                  valueParam="managerId"
+                  placeholder="Select Manager"
+                  onSearch={onSearch}
                 />
               </AppLabelComponent>
             </AppGrid>
-            <AppGrid item size={mobileSize}>
-              <AppLabelComponent label={"Mobile Number"}>
+            <AppGrid item size={size}>
+              <AppLabelComponent label={"Email"}>
                 <TextField
-                  value={values?.communityManager?.phone}
+                  value={values?.communityManager?.email || ""}
                   fullWidth
                   onChange={handleChange}
-                  placeholder="+123423355"
-                  name="communityManager.phone"
+                  name="communityManager.email"
+                  placeholder="Eg : SarahJohnson@gmail.com"
                   disabled={!enableEdit}
                   error={Boolean(
-                    touched.communityManager?.phone &&
-                      errors.communityManager?.phone
+                    touched.communityManager?.email &&
+                    errors.communityManager?.email
                   )}
                   helperText={
-                    touched.communityManager?.phone &&
-                    errors.communityManager?.phone
+                    touched.communityManager?.email &&
+                    errors.communityManager?.email
                   }
                 />
               </AppLabelComponent>
             </AppGrid>
+            <AppGrid item size={{ xs: 12 }} container spacing={2}>
+              <AppGrid item size={countryCodeSize}>
+                <AppLabelComponent label={"Code"}>
+                  <AppAutoComplete
+                    name="communityManager.code"
+                    freeSolo={false}
+                    disabled={!enableEdit}
+                    error={
+                      touched.communityManager?.code &&
+                      errors.communityManager?.code
+                    }
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    disableClearable
+                    nameParam="label"
+                    searchKey="communityManager"
+                    value={values?.communityManager?.code || ""}
+                    options={countryPhoneCodes}
+                    placeholder="+1"
+                  />
+                </AppLabelComponent>
+              </AppGrid>
+              <AppGrid item size={mobileSize}>
+                <AppLabelComponent label={"Mobile Number"}>
+                  <TextField
+                    value={values?.communityManager?.phone}
+                    fullWidth
+                    onChange={handleChange}
+                    placeholder="14123423355"
+                    name="communityManager.phone"
+                    disabled={!enableEdit}
+                    error={Boolean(
+                      touched.communityManager?.phone &&
+                      errors.communityManager?.phone
+                    )}
+                    helperText={
+                      touched.communityManager?.phone &&
+                      errors.communityManager?.phone
+                    }
+                  />
+                </AppLabelComponent>
+              </AppGrid>
+            </AppGrid>
           </AppGrid>
         </AppGrid>
-      </AppGrid>
-      <AppGrid container size={{ xs: 12 }} padding={1} direction={"column"}>
-        <Typography variant="h3" sx={{ mb: 2 }}>
-          {"Property Manager"}
-        </Typography>
-        <AppGrid container columnSpacing={5} rowSpacing={2}>
-          <AppGrid item size={size}>
-            <AppLabelComponent label={"Name"}>
-              <AppAutoComplete
-                name="propertyManager.username"
-                freeSolo={false}
-                disabled={!enableEdit}
-                error={
-                  touched.propertyManager?.username &&
-                  errors.propertyManager?.username
-                }
-                onChange={handleManager}
-                // onBlur={handleBlur}
-                nameParam="username"
-                valueParam="userId"
-                searchKey="propertyManager"
-                value={values?.propertyManager?.username}
-                options={propertyManagerData?.data}
-                placeholder="Select Manager"
-                onSearch={onSearch}
-              />
-            </AppLabelComponent>
+        {/* Property Manager */}
+
+        <AppGrid item container size={{ xs: 12 }} rowSpacing={3}>
+          <AppGrid item size={{ xs: 12 }}>
+
+            <Typography variant="h3" >
+              {"Property Manager"}
+            </Typography>
           </AppGrid>
-          <AppGrid item size={size}>
-            <AppLabelComponent label={"Email"}>
-              <TextField
-                value={values?.propertyManager?.email}
-                fullWidth
-                onChange={handleChange}
-                name="propertyManager.email"
-                placeholder="Eg : SarahJohnson@gmail.com"
-                disabled={!enableEdit}
-                error={Boolean(
-                  touched.propertyManager?.email &&
-                    errors.propertyManager?.email
-                )}
-                helperText={
-                  touched.propertyManager?.email &&
-                  errors.propertyManager?.email
-                }
-              />
-            </AppLabelComponent>
-          </AppGrid>
-          <AppGrid item size={{ xs: 12 }} spacing={2} container>
-            <AppGrid item size={countryCodeSize}>
-              <AppLabelComponent label={"Code"}>
+          <AppGrid item size={{ xs: 12 }} container columnSpacing={4} rowSpacing={2}>
+            <AppGrid item size={size}>
+              <AppLabelComponent label={"Name"}>
                 <AppAutoComplete
-                  name="propertyManager.code"
+                  name="propertyManager.username"
                   freeSolo={false}
                   disabled={!enableEdit}
                   error={
-                    touched.propertyManager?.code &&
-                    errors.propertyManager?.code
+                    touched.propertyManager?.username &&
+                    errors.propertyManager?.username
                   }
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  nameParam="label"
-                  disableClearable
+                  onChange={handleManager}
+                  // onBlur={handleBlur}
+                  nameParam="username"
+                  valueParam="userId"
                   searchKey="propertyManager"
-                  value={values?.propertyManager?.code || ""}
-                  options={countryPhoneCodes}
-                  placeholder="+1"
+                  value={values?.propertyManager?.username}
+                  options={propertyManagerData?.data}
+                  placeholder="Select Manager"
+                  onSearch={onSearch}
                 />
               </AppLabelComponent>
             </AppGrid>
-            <AppGrid item size={mobileSize}>
-              <AppLabelComponent label={"Mobile Number"}>
+            <AppGrid item size={size}>
+              <AppLabelComponent label={"Email"}>
                 <TextField
-                  value={values?.propertyManager?.phone}
+                  value={values?.propertyManager?.email}
                   fullWidth
                   onChange={handleChange}
-                  placeholder="+123423355"
-                  name="propertyManager.phone"
+                  name="propertyManager.email"
+                  placeholder="Eg : SarahJohnson@gmail.com"
                   disabled={!enableEdit}
                   error={Boolean(
-                    touched.propertyManager?.phone &&
-                      errors.propertyManager?.phone
+                    touched.propertyManager?.email &&
+                    errors.propertyManager?.email
                   )}
                   helperText={
-                    touched.propertyManager?.phone &&
-                    errors.propertyManager?.phone
+                    touched.propertyManager?.email &&
+                    errors.propertyManager?.email
                   }
                 />
               </AppLabelComponent>
+            </AppGrid>
+            <AppGrid item size={{ xs: 12 }} spacing={2} container>
+              <AppGrid item size={countryCodeSize}>
+                <AppLabelComponent label={"Code"}>
+                  <AppAutoComplete
+                    name="propertyManager.code"
+                    freeSolo={false}
+                    disabled={!enableEdit}
+                    error={
+                      touched.propertyManager?.code &&
+                      errors.propertyManager?.code
+                    }
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    nameParam="label"
+                    disableClearable
+                    searchKey="propertyManager"
+                    value={values?.propertyManager?.code || ""}
+                    options={countryPhoneCodes}
+                    placeholder="+1"
+                  />
+                </AppLabelComponent>
+              </AppGrid>
+              <AppGrid item size={mobileSize}>
+                <AppLabelComponent label={"Mobile Number"}>
+                  <TextField
+                    value={values?.propertyManager?.phone}
+                    fullWidth
+                    onChange={handleChange}
+                    placeholder="+123423355"
+                    name="propertyManager.phone"
+                    disabled={!enableEdit}
+                    error={Boolean(
+                      touched.propertyManager?.phone &&
+                      errors.propertyManager?.phone
+                    )}
+                    helperText={
+                      touched.propertyManager?.phone &&
+                      errors.propertyManager?.phone
+                    }
+                  />
+                </AppLabelComponent>
+              </AppGrid>
             </AppGrid>
           </AppGrid>
         </AppGrid>
-      </AppGrid>
-      <AppGrid
-        container
-        size={{ xs: 12 }}
-        padding={1}
-        spacing={1}
-        direction={"column"}
-      >
-        <Typography variant="h3" sx={{ mb: 2 }}>
-          {"Insurance Details"}
-        </Typography>
-        <AppGrid container columnSpacing={5} rowSpacing={2}>
-          <AppGrid item size={size}>
-            <AppLabelComponent
-              label="Insurance Value"
-              color={"secondary"}
-              variant="body2"
-            >
-              <AppAutoComplete
-                name="insuranceDetails.insuranceValue"
-                freeSolo={false}
-                disabled={!enableEdit}
-                error={
-                  touched.insuranceDetails?.insuranceValue &&
-                  errors.insuranceDetails?.insuranceValue
-                }
-                onChange={handleChange}
-                onBlur={handleBlur}
-                nameParam="name"
-                searchKey="propertyManager"
-                value={values?.insuranceDetails?.insuranceValue || ""}
-                options={insuranceOptions}
-                placeholder="Select Insurance Value"
-              />
-            </AppLabelComponent>
+        {/* Insurance Details */}
+        <AppGrid
+          item
+          container
+          size={{ xs: 12 }}
+          spacing={1}
+        >
+          <AppGrid item size={{ xs: 12 }}>
+
+            <Typography variant="h3" sx={{ mb: 2 }}>
+              {"Insurance Details"}
+            </Typography>
           </AppGrid>
-          <AppGrid item size={size}>
-            <AppLabelComponent
-              label="Insurance Coverage"
-              color={"secondary"}
-              variant="body2"
-            >
-              <TextField
-                value={values?.insuranceDetails?.insuranceCoverage}
-                placeholder="Eg : 1,00,000"
-                fullWidth
-                onChange={handleChange}
-                name="insuranceDetails.insuranceCoverage"
-                disabled={!enableEdit}
-                error={Boolean(
-                  touched.insuranceDetails?.insuranceCoverage &&
-                    errors.insuranceDetails?.insuranceCoverage
-                )}
-                helperText={
-                  touched.insuranceDetails?.insuranceCoverage &&
-                  errors.insuranceDetails?.insuranceCoverage
-                }
-              />
-            </AppLabelComponent>
+          <AppGrid item size={{ xs: 12 }} container columnSpacing={4} rowSpacing={2}>
+            <AppGrid item size={size}>
+              <AppLabelComponent
+                label="Insurance Value"
+                color={"secondary"}
+                variant="body2"
+              >
+                <AppAutoComplete
+                  name="insuranceDetails.premiumAmount"
+                  freeSolo={false}
+                  disabled={!enableEdit}
+                  error={
+                    touched.insuranceDetails?.premiumAmount &&
+                    errors.insuranceDetails?.premiumAmount
+                  }
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  nameParam="name"
+                  searchKey="propertyManager"
+                  value={values?.insuranceDetails?.premiumAmount || null}
+                  options={insuranceOptions}
+                  placeholder="Select Insurance Value"
+                />
+              </AppLabelComponent>
+            </AppGrid>
+            <AppGrid item size={size}>
+              <AppLabelComponent
+                label="Insurance Coverage"
+                color={"secondary"}
+                variant="body2"
+              >
+                <TextField
+                  value={values?.insuranceDetails?.insuredCoverage}
+                  placeholder="Eg : 1,00,000"
+                  fullWidth
+                  onChange={handleChange}
+                  name="insuranceDetails.insuredCoverage"
+                  disabled={!enableEdit}
+                  error={Boolean(
+                    touched.insuranceDetails?.insuredCoverage &&
+                    errors.insuranceDetails?.insuredCoverage
+                  )}
+                  helperText={
+                    touched.insuranceDetails?.insuredCoverage &&
+                    errors.insuranceDetails?.insuredCoverage
+                  }
+                />
+              </AppLabelComponent>
+            </AppGrid>
           </AppGrid>
         </AppGrid>
       </AppGrid>

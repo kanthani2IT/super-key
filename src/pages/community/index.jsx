@@ -38,7 +38,7 @@ const CommunityOnboarding = () => {
   const handleChangePage = (event, newPage) => {
     fetchData(filters.sort, filters.search, newPage);
     setPage(newPage);
-    setFilters({...filters, page:newPage})
+    setFilters({ ...filters, page: newPage })
   };
   //handlers
   const openDrawer = (id) => {
@@ -72,7 +72,7 @@ const CommunityOnboarding = () => {
     setPage(1)
   };
 
-  const fetchData = (sort, search, page=filters.page) => {
+  const fetchData = (sort, search, page = filters.page) => {
     const sortData = sort === "ACTIVE" || sort === "INACTIVE" ? "" : "name";
     const orderByData =
       sort === "lowToHigh" ? "asc" : sort === "highToLow" ? "desc" : "";
@@ -94,8 +94,8 @@ const CommunityOnboarding = () => {
   }, 500);
 
   const handleSearch = (value) => {
-    setFilters({ ...filters, page:1,search: value });
-    
+    setFilters({ ...filters, page: 1, search: value });
+
     onSearch(value);
   };
 
@@ -104,6 +104,7 @@ const CommunityOnboarding = () => {
   }, []);
   const refetch = () => {
     fetchData(filters.sort, filters.search, 1);
+    setPage(1)
   };
   return (
     <AppGrid container spacing={4}>
@@ -166,16 +167,22 @@ const CommunityOnboarding = () => {
           handleSearch={handleSearch}
           handleChangePage={handleChangePage}
           page={page}
+          selectedRows={selectedRows}
           setPage={setPage}
         />
       </AppGrid>
-      <Drawer open={edit} onClose={closeDrawer} anchor="right">
+      <Drawer sx={{
+        "& .MuiDrawer-paper": {
+          width: "50%",
+        },
+      }} open={edit} onClose={closeDrawer} anchor="right">
         <EditCommunity
           onClose={closeDrawer}
           communityData={communityData}
           refetch={refetch}
         />
       </Drawer>
+
     </AppGrid>
   );
 };

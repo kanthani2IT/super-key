@@ -10,12 +10,14 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
+import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
 import AppMenu from "components/AppComponents/AppMenu";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
 import { StyledMenuItem } from "components/AppComponents/StyledComponent";
 import { communityStyles } from "components/StyledComponents";
+import { formatAsDollar } from "pages/community/onboarding/utils";
 import { useState } from "react";
 
 const options = [
@@ -40,12 +42,15 @@ export default function UserTable({
   handleChangePage,
   page,
   setPage,
+  selectedRows
 }) {
   const theme = useTheme();
   // const [page, setPage] = useState(1);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [modal, setModal] = useState(false)
+
   const pageSize = 10;
 
   const columns = [
@@ -79,10 +84,10 @@ export default function UserTable({
     //   },
     // },
     {
-      field: "insured",
+      field: "insuredCoverage",
       headerName: "Insured",
       renderCell: (row) => {
-        return <Typography>{row?.insured ?? "-"}</Typography>;
+        return <Typography>{formatAsDollar(row?.insuredCoverage) ?? "-"}</Typography>;
       },
     },
     {
@@ -100,7 +105,7 @@ export default function UserTable({
               gap={0.5}
             >
               <FiberManualRecordIcon fontSize="12px" />
-              {row?.status === "ACTIVE"?"Active":"Inactive"}
+              {row?.status === "ACTIVE" ? "Active" : "Inactive"}
             </Typography>
           );
         } else {
@@ -117,6 +122,7 @@ export default function UserTable({
           <MoreVert
             onClick={(e) => {
               e.stopPropagation();
+              onSelectionChange([])
               setMenuAnchorEl(e.currentTarget);
               setCommunityInfo(row);
             }}
@@ -151,6 +157,11 @@ export default function UserTable({
   const handleMenuAnchorClose = () => {
     setMenuAnchorEl(null);
   };
+  const handleModal = () => {
+    setModal(!modal);
+  };
+
+
 
   const renderSortComponent = () => {
     return (
@@ -195,7 +206,7 @@ export default function UserTable({
     return (
       <>
         <StyledMenuItem onClick={handleDrawer}>View details</StyledMenuItem>
-        <StyledMenuItem onClick={handleOffBoard}>
+        <StyledMenuItem onClick={handleModal}>
           Off-board Community
         </StyledMenuItem>
       </>
@@ -228,6 +239,7 @@ export default function UserTable({
           totalItems={communityList?.totalElements}
           pageSize={pageSize}
           onPageChange={handleChangePage}
+          selected={selectedRows}
         />
       </>
 
@@ -240,6 +252,19 @@ export default function UserTable({
         anchorEl={anchorEl}
         handleClose={handleClose}
         renderComponent={renderSortComponent()}
+      />
+
+      <ConfirmationModal
+        open={modal}
+        onClose={handleModal}
+        message={
+          "Do you want to off-board the community?"
+
+        }
+        confirmLabel={"Yes"}
+        cancelLabel={"No"}
+        onConfirm={handleModal}
+        onCancel={handleModal}
       />
     </Box>
   );
