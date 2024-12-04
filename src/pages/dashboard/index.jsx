@@ -8,7 +8,7 @@ import MainCard from "components/MainCard";
 // assets
 import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
-import AppSkeleton from "components/AppComponents/AppSkeleton";
+import AppSkeletonWrapper from "components/AppComponents/AppSkeletonWrapper";
 import MainTabs from "components/MainTabs";
 import { useGetUsers } from "hooks/useCommunity";
 import {
@@ -17,9 +17,9 @@ import {
 } from "hooks/useDashboard";
 import { ColorBox } from "pages/component-overview/color";
 import { useEffect, useState } from "react";
+import UserTable from "../community/CommunityTable";
 import RenewalPieChart from "./RenewalPieChart";
 import TaskTable from "./TaskTable";
-import UserTable from "./CommunityTable";
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 const tabs = [
@@ -105,7 +105,8 @@ export default function DashboardDefault() {
       <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
         <AppGrid container rowSpacing={2} columnSpacing={2}>
           <AppGrid size={{ xs: 12 }}>
-            {!isWidgetLoading ? (
+            <AppSkeletonWrapper loading={isWidgetLoading} height={'200px'}>
+
               <MainCard title="Communities" secondary={"Full View"}>
                 <Stack spacing={2}>
                   <Typography variant="h6">Communities Managed</Typography>
@@ -114,17 +115,11 @@ export default function DashboardDefault() {
                   </Typography>
                 </Stack>
               </MainCard>
-            ) : (
-              <AppSkeleton
-                row={1}
-                variant={"custom"}
-                width={"100%"}
-                height={"200px"}
-              />
-            )}
+            </AppSkeletonWrapper>
           </AppGrid>
           <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
-            {!isWidgetLoading ? (
+            <AppSkeletonWrapper loading={isWidgetLoading} height={'150px'}>
+
               <MainCard>
                 <Stack rowGap={4} textAlign={"center"}>
                   <Typography variant="h6">
@@ -136,17 +131,10 @@ export default function DashboardDefault() {
                   </Typography>
                 </Stack>
               </MainCard>
-            ) : (
-              <AppSkeleton
-                row={1}
-                variant={"custom"}
-                width={"100%"}
-                height={"150px"}
-              />
-            )}
+            </AppSkeletonWrapper>
           </AppGrid>
           <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
-            {!isWidgetLoading ? (
+            <AppSkeletonWrapper loading={isWidgetLoading} height={'150px'}>
               <MainCard>
                 <Stack rowGap={4} textAlign={"center"}>
                   <Typography variant="h6">
@@ -157,17 +145,11 @@ export default function DashboardDefault() {
                   </Typography>
                 </Stack>
               </MainCard>
-            ) : (
-              <AppSkeleton
-                row={1}
-                variant={"custom"}
-                width={"100%"}
-                height={"150px"}
-              />
-            )}
+            </AppSkeletonWrapper>
           </AppGrid>
           <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
-            {!isWidgetLoading ? (
+            <AppSkeletonWrapper loading={isWidgetLoading} height={'150px'}>
+
               <MainCard>
                 <Stack rowGap={4} textAlign={"center"}>
                   <Typography variant="h6">
@@ -179,32 +161,20 @@ export default function DashboardDefault() {
                   </Typography>
                 </Stack>
               </MainCard>
-            ) : (
-              <AppSkeleton
-                row={1}
-                variant={"custom"}
-                width={"100%"}
-                height={"150px"}
-              />
-            )}
+            </AppSkeletonWrapper>
           </AppGrid>
         </AppGrid>
       </AppGrid>
       <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
-        {!isWidgetLoading ? (
+        <AppSkeletonWrapper loading={isWidgetLoading} height={'370px'}>
+
           <MainCard title={"Upcoming Renewals"}>
             <AppGrid size={{ xs: 12 }} justifyItems={"center"}>
               <RenewalPieChart chartData={upcomingRenewals ?? []} />
             </AppGrid>
           </MainCard>
-        ) : (
-          <AppSkeleton
-            row={1}
-            variant={"custom"}
-            width={"100%"}
-            height={"370px"}
-          />
-        )}
+        </AppSkeletonWrapper>
+
       </AppGrid>
       <AppModal open={open} onClose={handleClose} height="auto" width="70%">
         <MainCard

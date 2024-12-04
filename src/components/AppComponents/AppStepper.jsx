@@ -1,5 +1,5 @@
 import { Box, Stepper } from "@mui/material";
-import { CustomConnector, CustomStep } from "./StyledComponent";
+import { CustomConnector, CustomStep } from "components/StyledComponents";
 
 const AppStepper = ({ activeStep, steps }) => {
   return (
