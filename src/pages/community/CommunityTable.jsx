@@ -157,7 +157,7 @@ export default function UserTable({
     setMenuAnchorEl(null);
   };
   const handleModal = () => {
-    setModal(!modal);
+    // setModal(!modal);
   };
 
 
@@ -199,9 +199,9 @@ export default function UserTable({
     return (
       <>
         <StyledMenuItem onClick={handleDrawer}>View details</StyledMenuItem>
-        <StyledMenuItem onClick={handleModal}>
+        {/* <StyledMenuItem onClick={handleModal}>
           Off-board Community
-        </StyledMenuItem>
+        </StyledMenuItem> */}
       </>
     );
   };

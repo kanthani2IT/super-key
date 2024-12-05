@@ -58,7 +58,7 @@ const CommunityOnboarding = () => {
         },
       ],
     };
-    deleteUserById({ id: communityData?.communityId, body: payload });
+    // deleteUserById({ id: communityData?.communityId, body: payload });
   };
 
   const handleSelectionChange = (selected) => {
