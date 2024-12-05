@@ -278,7 +278,7 @@ const OnboardingIndex = ({ refetch }) => {
         variant="contained"
         onClick={handleOpen}
       >
-        Add Community
+        Add New Community
       </RadiusStyledButton>
       <AppModal
         height={finalStep ? "40vh" : "auto"}
