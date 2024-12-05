@@ -1,64 +1,20 @@
-import {
-    Box,
-    Step,
-    StepConnector,
-    StepLabel,
-    Stepper,
-    styled,
-    Typography
-} from '@mui/material';
-
-
-
-const CustomConnector = styled(StepConnector)(({ theme }) => ({
-    '& .MuiStepConnector-line': {
-        height: 9,
-        border: 0,
-        borderRadius: 10,
-        backgroundColor: '#B0B0B0',
-    },
-    '&.Mui-active, &.Mui-completed': {
-        '& .MuiStepConnector-line': {
-            backgroundColor: theme.palette.success.dark,
-        },
-    },
-}));
-
-
-
-const CustomStepIcon = () => null;
-
-
+import { Box, Stepper } from "@mui/material";
+import { CustomConnector, CustomStep } from "./StyledComponent";
 
 const AppStepper = ({ activeStep, steps }) => {
-
-    return (
-        <Box sx={{ width: "100%" }}>
-            <Stepper
-                activeStep={activeStep}
-                alternativeLabel
-                connector={<CustomConnector />}
-            >
-                {steps.map((label, index) => (
-                    <Step key={index} completed={activeStep > index}>
-                        <StepLabel
-                            StepIconComponent={(props) => (
-                                <CustomStepIcon
-                                    {...props}
-                                    active={activeStep === index}
-                                    completed={activeStep > index}
-                                />
-                            )}
-                        >
-
-                        </StepLabel>
-                    </Step>
-                ))}
-            </Stepper>
-
-
-        </Box>
-    );
+  return (
+    <Box sx={{ width: "100%", mb: 2, mt: 0 }}>
+      <Stepper
+        activeStep={activeStep}
+        alternativeLabel
+        connector={<CustomConnector />}
+      >
+        {steps.map((_, index) => (
+          <CustomStep key={index} completed={activeStep > index}></CustomStep>
+        ))}
+      </Stepper>
+    </Box>
+  );
 };
 
 export default AppStepper;

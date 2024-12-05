@@ -34,7 +34,6 @@ export default function Breadcrumbs({ navigation, title, ...others }) {
 
   useEffect(() => {
     navigation?.items?.map((menu) => {
-      console.log('s', menu)
       if (menu.type && menu.type === 'group') {
         getCollapse(menu);
       }
@@ -72,24 +71,25 @@ export default function Breadcrumbs({ navigation, title, ...others }) {
 
     // main
     breadcrumbContent = (
-      <MainCard border={false} sx={{ mb: 3, bgcolor: 'transparent' }} {...others} content={false}>
-        <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
-          {item.breadcrumbs && <Grid>
-            <MuiBreadcrumbs aria-label="breadcrumb">
-              <Typography component={Link} to="/" color="textSecondary" variant="h6" sx={{ textDecoration: 'none' }}>
-                Home
-              </Typography>
-              {mainContent}
-              {itemContent}
-            </MuiBreadcrumbs>
-          </Grid>}
-          {item.showTitle && (
-            <Grid sx={{ mt: 2 }}>
-              <Typography variant="h4">{item.title}</Typography>
-            </Grid>
-          )}
+      item.showTitle && (
+        <Grid sx={{ m: 2 }}>
+          <Typography variant="h4">{item.title}</Typography>
         </Grid>
-      </MainCard>
+      )
+      // <MainCard border={false} sx={{ mb: 3, bgcolor: 'transparent' }} {...others} content={false}>
+      /* <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}> */
+      /* {item.breadcrumbs && <Grid>
+          <MuiBreadcrumbs aria-label="breadcrumb">
+            <Typography component={Link} to="/" color="textSecondary" variant="h6" sx={{ textDecoration: 'none' }}>
+              Home
+            </Typography>
+            {mainContent}
+            {itemContent}
+          </MuiBreadcrumbs>
+        </Grid>} */
+      /* </Grid> */
+      /* </MainCard> */
+
     );
   }
 

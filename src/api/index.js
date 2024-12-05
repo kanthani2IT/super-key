@@ -1,7 +1,11 @@
+import { commonApi } from "./common";
+import { communityApi } from "./communityApi";
+import { dashboardApi } from "./dashboardApi";
 import { loginApi } from "./loginApi";
-import {onboardApi} from "./onboardApi";
 
 export const api = {
   login: loginApi,
-  onboard:onboardApi,
+  community: communityApi,
+  common: commonApi,
+  dashboard: dashboardApi,
 };

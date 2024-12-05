@@ -20,7 +20,7 @@ const StyledDataCard = styled(Card)(({ fullWidth = false }) => ({
 const DataCard = ({ item, title, count, fullWidth, actionTitle, handleClick }) => {
     const limitedString = !actionTitle ? title?.length < 20 ? title : title.substring(0, 20) + '...' : ""
     return (
-        <AppToolTip title={!title && title}>
+        <AppToolTip title={title ?? ""}>
 
             <StyledDataCard fullWidth={fullWidth}>
                 {!actionTitle && <CardHeader
@@ -65,7 +65,7 @@ const CardGrid = ({ data, fullWidth, actionTitle, handleClick }) => {
         <Grid container spacing={2}>
             {data.map((item, index) => (
                 <Grid size={fullWidth && { xs: 12, md: 6, lg: 6 }} item key={index}>
-                    <DataCard item={item} handleClick={handleClick} actionTitle={actionTitle} fullWidth={fullWidth} title={item.title} count={item.count} />
+                    <DataCard item={item} handleClick={() => handleClick(item, index)} actionTitle={actionTitle} fullWidth={fullWidth} title={item.title} count={item.count} />
                 </Grid>
             ))}
         </Grid>

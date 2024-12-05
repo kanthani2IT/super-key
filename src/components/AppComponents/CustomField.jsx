@@ -41,3 +41,42 @@ export const BootstrapInput = styled(TextField)(({ theme }) => ({
       }),
     },
   }));
+
+
+
+  export const getStatus = (params) => {
+    if (!params || params.status === undefined) {
+      return null;
+    }
+  
+    const { status } = params;
+  
+    const getColor = () => {
+      switch (status) {
+        case 0:
+          return '#FF8255';
+        case 1:
+          return '#4AA785';
+        default:
+          return 'gray';
+      }
+    };
+  
+    return (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <span
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: '50%',
+            backgroundColor: getColor(),
+            marginRight: 8,
+          }}
+        ></span>
+        <span style={{ color: getColor() }}>
+          {status === 1 ? 'Active' : 'Inactive'}
+        </span>
+      </div>
+    );
+  };
+  

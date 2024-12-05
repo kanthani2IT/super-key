@@ -7,7 +7,7 @@ export default function TextField() {
           "& .MuiOutlinedInput-root": {
             background: "#F7F9FB",
 
-            padding: "3px 10px",
+            padding: "3px 10px !important",
             "& fieldset": {
               borderColor: "#c0c0c0",
             },

@@ -1,314 +1,261 @@
-import { Autocomplete, Divider, FormControlLabel, Grid2 as Grid, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material';
-import { StyledTypography } from 'components/StyledComponents';
-import { useEffect, useState } from 'react';
-import { cManagers } from 'utils/constants';
+import { TextField, Typography } from "@mui/material";
+import AppAutoComplete from "components/AppComponents/AppAutoComplete";
+import AppGrid from "components/AppComponents/AppGrid";
+import AppLabelComponent from "components/AppComponents/AppLabelComponent";
+import {
+  useCommunityManagersQuery,
+  usePropertyManagersQuery,
+} from "hooks/useDropDown";
+import { useEffect, useState } from "react";
+import { countryPhoneCodes } from "utils/constants";
+import { useDebounceFn } from "utils/helpers";
 
+const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
+  const size = { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 };
 
-const CommunityDetails = ({
-    formValues,
-    errors,
-    touched,
-    setFieldValue,
-    community, handleCommunityDetails }) => {
+  //phone number
+  const countryCodeSize = { xs: 2.5, sm: 2.5, md: 2.5, lg: 2, xl: 2 };
+  const mobileSize = { xs: 9.5, sm: 9.5, md: 9.5, lg: 4, xl: 4 };
 
-    const { communityManager, projectManager } = formValues
+  const { communityManager, propertyManager } = formValues;
 
-    const [values, setValues] = useState({
-        communityManager: {
-            name: '',
-            email: '',
-            mobile: '',
-            address: ""
-        },
-        projectManager: {
-            name: '',
-            email: '',
-            mobile: '',
-            address: ""
-        },
-    })
+  const [seachString, setSearchString] = useState({
+    communityManager: "",
+    propertyManager: "",
+  });
+  const { data: communityManagerList, isLoading: communityManagerFetching } =
+    useCommunityManagersQuery();
+  const { data: propertyManagerList, isLoading: propertyManagerFetching } =
+    usePropertyManagersQuery();
 
-    useEffect(() => {
-        setValues({ communityManager, projectManager })
-    }, [])
+  const [values, setValues] = useState({
+    communityManager: {
+      username: "",
+      email: "",
+      phone: "",
+      countryCode: "",
+      address: "",
+    },
+    propertyManager: {
+      username: "",
+      email: "",
+      phone: "",
+      countryCode: "",
+      address: "",
+    },
+  });
 
-    const handleChange = (event) => {
-        const { name, value } = event.target
-        const [id, key] = name.split('.')
-        setValues(prevState => ({
-            ...prevState,
-            [id]: {
-                ...prevState[id],
-                [key]: value
-            }
-        }))
-    }
+  useEffect(() => {
+    setValues({ communityManager, propertyManager });
+  }, []);
 
+  //handlers
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    const [id, key] = name.split(".");
+    setValues((prevState) => ({
+      ...prevState,
+      [id]: {
+        ...prevState[id],
+        [key]: value,
+      },
+    }));
+  };
 
-    const handleBlur = (event) => {
-        const { name, value } = event.target
-        setFieldValue(name, value);
-    };
+  const handleBlur = (event) => {
+    const { name, value } = event.target;
+    setFieldValue(name, value);
+  };
 
-
+  const onSearch = useDebounceFn((searchString, key) => {
+    setSearchString((prev) => ({
+      ...prev,
+      [key]: searchString,
+    }));
+  });
+  //For Mobile Number
+  const Mobile = ({ key, values, mobileError, handleChange, handleBlur }) => {
     return (
-        <Grid container spacing={4} >
+      <AppGrid item size={{ xs: 12 }} container spacing={2}>
+        <AppGrid item size={countryCodeSize}>
+          <AppLabelComponent label={"Code"}>
+            <AppAutoComplete
+              name={`${key}.countryCode`}
+              freeSolo={false}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              nameParam="label"
+              valueParam="value"
+              value={values?.countryCode || ""}
+              options={countryPhoneCodes}
+              placeholder="+1"
+              disableClearable
+              filter
+              disabled
+            />
+          </AppLabelComponent>
+        </AppGrid>
+        <AppGrid item size={mobileSize}>
+          <AppLabelComponent label={"Mobile Number"}>
+            <TextField
+              placeholder="+123423355"
+              required
+              fullWidth
+              name={`${key}.phone`}
+              value={values?.phone}
+              onChange={(event) => handleChange(event)}
+              onBlur={handleBlur}
+              error={Boolean(mobileError)}
+              helperText={mobileError}
+            />
+          </AppLabelComponent>
+        </AppGrid>
+      </AppGrid>
+    );
+  };
 
-            <Grid item container size={{ xs: 12 }} rowSpacing={3} >
-                <Grid item size={{ xs: 12 }} >
-                    <Stack spacing={2} justifyContent={'space-between'}>
-                        <StyledTypography variant="h5">Do you have the Community Manager in your community?</StyledTypography>
-                        <RadioGroup
-                            row
+  const handleManger = (event) => {
+    const { name, value } = event.target;
+    const [id, key] = name.split(".");
+    let exitingValue = formValues[id];
 
-                            sx={{ gap: 5 }}
-                            name='manager'
-                            value={community.manager}
-                            onChange={(event, value) => handleCommunityDetails(event.target.name, value)}
-                        >
-                            <FormControlLabel
-                                value={'true'}
-                                control={<Radio color='success' />}
-                                label="Yes"
-                            />
-                            <FormControlLabel
-                                value={'false'}
-                                control={<Radio color='success' />}
-                                label="No"
-                            />
-                        </RadioGroup>
+    if (!value?.isCustom) {
+      exitingValue = {
+        ...exitingValue,
+        ...value,
+      };
+      setValues((prevState) => ({
+        ...prevState,
+        [id]: exitingValue,
+      }));
+      setFieldValue(id, exitingValue);
+    } else {
+      handleChange(event);
+    }
+  };
+  return (
+    <AppGrid container spacing={4}>
+      <AppGrid item container size={{ xs: 12 }} rowSpacing={3}>
+        <AppGrid item container spacing={2}>
+          <AppGrid item size={{ xs: 12 }}>
+            <Typography variant="h4">Community Manager</Typography>
+          </AppGrid>
+          <AppGrid item size={size}>
+            <AppLabelComponent label={"Name"}>
+              <AppAutoComplete
+                name="communityManager.username"
+                freeSolo={false}
+                error={
+                  touched.communityManager?.username                  &&
+                  errors.communityManager?.username
+                }
+                onChange={handleManger}
+                nameParam="username"
+                valueParam="managerId"
+                searchKey="communityManager"
+                loading={communityManagerFetching}
+                value={values?.communityManager?.username                  || ""}
+                options={communityManagerList?.data}
+                placeholder="Select Manager"
+                onSearch={onSearch}
+              />
+            </AppLabelComponent>
+          </AppGrid>
+          <AppGrid item size={size}>
+            <AppLabelComponent label={"Email"}>
+              <TextField
+                required
+                id="communityManager"
+                placeholder="communityManager@gmail.com"
+                fullWidth
+                name="communityManager.email"
+                value={values.communityManager?.email}
+                onChange={(event) => handleChange(event)}
+                onBlur={handleBlur}
+                error={Boolean(
+                  touched.communityManager?.email &&
+                    errors.communityManager?.email
+                )}
+                helperText={
+                  touched.communityManager?.email &&
+                  errors.communityManager?.email
+                }
+              />
+            </AppLabelComponent>
+          </AppGrid>
 
-                    </Stack>
+          {Mobile({
+            key: "communityManager",
+            values: values.communityManager,
+            mobileError:
+              touched?.communityManager?.phone &&
+              errors?.communityManager?.phone,
+            handleBlur,
+            handleChange,
+          })}
+        </AppGrid>
+      </AppGrid>
 
-                </Grid>
-                {community.manager ? <Grid item container spacing={2} >
+      <AppGrid item container size={{ xs: 12 }} rowSpacing={3}>
+        <AppGrid item container spacing={2}>
+          <AppGrid item size={{ xs: 12 }}>
+            <Typography variant="h4">Property Manager</Typography>
+          </AppGrid>
+          <AppGrid item size={size}>
+            <AppLabelComponent label={"Name"}>
+              <AppAutoComplete
+                name="propertyManager.username"
+                freeSolo={false}
+                error={
+                  touched.propertyManager?.username &&
+                  errors.propertyManager?.username
+                }
+                onChange={handleManger}
+                nameParam="username"
+                valueParam="userId"
+                searchKey="propertyManager"
+                loading={propertyManagerFetching}
+                value={values?.propertyManager?.username || ""}
+                options={propertyManagerList?.data}
+                placeholder="Select Property Manager"
+                onSearch={onSearch}
+              />
+            </AppLabelComponent>
+          </AppGrid>
+          <AppGrid item size={size}>
+            <AppLabelComponent label={"Email"}>
+              <TextField
+                required
+                placeholder="propertyManager@gmail.com"
+                fullWidth
+                name="propertyManager.email"
+                value={values.propertyManager.email}
+                onChange={(event) => handleChange(event)}
+                onBlur={handleBlur}
+                error={Boolean(
+                  touched.propertyManager?.email &&
+                    errors.propertyManager?.email
+                )}
+                helperText={
+                  touched.propertyManager?.email &&
+                  errors.propertyManager?.email
+                }
+              />
+            </AppLabelComponent>
+          </AppGrid>
 
-                    <Grid item size={{ xs: 12 }} >
-                        <Typography variant="h4">Add details about your Community Manager</Typography>
-                    </Grid>
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5"> Community Manager Name</StyledTypography>
+          {Mobile({
+            key: "propertyManager",
+            values: values.propertyManager,
+            mobileError:
+              touched?.propertyManager?.phone && errors?.propertyManager?.phone,
+            handleBlur,
+            handleChange,
+          })}
+        </AppGrid>
+      </AppGrid>
+    </AppGrid>
+  );
+};
 
-                            <Autocomplete
-
-                                name="communityManager.name"
-                                options={cManagers}
-                                getOptionLabel={(option) => {
-                                    if (typeof option === 'string') {
-                                        return option;
-                                    }
-                                    if (option.label) {
-                                        return option.label;
-                                    }
-                                    return option.name;
-                                }}
-                                value={communityManager?.name || ''}
-                                onChange={(event, value) => {
-
-                                    setFieldValue("communityManager.name", value ? value.name : '');
-                                }}
-
-                                renderInput={(params) => (
-                                    <TextField
-                                        required
-                                        {...params}
-                                        placeholder="Select Manager"
-                                        error={Boolean(touched.communityManager?.name && errors.communityManager?.name)}
-                                        helperText={touched.communityManager?.name && errors.communityManager?.name}
-                                    />
-                                )}
-                                fullWidth
-                            />
-                        </Stack>
-                    </Grid>
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5">Email</StyledTypography>
-                            <TextField
-                                required
-                                id='communityManager'
-                                placeholder='communityManager@gmail.com'
-                                fullWidth
-                                name="communityManager.email"
-                                value={values.communityManager?.email}
-                                onChange={(event) => handleChange(event)}
-                                onBlur={handleBlur}
-                                error={Boolean(touched.communityManager?.email && errors.communityManager?.email)}
-                                helperText={touched.communityManager?.email && errors.communityManager?.email}
-                            />
-                        </Stack>
-                    </Grid>
-
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5">Mobile Number</StyledTypography>
-                            <TextField
-                                placeholder='+123423355'
-                                required
-                                fullWidth
-                                name="communityManager.mobile"
-                                value={values.communityManager?.mobile}
-                                onChange={(event) => handleChange(event)}
-                                onBlur={handleBlur}
-                                error={Boolean(touched.communityManager?.mobile && errors.communityManager?.mobile)}
-                                helperText={touched.communityManager?.mobile && errors.communityManager?.mobile}
-                            />
-                        </Stack>
-                    </Grid>
-
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5">Address</StyledTypography>
-                            <TextField
-                                required
-                                fullWidth
-                                placeholder='Los angels'
-                                multiline
-                                name="communityManager.address"
-                                value={values.communityManager.address}
-                                onChange={(event) => handleChange(event)}
-                                onBlur={handleBlur}
-                                error={Boolean(touched.communityManager?.address && errors.communityManager?.address)}
-                                helperText={touched.communityManager?.address && errors.communityManager?.address}
-                            />
-                        </Stack>
-                    </Grid>
-                </Grid> : null}
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-
-                <Divider sx={{ color: "GrayText" }} />
-            </Grid>
-
-            <Grid item container size={{ xs: 12 }} rowSpacing={3} >
-
-                <Grid item size={{ xs: 12 }} >
-                    <Stack spacing={2} justifyContent={'space-between'}>
-                        <StyledTypography variant="h5">Do you have the Project Manager in your community?</StyledTypography>
-                        <RadioGroup
-                            row
-
-                            sx={{ gap: 5 }}
-                            name='projectManager'
-                            value={community.projectManager}
-                            onChange={(event, value) => handleCommunityDetails(event.target.name, value)}
-                        >
-                            <FormControlLabel
-                                value={'true'}
-                                control={<Radio color='success' />}
-                                label="Yes"
-                            />
-                            <FormControlLabel
-                                value={'false'}
-                                control={<Radio color='success' />}
-                                label="No"
-                            />
-                        </RadioGroup>
-
-                    </Stack>
-
-                </Grid>
-
-                {community.projectManager ? <Grid item container spacing={2} >
-
-                    <Grid item size={{ xs: 12 }} >
-                        <Typography variant="h4">Add details about your Project Manager</Typography>
-                    </Grid>
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5"> Project Manager Name</StyledTypography>
-
-                            <Autocomplete
-                                name="projectManager.name"
-                                options={cManagers}
-                                getOptionLabel={(option) => {
-                                    // Value selected with enter, right from the input
-                                    if (typeof option === 'string') {
-                                        return option;
-                                    }
-                                    // Add "xxx" option created dynamically
-                                    if (option.label) {
-                                        return option.label;
-                                    }
-                                    // Regular option
-                                    return option.name;
-                                }}
-                                value={projectManager.name || ''} // Only use the name here
-                                onChange={(event, value) => {
-                                    setFieldValue("projectManager.name", value ? value.name : '');
-                                }}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        required
-                                        placeholder="Select Project Manager"
-                                        error={Boolean(touched.projectManager?.name && errors.projectManager?.name)}
-                                        helperText={touched.projectManager?.name && errors.projectManager?.name}
-                                    />
-                                )}
-                                fullWidth
-                            />
-                        </Stack>
-                    </Grid>
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5">Email</StyledTypography>
-                            <TextField
-                                required
-                                placeholder='projectManager@gmail.com'
-                                fullWidth
-                                name="projectManager.email"
-                                value={values.projectManager.email}
-                                onChange={(event) => handleChange(event)}
-                                onBlur={handleBlur}
-                                error={Boolean(touched.projectManager?.email && errors.projectManager?.email)}
-                                helperText={touched.projectManager?.email && errors.projectManager?.email}
-                            />
-                        </Stack>
-                    </Grid>
-
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5">Mobile Number</StyledTypography>
-                            <TextField
-                                fullWidth
-                                placeholder='+14128373933'
-                                required
-                                name="projectManager.mobile"
-                                value={values.projectManager.mobile}
-                                onChange={(event) => handleChange(event)}
-                                onBlur={handleBlur}
-                                error={Boolean(touched.projectManager?.mobile && errors.projectManager?.mobile)}
-                                helperText={touched.projectManager?.mobile && errors.projectManager?.mobile}
-                            />
-                        </Stack>
-                    </Grid>
-
-                    <Grid item size={{ xs: 6 }} >
-                        <Stack rowGap={1}>
-                            <StyledTypography variant="h5">Address</StyledTypography>
-                            <TextField
-                                fullWidth
-                                placeholder='New Jersey'
-                                required
-                                name="projectManager.address"
-                                value={values.projectManager.address}
-                                onChange={(event) => handleChange(event)}
-                                onBlur={handleBlur}
-                                error={Boolean(touched.projectManager?.address && errors.projectManager?.address)}
-                                helperText={touched.projectManager?.address && errors.projectManager?.address}
-                                multiline
-                            />
-                        </Stack>
-                    </Grid>
-                </Grid> : null}
-
-            </Grid>
-        </Grid>
-
-
-    )
-}
-
-export default CommunityDetails
+export default CommunityDetails;

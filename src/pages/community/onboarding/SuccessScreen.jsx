@@ -1,21 +1,27 @@
 
-import { Grid2 as Grid, Stack, Typography } from '@mui/material';
-import completedImg from 'assets/images/icons/completed.png';
-import { Image } from 'components/StyledComponents';
+import { CheckCircle } from '@mui/icons-material';
+import { Button, Stack, Typography } from '@mui/material';
+import AppGrid from 'components/AppComponents/AppGrid';
 
-const SuccessScreen = () => {
+const SuccessScreen = ({ title, handleClose }) => {
     return (
-        <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
-            <Grid item size={{ xs: 9 }}>
-                <Image height={'90%'} width={'30%'} src={completedImg} alt='done' />
-            </Grid>
-            <Grid item >
+        <AppGrid container textAlign={'center'} alignItems={'center'} justifyContent={'center'} spacing={4} >
+            <AppGrid item size={{ xs: 9 }}>
+                <CheckCircle color='success' sx={{ fontSize: 100 }} />
+                {/* <Image height={'90%'} width={'30%'} src={<CheckCircle />} alt='done' /> */}
+            </AppGrid>
+            <AppGrid item size={{ xs: 12 }} >
                 <Stack spacing={4}>
-                    <Typography variant="h4">Your Community Onboarded Successfully !</Typography>
-                </Stack>
+                    <Typography variant="h4">{title}</Typography>
 
-            </Grid>
-        </Grid>
+                </Stack>
+            </AppGrid>
+            <AppGrid item size={{ xs: 12 }}  >
+                <Button variant='contained'
+                    color="info"
+                    size='large' onClick={handleClose}>Done</Button>
+            </AppGrid>
+        </AppGrid>
     )
 }
 

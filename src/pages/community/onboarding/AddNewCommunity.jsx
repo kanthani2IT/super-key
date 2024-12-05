@@ -1,17 +1,16 @@
-import { FormControlLabel, Grid2 as Grid, Radio, RadioGroup, Stack } from '@mui/material'
-import { StyledTypography } from 'components/StyledComponents'
-import React from 'react'
+import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
+import AppGrid from 'components/AppComponents/AppGrid'
+import AppLabelComponent from 'components/AppComponents/AppLabelComponent'
 
-const AddNewCommunity = ({ setOnboardingType, onBoardingType }) => {
+const AddNewCommunity = ({ handleOnboardingType, onBoardingType }) => {
     return (
-        <Grid container textAlign={'center'} justifyContent={'center'} rowSpacing={4} >
-            <Grid item >
-                <Stack spacing={2} alignItems={'center'}>
-                    <StyledTypography variant="h4">What is the name of your community?</StyledTypography>
+        <AppGrid container justifyContent={'center'} rowSpacing={4} >
+            <AppGrid item size={{ xs: 10 }} >
+                <AppLabelComponent gap={2} variant="h4" label={'Do you want to add single community or multiple communities?'} >
                     <RadioGroup
                         row
                         value={onBoardingType}
-                        onChange={(event) => setOnboardingType(event.target.value)}
+                        onChange={(event) => handleOnboardingType(event.target.value)}
                     >
                         <FormControlLabel
                             value="single"
@@ -25,10 +24,11 @@ const AddNewCommunity = ({ setOnboardingType, onBoardingType }) => {
                         />
                     </RadioGroup>
 
-                </Stack>
+                </AppLabelComponent>
 
-            </Grid>
-        </Grid>
+
+            </AppGrid>
+        </AppGrid >
     )
 }
 
