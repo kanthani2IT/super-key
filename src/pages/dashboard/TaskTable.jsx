@@ -5,7 +5,7 @@ import MessageIcon from "assets/images/dashboard/MessageIcon";
 import Dot from "components/@extended/Dot";
 import AppSkeleton from "components/AppComponents/AppSkeleton";
 import NoDataMessage from "components/NoDataMessage";
-import { StyledDashboardCard } from "./StyledComponent";
+import { StyledDashboardCard } from "components/StyledComponents";
 
 const getStatus = (status) => {
   let color;

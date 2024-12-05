@@ -8,7 +8,7 @@ import AppRowBox from "components/AppComponents/AppRowBox";
 import CircularLoader from "components/CircularLoader";
 import { useFormik } from "formik";
 import { useOnboardCommunity } from "hooks/useCommunity";
-import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
+import { RadiusStyledButton } from "components/StyledComponents";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import * as Yup from "yup";

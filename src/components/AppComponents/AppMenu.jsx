@@ -1,10 +1,9 @@
-import { StyledMenu } from "./StyledComponent";
+import { StyledMenu } from "components/StyledComponents";
 
 const AppMenu = ({ anchorEl, handleClose, renderComponent }) => {
   const open = Boolean(anchorEl);
   return (
     <StyledMenu
-      id="basic-menu"
       anchorEl={anchorEl}
       open={open}
       onClose={handleClose}

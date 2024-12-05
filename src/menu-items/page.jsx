@@ -68,6 +68,7 @@ const pages = {
         url: '/property',
         icon: icons.PropertyIcon,
         showTitle: false,
+        disable: true,
         type: "item",
 
       },
@@ -77,6 +78,7 @@ const pages = {
         type: 'item',
         url: '/insurance',
         showTitle: false,
+        disable: true,
         icon: icons.InsuranceIcon,
       },
       {
@@ -85,6 +87,7 @@ const pages = {
         url: '/claims-management',
         type: "item",
         showTitle: false,
+        disable: true,
         icon: icons.ClaimsIcon,
       },
       {
@@ -98,6 +101,7 @@ const pages = {
           title: 'All Documents',
           url: '/all-documents',
           type: "item",
+          disable: true,
           showTitle: true,
           // icon: icons.HelpIcon,
         }, , {
@@ -114,6 +118,7 @@ const pages = {
         id: 'payments',
         title: 'Payments',
         url: '/payments',
+        disable: true,
         icon: icons.PaymentIcon,
         type: "item",
         badge: 2
@@ -122,6 +127,7 @@ const pages = {
         id: 'analytics',
         title: 'Analytics',
         url: '/analytics',
+        disable: true,
         icon: icons.AnalyticsIcon,
         type: "item",
       },
@@ -129,6 +135,7 @@ const pages = {
         id: 'settings',
         title: 'Settings',
         url: '/settings',
+        disable: true,
         icon: icons.SettingsIcon,
         type: "item",
         target: true
@@ -137,6 +144,7 @@ const pages = {
         id: 'help-support',
         title: 'Help & Support',
         url: '/help-support',
+        disable: true,
         icon: icons.HelpIcon,
         type: "item",
         target: true

@@ -2,8 +2,8 @@ import { Drawer } from "@mui/material";
 
 import AppGrid from "components/AppComponents/AppGrid";
 import { useCommunityList, useDeleteCommunityById } from "hooks/useCommunity";
-import CommunityTable from "pages/dashboard/CommunityTable";
-import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
+import CommunityTable from "pages/community/CommunityTable";
+import { RadiusStyledButton } from "components/StyledComponents";
 import { useEffect, useState } from "react";
 import { useDebounceFn } from "utils/helpers";
 import EditCommunity from "./edit-community";
@@ -65,10 +65,14 @@ const CommunityOnboarding = () => {
     setSelectedRows(selected);
   };
 
-  const handleChangeRadio = (e) => {
-    const { value } = e.target;
-    setFilters({ ...filters, sort: value });
-    fetchData(value, filters.search, 1);
+  const handleChangeRadio = (value) => {
+    let newValue = filters.sort == value ? null : value
+    setFilters((prev) => ({
+      ...prev,
+      sort: newValue,
+    }));
+
+    fetchData(newValue, filters.search, 1);
     setPage(1)
   };
 

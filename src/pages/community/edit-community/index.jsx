@@ -16,7 +16,7 @@ import {
   useCommunityManagersQuery,
   usePropertyManagersQuery,
 } from "hooks/useDropDown";
-import { RadiusStyledButton } from "pages/dashboard/StyledComponent";
+import { RadiusStyledButton } from "components/StyledComponents";
 
 import { useEffect, useState } from "react";
 

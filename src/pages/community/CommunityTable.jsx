@@ -1,6 +1,7 @@
-import { MoreVert, SwapVert } from "@mui/icons-material";
+import { MoreVert, RadioButtonChecked, RadioButtonUnchecked, SwapVert } from "@mui/icons-material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import {
+  Checkbox,
   FormControl,
   FormControlLabel,
   IconButton,
@@ -15,16 +16,15 @@ import AppMenu from "components/AppComponents/AppMenu";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
-import { StyledMenuItem } from "components/AppComponents/StyledComponent";
-import { communityStyles } from "components/StyledComponents";
+import { communityStyles, StyledMenuItem } from "components/StyledComponents";
 import { formatAsDollar } from "pages/community/onboarding/utils";
 import { useState } from "react";
 
 const options = [
-  { value: "ACTIVE", label: "Status:Active" },
-  { value: "INACTIVE", label: "Status:Inactive" },
-  { value: "highToLow", label: "Insured Value:High to Low" },
-  { value: "lowToHigh", label: "Insured value:Low to High" },
+  { value: "ACTIVE", label: "Status: Active" },
+  { value: "INACTIVE", label: "Status: Inactive" },
+  { value: "highToLow", label: "Insured Value: High to Low" },
+  { value: "lowToHigh", label: "Insured value: Low to High" },
 ];
 
 export default function UserTable({
@@ -45,7 +45,6 @@ export default function UserTable({
   selectedRows
 }) {
   const theme = useTheme();
-  // const [page, setPage] = useState(1);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -162,39 +161,33 @@ export default function UserTable({
   };
 
 
-
   const renderSortComponent = () => {
     return (
-      <FormControl sx={{ m: 1 }}>
-        <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue=""
-          name="radio-buttons-group"
-          value={filters.sort}
-          onChange={handleChangeRadio}
-        >
-          {options?.map(({ value, label }) => (
-            // <StyledMenuItem sx={{ padding: "0", margin: "0" }}>
-            <FormControlLabel
-              key={value}
-              value={value}
-              control={<Radio />}
-              label={label}
-              sx={{
-                borderRadius: "10px",
-                pl: 1,
-                pr: 1,
-                m: 1,
-                width: "90%",
-                backgroundColor:
-                  filters?.sort === value
-                    ? theme.palette.blue[100]
-                    : "transparent",
-              }}
-            />
-            // </StyledMenuItem>
-          ))}
-        </RadioGroup>
+      <FormControl >
+
+        {options?.map(({ value, label }) => (
+          <FormControlLabel
+            key={value}
+            value={value}
+            control={<Checkbox
+              icon={<RadioButtonUnchecked />}
+              checkedIcon={<RadioButtonChecked />}
+              checked={filters?.sort == value}
+              onChange={() => handleChangeRadio(value)}
+            />}
+            label={label}
+            sx={{
+              borderRadius: "10px",
+              px: 1,
+              m: 1,
+              width: "90%",
+              backgroundColor:
+                filters?.sort === value
+                  ? theme.palette.blue[100]
+                  : "transparent",
+            }}
+          />
+        ))}
       </FormControl>
     );
   };

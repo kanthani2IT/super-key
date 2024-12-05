@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 
 // material-ui
 import AppBar from "@mui/material/AppBar";
@@ -12,7 +11,6 @@ import { drawerWidth } from "config";
 const AppBarStyled = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
-  // zIndex: theme.zIndex.drawer + 1,
   left: 0,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
@@ -31,8 +29,6 @@ const AppBarStyled = styled(AppBar, {
   }),
 }));
 
-AppBarStyled.propTypes = {
-  open: PropTypes.bool,
-};
+
 
 export default AppBarStyled;
