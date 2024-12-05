@@ -141,8 +141,8 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     setErrors,
   } = formik;
   const onReset = () => {
-    // setModal(true);
-    // setOffBoard(true);
+    setModal(true);
+    setOffBoard(true);
   };
   const handleBlur = (event) => {
     const { name, value } = event.target;
@@ -244,7 +244,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
         },
       ],
     };
-    // deleteUserById({ id: communityData?.communityId, body: payload });
+    deleteUserById({ id: communityData?.communityId, body: payload });
   };
   const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 };
   const mobileSize = { xs: 8, sm: 8, md: 8, lg: 4, xl: 4 };
@@ -299,7 +299,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
             </AppGrid>
           )}
         </AppRowBox>
-        {/* <ConfirmationModal
+        <ConfirmationModal
           open={modal}
           onClose={handleModal}
           message={
@@ -309,9 +309,9 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
           }
           confirmLabel={offBoard ? "Yes" : "No"}
           cancelLabel={offBoard ? "No" : "Yes, Discard"}
-          onConfirm={offBoard ? handleOffBoard : handleModal}
+          onConfirm={offBoard ? handleModal : handleModal}
           onCancel={handleModal}
-        /> */}
+        />
       </>
     );
   };
