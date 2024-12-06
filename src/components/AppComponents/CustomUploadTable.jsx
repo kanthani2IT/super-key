@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import PreviewIcon from "assets/images/icons/CommunityIcons/PreviewIcon";
 import { StyledTableCell, StyledTableRow } from "./StyledComponent";
+import DeleteIcon from "assets/images/icons/CommunityIcons/DeleteIcon";
 
 const CustomUploadTable = ({ cols, tableData }) => {
   return (
@@ -26,7 +27,7 @@ const CustomUploadTable = ({ cols, tableData }) => {
                 }}
               >
                 <Typography sx={{ fontWeight: 600, fontSize: "12px" }}>
-                  {item.title}
+                  {item.headerName}
                 </Typography>
               </TableCell>
             ))}
@@ -36,7 +37,7 @@ const CustomUploadTable = ({ cols, tableData }) => {
           {tableData.map((rows, rowsIndex) => (
             <StyledTableRow key={rowsIndex}>
               {cols.map((col) => {
-                if (col.fieldName === "action") {
+                if (col.field === "action") {
                   return (
                     <StyledTableCell
                       component="th"
@@ -44,12 +45,13 @@ const CustomUploadTable = ({ cols, tableData }) => {
                       sx={{ cursor: "pointer" }}
                     >
                       <PreviewIcon />
+                      <DeleteIcon />
                     </StyledTableCell>
                   );
                 } else {
                   return (
                     <StyledTableCell component="th" scope="row">
-                      {rows[col.fieldName]}
+                      {rows[col.field]}
                     </StyledTableCell>
                   );
                 }

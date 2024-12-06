@@ -1,11 +1,15 @@
-import { Box, Typography } from '@mui/material';
-import UploadIcon from 'assets/images/icons/NavIcons/UploadIcon';
-import FileUploadButton from 'components/AppComponents/FileUploadButton'; // Importing the common button component
-import { importPolicyData } from '../../pages/community/onboarding/utils'; // Importing the data
+import { Box, Typography } from "@mui/material";
+import UploadIcon from "assets/images/icons/NavIcons/UploadIcon";
+import FileUploadButton from "components/AppComponents/FileUploadButton"; // Importing the common button component
+import { importPolicyData } from "../../pages/community/onboarding/utils"; // Importing the data
 
-const InsuranceDocument = ({ enable = true, selectedFiles, setSelectedFiles, documentTypesData = [] }) => {
-
-
+const InsuranceDocument = ({
+  enable = true,
+  selectedFiles,
+  setSelectedFiles,
+  documentTypesData = [],
+  readData,
+}) => {
   const handleFileUpload = (event) => {
     const fileList = event.target.files;
     const filesArray = Array.from(fileList).map((file) => ({
@@ -16,9 +20,9 @@ const InsuranceDocument = ({ enable = true, selectedFiles, setSelectedFiles, doc
     const totalFiles = selectedFiles.length + filesArray.length;
 
     if (totalFiles > 20) {
-      alert('You can only upload a maximum of 20 files.');
+      alert("You can only upload a maximum of 20 files.");
     } else {
-      setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);  // Append new files to the existing ones
+      setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]); // Append new files to the existing ones
     }
   };
 
@@ -39,17 +43,29 @@ const InsuranceDocument = ({ enable = true, selectedFiles, setSelectedFiles, doc
       <UploadIcon />
 
       {/* Title */}
-      <Typography variant="h6" fontWeight="bold" gutterBottom sx={{ mt: '1rem' }}>
-        {importPolicyData.title}
+      <Typography
+        variant="h6"
+        fontWeight="bold"
+        gutterBottom
+        sx={{ mt: "1rem" }}
+      >
+        {readData ? "Upload the Template File" : importPolicyData.title}
       </Typography>
 
       {/* Instructions */}
-      {enable && <Typography variant="body2" color="textSecondary" gutterBottom>
-        {importPolicyData.instructions}
-      </Typography>}
+      {enable && (
+        <Typography variant="body2" color="textSecondary" gutterBottom>
+          {importPolicyData.instructions}
+        </Typography>
+      )}
 
       {/* Import Button */}
-      {enable && <FileUploadButton onFileChange={handleFileUpload} fileTypes={importPolicyData.fileTypes} />}
+      {enable && (
+        <FileUploadButton
+          onFileChange={handleFileUpload}
+          fileTypes={importPolicyData.fileTypes}
+        />
+      )}
 
       {/* File Details for Each Selected File */}
       {/* {selectedFiles.length > 0 && (
@@ -62,7 +78,9 @@ const InsuranceDocument = ({ enable = true, selectedFiles, setSelectedFiles, doc
 
       {/* Footer Text */}
       <Typography variant="caption" color="textSecondary">
-        {importPolicyData.footerText}
+        {readData
+          ? "Support file under 100 MB. 20 files per upload. Import files in  XLSX "
+          : importPolicyData.footerText}
       </Typography>
     </Box>
   );
