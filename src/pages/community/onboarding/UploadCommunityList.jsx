@@ -1,53 +1,75 @@
-import { Typography } from "@mui/material";
+import CustomUploadTable from "components/AppComponents/CustomUploadTable";
+import { useState } from "react";
+import * as XLSX from "xlsx";
 
-import icons from "assets/images/icons/mui-icons/Icons";
-import AppGrid from "components/AppComponents/AppGrid";
-import InsuranceDocument from "components/AppComponents/UploadDocument";
-import { RadiusStyledButton } from "components/StyledComponents";
 const UploadCommunityList = () => {
+  const [tableData, setTableData] = useState([]);
+
+  const handleFileUpload = (e) => {
+    e.preventDefault();
+    if (e.target.files) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = e.target.result;
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const json = XLSX.utils.sheet_to_json(worksheet);
+        console.log(json);
+
+        if (json.length > 0) {
+          setTableData(json);
+        }
+      };
+      reader.readAsArrayBuffer(e.target.files[0]);
+    }
+  };
+  console.log(tableData, "tableData");
+  const columns = [
+    {
+      field: "CommunityName",
+      headerName: "Community Name",
+      flex: 1,
+    },
+    {
+      field: "CommunityEmail",
+      headerName: "Community Email",
+    },
+    {
+      field: "ContactNo",
+      headerName: "Contact No",
+    },
+
+    {
+      field: "InsurancrStatus",
+      headerName: "Insurance Status",
+    },
+    {
+      field: "CommunityManager",
+      headerName: "Community Manager",
+    },
+    {
+      field: "PropertyMangerNo",
+      headerName: "PropertyManager No",
+    },
+    {
+      field: "Address",
+      headerName: "Address",
+    },
+    {
+      field: "action",
+      headerName: "",
+    },
+  ];
+
   return (
-    <>
-      <AppGrid container spacing={5}>
-        <AppGrid size={{ xl: 6 }}>
-          <Typography variant="h5" color="#5B738B">
-            Steps to bulk upload the communities
-          </Typography>
-          <Typography variant="h5" color="#5B738B">
-            1.Please download the template{" "}
-          </Typography>
-          <Typography variant="h5" color="#5B738B">
-            2.Upload the Details in the given template format{" "}
-          </Typography>
-          <Typography variant="h5" color="#5B738B">
-            3.Upload the file{" "}
-          </Typography>
-        </AppGrid>
-        <AppGrid
-          size={{ xl: 6 }}
-          display={"flex"}
-          alignItems={"center"}
-          flexDirection={"column"}
-          gap={"10px"}
-        >
-          <RadiusStyledButton
-            variant="outlined"
-            startIcon={icons.IconArrowDownward()}
-            color="info"
-            textColor="#2954E1"
-            borderRadius="10px"
-            width="auto"
-          >
-            Download the Template
-          </RadiusStyledButton>
-          <Typography variant="caption" color="#8F8F8F">
-            Format: XLSX
-          </Typography>
-        </AppGrid>
-        <AppGrid size={{ xl: 12 }}>
-          <InsuranceDocument readData={true} />
-        </AppGrid>
-      </AppGrid>
-    </>
+    <div>
+      <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
+
+      {tableData.length > 0 && (
+        <CustomUploadTable cols={columns} tableData={tableData} />
+      )}
+    </div>
   );
 };
 

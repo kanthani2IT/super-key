@@ -6,9 +6,9 @@ import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
 import CircularLoader from "components/CircularLoader";
+import { RadiusStyledButton } from "components/StyledComponents";
 import { useFormik } from "formik";
 import { useOnboardCommunity } from "hooks/useCommunity";
-import { RadiusStyledButton } from "components/StyledComponents";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import * as Yup from "yup";
@@ -20,6 +20,8 @@ const CommunityDetails = React.lazy(() => import("./CommunityDetails"));
 const CommunityName = React.lazy(() => import("./CommunityName"));
 const InsuranceUpload = React.lazy(() => import("./InsuranceTable"));
 const SuccessScreen = React.lazy(() => import("./SuccessScreen"));
+const UploadCommunity = React.lazy(() => import("./UploadCommunity"));
+const UploadCommunityList = React.lazy(() => import("./UploadCommunityList"));
 
 const onBoardingStepper = [
   { title: "Add New Community", component: AddNewCommunity, height: "25vh" },
@@ -84,10 +86,27 @@ const onBoardingStepper = [
   },
 ];
 
+const multiOnBoardingStepper = [
+  { title: "Add New Community", component: AddNewCommunity, height: "25vh" },
+  { title: "Add New Community", component: UploadCommunity, height: "60vh" },
+  {
+    title: "Add New Community",
+    component: UploadCommunityList,
+    height: "50vh",
+    width: "50%",
+  },
+];
+
 const defaultValue = {
   modalOpen: false,
   onboardingType: "single",
   activeStep: 0,
+};
+
+const multiDefaultValue = {
+  modalOpen: false,
+  onboardingType: "multiple",
+  activeStep: 1,
 };
 
 const OnboardingIndex = ({ refetch }) => {
@@ -98,16 +117,24 @@ const OnboardingIndex = ({ refetch }) => {
   const currentOnboradingType =
     searchParams.get("type") || defaultValue.onboardingType;
   const currentStep = Number(searchParams.get("cs")) || defaultValue.activeStep;
+  const currentMultiStep =
+    (currentOnboradingType == "multiple" && Number(searchParams.get("cs"))) ||
+    multiDefaultValue.activeStep;
   const modalOpen =
     Boolean(searchParams.get("onboarding")) || defaultValue.modalOpen;
+  const multiModalOpen =
+    Boolean(searchParams.get("onboarding-multi")) ||
+    multiDefaultValue.modalOpen;
 
   const { onboarding, updateOnboarding, resetOnboarding } = useGlobalStore();
   const [open, setOpen] = useState(modalOpen);
+  const [openMulti, setOpenMulti] = useState(multiModalOpen);
   const [show, setShow] = useState("true");
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   //for handling onboarding flow
   const [activeStep, setActiveStep] = useState(currentStep);
+  const [multiActiveStep, setMultiActiveStep] = useState(currentMultiStep);
   const [onBoardingType, setOnboardingType] = useState(currentOnboradingType);
   const [validationSchema, setValidationSchema] = useState(
     onBoardingStepper[activeStep]?.initialValidationSchema || null
@@ -122,11 +149,19 @@ const OnboardingIndex = ({ refetch }) => {
 
   const handleQueryParams = (step) => {
     searchParams.set("cs", step);
-
     navigate({
       pathname: location.pathname,
       search: searchParams?.toString(),
     });
+  };
+
+  const handleNextMulti = () => {
+    if (multiActiveStep === 2) {
+      handleCloseMultiModal();
+    } else {
+      handleQueryParams(multiActiveStep + 1);
+      setMultiActiveStep((prevStep) => prevStep + 1);
+    }
   };
 
   const handleNext = () => {
@@ -158,6 +193,20 @@ const OnboardingIndex = ({ refetch }) => {
     }
   };
 
+  const handleBackMulti = () => {
+    if (multiActiveStep === 1) {
+      navigate({
+        pathname: location.pathname,
+        search: `?onboarding=true&cs=0`,
+      });
+      setOpen(true);
+      setOpenMulti(false);
+    } else {
+      handleQueryParams(multiActiveStep - 1);
+      setMultiActiveStep((prevStep) => prevStep - 1);
+    }
+  };
+
   const handleOnboardingType = (value) => {
     setOnboardingType(value);
     setFieldValue("onBoardingType", value);
@@ -177,6 +226,48 @@ const OnboardingIndex = ({ refetch }) => {
     setSelectedFiles([]);
     resetForm();
     resetOnboarding();
+  };
+
+  const handleCloseMultiModal = () => {
+    navigate({
+      pathname: location.pathname,
+      search: "",
+    });
+    setOnboardingType(defaultValue.onboardingType);
+    setActiveStep(defaultValue.activeStep);
+    setMultiActiveStep(multiDefaultValue.activeStep);
+    setOpenMulti(false);
+  };
+
+  const multiFooter = () => {
+    return (
+      <AppRowBox>
+        <AppGrid item size={{ xs: 2 }}>
+          <Button
+            fullWidth
+            color="secondary"
+            onClick={handleBackMulti}
+            variant="outlined"
+          >
+            Back
+          </Button>
+        </AppGrid>
+        <AppGrid item size={{ xs: 2 }}>
+          <Button
+            fullWidth
+            color="info"
+            type="submit"
+            onClick={handleNextMulti}
+            variant="contained"
+            // disabled={
+            //   activeStep === 4 && show == "true" && selectedFiles.length == 0
+            // }
+          >
+            {multiActiveStep === 2 ? "Save" : "Next"}
+          </Button>
+        </AppGrid>
+      </AppRowBox>
+    );
   };
 
   const footer = () => {
@@ -239,8 +330,18 @@ const OnboardingIndex = ({ refetch }) => {
         selectedFiles.forEach((item) => formData.append("file", item.file));
         mutate(formData);
       } else {
-        handleNext(values);
-        updateOnboarding(values);
+        if (onBoardingType === "multiple") {
+          searchParams.set("type", onBoardingType);
+          navigate({
+            pathname: location.pathname,
+            search: `?onboarding-multi=true&type=${onBoardingType}&cs=${multiActiveStep}`,
+          });
+          setOpen(false);
+          setOpenMulti(true);
+        } else {
+          handleNext(values);
+          updateOnboarding(values);
+        }
       }
       setTouched({});
     },
@@ -269,17 +370,51 @@ const OnboardingIndex = ({ refetch }) => {
     });
   };
 
-  return (
-    <>
-      <RadiusStyledButton
-        borderRadius="10px"
-        color="info"
-        startIcon={<AddCircle />}
-        variant="contained"
-        onClick={handleOpen}
+  const renderMultiModal = () => {
+    return (
+      <AppModal
+        height={"auto"}
+        cardHeight={multiOnBoardingStepper[multiActiveStep].height || undefined}
+        open={openMulti}
+        onClose={handleCloseMultiModal}
+        enableCard={!finalStep}
+        title={multiOnBoardingStepper[multiActiveStep]?.title}
+        activeStep={multiActiveStep}
+        footer={multiFooter()}
+        steps={multiOnBoardingStepper}
+        align={finalStep ? "center" : ""}
+        width={multiOnBoardingStepper[multiActiveStep]?.width || undefined}
       >
-        Add Community
-      </RadiusStyledButton>
+        <div
+          style={{ pointerEvents: communityCreationLoading ? "none" : "auto" }}
+        >
+          <Suspense fallback={<CircularLoader />}>
+            {multiOnBoardingStepper[multiActiveStep]?.component &&
+              React.createElement(
+                multiOnBoardingStepper[multiActiveStep]?.component,
+                {
+                  handleOnboardingType,
+                  onBoardingType,
+                  formValues: values,
+                  errors,
+                  touched,
+                  setFieldValue,
+                  handleChange,
+                  setShow,
+                  show,
+                  setSelectedFiles,
+                  selectedFiles,
+                  handleClose,
+                }
+              )}
+          </Suspense>
+        </div>
+      </AppModal>
+    );
+  };
+
+  const renderSingleModal = () => {
+    return (
       <AppModal
         height={finalStep ? "40vh" : "auto"}
         cardHeight={onBoardingStepper[activeStep]?.height || undefined}
@@ -315,6 +450,32 @@ const OnboardingIndex = ({ refetch }) => {
           </Suspense>
         </div>
       </AppModal>
+    );
+  };
+
+  const renderStepperModal = () => {
+    switch (currentOnboradingType) {
+      case "single":
+        return renderSingleModal();
+      case "multiple":
+        return renderMultiModal();
+      default:
+        return <></>;
+    }
+  };
+
+  return (
+    <>
+      <RadiusStyledButton
+        borderRadius="10px"
+        color="info"
+        startIcon={<AddCircle />}
+        variant="contained"
+        onClick={handleOpen}
+      >
+        Add Community
+      </RadiusStyledButton>
+      {renderStepperModal()}
     </>
   );
 };
