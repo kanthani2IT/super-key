@@ -30,7 +30,6 @@ const tabs = [
 export default function DashboardDefault() {
   const [selectedTab, setSelectedTab] = useState(tabs[0].value);
   const [open, setOpen] = useState(false);
-
   const { data, isLoading } = useGetUsers();
   const { data: dashboardData, isLoading: isWidgetLoading } =
     useGetDashboardMetrics();
@@ -105,8 +104,7 @@ export default function DashboardDefault() {
       <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
         <AppGrid container rowSpacing={2} columnSpacing={2}>
           <AppGrid size={{ xs: 12 }}>
-            <AppSkeletonWrapper loading={isWidgetLoading} height={'200px'}>
-
+            <AppSkeletonWrapper loading={isWidgetLoading} height={"200px"}>
               <MainCard title="Communities" secondary={"Full View"}>
                 <Stack spacing={2}>
                   <Typography variant="h6">Communities Managed</Typography>
@@ -118,8 +116,7 @@ export default function DashboardDefault() {
             </AppSkeletonWrapper>
           </AppGrid>
           <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
-            <AppSkeletonWrapper loading={isWidgetLoading} height={'150px'}>
-
+            <AppSkeletonWrapper loading={isWidgetLoading} height={"150px"}>
               <MainCard>
                 <Stack rowGap={4} textAlign={"center"}>
                   <Typography variant="h6">
@@ -134,7 +131,7 @@ export default function DashboardDefault() {
             </AppSkeletonWrapper>
           </AppGrid>
           <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
-            <AppSkeletonWrapper loading={isWidgetLoading} height={'150px'}>
+            <AppSkeletonWrapper loading={isWidgetLoading} height={"150px"}>
               <MainCard>
                 <Stack rowGap={4} textAlign={"center"}>
                   <Typography variant="h6">
@@ -148,8 +145,7 @@ export default function DashboardDefault() {
             </AppSkeletonWrapper>
           </AppGrid>
           <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
-            <AppSkeletonWrapper loading={isWidgetLoading} height={'150px'}>
-
+            <AppSkeletonWrapper loading={isWidgetLoading} height={"150px"}>
               <MainCard>
                 <Stack rowGap={4} textAlign={"center"}>
                   <Typography variant="h6">
@@ -166,15 +162,13 @@ export default function DashboardDefault() {
         </AppGrid>
       </AppGrid>
       <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
-        <AppSkeletonWrapper loading={isWidgetLoading} height={'370px'}>
-
+        <AppSkeletonWrapper loading={isWidgetLoading} height={"370px"}>
           <MainCard title={"Upcoming Renewals"}>
             <AppGrid size={{ xs: 12 }} justifyItems={"center"}>
               <RenewalPieChart chartData={upcomingRenewals ?? []} />
             </AppGrid>
           </MainCard>
         </AppSkeletonWrapper>
-
       </AppGrid>
       <AppModal open={open} onClose={handleClose} height="auto" width="70%">
         <MainCard
@@ -189,7 +183,7 @@ export default function DashboardDefault() {
         </MainCard>
       </AppModal>
       <AppGrid size={{ xs: 12 }}>
-        <MainCard title={"Task Assigned"} secondary={"Full View"}>
+        <MainCard title={"Task Assigned"} secondary={"Full View"} isFilter>
           <MainTabs
             handleChange={handleChange}
             value={selectedTab}

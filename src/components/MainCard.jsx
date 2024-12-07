@@ -98,10 +98,23 @@ function MainCard(
                 {isFilter ? (
                   <Button
                     variant="outlined"
-                    startIcon={<FilterAltIcon />}
-                    endIcon={<ArrowDropDownIcon fontSize="large" />}
+                    color="black"
+                    onClick={() => others.onFilterClick}
+                    endIcon={
+                      <FilterAltIcon sx={{ width: "22px", height: "24px" }} />
+                    }
+                    sx={{
+                      height: "42px",
+                      borderRadius: "10px",
+                      borderWidth: "0.5px",
+                      borderColor: "#000",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      "&:hover": { backgroundColor: "#E9F3FF" },
+                    }} // endIcon={<ArrowDropDownIcon fontSize="large" />}
                   >
-                    {"Filter"}
+                    {" "}
+                    {"Filter"}{" "}
                   </Button>
                 ) : null}
 
@@ -163,4 +176,5 @@ MainCard.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   modal: PropTypes.bool,
   others: PropTypes.any,
+  onFilterClick: PropTypes.func,
 };
