@@ -4,7 +4,47 @@ import icons from "assets/images/icons/mui-icons/Icons";
 import AppGrid from "components/AppComponents/AppGrid";
 import InsuranceDocument from "components/AppComponents/UploadDocument";
 import { RadiusStyledButton } from "components/StyledComponents";
-const UploadCommunity = () => {
+import * as XLSX from "xlsx";
+
+const validHeaders = [
+  "CommunityName",
+  "CommunityEmail",
+  "ContactNo",
+  "InsurancrStatus",
+  "CommunityManager",
+  "PropertyMangerNo",
+  "Address",
+];
+const UploadCommunity = ({ setBulkUploadFieldValue }) => {
+  const handleFileUpload = async (file) => {
+    if (file[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = e.target.result;
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const json = XLSX.utils.sheet_to_json(worksheet);
+        const header = Object.keys(json[0]);
+        const isIncludedAllRequiredColumns = validHeaders.every((col) =>
+          header.includes(col)
+        );
+        if (isIncludedAllRequiredColumns) {
+          const sheetData = json?.map((item) => {
+            return {
+              ...item,
+              isEdit: false,
+            };
+          });
+          setBulkUploadFieldValue("fileData", sheetData);
+        } else {
+          console.log("invalid column");
+        }
+      };
+      reader.readAsArrayBuffer(file[0]);
+    }
+  };
+
   return (
     <>
       <AppGrid container spacing={5}>
@@ -44,7 +84,7 @@ const UploadCommunity = () => {
           </Typography>
         </AppGrid>
         <AppGrid size={{ xl: 12 }}>
-          <InsuranceDocument readData={true} />
+          <InsuranceDocument readData={true} handleFile={handleFileUpload} />
         </AppGrid>
       </AppGrid>
     </>

@@ -9,20 +9,26 @@ const InsuranceDocument = ({
   setSelectedFiles,
   documentTypesData = [],
   readData,
+  handleFile,
+  isMultiple,
 }) => {
   const handleFileUpload = (event) => {
     const fileList = event.target.files;
-    const filesArray = Array.from(fileList).map((file) => ({
-      file, // The original file object
-      docType: documentTypesData?.[0] || [], // Default value for docType
-      active: false, // Default value for active
-    }));
-    const totalFiles = selectedFiles.length + filesArray.length;
-
-    if (totalFiles > 20) {
-      alert("You can only upload a maximum of 20 files.");
+    if (handleFile) {
+      handleFile(fileList);
     } else {
-      setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]); // Append new files to the existing ones
+      const filesArray = Array.from(fileList).map((file) => ({
+        file, // The original file object
+        docType: documentTypesData?.[0] || [], // Default value for docType
+        active: false, // Default value for active
+      }));
+      const totalFiles = selectedFiles.length + filesArray.length;
+
+      if (totalFiles > 20) {
+        alert("You can only upload a maximum of 20 files.");
+      } else {
+        setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]); // Append new files to the existing ones
+      }
     }
   };
 
@@ -64,6 +70,7 @@ const InsuranceDocument = ({
         <FileUploadButton
           onFileChange={handleFileUpload}
           fileTypes={importPolicyData.fileTypes}
+          isMultiple={isMultiple}
         />
       )}
 

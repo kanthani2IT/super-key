@@ -88,7 +88,11 @@ const onBoardingStepper = [
 
 const multiOnBoardingStepper = [
   { title: "Add New Community", component: AddNewCommunity, height: "25vh" },
-  { title: "Add New Community", component: UploadCommunity, height: "60vh" },
+  {
+    title: "Add New Community",
+    component: UploadCommunity,
+    height: "60vh",
+  },
   {
     title: "Add New Community",
     component: UploadCommunityList,
@@ -107,6 +111,10 @@ const multiDefaultValue = {
   modalOpen: false,
   onboardingType: "multiple",
   activeStep: 1,
+};
+
+const initialBulkUploadValues = {
+  fileData: [],
 };
 
 const OnboardingIndex = ({ refetch }) => {
@@ -140,6 +148,13 @@ const OnboardingIndex = ({ refetch }) => {
     onBoardingStepper[activeStep]?.initialValidationSchema || null
   );
   const finalStep = activeStep == onBoardingStepper?.length - 1;
+
+  const multiCommunityFormik = useFormik({
+    initialValues: initialBulkUploadValues,
+  });
+
+  const { values: bulkUploadValues, setFieldValue: setBulkUploadFieldValue } =
+    multiCommunityFormik;
 
   const successHandler = () => {
     resetOnboarding();
@@ -267,9 +282,7 @@ const OnboardingIndex = ({ refetch }) => {
             type="submit"
             onClick={handleNextMulti}
             variant="contained"
-            // disabled={
-            //   activeStep === 4 && show == "true" && selectedFiles.length == 0
-            // }
+            disabled={bulkUploadValues.fileData.length === 0 ? true : false}
           >
             {multiActiveStep === 2 ? "Save" : "Next"}
           </Button>
@@ -277,6 +290,8 @@ const OnboardingIndex = ({ refetch }) => {
       </AppRowBox>
     );
   };
+
+  console.log(bulkUploadValues.fileData);
 
   const footer = () => {
     return (
@@ -400,7 +415,7 @@ const OnboardingIndex = ({ refetch }) => {
             {multiOnBoardingStepper[multiActiveStep]?.component &&
               React.createElement(
                 multiOnBoardingStepper[multiActiveStep]?.component,
-                {}
+                { bulkUploadValues, setBulkUploadFieldValue }
               )}
           </Suspense>
         </div>

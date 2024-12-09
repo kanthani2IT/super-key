@@ -1,6 +1,11 @@
 import { Button } from "@mui/material";
 
-const FileUploadButton = ({ disabled, onFileChange, fileTypes }) => {
+const FileUploadButton = ({
+  disabled,
+  onFileChange,
+  fileTypes,
+  isMultiple,
+}) => {
   return (
     <Button
       disabled={disabled}
@@ -13,7 +18,7 @@ const FileUploadButton = ({ disabled, onFileChange, fileTypes }) => {
       <input
         type="file"
         hidden
-        multiple
+        multiple={isMultiple ?? false}
         onChange={onFileChange}
         accept={fileTypes.join(", ")} // Accept multiple file types from data
       />
