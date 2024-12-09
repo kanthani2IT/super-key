@@ -93,7 +93,7 @@ const multiOnBoardingStepper = [
     title: "Add New Community",
     component: UploadCommunityList,
     height: "50vh",
-    width: "70%",
+    width: "90%",
   },
 ];
 
@@ -242,6 +242,14 @@ const OnboardingIndex = ({ refetch }) => {
   const multiFooter = () => {
     return (
       <AppRowBox>
+        {/* <AppRowBox justifyContent="start">
+          <VectorIcon />
+          <Typography variant="subtitle1">
+            Note: To Upload the documents please save the communities and then
+            you can upload the documents in document repository section.
+          </Typography>
+        </AppRowBox> */}
+
         <AppGrid item size={{ xs: 2 }}>
           <Button
             fullWidth

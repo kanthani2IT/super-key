@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import CustomUploadTable from "components/AppComponents/CustomUploadTable";
 import { useState } from "react";
 import * as XLSX from "xlsx";
@@ -63,13 +64,16 @@ const UploadCommunityList = () => {
   ];
 
   return (
-    <div>
+    <>
       <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
+      <Typography variant="h5" color="#5B738B">
+        Uploaded Communities
+      </Typography>
 
       {tableData.length > 0 && (
         <CustomUploadTable cols={columns} tableData={tableData} />
       )}
-    </div>
+    </>
   );
 };
 

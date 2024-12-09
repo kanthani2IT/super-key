@@ -3,9 +3,9 @@ import {
   MenuItem,
   Step,
   StepConnector,
+  styled,
   TableCell,
   TableRow,
-  styled,
 } from "@mui/material";
 
 export const StyledMenu = styled(Menu)(({ theme }) => ({
@@ -46,23 +46,39 @@ export const CustomConnector = styled(StepConnector)(({ theme }) => ({
 }));
 
 export const StyledTableCell = styled(TableCell)({
-  borderColor: "#ffffff !important",
+  borderColor: "#94AAF4 !important",
   borderBottom: "5px solid rgba(253, 253, 253, 1)",
   padding: "15px",
+  fontSize: "0.875rem",
+  lineHeight: 1.57,
 });
 
 export const StyledTableRow = styled(TableRow)({
   backgroundColor: "#EDEFF6",
+
   "& > :first-of-type": {
     borderTopLeftRadius: "15px",
     borderBottomLeftRadius: "15px",
+    borderLeft: "1px solid #94AAF4",
+    borderTop: "1px solid #94AAF4",
   },
   "& > :last-of-type": {
     backgroundColor: "#ffffff",
   },
-
   "& > :nth-last-of-type(2)": {
     borderTopRightRadius: "15px",
     borderBottomRightRadius: "15px",
+    borderRight: "1px solid #94AAF4",
+  },
+  "& > td, & > th": {
+    borderTop: "1px solid #94AAF4 !important",
+    borderBottom: "1px solid #94AAF4",
+  },
+  "&:not(:first-of-type) > td, &:not(:first-of-type) > th": {
+    borderTop: "1px solid #94AAF4",
+  },
+  "& > td:last-child, & > th:last-child": {
+    borderTop: "none !important",
+    borderBottom: "none !important",
   },
 });
