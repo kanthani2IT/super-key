@@ -93,7 +93,7 @@ const multiOnBoardingStepper = [
     title: "Add New Community",
     component: UploadCommunityList,
     height: "50vh",
-    width: "100%",
+    width: "70%",
   },
 ];
 
@@ -382,7 +382,7 @@ const OnboardingIndex = ({ refetch }) => {
         activeStep={multiActiveStep}
         footer={multiFooter()}
         steps={multiOnBoardingStepper}
-        align={finalStep ? "center" : ""}
+        align={"center"}
         width={multiOnBoardingStepper[multiActiveStep]?.width || undefined}
       >
         <div
@@ -392,20 +392,7 @@ const OnboardingIndex = ({ refetch }) => {
             {multiOnBoardingStepper[multiActiveStep]?.component &&
               React.createElement(
                 multiOnBoardingStepper[multiActiveStep]?.component,
-                {
-                  handleOnboardingType,
-                  onBoardingType,
-                  formValues: values,
-                  errors,
-                  touched,
-                  setFieldValue,
-                  handleChange,
-                  setShow,
-                  show,
-                  setSelectedFiles,
-                  selectedFiles,
-                  handleClose,
-                }
+                {}
               )}
           </Suspense>
         </div>
