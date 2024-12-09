@@ -64,8 +64,8 @@ const UploadCommunityList = () => {
   ];
 
   return (
-    <div>
-      {/* <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} /> */}
+    <>
+      <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
       <Typography variant="h5" color="#5B738B">
         Uploaded Communities
       </Typography>
@@ -73,7 +73,7 @@ const UploadCommunityList = () => {
       {tableData.length > 0 && (
         <CustomUploadTable cols={columns} tableData={tableData} />
       )}
-    </div>
+    </>
   );
 };
 
