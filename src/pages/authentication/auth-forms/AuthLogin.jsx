@@ -86,8 +86,9 @@ export default function AuthLogin(props) {
                       checked={checked}
                       onChange={(event) => setChecked(event.target.checked)}
                       name="checked"
-                      color="primary"
                       size="small"
+                      color="info"
+
                     />
                   }
                   label={
@@ -102,6 +103,8 @@ export default function AuthLogin(props) {
                   fontWeight={600}
                   underline=""
                   to="/reset/forgot"
+                  color="info"
+
                 >
                   Forget Password?
                 </Link>
@@ -123,7 +126,7 @@ export default function AuthLogin(props) {
                   size="large"
                   type="submit"
                   variant="contained"
-                  color="primary"
+                  color="info"
                 >
                   Login
                 </Button>

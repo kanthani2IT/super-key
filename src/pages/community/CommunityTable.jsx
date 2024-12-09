@@ -27,7 +27,7 @@ const options = [
   { value: "lowToHigh", label: "Insured value: Low to High" },
 ];
 
-export default function UserTable({
+export default function CommunityTable({
   isLoading,
   height = 400,
   onSelectionChange,
@@ -233,6 +233,7 @@ export default function UserTable({
           pageSize={pageSize}
           onPageChange={handleChangePage}
           selected={selectedRows}
+          noDataText={'No Tasks Found'}
         />
       </>
 
