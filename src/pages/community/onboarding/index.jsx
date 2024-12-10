@@ -97,7 +97,7 @@ const multiOnBoardingStepper = [
     title: "Add New Community",
     component: UploadCommunityList,
     height: "50vh",
-    width: "70%",
+    width: "90%",
   },
 ];
 
