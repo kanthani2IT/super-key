@@ -291,8 +291,6 @@ const OnboardingIndex = ({ refetch }) => {
     );
   };
 
-  console.log(bulkUploadValues.fileData);
-
   const footer = () => {
     return (
       <AppRowBox>

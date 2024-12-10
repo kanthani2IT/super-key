@@ -1,4 +1,6 @@
 import {
+  Box,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -56,10 +58,14 @@ const CustomUploadTable = ({
                       scope="row"
                       sx={{ cursor: "pointer" }}
                     >
-                      <div style={{ display: "flex", gap: "8px" }}>
-                        <PreviewIcon />
-                        <DeleteIcon />
-                      </div>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <IconButton>
+                          <PreviewIcon />
+                        </IconButton>
+                        <IconButton>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
                     </StyledTableCell>
                   );
                 } else {
