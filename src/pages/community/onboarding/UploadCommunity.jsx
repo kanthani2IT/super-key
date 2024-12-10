@@ -48,17 +48,23 @@ const UploadCommunity = ({ setBulkUploadFieldValue }) => {
   return (
     <>
       <AppGrid container spacing={5}>
-        <AppGrid size={{ xl: 6 }}>
-          <Typography variant="h5" color="#5B738B">
+        <AppGrid
+          size={{ xl: 6 }}
+          display={"flex"}
+          alignItems={"flex-start"}
+          flexDirection={"column"}
+          gap={"10px"}
+        >
+          <Typography variant="h5" color="#5B738B" noWrap>
             Steps to bulk upload the communities
           </Typography>
-          <Typography variant="h5" color="#5B738B">
+          <Typography variant="h5" color="#5B738B" noWrap>
             1.Please download the template{" "}
           </Typography>
-          <Typography variant="h5" color="#5B738B">
+          <Typography variant="h5" color="#5B738B" noWrap>
             2.Upload the Details in the given template format{" "}
           </Typography>
-          <Typography variant="h5" color="#5B738B">
+          <Typography variant="h5" color="#5B738B" noWrap>
             3.Upload the file{" "}
           </Typography>
         </AppGrid>
