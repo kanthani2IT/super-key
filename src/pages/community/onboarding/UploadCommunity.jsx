@@ -68,13 +68,7 @@ const UploadCommunity = ({ setBulkUploadFieldValue }) => {
             3.Upload the file{" "}
           </Typography>
         </AppGrid>
-        <AppGrid
-          size={{ xl: 6 }}
-          display={"flex"}
-          alignItems={"center"}
-          flexDirection={"column"}
-          gap={"10px"}
-        >
+        <AppGrid size={{ xl: 6 }} display={"flow"}>
           <RadiusStyledButton
             variant="outlined"
             startIcon={icons.IconArrowDownward()}
