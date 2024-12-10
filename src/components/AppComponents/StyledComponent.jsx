@@ -3,6 +3,7 @@ import {
   MenuItem,
   Step,
   StepConnector,
+  Stepper,
   styled,
   TableCell,
   TableRow,
@@ -12,6 +13,15 @@ export const StyledMenu = styled(Menu)(({ theme }) => ({
   borderRadius: "0.625rem",
   boxShadow: "#00000045 0px 7px 29px 0px",
 }));
+export const Customstepper = styled(Stepper)(({ theme }) => ({
+  "& .MuiStepConnector-root": {
+    position: "relative",
+    top: "auto",
+    left: "auto",
+    right: "auto",
+  },
+}));
+
 export const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   "&:hover": {
     backgroundColor: "#E9F3FF",
@@ -36,7 +46,11 @@ export const CustomConnector = styled(StepConnector)(({ theme }) => ({
     border: 0,
     borderRadius: 10,
     backgroundColor: "#B0B0B0",
-    width: "5vw",
+    width: "70px",
+    maxWidth: "70px",
+    "@media (min-width: 500px) and (max-width: 700px)": {
+      width: "50px",
+    },
   },
   "&.Mui-active, &.Mui-completed": {
     "& .MuiStepConnector-line": {

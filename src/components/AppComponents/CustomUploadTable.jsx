@@ -40,7 +40,7 @@ const CustomUploadTable = ({
                   borderColor: "#ffffff !important",
                 }}
               >
-                <Typography variant="body1" color="#8F8F8F">
+                <Typography variant="body1" color="#8F8F8F" noWrap>
                   {item.headerName}
                 </Typography>
               </TableCell>
