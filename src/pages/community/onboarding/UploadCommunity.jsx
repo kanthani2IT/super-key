@@ -58,14 +58,14 @@ const UploadCommunity = ({ setBulkUploadFieldValue }) => {
           <Typography variant="h5" color="#5B738B" noWrap>
             Steps to bulk upload the communities
           </Typography>
-          <Typography variant="h5" color="#5B738B" noWrap>
-            1.Please download the template{" "}
+          <Typography variant="body1" color="#5B738B" noWrap>
+            1. Please download the template{" "}
           </Typography>
-          <Typography variant="h5" color="#5B738B" noWrap>
-            2.Upload the Details in the given template format{" "}
+          <Typography variant="body1" color="#5B738B" noWrap>
+            2. Upload the Details in the given template format{" "}
           </Typography>
-          <Typography variant="h5" color="#5B738B" noWrap>
-            3.Upload the file{" "}
+          <Typography variant="body1" color="#5B738B" noWrap>
+            3. Upload the file{" "}
           </Typography>
         </AppGrid>
         <AppGrid size={{ xl: 6 }} display={"flow"}>

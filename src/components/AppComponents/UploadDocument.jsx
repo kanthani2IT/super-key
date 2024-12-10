@@ -86,7 +86,7 @@ const InsuranceDocument = ({
       {/* Footer Text */}
       <Typography variant="caption" color="textSecondary">
         {readData
-          ? "Support file under 100 MB. 20 files per upload. Import files in  XLSX "
+          ? "Support file under 100 MB. Import files in  XLSX "
           : importPolicyData.footerText}
       </Typography>
     </Box>
