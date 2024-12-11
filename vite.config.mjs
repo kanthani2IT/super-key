@@ -12,24 +12,18 @@ export default defineConfig({
     global: "window",
   },
   resolve: {
-    alias: [
-      {
-        find: /^~(.+)/,
-        replacement: path.join(process.cwd(), "node_modules/$1"),
-      },
-      {
-        find: /^src(.+)/,
-        replacement: path.join(process.cwd(), "src/$1"),
-      },
-    ],
+   alias: {
+  "~": path.resolve(__dirname, "node_modules"),
+  src: path.resolve(__dirname, "src"),
+},
   },
   server: {
-    host: "0.0.0.0", // make the server accessible externally
+    host: "0.0.0.0", 
     open: false,
     port: 3000,
   },
   preview: {
-    host: "0.0.0.0", // make the preview accessible externally
+    host: "0.0.0.0", 
     open: true,
     port: 3000,
   },

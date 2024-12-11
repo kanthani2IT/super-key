@@ -35,10 +35,11 @@ export default function AuthLogin(props) {
     setSubmitting(false);
     loginMutation.mutate({ values, checked });
   };
+  console.log(user?.email)
   return (
     <Formik
       initialValues={{
-        email: !!user?.password ? user?.email : "",
+        email: user?.email,
         password: user?.password,
       }}
       validationSchema={validationSchema}

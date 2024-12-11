@@ -5,12 +5,12 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
   TableRow,
   Typography,
 } from "@mui/material";
 import { BoldTypographyHeader } from "components/StyledComponents";
-import { useState } from "react";
 import AppPagination from "./AppPagination";
 import AppSkeleton from "./AppSkeleton";
 
@@ -62,7 +62,7 @@ const AppTable = ({
     onSelectionChange?.(newSelected);
   };
   return (
-    <TableContainer>
+    <TableContainer sx={{ maxHeight: "calc(100vh - 300px)" }}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
@@ -143,16 +143,23 @@ const AppTable = ({
             </TableRow>
           )}
         </TableBody>
+        {totalItems ? (<TableFooter>
+          <TableRow>
+            <TableCell colSpan={columns.length + 1} align="right">
+
+              <AppPagination
+                pageSize={pageSize}
+                currentPage={currentPage}
+                totalItems={totalItems}
+                onPageChange={onPageChange}
+              />
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+        ) : null}
+
       </Table>
-      {totalItems ? (
-        <AppPagination
-          pageSize={pageSize}
-          currentPage={currentPage}
-          totalItems={totalItems}
-          onPageChange={onPageChange}
-        />
-      ) : null}
-    </TableContainer>
+    </TableContainer >
   );
 };
 
