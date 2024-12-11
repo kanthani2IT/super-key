@@ -10,6 +10,7 @@ export const cManagers = [
   { id: "sanya", name: "Sanya" },
   { id: "vishal", name: "Vishal" },
 ];
+export const hundredMbValidation = 100 * 1024 * 1024;
 
 export const pManagers = [
   { id: "priya", name: "Priya" },
