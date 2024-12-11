@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from "react";
 
 // Create the Snackbar Context
 const SnackbarContext = createContext();
@@ -10,7 +10,7 @@ export const SnackbarProvider = ({ children }) => {
     message: "Success",
     severity: "success",
     duration: 5000,
-    anchorOrigin: { vertical: "top", horizontal: "right" },
+    anchorOrigin: { vertical: "bottom", horizontal: "center" },
     customColors: {},
   });
 
@@ -31,7 +31,9 @@ export const SnackbarProvider = ({ children }) => {
   };
 
   return (
-    <SnackbarContext.Provider value={{ snackbarState, updateSnackbar, closeSnackbar }}>
+    <SnackbarContext.Provider
+      value={{ snackbarState, updateSnackbar, closeSnackbar }}
+    >
       {children}
     </SnackbarContext.Provider>
   );

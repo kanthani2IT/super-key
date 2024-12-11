@@ -8,7 +8,6 @@ import {
   Link,
   Radio,
   RadioGroup,
-  Select,
   Stack,
   Table,
   TableBody,
@@ -18,12 +17,12 @@ import {
 } from "@mui/material";
 import FileIcon from "assets/images/icons/FileIcon";
 import AppAutoComplete from "components/AppComponents/AppAutoComplete";
+import FilePreview from "components/AppComponents/AppFilePreview";
 import PreviewButton from "components/AppComponents/PreviewButton";
 import { useDocumentsQuery } from "hooks/useDropDown";
 import { useEffect, useState } from "react";
 import InsuranceDocument from "../../../components/AppComponents/UploadDocument";
 import { truncateFileName } from "./utils";
-import FilePreview from "components/AppComponents/AppFilePreview";
 
 // Document types
 export const documentTypes = [{ name: "Endorsement", value: "Endosement" }];
@@ -110,7 +109,7 @@ const DocumentTypeDropdown = ({ value, onChange, documentTypesData }) => (
       options={documentTypesData}
       placeholder="Select Document Type"
       size="small"
-    // onSearch={onSearch}
+      // onSearch={onSearch}
     />
   </>
 );
@@ -174,7 +173,6 @@ const FileRow = ({
     </EllipsisCell>
     <EllipsisCell>
       <DocumentTypeDropdown
-
         value={files.docType}
         onChange={({ target }, data) => onTypeChange(index, target.value)}
         documentTypesData={documentTypesData}
@@ -296,7 +294,7 @@ const InsuranceUpload = ({
           {!selectedFiles.length ? (
             <>
               <Typography variant="h5">
-                Do you have any documentation available?
+                Do you have any documents available?
               </Typography>
               <RadioGroup
                 row
@@ -412,6 +410,11 @@ const InsuranceUpload = ({
           selected={selected}
           setSelected={setSelected}
         />
+      )}
+      {selectedFiles.length > 0 && (
+        <Box p={4}>
+          <PreviewButton index={0} onPreview={onClickPreview} previewAll />
+        </Box>
       )}
     </Grid>
   );

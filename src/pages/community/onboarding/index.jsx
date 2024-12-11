@@ -6,9 +6,9 @@ import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
 import CircularLoader from "components/CircularLoader";
+import { RadiusStyledButton } from "components/StyledComponents";
 import { useFormik } from "formik";
 import { useOnboardCommunity } from "hooks/useCommunity";
-import { RadiusStyledButton } from "components/StyledComponents";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import * as Yup from "yup";
@@ -72,16 +72,16 @@ const onBoardingStepper = [
     height: "auto",
     width: "60%",
   },
-  {
-    title: "",
-    component: ({ handleClose }) => (
-      <SuccessScreen
-        title="Your Community Onboarded Successfully!"
-        handleClose={handleClose}
-      />
-    ),
-    height: "100vh",
-  },
+  // {
+  //   title: "",
+  //   component: ({ handleClose }) => (
+  //     <SuccessScreen
+  //       title="Your Community Onboarded Successfully!"
+  //       handleClose={handleClose}
+  //     />
+  //   ),
+  //   height: "100vh",
+  // },
 ];
 
 const defaultValue = {
@@ -207,7 +207,7 @@ const OnboardingIndex = ({ refetch }) => {
               activeStep === 4 && show == "true" && selectedFiles.length == 0
             }
           >
-            {finalStep ? "Done" : "Next"}
+            {selectedFiles.length > 0 ? "Save" : finalStep ? "Done" : "Next"}
           </Button>
         </AppGrid>
       </AppRowBox>
@@ -233,7 +233,7 @@ const OnboardingIndex = ({ refetch }) => {
           communityManagerId: values?.communityManager?.managerId,
           companyId: values?.communityManager?.managementCompanyId,
           documents: transformDocuments(selectedFiles),
-          status: "ACTIVE"
+          status: "ACTIVE",
         };
         formData.append("community", JSON.stringify(payload));
         selectedFiles.forEach((item) => formData.append("file", item.file));
