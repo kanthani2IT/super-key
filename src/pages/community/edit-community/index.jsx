@@ -35,14 +35,14 @@ const initialValues = {
   },
   communityManager: {
     username: "",
-    code: defaultCountryCode,
+    code: "+1",
     phone: "",
 
     email: "",
   },
   propertyManager: {
     username: "",
-    code: defaultCountryCode,
+    code: "+1",
     phone: "",
 
     email: "",
@@ -63,7 +63,7 @@ const initialValidationSchema = {
   communityManager: Yup.object().shape({
     username: Yup.string().required("Name is required"),
     phone: Yup.string().required("Contact Number is required"),
-    code: Yup.object().required("Country Code is required"),
+    code: Yup.string().required("Country Code is required"),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
@@ -71,7 +71,7 @@ const initialValidationSchema = {
   propertyManager: Yup.object().shape({
     username: Yup.string().required("Name is required"),
     phone: Yup.string().required("Contact Number is required"),
-    code: Yup.object().required("Country Code is required"),
+    code: Yup.string().required("Country Code is required"),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
@@ -90,15 +90,14 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     communityManager: "",
     propertyManager: "",
   });
+  const [communityDetails, setCommunityDetails] = useState({});
   const successHandler = () => {
     refetch();
     onClose();
   };
-  const {
-    data: communityInfo,
-    isLoading,
-    isError,
-  } = useGetCommunityById(communityData?.communityId);
+  const { data: communityInfo } = useGetCommunityById(
+    communityData?.communityId
+  );
   const { mutate: updateCommunity, isLoading: isUpdating } =
     useUpdateCommunityById(successHandler);
   const { mutate: deleteUserById } = useDeleteCommunityById();
@@ -130,6 +129,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
       updateCommunity({ id: communityData?.communityId, body: payload });
     },
   });
+
   const {
     values,
     errors,
@@ -168,11 +168,13 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     const [id, key] = name.split(".");
     let exitingValue = values[id];
 
-    if (!value?.isCustom) {
+    if (value) {
+      value.code = value.code ?? initialValues[id].code;
       exitingValue = {
         ...exitingValue,
         ...value,
       };
+
       setValues((prevState) => ({
         ...prevState,
         [id]: exitingValue,
@@ -180,7 +182,11 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
 
       setFieldValue(id, exitingValue);
     } else {
-      onChange(event);
+      setFieldValue(id, initialValues[id]);
+      setValues((prevState) => ({
+        ...prevState,
+        [id]: initialValues[id],
+      }));
     }
   };
   const onSearch = useDebounceFn((searchString, key) => {
@@ -192,45 +198,43 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   useEffect(() => {
     if (communityInfo?.data) {
       const data = communityInfo?.data;
-      console.log(data, "$$$ data");
-      setValues((prevValues) => ({
-        ...prevValues,
-        addressDetails: {
-          communityName: data?.name || "",
-          city: data?.contactInfo
-            ? data?.contactInfo.split(",")[1]
-            : "Sacramento",
-          state: data?.contactInfo
-            ? data?.contactInfo.split(",")[0]
-            : "California",
-          zipcode: data?.contactInfo
-            ? data?.contactInfo.split(",")[2]
-            : "96162",
-        },
-        communityManager: {
-          username: data?.communityManager?.username || "Henry",
-          userId: data?.communityManager?.managerId,
-          email: data?.communityManager?.email || "henry@gmaiol.com",
-          phone: data?.communityManager?.phone || "718 222 2222",
-          code: data?.communityManager?.region || defaultCountryCode,
-        },
-        propertyManager: {
-          username: data?.propertyManager?.username || "Lucas",
-          userId: data?.propertyManager?.managerId,
-          email: data?.propertyManager?.email || "lucas@gmail.com",
-          phone: data?.propertyManager?.phone || "717 222 2222",
-          code: data?.propertyManager?.region || defaultCountryCode,
-        },
-        insuranceDetails: {
-          premiumAmount: data?.premiumAmount
-            ? { id: data?.premiumAmount, name: data?.premiumAmount }
-            : "",
-          insuredCoverage: data?.insuredCoverage || 10000000,
-        },
-      }));
+      setCommunityDetails(data);
+      updateCommunityFields(data);
     }
   }, [communityInfo]);
-
+  const updateCommunityFields = (data) => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      addressDetails: {
+        communityName: data?.name || "",
+        city: data?.contactInfo ? data?.contactInfo.split(",")[1]?.trim() : "",
+        state: data?.contactInfo ? data?.contactInfo.split(",")[0]?.trim() : "",
+        zipcode: data?.contactInfo
+          ? data?.contactInfo.split(",")[2]?.trim()
+          : "",
+      },
+      communityManager: {
+        username: data?.communityManager?.username,
+        userId: data?.communityManager?.managerId,
+        email: data?.communityManager?.email,
+        phone: data?.communityManager?.phone,
+        code: data?.communityManager?.region,
+      },
+      propertyManager: {
+        username: data?.propertyManager?.username,
+        userId: data?.propertyManager?.managerId,
+        email: data?.propertyManager?.email,
+        phone: data?.propertyManager?.phone,
+        code: data?.propertyManager?.region ?? "+1",
+      },
+      insuranceDetails: {
+        premiumAmount: data?.premiumAmount
+          ? { id: data?.premiumAmount, name: data?.premiumAmount?.toString() }
+          : "",
+        insuredCoverage: data?.insuredCoverage || 10000000,
+      },
+    }));
+  };
   const onDiscard = () => {
     setOffBoard(false);
     setModal(true);
@@ -304,7 +308,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
         </AppRowBox>
         <ConfirmationModal
           open={modal}
-          onClose={handleModal}
+          // onClose={handleModal}
           message={
             offBoard
               ? "Do you want to off-board the community?"
@@ -338,7 +342,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
             textColor="blue"
             color="white"
             startIcon={<EditFilled />}
-            width="170px"
+            width="180px"
             height="45px"
             borderRadius="10px"
           >
@@ -475,11 +479,12 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
             <AppGrid item size={size}>
               <AppLabelComponent label={"Email"}>
                 <TextField
+                  inputProps={{ readOnly: true }}
                   value={values?.communityManager?.email || ""}
                   fullWidth
                   onChange={handleChange}
                   name="communityManager.email"
-                  placeholder="Eg : SarahJohnson@gmail.com"
+                  placeholder="communitymanager@gmail.com"
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.communityManager?.email &&
@@ -496,6 +501,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               <AppGrid item size={countryCodeSize}>
                 <AppLabelComponent label={"Code"}>
                   <AppAutoComplete
+                    readOnly
                     name="communityManager.code"
                     freeSolo={false}
                     disabled={!enableEdit}
@@ -517,6 +523,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               <AppGrid item size={mobileSize}>
                 <AppLabelComponent label={"Mobile Number"}>
                   <TextField
+                    inputProps={{ readOnly: true }}
                     value={values?.communityManager?.phone}
                     fullWidth
                     onChange={handleChange}
@@ -575,11 +582,12 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
             <AppGrid item size={size}>
               <AppLabelComponent label={"Email"}>
                 <TextField
+                  inputProps={{ readOnly: true }}
                   value={values?.propertyManager?.email}
                   fullWidth
                   onChange={handleChange}
                   name="propertyManager.email"
-                  placeholder="Eg : SarahJohnson@gmail.com"
+                  placeholder="propertymanager@gmail.com"
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.propertyManager?.email &&
@@ -596,6 +604,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               <AppGrid item size={countryCodeSize}>
                 <AppLabelComponent label={"Code"}>
                   <AppAutoComplete
+                    readOnly
                     name="propertyManager.code"
                     freeSolo={false}
                     disabled={!enableEdit}
@@ -617,6 +626,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               <AppGrid item size={mobileSize}>
                 <AppLabelComponent label={"Mobile Number"}>
                   <TextField
+                    inputProps={{ readOnly: true }}
                     value={values?.propertyManager?.phone}
                     fullWidth
                     onChange={handleChange}
@@ -653,7 +663,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
           >
             <AppGrid item size={size}>
               <AppLabelComponent
-                label="Insurance Value"
+                label="Insurance Premium"
                 color={"secondary"}
                 variant="body2"
               >
@@ -668,7 +678,6 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   onChange={onChange}
                   onBlur={handleBlur}
                   nameParam="name"
-                  searchKey="propertyManager"
                   value={values?.insuranceDetails?.premiumAmount || null}
                   options={insuranceOptions}
                   placeholder="Select Insurance Value"

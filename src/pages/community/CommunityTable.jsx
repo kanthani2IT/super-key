@@ -208,33 +208,31 @@ export default function UserTable({
 
   return (
     <Box sx={communityStyles.container(height)}>
-      <>
-        <AppTableSearch
-          placeholder="Search Documents"
-          searchTerm={filters.search}
-          onSearchChange={handleSearch}
-          icons={[
-            {
-              component: <SwapVert />,
-              onClick: (e) => handleSort(e),
-            },
-          ]}
-        />
+      <AppTableSearch
+        placeholder="Search Communities"
+        searchTerm={filters.search}
+        onSearchChange={handleSearch}
+        icons={[
+          {
+            component: <SwapVert />,
+            onClick: (e) => handleSort(e),
+          },
+        ]}
+      />
 
-        <AppTable
-          rowKey="communityId"
-          isLoading={isLoading}
-          columns={columns}
-          rows={flatRows || []}
-          getStatus={getStatus}
-          onSelectionChange={onSelectionChange}
-          currentPage={page}
-          totalItems={communityList?.totalElements}
-          pageSize={pageSize}
-          onPageChange={handleChangePage}
-          selected={selectedRows}
-        />
-      </>
+      <AppTable
+        rowKey="communityId"
+        isLoading={isLoading}
+        columns={columns}
+        rows={flatRows || []}
+        getStatus={getStatus}
+        onSelectionChange={onSelectionChange}
+        currentPage={page}
+        totalItems={communityList?.totalElements}
+        pageSize={pageSize}
+        onPageChange={handleChangePage}
+        selected={selectedRows}
+      />
 
       <AppMenu
         anchorEl={menuAnchorEl}

@@ -1,12 +1,11 @@
 import { AddCircle } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Backdrop, Button } from "@mui/material";
 import { useGlobalStore } from "store/store";
 
 import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
 import CircularLoader from "components/CircularLoader";
-import { RadiusStyledButton } from "components/StyledComponents";
 import { useFormik } from "formik";
 import { useOnboardCommunity } from "hooks/useCommunity";
 import React, { Suspense, useState } from "react";
@@ -44,24 +43,24 @@ const onBoardingStepper = [
     component: CommunityDetails,
     initialValidationSchema: {
       communityManager: Yup.object().shape({
-        username: Yup.string().required("Name is required"),
+        username: Yup.string().required("Please enter Name"),
         email: Yup.string()
-          .email("Invalid email format")
-          .required("Email is required"),
+          .email("Invalid Email format")
+          .required("Please enter Email"),
         phone: Yup.string()
           .min(10, "Mobile number must be at least 10 digits.")
           .max(15, "Mobile number cannot exceed 15 digits.")
-          .required("Mobile number is required"),
+          .required("Please enter Mobile number"),
       }),
       propertyManager: Yup.object().shape({
-        username: Yup.string().required("Name is required"),
+        username: Yup.string().required("Please enter Name"),
         email: Yup.string()
-          .email("Invalid email format")
-          .required("Email is required"),
+          .email("Invalid Email format")
+          .required("Please enter Email"),
         phone: Yup.string()
           .min(10, "Mobile number must be at least 10 digits.")
           .max(15, "Mobile number cannot exceed 15 digits.")
-          .required("Mobile number is required"),
+          .required("Please enter Mobile number"),
       }),
     },
     height: "60vh",
@@ -183,7 +182,7 @@ const OnboardingIndex = ({ refetch }) => {
     return (
       <AppRowBox>
         <AppGrid item size={{ xs: 2 }}>
-          {activeStep && !finalStep ? (
+          {activeStep ? (
             <Button
               fullWidth
               color="secondary"
@@ -223,7 +222,7 @@ const OnboardingIndex = ({ refetch }) => {
       : null,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      if (activeStep == onBoardingStepper?.length - 2) {
+      if (finalStep) {
         const formData = new FormData();
 
         let payload = {
@@ -271,24 +270,23 @@ const OnboardingIndex = ({ refetch }) => {
 
   return (
     <>
-      <RadiusStyledButton
-        borderRadius="10px"
+      <Button
         color="info"
+        size="large"
         startIcon={<AddCircle />}
         variant="contained"
         onClick={handleOpen}
       >
         Add New Community
-      </RadiusStyledButton>
+      </Button>
       <AppModal
-        height={finalStep ? "40vh" : "auto"}
         cardHeight={onBoardingStepper[activeStep]?.height || undefined}
         open={open}
         onClose={handleClose}
-        enableCard={!finalStep}
+        enableCard
         title={onBoardingStepper[activeStep]?.title}
         activeStep={activeStep}
-        footer={!finalStep && footer()}
+        footer={footer()}
         steps={onBoardingStepper}
         align={finalStep ? "center" : ""}
         width={onBoardingStepper[activeStep]?.width || undefined}
@@ -314,6 +312,15 @@ const OnboardingIndex = ({ refetch }) => {
               })}
           </Suspense>
         </div>
+        <Backdrop
+          sx={{
+            color: "#fff",
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+          open={communityCreationLoading}
+        >
+          <CircularLoader />
+        </Backdrop>
       </AppModal>
     </>
   );
