@@ -7,6 +7,7 @@ import {
   styled,
   TableCell,
   TableRow,
+  TextField,
 } from "@mui/material";
 
 export const StyledMenu = styled(Menu)(({ theme }) => ({
@@ -96,3 +97,19 @@ export const StyledTableRow = styled(TableRow)({
     borderBottom: "none !important",
   },
 });
+
+export const StyledBulkTextField = styled(TextField)(({ theme }) => ({
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "5px",
+    backgroundColor: theme.palette.background.default,
+    "& fieldset": {
+      borderColor: "transparent",
+    },
+    "&:hover fieldset": {
+      borderColor: "transparent",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "transparent",
+    },
+  },
+}));

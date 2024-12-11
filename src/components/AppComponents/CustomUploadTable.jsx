@@ -1,6 +1,4 @@
 import {
-  Box,
-  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -9,8 +7,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import DeleteIcon from "assets/images/icons/CommunityIcons/DeleteIcon";
-import PreviewIcon from "assets/images/icons/CommunityIcons/PreviewIcon";
 import VectorIcon from "assets/images/icons/CommunityIcons/VectorIcon";
 import AppPagination from "./AppPagination";
 import AppRowBox from "./AppRowBox";
@@ -53,33 +49,20 @@ const CustomUploadTable = ({
               {cols.map((col) => {
                 if (col.field === "action") {
                   return (
-                    <StyledTableCell
-                      component="th"
-                      scope="row"
-                      sx={{ cursor: "pointer" }}
-                    >
-                      <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <IconButton>
-                          <PreviewIcon />
-                        </IconButton>
-                        <IconButton>
-                          <DeleteIcon />
-                        </IconButton>
-                      </Box>
+                    <StyledTableCell component="th" scope="row">
+                      {col?.renderActionComponent ? (
+                        col.renderActionComponent(rows, rowsIndex)
+                      ) : (
+                        <></>
+                      )}
                     </StyledTableCell>
                   );
                 } else {
                   return (
-                    <StyledTableCell
-                      component="th"
-                      scope="row"
-                      sx={{
-                        color:
-                          col.field === "CommunityName" ? "black" : "#8F8F8F",
-                        fontWeight: col.field === "CommunityName" ? 600 : "",
-                      }}
-                    >
-                      {rows[col.field]}
+                    <StyledTableCell component="th" scope="row">
+                      {col?.renderComponent
+                        ? col.renderComponent(rows, rowsIndex)
+                        : rows[col.field]}
                     </StyledTableCell>
                   );
                 }

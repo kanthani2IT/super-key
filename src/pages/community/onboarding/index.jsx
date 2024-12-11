@@ -115,6 +115,7 @@ const multiDefaultValue = {
 
 const initialBulkUploadValues = {
   fileData: [],
+  editedList: [],
 };
 
 const OnboardingIndex = ({ refetch }) => {
