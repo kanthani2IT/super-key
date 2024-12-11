@@ -27,6 +27,29 @@ const options = [
   { value: "lowToHigh", label: "Insured value: Low to High" },
 ];
 
+const tableData = [{
+  communityId: 1,
+  name: "Community 1",
+  communityManagerName: "John Doe",
+  propertyManagerName: "Jane Doe",
+  insuredCoverage: 100000,
+  status: "ACTIVE",
+},
+{
+  communityId: 2,
+  name: "Community 1",
+  communityManagerName: "John Doe",
+  propertyManagerName: "Jane Doe",
+  insuredCoverage: 100000,
+  status: "ACTIVE",
+},{
+  communityId: 3,
+  name: "Community 1",
+  communityManagerName: "John Doe",
+  propertyManagerName: "Jane Doe",
+  insuredCoverage: 100000,
+  status: "ACTIVE",
+}]
 export default function UserTable({
   isLoading,
   height = 400,
@@ -157,7 +180,7 @@ export default function UserTable({
     setMenuAnchorEl(null);
   };
   const handleModal = () => {
-    // setModal(!modal);
+    setModal(!modal);
   };
 
 
@@ -199,9 +222,9 @@ export default function UserTable({
     return (
       <>
         <StyledMenuItem onClick={handleDrawer}>View details</StyledMenuItem>
-        {/* <StyledMenuItem onClick={handleModal}>
+        <StyledMenuItem onClick={handleModal}>
           Off-board Community
-        </StyledMenuItem> */}
+        </StyledMenuItem>
       </>
     );
   };
@@ -225,7 +248,7 @@ export default function UserTable({
           rowKey="communityId"
           isLoading={isLoading}
           columns={columns}
-          rows={flatRows || []}
+          rows={tableData || []}
           getStatus={getStatus}
           onSelectionChange={onSelectionChange}
           currentPage={page}

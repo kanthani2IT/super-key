@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useDebounceFn } from "utils/helpers";
 import EditCommunity from "./edit-community";
 import OnboardingIndex from "./onboarding";
+import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
 
 const initialValue = {
   page: 1,
@@ -24,6 +25,7 @@ const CommunityOnboarding = () => {
   const [edit, setEdit] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [filters, setFilters] = useState(initialValue);
+  const [modal, setModal] = useState(false);
 
   // const { refetch } = useCommunityListQuery();
 
@@ -49,6 +51,9 @@ const CommunityOnboarding = () => {
     setEdit(false);
   };
 
+  const handleModal = () => {
+    setModal(!modal);
+  };
   const handleOffBoard = () => {
     const payload = {
       mappings: [
@@ -143,7 +148,7 @@ const CommunityOnboarding = () => {
               width="227px"
               height="50px"
               borderRadius="10px"
-              // onClick={handleOffBoard}
+              onClick={handleModal}
               sx={{
                 border: "0.5px solid #E12929",
               }}
@@ -186,7 +191,18 @@ const CommunityOnboarding = () => {
           refetch={refetch}
         />
       </Drawer>
+      <ConfirmationModal
+        open={modal}
+        onClose={handleModal}
+        message={
+          "Do you want to off board selected communities?"
 
+        }
+        confirmLabel={"Yes"}
+        cancelLabel={"No"}
+        onConfirm={handleModal}
+        onCancel={handleModal}
+      />
     </AppGrid>
   );
 };

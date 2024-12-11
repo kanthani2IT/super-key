@@ -77,6 +77,19 @@ const getCommunityList = async (body) => {
   return response;
 };
 
+ const offboardCommunity = async (communityId, cmcId) => {
+    const payload = {
+      mappings: [
+        {
+          communityId,
+          cmcId,
+        },
+      ],
+    };
+    const response = await putRequest(COMMUNITY.offboardCommunity, payload);
+    return response.data;
+  };
+
 export const communityApi = {
   getUsersData,
   getCommunityById,
@@ -85,4 +98,5 @@ export const communityApi = {
   createCommunity,
   getAllCommunityList,
   getCommunityList,
+  offboardCommunity,
 };
