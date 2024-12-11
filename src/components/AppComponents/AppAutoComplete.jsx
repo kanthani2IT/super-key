@@ -19,6 +19,7 @@ const AddManuallyButton = styled(Typography)({
   marginLeft: "auto",
   fontSize: "0.875rem",
   fontWeight: 500,
+  minWidth: "fit-content"
 });
 
 const AddManuallyOptionWrapper = styled(Box)({
@@ -28,6 +29,8 @@ const AddManuallyOptionWrapper = styled(Box)({
   "&:hover": {
     backgroundColor: "transparent !important", // Prevent hover color change
   },
+  wordBreak: "break-all",
+  gap: "8"
 });
 const OptionWrapper = styled(Box)(({ theme, isSelected }) => ({
   // px: 2,
@@ -37,6 +40,9 @@ const OptionWrapper = styled(Box)(({ theme, isSelected }) => ({
   "&:hover": {
     backgroundColor: theme.palette.action.hover,
   },
+  wordBreak: "break-all",
+  gap: "8"
+
 }));
 
 const filterOption = createFilterOptions();
@@ -60,6 +66,8 @@ const AppAutoComplete = ({
   variant = "outlined",
   disableClearable,
   disabled,
+  readOnly = false,
+  focused,
   ...props
 }) => {
   const [open, setOpen] = useState(false);
@@ -88,8 +96,8 @@ const AppAutoComplete = ({
   const handleChange = (event, newValue) => {
     onChange?.({ target: { name, value: newValue } });
   };
-  const handleBlur = (event) => {
-    onBlur?.({ target: { name, value } });
+  const handleBlur = (event, newValue) => {
+    onBlur?.({ target: { name, value: newValue } });
   };
   const isLoading = !options?.length && loading;
 
@@ -100,10 +108,11 @@ const AppAutoComplete = ({
       name={name}
       value={value}
       options={options}
+      readOnly={readOnly}
       clearOnBlur
       openOnFocus
       disabled={isLoading || disabled}
-      freeSolo={freeSolo}
+      freeSolo={freeSolo || !focused}
       onChange={handleChange}
       onBlur={handleBlur}
       onInputChange={handleInputChange}
@@ -119,7 +128,7 @@ const AppAutoComplete = ({
           return [
             {
               id: "add-manually",
-              [nameParam]: params.inputValue,
+              [nameParam]: params?.inputValue,
               isCustom: true,
             },
             ...filtered,
@@ -130,6 +139,8 @@ const AppAutoComplete = ({
       }}
       renderInput={(params) => (
         <TextField
+          focused={focused}
+          multiline
           variant={variant}
           {...params}
           placeholder={placeholder}

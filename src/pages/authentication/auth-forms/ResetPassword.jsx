@@ -17,7 +17,7 @@ import { createValidationSchema } from 'utils/loginUtils';
 export default function ResetPassword(props) {
   const { fieldsConfig } = props
   const { id } = useParams();
-  const { getCookie } = useAuthCookies()
+  const { getCookie, setAuthCookie } = useAuthCookies()
   const user = getCookie("superkey")
   const newPasswordMutation = useNewPassword();
   const resetPasswordMutation = useResetPassword();
@@ -27,7 +27,7 @@ export default function ResetPassword(props) {
     setSubmitting(false);
     if (id == "change") {
       let payload = {
-        email: user?.email,
+        email: values?.email,
         password: values.password,
         newPassword: values.newPassword,
       }
@@ -38,6 +38,8 @@ export default function ResetPassword(props) {
       };
       resetPasswordMutation.mutate(payload);
     }
+    setAuthCookie("superkey", { email: values.email });
+
   };
 
   return (

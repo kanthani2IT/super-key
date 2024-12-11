@@ -26,6 +26,14 @@ export default function TextField() {
               fontSize: "0.9rem",
             },
           },
+          "& input[type=number]": {
+            MozAppearance: "textfield", // Removes spinner in Firefox
+          },
+          "& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button":
+            {
+              WebkitAppearance: "none", // Removes spinner in Chrome, Safari, and Edge
+              margin: 0,
+            },
         },
       },
     },
