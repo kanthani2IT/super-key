@@ -27,3 +27,10 @@ export const useGetDashboardMetrics = () => {
     queryFn: api.dashboard.getDashboardMetrics,
   });
 };
+
+export const useGetTaskRenewals = () => {
+  return useQuery({
+    queryKey: ["dashboardRenewals"],
+    queryFn: api.dashboard.getRenewals,
+  });
+};
