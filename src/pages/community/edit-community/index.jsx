@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
 import { countryPhoneCodes, insuranceOptions } from "utils/constants";
 import { useDebounceFn } from "utils/helpers";
 import * as Yup from "yup";
-import { getContactInfo } from "../onboarding/utils";
+import { getContactInfo, removeExtraSpaces } from "../onboarding/utils";
 const defaultCountryCode = { label: "+1", value: "+1" };
 
 const initialValues = {
@@ -331,7 +331,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     setEnableEdit(true);
   };
   return (
-    <AppCard title={"Desert Springs"} footer={<Footer />} onClose={onClose}>
+    <AppCard title={communityInfo?.data?.name||"Company Name"} footer={<Footer />} onClose={onClose}>
       <AppGrid container size={{ xs: 12 }} rowSpacing={4}>
         <AppGrid
           item
@@ -364,7 +364,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               variant="body2"
             >
               <TextField
-                value={values?.addressDetails?.communityName}
+                value={removeExtraSpaces(values?.addressDetails?.communityName)}
                 placeholder="Eg : Desert Springs"
                 fullWidth
                 onChange={handleChange}
@@ -384,7 +384,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
           <AppGrid item size={size}>
             <AppLabelComponent label="City" color={"secondary"} variant="body2">
               <TextField
-                value={values?.addressDetails?.city}
+                value={removeExtraSpaces(values?.addressDetails?.city)}
                 fullWidth
                 placeholder="Eg : Flushing"
                 onChange={handleChange}
@@ -406,7 +406,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               variant="body2"
             >
               <TextField
-                value={values?.addressDetails?.state}
+                value={removeExtraSpaces(values?.addressDetails?.state)}
                 fullWidth
                 onChange={handleChange}
                 name="addressDetails.state"
@@ -428,7 +428,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               variant="body2"
             >
               <TextField
-                value={values?.addressDetails?.zipcode}
+                value={removeExtraSpaces(values?.addressDetails?.zipcode)}
                 fullWidth
                 onChange={handleChange}
                 name="addressDetails.zipcode"

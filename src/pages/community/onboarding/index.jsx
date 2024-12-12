@@ -117,6 +117,7 @@ const OnboardingIndex = ({ refetch }) => {
     resetOnboarding();
     handleNext();
     refetch();
+    handleClose()
   };
 
   const handleQueryParams = (step) => {

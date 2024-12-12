@@ -96,10 +96,12 @@ const AppAutoComplete = ({
   const handleChange = (event, newValue) => {
     onChange?.({ target: { name, value: newValue } });
   };
-  const handleBlur = (event, newValue) => {
-    onBlur?.({ target: { name, value: newValue } });
+  //Todo: Need to check this
+  const handleBlur = (event) => {
+    onBlur?.({ target: { name, value } });
   };
   const isLoading = !options?.length && loading;
+
   return (
     <Autocomplete
       {...props}
@@ -138,7 +140,7 @@ const AppAutoComplete = ({
       }}
       renderInput={(params) => (
         <TextField
-          focused={focused}
+        focused={focused}
           multiline
           variant={variant}
           {...params}
