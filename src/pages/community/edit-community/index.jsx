@@ -242,6 +242,11 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   const handleModal = () => {
     setModal(false);
   };
+  const handleModalDiscard=()=>{
+    const data = communityInfo?.data;
+    updateCommunityFields(data);
+    setModal(false);
+  }
   const handleOffBoard = () => {
     const payload = {
       mappings: [
@@ -268,7 +273,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               // width="30%"
               height="50px"
               borderRadius="10px"
-              onClick={onReset}
+              // onClick={onReset}
               sx={{
                 border: "0.5px solid #E12929",
               }}
@@ -316,8 +321,8 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
           }
           confirmLabel={offBoard ? "Yes" : "No"}
           cancelLabel={offBoard ? "No" : "Yes, Discard"}
-          onConfirm={offBoard ? handleModal : handleModal}
-          onCancel={handleModal}
+          onConfirm={offBoard ? handleModalDiscard : handleModal}
+          onCancel={handleModalDiscard}
         />
       </>
     );
