@@ -207,7 +207,7 @@ const OnboardingIndex = ({ refetch }) => {
               activeStep === 4 && show == "true" && selectedFiles.length == 0
             }
           >
-            {selectedFiles.length > 0 ? "Save" : finalStep ? "Done" : "Next"}
+            {selectedFiles.length > 0 ? "Save" : finalStep ? "Save" : "Next"}
           </Button>
         </AppGrid>
       </AppRowBox>

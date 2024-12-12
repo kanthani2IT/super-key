@@ -209,7 +209,7 @@ export default function UserTable({
   return (
     <Box sx={communityStyles.container(height)}>
       <AppTableSearch
-        placeholder="Search Communities"
+        placeholder="Search Community"
         searchTerm={filters.search}
         onSearchChange={handleSearch}
         icons={[

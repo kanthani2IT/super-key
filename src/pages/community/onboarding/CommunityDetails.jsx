@@ -186,7 +186,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
                 inputProps={{ readOnly: true }}
                 required
                 id="communityManager"
-                placeholder="communitymanager@gmail.com"
+                placeholder="CommunityManager@gmail.com"
                 fullWidth
                 name="communityManager.email"
                 value={values.communityManager?.email}
@@ -251,7 +251,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
                 focused={false}
 
                 required
-                placeholder="propertymanager@gmail.com"
+                placeholder="PropertyManager@gmail.com"
                 fullWidth
                 name="propertyManager.email"
                 value={values.propertyManager.email}

@@ -489,7 +489,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   fullWidth
                   onChange={handleChange}
                   name="communityManager.email"
-                  placeholder="communitymanager@gmail.com"
+                  placeholder="CommunityManager@gmail.com"
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.communityManager?.email &&
@@ -592,7 +592,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   fullWidth
                   onChange={handleChange}
                   name="propertyManager.email"
-                  placeholder="propertymanager@gmail.com"
+                  placeholder="PropertyManager@gmail.com"
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.propertyManager?.email &&
