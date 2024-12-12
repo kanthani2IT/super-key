@@ -1,7 +1,8 @@
-import { TextField, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import AppAutoComplete from "components/AppComponents/AppAutoComplete";
 import AppGrid from "components/AppComponents/AppGrid";
 import AppLabelComponent from "components/AppComponents/AppLabelComponent";
+import AppTextField from "components/AppComponents/AppTextField";
 import {
   useCommunityManagersQuery,
   usePropertyManagersQuery,
@@ -97,7 +98,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
         </AppGrid>
         <AppGrid item size={mobileSize}>
           <AppLabelComponent label={"Mobile Number"}>
-            <TextField
+            <AppTextField
               placeholder="+123423355"
               required
               fullWidth
@@ -116,7 +117,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
 
   const handleManger = (event) => {
     const { name, value } = event.target;
-    const [id, key] = name.split(".");
+    const [id] = name.split(".");
     let exitingValue = formValues[id];
 
     if (!value?.isCustom) {
@@ -146,7 +147,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
                 name="communityManager.username"
                 freeSolo={false}
                 error={
-                  touched.communityManager?.username                  &&
+                  touched.communityManager?.username &&
                   errors.communityManager?.username
                 }
                 onChange={handleManger}
@@ -154,7 +155,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
                 valueParam="managerId"
                 searchKey="communityManager"
                 loading={communityManagerFetching}
-                value={values?.communityManager?.username                  || ""}
+                value={values?.communityManager?.username || ""}
                 options={communityManagerList?.data}
                 placeholder="Select Manager"
                 onSearch={onSearch}
@@ -163,7 +164,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
           </AppGrid>
           <AppGrid item size={size}>
             <AppLabelComponent label={"Email"}>
-              <TextField
+              <AppTextField
                 required
                 id="communityManager"
                 placeholder="communityManager@gmail.com"
@@ -174,7 +175,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
                 onBlur={handleBlur}
                 error={Boolean(
                   touched.communityManager?.email &&
-                    errors.communityManager?.email
+                  errors.communityManager?.email
                 )}
                 helperText={
                   touched.communityManager?.email &&
@@ -224,7 +225,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
           </AppGrid>
           <AppGrid item size={size}>
             <AppLabelComponent label={"Email"}>
-              <TextField
+              <AppTextField
                 required
                 placeholder="propertyManager@gmail.com"
                 fullWidth
@@ -234,7 +235,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
                 onBlur={handleBlur}
                 error={Boolean(
                   touched.propertyManager?.email &&
-                    errors.propertyManager?.email
+                  errors.propertyManager?.email
                 )}
                 helperText={
                   touched.propertyManager?.email &&

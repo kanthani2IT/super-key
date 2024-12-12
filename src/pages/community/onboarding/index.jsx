@@ -281,7 +281,7 @@ const OnboardingIndex = ({ refetch }) => {
       >
         Add New Community
       </RadiusStyledButton>
-      <AppModal
+      {open && <AppModal
         height={finalStep ? "40vh" : "auto"}
         cardHeight={onBoardingStepper[activeStep]?.height || undefined}
         open={open}
@@ -315,7 +315,7 @@ const OnboardingIndex = ({ refetch }) => {
               })}
           </Suspense>
         </div>
-      </AppModal>
+      </AppModal>}
     </>
   );
 };

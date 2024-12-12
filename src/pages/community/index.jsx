@@ -25,9 +25,7 @@ const CommunityOnboarding = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [filters, setFilters] = useState(initialValue);
 
-  // const { refetch } = useCommunityListQuery();
 
-  const { mutate: deleteUserById } = useDeleteCommunityById();
   const {
     mutate: getCommunityList,
     data: communityListData,
@@ -58,7 +56,6 @@ const CommunityOnboarding = () => {
         },
       ],
     };
-    // deleteUserById({ id: communityData?.communityId, body: payload });
   };
 
   const handleSelectionChange = (selected) => {

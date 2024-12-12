@@ -60,6 +60,7 @@ const AppAutoComplete = ({
   variant = "outlined",
   disableClearable,
   disabled,
+  size = 'small',
   ...props
 }) => {
   const [open, setOpen] = useState(false);
@@ -95,6 +96,7 @@ const AppAutoComplete = ({
 
   return (
     <Autocomplete
+
       {...props}
       disableClearable={isLoading || disableClearable}
       name={name}
@@ -128,6 +130,8 @@ const AppAutoComplete = ({
 
         return filtered;
       }}
+
+      size={size}
       renderInput={(params) => (
         <TextField
           variant={variant}
