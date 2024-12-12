@@ -10,10 +10,10 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { BoldTypographyHeader } from "components/StyledComponents";
+import { BoldTypographyHeader, Image } from "components/StyledComponents";
 import AppPagination from "./AppPagination";
 import AppSkeleton from "./AppSkeleton";
-
+import noData from 'assets/images/icons/noData.svg'
 const AppTable = ({
   isLoading,
   columns,
@@ -135,10 +135,11 @@ const AppTable = ({
             <TableRow>
               <TableCell colSpan={columns.length + 1} align="center">
                 <Box sx={{ py: 2 }}>
-                  <Typography variant="body1" color="textSecondary">
-                    {noDataText}
-                  </Typography>
+                  <Image width={'40%'} height={'10%'} src={noData} />
                 </Box>
+                <Typography variant="body1" color="textSecondary">
+                  {noDataText}
+                </Typography>
               </TableCell>
             </TableRow>
           )}

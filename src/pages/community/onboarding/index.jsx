@@ -179,6 +179,19 @@ const OnboardingIndex = ({ refetch }) => {
     resetOnboarding();
   };
 
+  const handleOpen = () => {
+    setOpen(true);
+    resetOnboarding();
+    let queryParams = "?onboarding=true";
+    if (!currentStep) {
+      queryParams = "?onboarding=true&cs=0";
+    }
+    navigate({
+      pathname: location.pathname,
+      search: !open ? queryParams : "",
+    });
+  };
+
   const footer = () => {
     return (
       <AppRowBox>
@@ -256,18 +269,6 @@ const OnboardingIndex = ({ refetch }) => {
     resetForm,
   } = formik;
 
-  const handleOpen = () => {
-    setOpen(true);
-    resetOnboarding();
-    let queryParams = "?onboarding=true";
-    if (!currentStep) {
-      queryParams = "?onboarding=true&cs=0";
-    }
-    navigate({
-      pathname: location.pathname,
-      search: !open ? queryParams : "",
-    });
-  };
 
   return (
     <>
@@ -322,7 +323,7 @@ const OnboardingIndex = ({ refetch }) => {
         >
           <CircularLoader />
         </Backdrop>
-      </AppModal>
+      </AppModal >
     </>
   );
 };

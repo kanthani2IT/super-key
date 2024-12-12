@@ -315,7 +315,8 @@ export const StyledButton = styled(Button)(({ theme }) => ({
 
 export const RadiusStyledButton = styled(Button)(
   ({ theme, color, height, width, textColor, borderRadius }) => ({
-    width: width || "200px",
+    minWidth: width || '150px',
+    width: width || "auto",
     height: height || "50px",
     borderRadius: borderRadius || "32px",
     padding: "15px 29px",
@@ -331,3 +332,8 @@ export const RadiusStyledButton = styled(Button)(
     },
   })
 );
+
+export const ButtonGroup = styled(Grid)({
+  display: "flex",
+  gap: "16px"
+})

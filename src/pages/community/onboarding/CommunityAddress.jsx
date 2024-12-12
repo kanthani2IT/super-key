@@ -38,6 +38,8 @@ const CommunityAddress = ({ handleChange, formValues, touched, errors }) => {
           label={"What is the address of your community?"}
         >
           <AppAutoComplete
+            size="medium"
+
             valueParam="value"
             name="communityAddress"
             error={touched.communityAddress && errors.communityAddress}

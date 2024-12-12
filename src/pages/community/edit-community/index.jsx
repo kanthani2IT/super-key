@@ -1,5 +1,5 @@
 import { EditFilled } from "@ant-design/icons";
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import AppAutoComplete from "components/AppComponents/AppAutoComplete";
 import AppCard from "components/AppComponents/AppCard";
 import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
@@ -24,6 +24,7 @@ import { countryPhoneCodes, insuranceOptions } from "utils/constants";
 import { useDebounceFn } from "utils/helpers";
 import * as Yup from "yup";
 import { getContactInfo, removeExtraSpaces } from "../onboarding/utils";
+import AppTextField from "components/AppComponents/AppTextField";
 const defaultCountryCode = { label: "+1", value: "+1" };
 
 const initialValues = {
@@ -242,7 +243,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   const handleModal = () => {
     setModal(false);
   };
-  const handleModalDiscard=()=>{
+  const handleModalDiscard = () => {
     const data = communityInfo?.data;
     updateCommunityFields(data);
     setModal(false);
@@ -259,7 +260,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     deleteUserById({ id: communityData?.communityId, body: payload });
   };
   const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 };
-  const mobileSize = { xs: 8, sm: 8, md: 8, lg: 4, xl: 4 };
+  const mobileSize = { xs: 8, sm: 8, md: 9, lg: 4, xl: 4 };
   const size = { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 };
 
   const Footer = () => {
@@ -331,7 +332,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     setEnableEdit(true);
   };
   return (
-    <AppCard title={communityInfo?.data?.name||"Company Name"} footer={<Footer />} onClose={onClose}>
+    <AppCard title={communityInfo?.data?.name || "Company Name"} footer={<Footer />} onClose={onClose}>
       <AppGrid container size={{ xs: 12 }} rowSpacing={4}>
         <AppGrid
           item
@@ -363,7 +364,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               color={"secondary"}
               variant="body2"
             >
-              <TextField
+              <AppTextField
                 value={removeExtraSpaces(values?.addressDetails?.communityName)}
                 placeholder="Eg : Desert Springs"
                 fullWidth
@@ -379,11 +380,11 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   errors.addressDetails?.communityName
                 }
               />
-            </AppLabelComponent>
-          </AppGrid>
+            </AppLabelComponent >
+          </AppGrid >
           <AppGrid item size={size}>
             <AppLabelComponent label="City" color={"secondary"} variant="body2">
-              <TextField
+              <AppTextField
                 value={removeExtraSpaces(values?.addressDetails?.city)}
                 fullWidth
                 placeholder="Eg : Flushing"
@@ -397,15 +398,15 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   touched.addressDetails?.city && errors.addressDetails?.city
                 }
               />
-            </AppLabelComponent>
-          </AppGrid>
+            </AppLabelComponent >
+          </AppGrid >
           <AppGrid item size={size}>
             <AppLabelComponent
               label="State"
               color={"secondary"}
               variant="body2"
             >
-              <TextField
+              <AppTextField
                 value={removeExtraSpaces(values?.addressDetails?.state)}
                 fullWidth
                 onChange={handleChange}
@@ -419,15 +420,15 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   touched.addressDetails?.state && errors.addressDetails?.state
                 }
               />
-            </AppLabelComponent>
-          </AppGrid>
+            </AppLabelComponent >
+          </AppGrid >
           <AppGrid item size={size}>
             <AppLabelComponent
               label="Zipcode"
               color={"secondary"}
               variant="body2"
             >
-              <TextField
+              <AppTextField
                 value={removeExtraSpaces(values?.addressDetails?.zipcode)}
                 fullWidth
                 onChange={handleChange}
@@ -436,16 +437,16 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.addressDetails?.zipcode &&
-                    errors.addressDetails?.zipcode
+                  errors.addressDetails?.zipcode
                 )}
                 helperText={
                   touched.addressDetails?.zipcode &&
                   errors.addressDetails?.zipcode
                 }
               />
-            </AppLabelComponent>
-          </AppGrid>
-        </AppGrid>
+            </AppLabelComponent >
+          </AppGrid >
+        </AppGrid >
         <AppGrid container size={{ xs: 12 }} spacing={1}>
           <AppGrid item size={{ xs: 12 }}>
             <Typography variant="h3" sx={{ mb: 2 }}>
@@ -483,7 +484,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
             </AppGrid>
             <AppGrid item size={size}>
               <AppLabelComponent label={"Email"}>
-                <TextField
+                <AppTextField
                   inputProps={{ readOnly: true }}
                   value={values?.communityManager?.email || ""}
                   fullWidth
@@ -493,15 +494,15 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.communityManager?.email &&
-                      errors.communityManager?.email
+                    errors.communityManager?.email
                   )}
                   helperText={
                     touched.communityManager?.email &&
                     errors.communityManager?.email
                   }
                 />
-              </AppLabelComponent>
-            </AppGrid>
+              </AppLabelComponent >
+            </AppGrid >
             <AppGrid item size={{ xs: 12 }} container spacing={2}>
               <AppGrid item size={countryCodeSize}>
                 <AppLabelComponent label={"Code"}>
@@ -527,7 +528,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               </AppGrid>
               <AppGrid item size={mobileSize}>
                 <AppLabelComponent label={"Mobile Number"}>
-                  <TextField
+                  <AppTextField
                     inputProps={{ readOnly: true }}
                     value={values?.communityManager?.phone}
                     fullWidth
@@ -537,21 +538,21 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                     disabled={!enableEdit}
                     error={Boolean(
                       touched.communityManager?.phone &&
-                        errors.communityManager?.phone
+                      errors.communityManager?.phone
                     )}
                     helperText={
                       touched.communityManager?.phone &&
                       errors.communityManager?.phone
                     }
                   />
-                </AppLabelComponent>
-              </AppGrid>
-            </AppGrid>
-          </AppGrid>
-        </AppGrid>
+                </AppLabelComponent >
+              </AppGrid >
+            </AppGrid >
+          </AppGrid >
+        </AppGrid >
         {/* Property Manager */}
 
-        <AppGrid item container size={{ xs: 12 }} rowSpacing={3}>
+        < AppGrid item container size={{ xs: 12 }} rowSpacing={3} >
           <AppGrid item size={{ xs: 12 }}>
             <Typography variant="h3">{"Property Manager"}</Typography>
           </AppGrid>
@@ -586,7 +587,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
             </AppGrid>
             <AppGrid item size={size}>
               <AppLabelComponent label={"Email"}>
-                <TextField
+                <AppTextField
                   inputProps={{ readOnly: true }}
                   value={values?.propertyManager?.email}
                   fullWidth
@@ -596,15 +597,15 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.propertyManager?.email &&
-                      errors.propertyManager?.email
+                    errors.propertyManager?.email
                   )}
                   helperText={
                     touched.propertyManager?.email &&
                     errors.propertyManager?.email
                   }
                 />
-              </AppLabelComponent>
-            </AppGrid>
+              </AppLabelComponent >
+            </AppGrid >
             <AppGrid item size={{ xs: 12 }} spacing={2} container>
               <AppGrid item size={countryCodeSize}>
                 <AppLabelComponent label={"Code"}>
@@ -630,7 +631,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               </AppGrid>
               <AppGrid item size={mobileSize}>
                 <AppLabelComponent label={"Mobile Number"}>
-                  <TextField
+                  <AppTextField
                     inputProps={{ readOnly: true }}
                     value={values?.propertyManager?.phone}
                     fullWidth
@@ -640,20 +641,20 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                     disabled={!enableEdit}
                     error={Boolean(
                       touched.propertyManager?.phone &&
-                        errors.propertyManager?.phone
+                      errors.propertyManager?.phone
                     )}
                     helperText={
                       touched.propertyManager?.phone &&
                       errors.propertyManager?.phone
                     }
                   />
-                </AppLabelComponent>
-              </AppGrid>
-            </AppGrid>
-          </AppGrid>
-        </AppGrid>
+                </AppLabelComponent >
+              </AppGrid >
+            </AppGrid >
+          </AppGrid >
+        </AppGrid >
         {/* Insurance Details */}
-        <AppGrid item container size={{ xs: 12 }} spacing={1}>
+        < AppGrid item container size={{ xs: 12 }} spacing={1} >
           <AppGrid item size={{ xs: 12 }}>
             <Typography variant="h3" sx={{ mb: 2 }}>
               {"Insurance Details"}
@@ -695,7 +696,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 color={"secondary"}
                 variant="body2"
               >
-                <TextField
+                <AppTextField
                   value={values?.insuranceDetails?.insuredCoverage}
                   placeholder="Eg : 1,00,000"
                   fullWidth
@@ -704,7 +705,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.insuranceDetails?.insuredCoverage &&
-                      errors.insuranceDetails?.insuredCoverage
+                    errors.insuranceDetails?.insuredCoverage
                   )}
                   helperText={
                     touched.insuranceDetails?.insuredCoverage &&
@@ -714,9 +715,9 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               </AppLabelComponent>
             </AppGrid>
           </AppGrid>
-        </AppGrid>
-      </AppGrid>
-    </AppCard>
+        </AppGrid >
+      </AppGrid >
+    </AppCard >
   );
 };
 

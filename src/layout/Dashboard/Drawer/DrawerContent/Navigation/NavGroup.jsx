@@ -14,7 +14,6 @@ export default function NavGroup({ item }) {
   const [activeNav, setActiveNav] = useState('');
   const { pathname } = useLocation();
   useEffect(() => {
-    // Update activeNav when pathname changes
     setActiveNav(pathname);
   }, [pathname]);
 

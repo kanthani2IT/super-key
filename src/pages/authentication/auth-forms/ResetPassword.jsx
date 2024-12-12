@@ -82,7 +82,7 @@ export default function ResetPassword(props) {
 
             <Grid item xs={12}>
               <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="info">
                   Reset Password
                 </Button>
               </AnimateButton>
