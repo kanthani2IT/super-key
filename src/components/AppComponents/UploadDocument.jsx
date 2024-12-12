@@ -108,6 +108,11 @@ const InsuranceDocument = ({
       borderRadius="12px"
       p={3}
       textAlign="center"
+      onDragEnter={handleDragEnter}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          sx={{cursor:"pointer"}}
     >
       {/* Icon */}
       <UploadIcon />
@@ -132,10 +137,7 @@ const InsuranceDocument = ({
       {/* Import Button */}
       {enable && (
         <div
-          onDragEnter={handleDragEnter}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
+          
         >
           <FileUploadButton
             onFileChange={(event) => handleFileUpload(event.target.files)}
