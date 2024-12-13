@@ -127,7 +127,7 @@ export default function AuthLogin(props) {
                 <Link
                   variant="h7"
                   component={RouterLink}
-                  color="red"
+                  color="error"
                   fontWeight={600}
                   to="/reset/forgot"
                 >
