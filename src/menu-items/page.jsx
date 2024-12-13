@@ -7,6 +7,7 @@ import InsuranceIcon from 'assets/images/icons/NavIcons/InsuranceIcon';
 import PaymentIcon from 'assets/images/icons/NavIcons/PaymentIcon';
 import PropertyIcon from 'assets/images/icons/NavIcons/PropertyIcon';
 import SettingsIcon from 'assets/images/icons/NavIcons/SettingsIcon';
+import TaskIcon from 'assets/images/icons/NavIcons/TaskIcon';
 // icons
 const icons = {
   SettingsIcon,
@@ -16,7 +17,8 @@ const icons = {
   ClaimsIcon,
   HelpIcon,
   PaymentIcon,
-  DocumentIcon
+  DocumentIcon,
+  TaskIcon
 };
 
 // ==============================|| MENU ITEMS - EXTRA PAGES ||============================== //
@@ -87,7 +89,7 @@ const pages = {
         id: 'task',
         title: 'Create Task',
         url: '/tasks',
-        icon: icons.PaymentIcon,
+        icon: icons.TaskIcon,
         type: "item",
         badge: 2
       }, {

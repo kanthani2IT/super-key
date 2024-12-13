@@ -34,7 +34,10 @@ export default function ResetPassword(props) {
       newPasswordMutation.mutate(payload);
     } else {
       let payload = {
+        email: values?.email,
         password: values.newPassword,
+        newPassword: values.newPassword,
+
       };
       resetPasswordMutation.mutate(payload);
     }

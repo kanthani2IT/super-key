@@ -7,10 +7,13 @@ import {
   CardContent,
   CardHeader,
   Divider,
+  Modal,
   Paper,
   Stack,
   Typography
 } from "@mui/material";
+import { useState } from "react";
+import ConfirmationModal from "./AppConfirmationModal";
 
 const StyledPaper = styled(Paper)(({ theme, width, height, align, fullWidth }) => ({
   height: height || "auto",
@@ -66,6 +69,12 @@ const AppModalContainer = ({
   onClose,
   fullWidth = false,
 }) => {
+
+  const [closeModal, setCloseModal] = useState(false)
+  const handleClose = () => {
+    setCloseModal(false)
+    onClose?.()
+  }
   return (
     <StyledPaper fullWidth={fullWidth} width={width} height={height} align={align}>
       {enableCard ? (
@@ -73,7 +82,7 @@ const AppModalContainer = ({
           {title && !header && (
             <>
               <Box sx={{ display: "flex", justifyContent: "end" }}>
-                <Button onClick={onClose} disableTouchRipple variant="text" size="small" color="secondary" >Close</Button>
+                <Button onClick={() => setCloseModal(true)} disableTouchRipple variant="text" size="small" color="secondary" >Close</Button>
               </Box>
               <CardHeader
                 title={
@@ -107,6 +116,10 @@ const AppModalContainer = ({
       ) : (
         children
       )}
+      {/* Close Modal */}
+
+      <ConfirmationModal open={closeModal} message={'Are you sure that you want to Close?'} confirmLabel={'Yes'} cancelLabel={'Continue'} onConfirm={handleClose} onCancel={() => setCloseModal(false)} />
+
     </StyledPaper>
   );
 };
