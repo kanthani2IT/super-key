@@ -9,29 +9,31 @@ import {
   Divider,
   Paper,
   Stack,
-  Typography
+  Typography,
 } from "@mui/material";
 
-const StyledPaper = styled(Paper)(({ theme, width, height, align, fullWidth }) => ({
-  height: height || "auto",
-  padding: "1%",
-  alignContent: align,
-  borderRadius: "10px",
-  backgroundColor: theme.palette.background.paper,
-  boxShadow: theme.shadows[6],
-  [theme.breakpoints.up("xs")]: {
-    width: fullWidth ? width : "75%",
-  },
-  [theme.breakpoints.up("sm")]: {
-    width: fullWidth ? width : "75%",
-  },
-  [theme.breakpoints.up("md")]: {
-    width: fullWidth ? width : "50%",
-  },
-  [theme.breakpoints.up("lg")]: {
-    width: width,
-  },
-}));
+const StyledPaper = styled(Paper)(
+  ({ theme, width, height, align, fullWidth }) => ({
+    height: height || "auto",
+    padding: "1%",
+    alignContent: align,
+    borderRadius: "10px",
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[6],
+    [theme.breakpoints.up("xs")]: {
+      width: fullWidth ? width : "75%",
+    },
+    [theme.breakpoints.up("sm")]: {
+      width: fullWidth ? width : "75%",
+    },
+    [theme.breakpoints.up("md")]: {
+      width: fullWidth ? width : "50%",
+    },
+    [theme.breakpoints.up("lg")]: {
+      width: width,
+    },
+  })
+);
 
 const StyledFlexCard = styled(Card)(({ theme }) => ({
   display: "flex",
@@ -67,13 +69,26 @@ const AppModalContainer = ({
   fullWidth = false,
 }) => {
   return (
-    <StyledPaper fullWidth={fullWidth} width={width} height={height} align={align}>
+    <StyledPaper
+      fullWidth={fullWidth}
+      width={width}
+      height={height}
+      align={align}
+    >
       {enableCard ? (
         <StyledFlexCard elevation={0}>
           {title && !header && (
             <>
               <Box sx={{ display: "flex", justifyContent: "end" }}>
-                <Button onClick={onClose} disableTouchRipple variant="text" size="small" color="secondary" >Close</Button>
+                <Button
+                  onClick={onClose}
+                  disableTouchRipple
+                  variant="text"
+                  size="small"
+                  color="secondary"
+                >
+                  Close
+                </Button>
               </Box>
               <CardHeader
                 title={

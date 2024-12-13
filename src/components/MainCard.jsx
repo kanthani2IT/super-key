@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 
-// material-ui
 import { ExpandAltOutlined } from "@ant-design/icons";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -11,8 +10,8 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
+import FilterDrawer from "./CustomPopup";
 
-// header style
 const headerSX = {
   px: 3,
   "& .MuiCardHeader-action": { m: "0px auto", alignSelf: "center" },
@@ -35,13 +34,36 @@ function MainCard(
     secondaryAction,
     isFilter,
     noStyles = false,
+    onFilterClick,
     ...others
   },
   ref
 ) {
   const theme = useTheme();
   boxShadow = theme.palette.mode === "dark" ? boxShadow || true : boxShadow;
+  const [openFilter, setOpenFilter] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
+  const handleFilterButtonClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpenFilter((prev) => !prev);
+  };
+
+  const [selectedFilters, setSelectedFilters] = useState([
+    { id: 1, data: "Desert Springs", selected: false },
+    { id: 2, data: "Rose Dale", selected: false },
+    { id: 3, data: "Rose Dal", selected: false },
+    { id: 4, data: "Oak Ridge Estates", selected: false },
+    { id: 5, data: "Mountain Vista", selected: false },
+  ]);
+
+  const toggleFilter = (id) => {
+    setSelectedFilters((prev) =>
+      prev.map((filter) =>
+        filter.id === id ? { ...filter, selected: !filter.selected } : filter
+      )
+    );
+  };
   return (
     <Card
       elevation={elevation || 0}
@@ -65,7 +87,6 @@ function MainCard(
           p: 0,
           "& pre": {
             m: 0,
-            // p: '15px !important',
             fontFamily: theme.typography.fontFamily,
             fontSize: "0.75rem",
           },
@@ -84,7 +105,6 @@ function MainCard(
                 <Chip
                   variant="combined"
                   color={"success"}
-                  // icon={isLoss ? <FallOutlined style={iconSX} /> : <RiseOutlined style={iconSX} />}
                   label={`${count}`}
                   sx={{ ml: 2 }}
                   size="small"
@@ -99,7 +119,7 @@ function MainCard(
                   <Button
                     variant="outlined"
                     color="black"
-                    onClick={() => others.onFilterClick}
+                    onClick={handleFilterButtonClick}
                     endIcon={
                       <FilterAltIcon sx={{ width: "22px", height: "24px" }} />
                     }
@@ -111,7 +131,7 @@ function MainCard(
                       fontSize: "16px",
                       fontWeight: "500",
                       "&:hover": { backgroundColor: "#E9F3FF" },
-                    }} // endIcon={<ArrowDropDownIcon fontSize="large" />}
+                    }}
                   >
                     {" "}
                     {"Filter"}{" "}
@@ -120,14 +140,20 @@ function MainCard(
 
                 <Typography
                   variant="body1"
-                  sx={{ textDecoration: "none", cursor: "pointer" }}
-                  color="primary"
+                  sx={{
+                    textDecoration: "none",
+                    cursor: "pointer",
+                    color: secondary === "Close" ? "black" : "primary.main",
+                  }}
+                  // color="primary"
                   onClick={secondaryAction && secondaryAction}
                 >
-                  <ExpandAltOutlined
-                    style={{ marginRight: 2 }}
-                    fontSize="medium"
-                  />{" "}
+                  {secondary === "Full View" && (
+                    <ExpandAltOutlined
+                      style={{ marginRight: 2 }}
+                      fontSize="medium"
+                    />
+                  )}
                   {secondary}
                 </Typography>
               </Box>
@@ -146,10 +172,17 @@ function MainCard(
             overflow: "scroll",
             ...contentSX,
             "&::-webkit-scrollbar": {
-              display: "none", // For Chrome, Safari, and Edge
+              display: "none",
             },
           }}
         >
+          <FilterDrawer
+            openFilter={openFilter}
+            setOpenFilter={setOpenFilter}
+            selectedFilters={selectedFilters}
+            toggleFilter={toggleFilter}
+            anchorEl={anchorEl}
+          />
           {children}
         </CardContent>
       )}
