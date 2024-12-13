@@ -35,7 +35,7 @@ const TASK = {
 const DASHBOARD = {
   getActiveTask: "/api/tasks",
   getCompletedTask: "api/tasks/history",
-  getActiveAndCompletedTaskByFilter: (sort, orderBy) =>
+  getActiveAndCompletedTaskByFilter: (sort, orderBy, communityId) =>
     `/api/tasks/filters?sort=${sort}&orderBy=${orderBy}`,
   getDashboardMetrics: `/api/dashboard/metrics`,
   getRenewals: `/api/dashboard/renewal/001bn00001CitW2AAJ`,
