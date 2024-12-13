@@ -77,7 +77,7 @@ const getCommunityList = async (body) => {
   return response;
 };
 
- const offboardCommunity = async (communityId, cmcId) => {
+ const offBoardCommunity = async (communityId, cmcId) => {
     const payload = {
       mappings: [
         {
@@ -86,8 +86,8 @@ const getCommunityList = async (body) => {
         },
       ],
     };
-    const response = await putRequest(COMMUNITY.offboardCommunity, payload);
-    return response.data;
+    const response = await putRequest(COMMUNITY.offBoardCommunity, payload);
+    return response;
   };
 
 export const communityApi = {
@@ -98,5 +98,5 @@ export const communityApi = {
   createCommunity,
   getAllCommunityList,
   getCommunityList,
-  offboardCommunity,
+  offBoardCommunity,
 };

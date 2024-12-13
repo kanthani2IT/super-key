@@ -19,6 +19,9 @@ import { getStatus } from "components/AppComponents/CustomField";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
 import { formatAsDollar } from "pages/community/onboarding/utils";
 import { useState } from "react";
+import { useSnackbar } from "components/AppComponents/SnackBarProvider";
+import { MESSAGE, SEVERITY } from "utils/message";
+import { useOffBoardCommunity } from "hooks/useCommunity";
 
 const options = [
   { value: "ACTIVE", label: "Status: Active" },
@@ -27,29 +30,6 @@ const options = [
   { value: "lowToHigh", label: "Insured value: Low to High" },
 ];
 
-const tableData = [{
-  communityId: 1,
-  name: "Community 1",
-  communityManagerName: "John Doe",
-  propertyManagerName: "Jane Doe",
-  insuredCoverage: 100000,
-  status: "ACTIVE",
-},
-{
-  communityId: 2,
-  name: "Community 1",
-  communityManagerName: "John Doe",
-  propertyManagerName: "Jane Doe",
-  insuredCoverage: 100000,
-  status: "ACTIVE",
-},{
-  communityId: 3,
-  name: "Community 1",
-  communityManagerName: "John Doe",
-  propertyManagerName: "Jane Doe",
-  insuredCoverage: 100000,
-  status: "ACTIVE",
-}]
 export default function UserTable({
   isLoading,
   height = 400,
@@ -183,6 +163,18 @@ export default function UserTable({
     setModal(!modal);
   };
 
+  const offBoard = () => {
+    const payload = {
+      mappings: [
+        {
+          communityId: communityInfo.communityId,
+          cmcId: communityInfo.communityManager.managementCompanyId,
+        },
+      ],
+    };
+    const { mutate } = useOffBoardCommunity();
+    mutate(payload);
+  };
 
   const renderSortComponent = () => {
     return (
@@ -248,7 +240,7 @@ export default function UserTable({
           rowKey="communityId"
           isLoading={isLoading}
           columns={columns}
-          rows={tableData || []}
+          rows={flatRows || []}
           getStatus={getStatus}
           onSelectionChange={onSelectionChange}
           currentPage={page}
@@ -275,11 +267,10 @@ export default function UserTable({
         onClose={handleModal}
         message={
           "Do you want to off-board the community?"
-
         }
         confirmLabel={"Yes"}
         cancelLabel={"No"}
-        onConfirm={handleModal}
+        onConfirm={offBoard}
         onCancel={handleModal}
       />
     </Box>

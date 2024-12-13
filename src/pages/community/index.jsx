@@ -1,7 +1,7 @@
 import { Drawer } from "@mui/material";
 
 import AppGrid from "components/AppComponents/AppGrid";
-import { useCommunityList, useDeleteCommunityById } from "hooks/useCommunity";
+import { useCommunityList, useDeleteCommunityById, useOffBoardCommunity } from "hooks/useCommunity";
 import CommunityTable from "pages/community/CommunityTable";
 import { RadiusStyledButton } from "components/StyledComponents";
 import { useEffect, useState } from "react";
@@ -9,6 +9,8 @@ import { useDebounceFn } from "utils/helpers";
 import EditCommunity from "./edit-community";
 import OnboardingIndex from "./onboarding";
 import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
+import { useSnackbar } from "components/AppComponents/SnackBarProvider";
+import { MESSAGE, SEVERITY } from "utils/message";
 
 const initialValue = {
   page: 1,
@@ -54,16 +56,18 @@ const CommunityOnboarding = () => {
   const handleModal = () => {
     setModal(!modal);
   };
+
   const handleOffBoard = () => {
-    const payload = {
-      mappings: [
-        {
-          communityId: communityData?.communityId,
-          cmcId: communityData?.communityId,
-        },
-      ],
-    };
-    // deleteUserById({ id: communityData?.communityId, body: payload });
+    const communitiesData = selectedRows.map((communityId) => {
+      const community = communityData.find((community) => community.communityId === communityId);
+      return {
+        communityId: community.communityId,
+        cmcId: community.communityManager.managementCompanyId,
+      };
+    });
+    const payload = communitiesData;
+    const { mutate } = useOffBoardCommunity();
+    mutate(payload);
   };
 
   const handleSelectionChange = (selected) => {

@@ -108,14 +108,14 @@ export const useCommunityList = () => {
   });
 };
 
-export const useOffboardCommunity = () => {
+export const useOffBoardCommunity = () => {
   const { updateSnackbar } = useSnackbar();
 
   const mutation = useMutation({
     mutationKey: ['community-offboarding'],
     mutationFn: async (payload) => {
       const { communityId, cmcId } = payload;
-      const response = await api.community.offboardCommunity(communityId, cmcId);
+      const response = await api.community.offBoardCommunity(communityId, cmcId);
       return response.data;
     },
     onSuccess: (data) => {

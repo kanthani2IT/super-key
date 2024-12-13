@@ -11,6 +11,7 @@ import {
   useDeleteCommunityById,
   useGetCommunityById,
   useUpdateCommunityById,
+  useOffBoardCommunity,
 } from "hooks/useCommunity";
 import {
   useCommunityManagersQuery,
@@ -24,6 +25,8 @@ import { countryPhoneCodes, insuranceOptions } from "utils/constants";
 import { useDebounceFn } from "utils/helpers";
 import * as Yup from "yup";
 import { getContactInfo } from "../onboarding/utils";
+import { useSnackbar } from "components/AppComponents/SnackBarProvider";
+import { MESSAGE, SEVERITY } from "utils/message";
 const defaultCountryCode = { label: "+1", value: "+1" };
 
 const initialValues = {
@@ -244,8 +247,10 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
         },
       ],
     };
-    deleteUserById({ id: communityData?.communityId, body: payload });
+    const { mutate } = useOffBoardCommunity();
+    mutate(payload);
   };
+
   const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 };
   const mobileSize = { xs: 8, sm: 8, md: 8, lg: 4, xl: 4 };
   const size = { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 };
@@ -309,7 +314,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
           }
           confirmLabel={offBoard ? "Yes" : "No"}
           cancelLabel={offBoard ? "No" : "Yes, Discard"}
-          onConfirm={offBoard ? handleModal : handleModal}
+          onConfirm={offBoard ? handleOffBoard : handleModal}
           onCancel={handleModal}
         />
       </>

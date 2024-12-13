@@ -16,7 +16,7 @@ const COMMUNITY = {
   getCommunityById: (id) => `/api/community/${id}`,
   updateCommunityById: (id) => `/api/community/update/${id}`,
   deleteCommunityById: (id) => `/api/community/${id}`,
-  offboardCommunity: '/api/community/offboardingCommunities',
+  offBoardCommunity: `/api/community/offboardingCommunities`,
 };
 const COMMON = {
   getAllLocation: `/api/autocomplete`,
