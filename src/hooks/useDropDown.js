@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "api";
 
 // Custom hook for Locations Query
-export const useLocationsQuery = (search) =>
+export const useLocationsQuery = (input) =>
   useQuery({
-    queryKey: ["allLocationList", search],
-    queryFn: () => api.common.getAllLocation({ search }),
+    queryKey: ["allLocationList", input],
+    queryFn: () => api.common.getAllLocation({ input }),
     keepPreviousData: true,
     onSuccess: (data) => {},
     onError: (error) => {

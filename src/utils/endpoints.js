@@ -18,7 +18,7 @@ const COMMUNITY = {
   deleteCommunityById: (id) => `/api/community/${id}`,
 };
 const COMMON = {
-  getAllLocation: `/api/autocomplete`,
+  getAllLocation:`api/googlemap/autocomplete`,
   getAllCommunity: `/api/community`,
   getAllCommunityManager: `/api/manager`,
   getAllPropertyManager: `/api/property-managers/all`,
@@ -31,6 +31,7 @@ const DASHBOARD = {
   getActiveAndCompletedTaskByFilter: (sort, orderBy) =>
     `/api/tasks/filters?sort=${sort}&orderBy=${orderBy}`,
   getDashboardMetrics: `/api/dashboard/metrics`,
+  getRenewals:`/api/dashboard/renewal/001bn00001CitW2AAJ`,
 };
 
 export { COMMON, COMMUNITY, DASHBOARD, LOGIN };
