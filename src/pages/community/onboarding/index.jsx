@@ -199,6 +199,7 @@ const OnboardingIndex = ({ refetch }) => {
           {activeStep ? (
             <Button
               fullWidth
+              size="large"
               color="secondary"
               onClick={handleBack}
               variant="outlined"
@@ -212,6 +213,8 @@ const OnboardingIndex = ({ refetch }) => {
         <AppGrid item size={{ xs: 2 }}>
           <Button
             fullWidth
+            size="large"
+
             color="info"
             type="submit"
             onClick={() => handleSubmit()}

@@ -65,14 +65,14 @@ const pages = {
         id: 'documents',
         title: 'Documents',
         url: '/documents',
+        disable: true,
         icon: icons.DocumentIcon,
         type: "collapse",
         children: [{
-          id: 'all_documents',
+          id: 'repository',
           title: 'Repository',
-          url: '/all-documents',
+          url: '/repository',
           type: "item",
-          disable: true,
           showTitle: true,
           // icon: icons.HelpIcon,
         }, , {

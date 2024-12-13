@@ -36,23 +36,19 @@ const DataCard = ({ item, title, count, fullWidth, actionTitle, handleClick }) =
                     }
                     sx={{ paddingBottom: 1 }}
                 />}
-                <CardActions
+                <AppRowBox>
 
-                >
-                    <AppRowBox>
+                    {actionTitle ? <Stack direction={'coloumn'} columnGap={1} alignItems={'center'}>
+                        <ArticleOutlined color='secondary' />
+                        <Typography variant="h6" >
+                            {title}
+                        </Typography>
 
-                        {actionTitle ? <Stack direction={'coloumn'} columnGap={1} alignItems={'center'}>
-                            <ArticleOutlined color='secondary' />
-                            <Typography variant="h6" >
-                                {title}
-                            </Typography>
-
-                        </Stack> : <div></div>}
-                        <IconButton onClick={() => handleClick(item)} disableRipple >
-                            <MailIcon />
-                        </IconButton>
-                    </AppRowBox>
-                </CardActions>
+                    </Stack> : <div></div>}
+                    <IconButton onClick={() => handleClick(item)} disableRipple >
+                        <MailIcon />
+                    </IconButton>
+                </AppRowBox>
             </StyledDataCard>
         </AppToolTip>
 

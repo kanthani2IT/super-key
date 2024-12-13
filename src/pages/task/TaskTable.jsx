@@ -197,7 +197,7 @@ export default function TaskTable({
           getStatus={getStatus}
           onSelectionChange={onSelectionChange}
           currentPage={page}
-          totalItems={taskList?.totalElements || 3}
+          totalItems={taskList?.totalElements || 0}
           pageSize={pageSize}
           onPageChange={handleChangePage}
           selected={selectedRows}
