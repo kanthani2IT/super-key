@@ -7,34 +7,35 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  Modal,
   Paper,
   Stack,
-  Typography
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import ConfirmationModal from "./AppConfirmationModal";
 
-const StyledPaper = styled(Paper)(({ theme, width, height, align, fullWidth }) => ({
-  height: height || "auto",
-  padding: "1%",
-  alignContent: align,
-  borderRadius: "10px",
-  backgroundColor: theme.palette.background.paper,
-  boxShadow: theme.shadows[6],
-  [theme.breakpoints.up("xs")]: {
-    width: fullWidth ? width : "75%",
-  },
-  [theme.breakpoints.up("sm")]: {
-    width: fullWidth ? width : "75%",
-  },
-  [theme.breakpoints.up("md")]: {
-    width: fullWidth ? width : "50%",
-  },
-  [theme.breakpoints.up("lg")]: {
-    width: width,
-  },
-}));
+const StyledPaper = styled(Paper)(
+  ({ theme, width, height, align, fullWidth }) => ({
+    height: height || "auto",
+    padding: "1%",
+    alignContent: align,
+    borderRadius: "10px",
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[6],
+    [theme.breakpoints.up("xs")]: {
+      width: fullWidth ? width : "75%",
+    },
+    [theme.breakpoints.up("sm")]: {
+      width: fullWidth ? width : "75%",
+    },
+    [theme.breakpoints.up("md")]: {
+      width: fullWidth ? width : "50%",
+    },
+    [theme.breakpoints.up("lg")]: {
+      width: width,
+    },
+  })
+);
 
 const StyledFlexCard = styled(Card)(({ theme }) => ({
   display: "flex",
@@ -70,27 +71,39 @@ const AppModalContainer = ({
   fullWidth = false,
   confirmModal = false,
 }) => {
-
-  const [closeModal, setCloseModal] = useState(false)
+  const [closeModal, setCloseModal] = useState(false);
   const handleClose = () => {
-    setCloseModal(false)
-    onClose?.()
-  }
+    setCloseModal(false);
+    onClose?.();
+  };
   const handleCloseModal = () => {
     if (confirmModal) {
-      setCloseModal(true)
+      setCloseModal(true);
     } else {
-      onClose?.()
+      onClose?.();
     }
-  }
+  };
   return (
-    <StyledPaper fullWidth={fullWidth} width={width} height={height} align={align}>
+    <StyledPaper
+      fullWidth={fullWidth}
+      width={width}
+      height={height}
+      align={align}
+    >
       {enableCard ? (
         <StyledFlexCard elevation={0}>
           {title && !header && (
             <>
               <Box sx={{ display: "flex", justifyContent: "end" }}>
-                <Button onClick={handleCloseModal} disableTouchRipple variant="text" size="small" color="secondary" >Close</Button>
+                <Button
+                  onClick={handleCloseModal}
+                  disableTouchRipple
+                  variant="text"
+                  size="small"
+                  color="secondary"
+                >
+                  Close
+                </Button>
               </Box>
               <CardHeader
                 title={
@@ -126,8 +139,14 @@ const AppModalContainer = ({
       )}
       {/* Close Modal */}
 
-      <ConfirmationModal open={closeModal} message={'Are you sure that you want to Close?'} confirmLabel={'Yes'} cancelLabel={'Continue'} onConfirm={handleClose} onCancel={() => setCloseModal(false)} />
-
+      <ConfirmationModal
+        open={closeModal}
+        message={"Are you sure that you want to Close?"}
+        confirmLabel={"Yes"}
+        cancelLabel={"Continue"}
+        onConfirm={handleClose}
+        onCancel={() => setCloseModal(false)}
+      />
     </StyledPaper>
   );
 };
