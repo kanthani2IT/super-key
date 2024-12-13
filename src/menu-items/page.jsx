@@ -62,14 +62,14 @@ const pages = {
 
       },
       {
-        id: 'documents-repository',
-        title: 'Documents Repository',
-        url: '/documents-repository',
+        id: 'documents',
+        title: 'Documents',
+        url: '/documents',
         icon: icons.DocumentIcon,
         type: "collapse",
         children: [{
           id: 'all_documents',
-          title: 'All Documents',
+          title: 'Repository',
           url: '/all-documents',
           type: "item",
           disable: true,
@@ -87,7 +87,7 @@ const pages = {
       },
       {
         id: 'task',
-        title: 'Create Task',
+        title: 'Task Management',
         url: '/tasks',
         icon: icons.TaskIcon,
         type: "item",

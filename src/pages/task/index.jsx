@@ -28,7 +28,7 @@ const Task = () => {
                     </RadiusStyledButton>
                 </ButtonGroup>
                 <ButtonGroup>
-                    <TaskCreation />
+                    <TaskCreation refetch={() => console.log('add refetch here')} />
 
                 </ButtonGroup>
             </AppGrid>

@@ -18,7 +18,7 @@ const StyledDataCard = styled(Card)(({ fullWidth = false }) => ({
 }))
 
 const DataCard = ({ item, title, count, fullWidth, actionTitle, handleClick }) => {
-    const limitedString = !actionTitle ? title?.length < 20 ? title : title.substring(0, 20) + '...' : ""
+    const limitedString = !actionTitle ? title?.trim()?.length < 21 ? title : title.substring(0, 20) + '...' : ""
     return (
         <AppToolTip title={title ?? ""}>
 

@@ -50,7 +50,7 @@ const filterOption = createFilterOptions();
 const AppAutoComplete = ({
   freeSolo = true,
   options = [],
-  nameParam = "label",
+  nameParam = "name",
   valueParam = "id",
   placeholder = "type",
   inputValue,
