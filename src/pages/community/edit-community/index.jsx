@@ -25,8 +25,7 @@ import { countryPhoneCodes, insuranceOptions } from "utils/constants";
 import { useDebounceFn } from "utils/helpers";
 import * as Yup from "yup";
 import { getContactInfo } from "../onboarding/utils";
-import { useSnackbar } from "components/AppComponents/SnackBarProvider";
-import { MESSAGE, SEVERITY } from "utils/message";
+
 const defaultCountryCode = { label: "+1", value: "+1" };
 
 const initialValues = {
@@ -238,17 +237,21 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   const handleModal = () => {
     setModal(false);
   };
+
+  const { mutate } = useOffBoardCommunity();
   const handleOffBoard = () => {
+    console.log("You try to off-board", communityData, communityManagerData);
     const payload = {
       mappings: [
         {
           communityId: communityData?.communityId,
-          cmcId: communityData?.communityManager?.managementCompanyId,
+          cmcId: communityManagerData?.data?.managementCompanyId,
         },
       ],
     };
-    const { mutate } = useOffBoardCommunity();
+    console.log(payload);
     mutate(payload);
+    setModal(false);
   };
 
   const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 };

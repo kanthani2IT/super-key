@@ -77,15 +77,15 @@ const getCommunityList = async (body) => {
   return response;
 };
 
- const offBoardCommunity = async (communityId, cmcId) => {
-    const payload = {
-      mappings: [
-        {
-          communityId,
-          cmcId,
-        },
-      ],
-    };
+ const offBoardCommunity = async (payload) => {
+    // const payload = {
+    //   mappings: [
+    //     {
+    //       communityId,
+    //       cmcId,
+    //     },
+    //   ],
+    // };
     const response = await putRequest(COMMUNITY.offBoardCommunity, payload);
     return response;
   };

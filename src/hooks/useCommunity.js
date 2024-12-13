@@ -114,8 +114,8 @@ export const useOffBoardCommunity = () => {
   const mutation = useMutation({
     mutationKey: ['community-offboarding'],
     mutationFn: async (payload) => {
-      const { communityId, cmcId } = payload;
-      const response = await api.community.offBoardCommunity(communityId, cmcId);
+      // const { communityId, cmcId } = payload;
+      const response = await api.community.offBoardCommunity(payload);
       return response.data;
     },
     onSuccess: (data) => {

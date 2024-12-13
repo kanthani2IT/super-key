@@ -19,8 +19,6 @@ import { getStatus } from "components/AppComponents/CustomField";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
 import { formatAsDollar } from "pages/community/onboarding/utils";
 import { useState } from "react";
-import { useSnackbar } from "components/AppComponents/SnackBarProvider";
-import { MESSAGE, SEVERITY } from "utils/message";
 import { useOffBoardCommunity } from "hooks/useCommunity";
 
 const options = [
@@ -54,6 +52,31 @@ export default function UserTable({
   const [modal, setModal] = useState(false)
 
   const pageSize = 10;
+
+//   const tableData = [{
+//     name: "Community Name",
+//     communityManagerName: "Community Manager",
+//     propertyManagerName: "Property Manager",
+//     insuredCoverage: "Insured",
+//     status: "Status",
+//     action: "Action",
+//   },
+// {
+//   name: "Community Name",
+//   communityManagerName: "Community Manager",
+//   propertyManagerName: "Property Manager",
+//   insuredCoverage: "Insured",
+//   status: "Status",
+//   action: "Action",
+// },
+// {
+//   name: "Community Name",
+//   communityManagerName: "Community Manager",
+//   propertyManagerName: "Property Manager",
+//   insuredCoverage: "Insured",
+//   status: "Status",
+//   action: "Action",
+// }]
 
   const columns = [
     {
@@ -163,7 +186,9 @@ export default function UserTable({
     setModal(!modal);
   };
 
+  const { mutate } = useOffBoardCommunity();
   const offBoard = () => {
+    console.log("you try to off-board", communityInfo);
     const payload = {
       mappings: [
         {
@@ -172,8 +197,9 @@ export default function UserTable({
         },
       ],
     };
-    const { mutate } = useOffBoardCommunity();
+    console.log(payload)
     mutate(payload);
+    setModal(!modal);
   };
 
   const renderSortComponent = () => {

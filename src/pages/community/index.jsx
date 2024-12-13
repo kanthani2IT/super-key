@@ -9,8 +9,6 @@ import { useDebounceFn } from "utils/helpers";
 import EditCommunity from "./edit-community";
 import OnboardingIndex from "./onboarding";
 import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
-import { useSnackbar } from "components/AppComponents/SnackBarProvider";
-import { MESSAGE, SEVERITY } from "utils/message";
 
 const initialValue = {
   page: 1,
@@ -57,17 +55,19 @@ const CommunityOnboarding = () => {
     setModal(!modal);
   };
 
+  const { mutate } = useOffBoardCommunity();
   const handleOffBoard = () => {
+    console.log("You try to off-board");
     const communitiesData = selectedRows.map((communityId) => {
-      const community = communityData.find((community) => community.communityId === communityId);
+      const community = communityListData.content.find((community) => community.communityId === communityId);
       return {
         communityId: community.communityId,
         cmcId: community.communityManager.managementCompanyId,
       };
     });
-    const payload = communitiesData;
-    const { mutate } = useOffBoardCommunity();
+    const payload ={ mappings: communitiesData, };
     mutate(payload);
+    setModal(!modal);
   };
 
   const handleSelectionChange = (selected) => {
@@ -200,11 +200,10 @@ const CommunityOnboarding = () => {
         onClose={handleModal}
         message={
           "Do you want to off board selected communities?"
-
         }
         confirmLabel={"Yes"}
         cancelLabel={"No"}
-        onConfirm={handleModal}
+        onConfirm={handleOffBoard}
         onCancel={handleModal}
       />
     </AppGrid>
