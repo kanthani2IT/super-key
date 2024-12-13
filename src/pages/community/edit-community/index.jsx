@@ -245,7 +245,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
       mappings: [
         {
           communityId: communityData?.communityId,
-          cmcId: communityManagerData?.data?.managementCompanyId,
+          cmcId: communityManagerData?.data[0]?.managementCompanyId,
         },
       ],
     };

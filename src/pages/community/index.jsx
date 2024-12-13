@@ -57,7 +57,7 @@ const CommunityOnboarding = () => {
 
   const { mutate } = useOffBoardCommunity();
   const handleOffBoard = () => {
-    console.log("You try to off-board");
+    console.log("You try to off-board", selectedRows, communityListData);
     const communitiesData = selectedRows.map((communityId) => {
       const community = communityListData.content.find((community) => community.communityId === communityId);
       return {
