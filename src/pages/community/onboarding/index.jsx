@@ -260,6 +260,7 @@ const OnboardingIndex = ({ refetch }) => {
   });
   const {
     values,
+    dirty,
     errors,
     touched,
     setFieldValue,
@@ -282,6 +283,7 @@ const OnboardingIndex = ({ refetch }) => {
         Add New Community
       </Button>
       <AppModal
+        confirmModal={dirty}
         cardHeight={onBoardingStepper[activeStep]?.height || undefined}
         open={open}
         onClose={handleClose}

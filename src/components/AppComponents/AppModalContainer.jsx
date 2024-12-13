@@ -68,12 +68,20 @@ const AppModalContainer = ({
   align,
   onClose,
   fullWidth = false,
+  confirmModal = false,
 }) => {
 
   const [closeModal, setCloseModal] = useState(false)
   const handleClose = () => {
     setCloseModal(false)
     onClose?.()
+  }
+  const handleCloseModal = () => {
+    if (confirmModal) {
+      setCloseModal(true)
+    } else {
+      onClose?.()
+    }
   }
   return (
     <StyledPaper fullWidth={fullWidth} width={width} height={height} align={align}>
@@ -82,7 +90,7 @@ const AppModalContainer = ({
           {title && !header && (
             <>
               <Box sx={{ display: "flex", justifyContent: "end" }}>
-                <Button onClick={() => setCloseModal(true)} disableTouchRipple variant="text" size="small" color="secondary" >Close</Button>
+                <Button onClick={handleCloseModal} disableTouchRipple variant="text" size="small" color="secondary" >Close</Button>
               </Box>
               <CardHeader
                 title={

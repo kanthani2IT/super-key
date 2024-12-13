@@ -7,10 +7,12 @@ import AppLabelComponent from 'components/AppComponents/AppLabelComponent'
 import AppModal from 'components/AppComponents/AppModal'
 import AppRowBox from 'components/AppComponents/AppRowBox'
 import AppTextField from 'components/AppComponents/AppTextField'
+import dayjs from 'dayjs'
 import { useFormik } from 'formik'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { cManagers, pManagers, priority, status, type } from 'utils/constants'
+import { compareeJson } from 'utils/helpers'
 import * as Yup from "yup"
 
 
@@ -29,7 +31,7 @@ const initialValues = {
     taskName: '',
     type: null,
     assignedTo: null,
-    dueDate: null,
+    dueDate: dayjs(),
     priority: null,
     status: null,
     relatedTo: null,
@@ -64,15 +66,6 @@ const TaskCreation = () => {
 
     };
 
-
-    const header = (title) => {
-        return (
-            <AppRowBox >
-                <Typography variant="h5">{title}</Typography>
-                <Button onClick={handleClose} disableTouchRipple variant="text" size="small" color="secondary">Close </Button>
-            </AppRowBox>)
-    }
-
     const footer = () => {
         return (
             <AppRowBox justifyContent='end' >
@@ -90,18 +83,14 @@ const TaskCreation = () => {
         },
     })
 
-    const { values, errors, touched, resetForm, handleChange, handleSubmit } = formik
-
-    console.log(values)
-
-
+    const { values, dirty, errors, touched, resetForm, handleChange, handleSubmit } = formik
 
     return (
         <>
             <Button startIcon={<AddCircle />} size='large' color='info' variant='contained' onClick={handleOpen}>
                 Create New Task
             </Button>
-            <AppModal height={'70vh'} footer={footer()} header={header('New Task',)} enableCard open={open} onClose={handleClose}>
+            <AppModal cardHeight={'50vh'} footer={footer()} confirmModal={dirty} title={'Create New Task'} enableCard open={open} onClose={handleClose}>
                 <AppGrid container spacing={3}>
                     <AppGrid item size={{ xs: 12 }}>
                         <AppLabelComponent label={'Task Name'}>
