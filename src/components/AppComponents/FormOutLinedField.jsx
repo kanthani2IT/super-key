@@ -29,7 +29,12 @@ export const FormOutLinedField = ({
     event.preventDefault();
   };
 
-
+  const handleKeyDown = (e) => {
+    // Prevent space character (keyCode 32 or e.key === ' ')
+    if (e.key === ' ' || e.keyCode === 32) {
+      e.preventDefault();
+    }
+  };
   return (
     <Stack spacing={1}>
       <Typography variant="h7" color="#5B738B" fontSize="0.75rem">
@@ -45,6 +50,7 @@ export const FormOutLinedField = ({
         onChange={handleChange}
         placeholder={placeholder}
         fullWidth
+        onKeyDown={handleKeyDown}
         error={Boolean(error)}
         sx={{ background: '#EBF1F4' }}
         endAdornment={
