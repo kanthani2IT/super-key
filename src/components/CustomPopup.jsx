@@ -8,16 +8,21 @@ import {
   Button,
   Popover,
 } from "@mui/material";
+import AppPriorityItems from "./AppPriorityComponent";
 
 const FilterDrawer = ({
   openFilter,
   setOpenFilter,
-  selectedFilters,
+  selectedProperty = [],
+  selectedPriority = [],
+  setSelectedPriority,
   toggleFilter,
   anchorEl,
 }) => {
   const [selectedTab, setSelectedTab] = useState("Properties");
-  const isAnyFilteredSelect = selectedFilters.some((filter) => filter.selected);
+  const isAnyFilteredSelect = selectedProperty.some(
+    (filter) => filter.selected
+  );
 
   if (!openFilter) return null;
 
@@ -26,7 +31,7 @@ const FilterDrawer = ({
   };
   const handleApply = () => {
     if (!isAnyFilteredSelect) return;
-    const appliedFilters = selectedFilters.filter((filter) => filter.selected);
+    const appliedFilters = selectedProperty.filter((filter) => filter.selected);
     console.log("Applied Filters:", appliedFilters);
     setOpenFilter(false);
   };
@@ -101,25 +106,29 @@ const FilterDrawer = ({
           }}
         >
           <Box sx={{ mt: 1 }}>
-            {selectedTab === "Properties" ? (
-              selectedFilters.map((filter, index) => (
-                <FormControlLabel
-                  key={filter.id}
-                  control={
-                    <Checkbox
-                      checked={filter.selected}
-                      onChange={() => toggleFilter(filter.id)}
-                    />
-                  }
-                  label={filter.data}
-                  sx={{ display: "block", mb: 1 }}
-                />
-              ))
-            ) : (
-              <Typography variant="h6" sx={{ fontWeight: 500 }}>
-                No Priorities Found
-              </Typography>
-            )}
+            {selectedTab === "Properties"
+              ? selectedProperty.map((filter, index) => (
+                  <FormControlLabel
+                    key={filter.id}
+                    control={
+                      <Checkbox
+                        checked={filter.selected}
+                        onChange={() => toggleFilter(filter.id)}
+                      />
+                    }
+                    label={filter.data}
+                    sx={{ display: "block", mb: 1 }}
+                  />
+                ))
+              : selectedPriority.map((priority) => (
+                  <AppPriorityItems
+                    key={priority.name}
+                    name={priority.name}
+                    color={priority.color}
+                    isSelected={priority.name === selectedPriority}
+                    onClick={() => setSelectedPriority(priority.name)}
+                  />
+                ))}
           </Box>
         </Box>
       </Box>

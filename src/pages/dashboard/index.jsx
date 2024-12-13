@@ -20,10 +20,6 @@ import { useEffect, useState } from "react";
 import UserTable from "../community/CommunityTable";
 import RenewalPieChart from "./RenewalPieChart";
 import TaskTable from "./TaskTable";
-import { Box } from "@mui/system";
-import { Button, Checkbox, Divider, FormControlLabel } from "@mui/material";
-import FilterDrawer from "components/CustomPopup";
-import AppModalContainer from "components/AppComponents/AppModalContainer";
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 const tabs = [
@@ -34,7 +30,6 @@ const tabs = [
 export default function DashboardDefault() {
   const [selectedTab, setSelectedTab] = useState(tabs[0].value);
   const [open, setOpen] = useState(false);
-  const [hideGrids, setHideGrids] = useState(false);
   const { data, isLoading } = useGetUsers();
   const { data: dashboardData, isLoading: isWidgetLoading } =
     useGetDashboardMetrics();
@@ -59,9 +54,7 @@ export default function DashboardDefault() {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleFullViewClick = () => {
-    setHideGrids((prev) => !prev);
-  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -108,80 +101,76 @@ export default function DashboardDefault() {
           </Stack>
         </MainCard>
       </AppGrid>
-      {!hideGrids && (
-        <>
-          <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
-            <AppGrid container rowSpacing={2} columnSpacing={2}>
-              <AppGrid size={{ xs: 12 }}>
-                <AppSkeletonWrapper loading={isWidgetLoading} height={"200px"}>
-                  <MainCard title="Communities" secondary={"Full View"}>
-                    <Stack spacing={2}>
-                      <Typography variant="h6">Communities Managed</Typography>
-                      <Typography variant="subtitle2" color="success">
-                        {totalCommunities ?? 0}
-                      </Typography>
-                    </Stack>
-                  </MainCard>
-                </AppSkeletonWrapper>
-              </AppGrid>
-              <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
-                <AppSkeletonWrapper loading={isWidgetLoading} height={"150px"}>
-                  <MainCard>
-                    <Stack rowGap={4} textAlign={"center"}>
-                      <Typography variant="h6">
-                        Communities
-                        <br /> Insured
-                      </Typography>
-                      <Typography variant="subtitle2" color="success">
-                        {insuredCommunities ?? 0}
-                      </Typography>
-                    </Stack>
-                  </MainCard>
-                </AppSkeletonWrapper>
-              </AppGrid>
-              <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
-                <AppSkeletonWrapper loading={isWidgetLoading} height={"150px"}>
-                  <MainCard>
-                    <Stack rowGap={4} textAlign={"center"}>
-                      <Typography variant="h6">
-                        Total Gross <br /> Premiums
-                      </Typography>
-                      <Typography variant="subtitle2" color="success">
-                        {totalPremium ?? 0}
-                      </Typography>
-                    </Stack>
-                  </MainCard>
-                </AppSkeletonWrapper>
-              </AppGrid>
-              <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
-                <AppSkeletonWrapper loading={isWidgetLoading} height={"150px"}>
-                  <MainCard>
-                    <Stack rowGap={4} textAlign={"center"}>
-                      <Typography variant="h6">
-                        Maintenance
-                        <br /> Pending
-                      </Typography>
-                      <Typography variant="subtitle2" color="success">
-                        {totalCoverageValue ?? 0}
-                      </Typography>
-                    </Stack>
-                  </MainCard>
-                </AppSkeletonWrapper>
-              </AppGrid>
-            </AppGrid>
-          </AppGrid>
-
-          <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
-            <AppSkeletonWrapper loading={isWidgetLoading} height={"370px"}>
-              <MainCard title={"Upcoming Renewals"}>
-                <AppGrid size={{ xs: 12 }} justifyItems={"center"}>
-                  <RenewalPieChart chartData={upcomingRenewals ?? []} />
-                </AppGrid>
+      <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
+        <AppGrid container rowSpacing={2} columnSpacing={2}>
+          <AppGrid size={{ xs: 12 }}>
+            <AppSkeletonWrapper loading={isWidgetLoading} height={"200px"}>
+              <MainCard title="Communities" secondary={"Full View"}>
+                <Stack spacing={2}>
+                  <Typography variant="h6">Communities Managed</Typography>
+                  <Typography variant="subtitle2" color="success">
+                    {totalCommunities ?? 0}
+                  </Typography>
+                </Stack>
               </MainCard>
             </AppSkeletonWrapper>
           </AppGrid>
-        </>
-      )}
+          <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
+            <AppSkeletonWrapper loading={isWidgetLoading} height={"150px"}>
+              <MainCard>
+                <Stack rowGap={4} textAlign={"center"}>
+                  <Typography variant="h6">
+                    Communities
+                    <br /> Insured
+                  </Typography>
+                  <Typography variant="subtitle2" color="success">
+                    {insuredCommunities ?? 0}
+                  </Typography>
+                </Stack>
+              </MainCard>
+            </AppSkeletonWrapper>
+          </AppGrid>
+          <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
+            <AppSkeletonWrapper loading={isWidgetLoading} height={"150px"}>
+              <MainCard>
+                <Stack rowGap={4} textAlign={"center"}>
+                  <Typography variant="h6">
+                    Total Gross <br /> Premiums
+                  </Typography>
+                  <Typography variant="subtitle2" color="success">
+                    {totalPremium ?? 0}
+                  </Typography>
+                </Stack>
+              </MainCard>
+            </AppSkeletonWrapper>
+          </AppGrid>
+          <AppGrid size={{ xs: 12, md: 4, lg: 4 }}>
+            <AppSkeletonWrapper loading={isWidgetLoading} height={"150px"}>
+              <MainCard>
+                <Stack rowGap={4} textAlign={"center"}>
+                  <Typography variant="h6">
+                    Maintenance
+                    <br /> Pending
+                  </Typography>
+                  <Typography variant="subtitle2" color="success">
+                    {totalCoverageValue ?? 0}
+                  </Typography>
+                </Stack>
+              </MainCard>
+            </AppSkeletonWrapper>
+          </AppGrid>
+        </AppGrid>
+      </AppGrid>
+
+      <AppGrid size={{ xs: 12, md: 6, lg: 6 }}>
+        <AppSkeletonWrapper loading={isWidgetLoading} height={"370px"}>
+          <MainCard title={"Upcoming Renewals"}>
+            <AppGrid size={{ xs: 12 }} justifyItems={"center"}>
+              <RenewalPieChart chartData={upcomingRenewals ?? []} />
+            </AppGrid>
+          </MainCard>
+        </AppSkeletonWrapper>
+      </AppGrid>
       <AppModal open={open} onClose={handleClose} height="auto" width="70%">
         <MainCard
           noStyles={true}
@@ -194,53 +183,16 @@ export default function DashboardDefault() {
           />
         </MainCard>
       </AppModal>
-      {hideGrids ? (
-        <AppModalContainer
-          fullWidth
-          // enableCard
-          height="auto"
-          width="100%"
-          // padding="1%"
-        >
-          <AppGrid size={{ xs: 12 }}>
-            <MainCard
-              title={"Task Assigned"}
-              secondary={hideGrids ? "Close" : "Full View"}
-              isFilter
-              secondaryAction={handleFullViewClick}
-            >
-              <MainTabs
-                handleChange={handleChange}
-                value={selectedTab}
-                tabs={tabs}
-              />
-              <TaskTable
-                tableData={taskData?.data || []}
-                loading={isTaskLoading}
-              />
-            </MainCard>
-          </AppGrid>
-        </AppModalContainer>
-      ) : (
-        <AppGrid size={{ xs: 12 }}>
-          <MainCard
-            title={"Task Assigned"}
-            secondary={hideGrids ? "Close" : "Full View"}
-            isFilter
-            secondaryAction={handleFullViewClick}
-          >
-            <MainTabs
-              handleChange={handleChange}
-              value={selectedTab}
-              tabs={tabs}
-            />
-            <TaskTable
-              tableData={taskData?.data || []}
-              loading={isTaskLoading}
-            />
-          </MainCard>
-        </AppGrid>
-      )}
+      <AppGrid size={{ xs: 12 }}>
+        <MainCard title={"Task Assigned"} secondary={"Full View"} isFilter>
+          <MainTabs
+            handleChange={handleChange}
+            value={selectedTab}
+            tabs={tabs}
+          />
+          <TaskTable tableData={taskData?.data || []} loading={isTaskLoading} />
+        </MainCard>
+      </AppGrid>
     </AppGrid>
   );
 }

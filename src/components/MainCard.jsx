@@ -48,8 +48,12 @@ function MainCard(
     setAnchorEl(event.currentTarget);
     setOpenFilter((prev) => !prev);
   };
-
-  const [selectedFilters, setSelectedFilters] = useState([
+  const [selectedPriority, setSelectedPriority] = useState([
+    { name: "High", color: "#E81616" },
+    { name: "Medium", color: "#EB6C0B" },
+    { name: "Low", color: "#DEC013" },
+  ]);
+  const [selectedProperty, setSelectedProperties] = useState([
     { id: 1, data: "Desert Springs", selected: false },
     { id: 2, data: "Rose Dale", selected: false },
     { id: 3, data: "Rose Dal", selected: false },
@@ -58,7 +62,7 @@ function MainCard(
   ]);
 
   const toggleFilter = (id) => {
-    setSelectedFilters((prev) =>
+    setSelectedProperties((prev) =>
       prev.map((filter) =>
         filter.id === id ? { ...filter, selected: !filter.selected } : filter
       )
@@ -143,17 +147,14 @@ function MainCard(
                   sx={{
                     textDecoration: "none",
                     cursor: "pointer",
-                    color: secondary === "Close" ? "black" : "primary.main",
                   }}
-                  // color="primary"
+                  color="primary"
                   onClick={secondaryAction && secondaryAction}
                 >
-                  {secondary === "Full View" && (
-                    <ExpandAltOutlined
-                      style={{ marginRight: 2 }}
-                      fontSize="medium"
-                    />
-                  )}
+                  <ExpandAltOutlined
+                    style={{ marginRight: 2 }}
+                    fontSize="medium"
+                  />
                   {secondary}
                 </Typography>
               </Box>
@@ -179,7 +180,8 @@ function MainCard(
           <FilterDrawer
             openFilter={openFilter}
             setOpenFilter={setOpenFilter}
-            selectedFilters={selectedFilters}
+            selectedProperty={selectedProperty}
+            selectedPriority={selectedPriority}
             toggleFilter={toggleFilter}
             anchorEl={anchorEl}
           />
