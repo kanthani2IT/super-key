@@ -17,6 +17,7 @@ import { getStatus } from "components/AppComponents/CustomField";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
 import { formatAsDollar } from "pages/community/onboarding/utils";
 import { useState } from "react";
+import { useOffBoardCommunity } from "hooks/useCommunity";
 
 const options = [
   { value: "ACTIVE", label: "Status: Active" },
@@ -40,7 +41,10 @@ export default function CommunityTable({
   handleChangePage,
   page,
   setPage,
-  selectedRows
+  selectedRows,
+  setOffboardData,
+  rowSecondKey,
+  offboardData
 }) {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -49,6 +53,31 @@ export default function CommunityTable({
   const [modal, setModal] = useState(false)
 
   const pageSize = 10;
+
+//   const tableData = [{
+//     name: "Community Name",
+//     communityManagerName: "Community Manager",
+//     propertyManagerName: "Property Manager",
+//     insuredCoverage: "Insured",
+//     status: "Status",
+//     action: "Action",
+//   },
+// {
+//   name: "Community Name",
+//   communityManagerName: "Community Manager",
+//   propertyManagerName: "Property Manager",
+//   insuredCoverage: "Insured",
+//   status: "Status",
+//   action: "Action",
+// },
+// {
+//   name: "Community Name",
+//   communityManagerName: "Community Manager",
+//   propertyManagerName: "Property Manager",
+//   insuredCoverage: "Insured",
+//   status: "Status",
+//   action: "Action",
+// }]
 
   const columns = [
     {
@@ -155,9 +184,24 @@ export default function CommunityTable({
     setMenuAnchorEl(null);
   };
   const handleModal = () => {
-    // setModal(!modal);
+    setModal(!modal);
   };
 
+  const { mutate } = useOffBoardCommunity();
+  const offBoard = () => {
+    console.log("you try to off-board",selectedRows, communityInfo);
+    const payload = {
+      mappings: [
+        {
+          communityId: communityInfo.communityId,
+          cmcId: communityInfo.communityManager.managementCompanyId,
+        },
+      ],
+    };
+    console.log(payload)
+    mutate(payload);
+    setModal(!modal);
+  };
 
   const renderSortComponent = () => {
     return (
@@ -197,9 +241,9 @@ export default function CommunityTable({
     return (
       <>
         <StyledMenuItem onClick={handleDrawer}>View details</StyledMenuItem>
-        {/* <StyledMenuItem onClick={handleModal}>
+        <StyledMenuItem onClick={handleModal}>
           Off-board Community
-        </StyledMenuItem> */}
+        </StyledMenuItem>
       </>
     );
   };
@@ -231,6 +275,9 @@ export default function CommunityTable({
         onPageChange={handleChangePage}
         selected={selectedRows}
         noDataText={'No Community Found'}
+        selectedData={setOffboardData}
+        rowSecondKey={rowSecondKey}
+        offboardData={offboardData}
       />
 
 
@@ -250,11 +297,10 @@ export default function CommunityTable({
         onClose={handleModal}
         message={
           "Do you want to off-board the community?"
-
         }
         confirmLabel={"Yes"}
         cancelLabel={"No"}
-        onConfirm={handleModal}
+        onConfirm={offBoard}
         onCancel={handleModal}
       />
     </Box>

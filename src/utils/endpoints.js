@@ -9,13 +9,14 @@ const LOGIN = {
 const COMMUNITY = {
   getAll: "/api/community",
   createCommunity: "/api/community/createWithFile",
-  getAllCommunityList: "/api/community/paging",
+  getAllCommunityList: "/api/community/pagings",
   getCommunityList: (page, size, sortBy, orderBy, status, search) =>
     `/api/community/paging?page=${page}&size=${size}&sortBy=${sortBy}&direction=${orderBy}&status=${status}&name=${search}`,
   getUsers: "/api/veruna/users",
   getCommunityById: (id) => `/api/community/${id}`,
   updateCommunityById: (id) => `/api/community/update/${id}`,
   deleteCommunityById: (id) => `/api/community/${id}`,
+  offBoardCommunity: `/api/community/offboardingCommunities`,
 };
 const COMMON = {
   getAllLocation:`api/googlemap/autocomplete`,

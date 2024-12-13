@@ -12,6 +12,7 @@ import {
   useDeleteCommunityById,
   useGetCommunityById,
   useUpdateCommunityById,
+  useOffBoardCommunity,
 } from "hooks/useCommunity";
 import {
   useCommunityManagersQuery,
@@ -248,17 +249,23 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     updateCommunityFields(data);
     setModal(false);
   }
+
+  const { mutate } = useOffBoardCommunity();
   const handleOffBoard = () => {
+    console.log("You try to off-board", communityData, communityManagerData);
     const payload = {
       mappings: [
         {
           communityId: communityData?.communityId,
-          cmcId: communityData?.communityManager?.managementCompanyId,
+          cmcId: communityManagerData?.data[0]?.managementCompanyId,
         },
       ],
     };
-    deleteUserById({ id: communityData?.communityId, body: payload });
+    console.log(payload);
+    mutate(payload);
+    setModal(false);
   };
+
   const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 };
   const mobileSize = { xs: 8, sm: 8, md: 9, lg: 4, xl: 4 };
   const size = { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 };
@@ -274,7 +281,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               // width="30%"
               height="50px"
               borderRadius="10px"
-              // onClick={onReset}
+              onClick={onReset}
               sx={{
                 border: "0.5px solid #E12929",
               }}
@@ -322,8 +329,10 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
           }
           confirmLabel={offBoard ? "Yes" : "No"}
           cancelLabel={offBoard ? "No" : "Yes, Discard"}
-          onConfirm={offBoard ? handleModalDiscard : handleModal}
-          onCancel={handleModalDiscard}
+          // onConfirm={offBoard ? handleModalDiscard : handleModal}
+          // onCancel={handleModalDiscard}
+          onConfirm={offBoard ? handleOffBoard : handleModal}
+          onCancel={handleModal}
         />
       </>
     );
