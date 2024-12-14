@@ -1,28 +1,28 @@
 export const cManagers = [
-  { id: "jahnavi", name: "Jahnavi" },
-  { id: "rohan", name: "Rohan" },
-  { id: "isha", name: "Isha" },
-  { id: "arjun", name: "Arjun" },
-  { id: "meera", name: "Meera" },
-  { id: "dev", name: "Dev" },
-  { id: "aisha", name: "Aisha" },
-  { id: "rajesh", name: "Rajesh" },
-  { id: "sanya", name: "Sanya" },
-  { id: "vishal", name: "Vishal" },
+  { managerId: "jahnavi", username: "Jahnavi" },
+  { managerId: "jenish", username: "Jenish" },
+  { managerId: "isha", username: "Isha" },
+  { managerId: "arjun", username: "Arjun" },
+  { managerId: "meera", username: "Meera" },
+  { managerId: "dev", username: "Dev" },
+  { managerId: "aisha", username: "Aisha" },
+  { managerId: "rajesh", username: "Rajesh" },
+  { managerId: "sanya", username: "Sanya" },
+  { managerId: "vishal", username: "Vishal" },
 ];
 export const hundredMbValidation = 100 * 1024 * 1024;
 
 export const pManagers = [
-  { id: "priya", name: "Priya" },
-  { id: "karthik", name: "Karthik" },
-  { id: "ananya", name: "Ananya" },
-  { id: "amit", name: "Amit" },
-  { id: "sneha", name: "Sneha" },
-  { id: "vikram", name: "Vikram" },
-  { id: "riya", name: "Riya" },
-  { id: "aman", name: "Aman" },
-  { id: "preeti", name: "Preeti" },
-  { id: "kavya", name: "Kavya" },
+  { managerId: "priya", username: "Priya" },
+  { managerId: "karthik", username: "Karthik" },
+  { managerId: "ananya", username: "Ananya" },
+  { managerId: "amit", username: "Amit" },
+  { managerId: "sneha", username: "Sneha" },
+  { managerId: "vikram", username: "Vikram" },
+  { managerId: "riya", username: "Riya" },
+  { managerId: "aman", username: "Aman" },
+  { managerId: "preeti", username: "Preeti" },
+  { managerId: "kavya", username: "Kavya" },
 ];
 export const insuranceOptions = [
   { id: "100000", name: "100000" },
@@ -208,4 +208,51 @@ export const countryPhoneCodes = [
   { label: "+351", value: "+351" },
   { label: "+974", value: "+974" },
   { label: "+40", value: "+40" },
+];
+
+//tasks
+
+export const priority = [
+  {
+    id: "high",
+    label: "High",
+  },
+  {
+    id: "medium",
+    label: "Medium",
+  },
+  {
+    id: "low",
+    label: "Low",
+  },
+];
+
+export const type = [
+  {
+    id: "audit",
+    label: "Audit",
+  },
+  {
+    id: "review",
+    label: "Review",
+  },
+  {
+    id: "checking",
+    label: "Checking",
+  },
+];
+
+export const status = [
+  {
+    id: "yet-to-start",
+    label: "Yet to Start",
+  },
+  {
+    id: "in-progress",
+    label: "In Progress",
+  },
+  {
+    id: "completed",
+    label: "Completed",
+  },
 ];

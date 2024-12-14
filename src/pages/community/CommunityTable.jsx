@@ -5,9 +5,7 @@ import {
   FormControl,
   FormControlLabel,
   IconButton,
-  Radio,
-  RadioGroup,
-  Typography,
+  Typography
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
@@ -19,6 +17,7 @@ import { getStatus } from "components/AppComponents/CustomField";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
 import { formatAsDollar } from "pages/community/onboarding/utils";
 import { useState } from "react";
+import { useOffBoardCommunity } from "hooks/useCommunity";
 
 const options = [
   { value: "ACTIVE", label: "Status: Active" },
@@ -27,7 +26,7 @@ const options = [
   { value: "lowToHigh", label: "Insured value: Low to High" },
 ];
 
-export default function UserTable({
+export default function CommunityTable({
   isLoading,
   height = 400,
   onSelectionChange,
@@ -42,7 +41,10 @@ export default function UserTable({
   handleChangePage,
   page,
   setPage,
-  selectedRows
+  selectedRows,
+  setOffboardData,
+  rowSecondKey,
+  offboardData
 }) {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -51,6 +53,31 @@ export default function UserTable({
   const [modal, setModal] = useState(false)
 
   const pageSize = 10;
+
+//   const tableData = [{
+//     name: "Community Name",
+//     communityManagerName: "Community Manager",
+//     propertyManagerName: "Property Manager",
+//     insuredCoverage: "Insured",
+//     status: "Status",
+//     action: "Action",
+//   },
+// {
+//   name: "Community Name",
+//   communityManagerName: "Community Manager",
+//   propertyManagerName: "Property Manager",
+//   insuredCoverage: "Insured",
+//   status: "Status",
+//   action: "Action",
+// },
+// {
+//   name: "Community Name",
+//   communityManagerName: "Community Manager",
+//   propertyManagerName: "Property Manager",
+//   insuredCoverage: "Insured",
+//   status: "Status",
+//   action: "Action",
+// }]
 
   const columns = [
     {
@@ -157,9 +184,24 @@ export default function UserTable({
     setMenuAnchorEl(null);
   };
   const handleModal = () => {
-    // setModal(!modal);
+    setModal(!modal);
   };
 
+  const { mutate } = useOffBoardCommunity();
+  const offBoard = () => {
+    console.log("you try to off-board",selectedRows, communityInfo);
+    const payload = {
+      mappings: [
+        {
+          communityId: communityInfo.communityId,
+          cmcId: communityInfo.communityManager.managementCompanyId,
+        },
+      ],
+    };
+    console.log(payload)
+    mutate(payload);
+    setModal(!modal);
+  };
 
   const renderSortComponent = () => {
     return (
@@ -199,9 +241,9 @@ export default function UserTable({
     return (
       <>
         <StyledMenuItem onClick={handleDrawer}>View details</StyledMenuItem>
-        {/* <StyledMenuItem onClick={handleModal}>
+        <StyledMenuItem onClick={handleModal}>
           Off-board Community
-        </StyledMenuItem> */}
+        </StyledMenuItem>
       </>
     );
   };
@@ -232,7 +274,12 @@ export default function UserTable({
         pageSize={pageSize}
         onPageChange={handleChangePage}
         selected={selectedRows}
+        noDataText={'No Community Found'}
+        selectedData={setOffboardData}
+        rowSecondKey={rowSecondKey}
+        offboardData={offboardData}
       />
+
 
       <AppMenu
         anchorEl={menuAnchorEl}
@@ -250,11 +297,10 @@ export default function UserTable({
         onClose={handleModal}
         message={
           "Do you want to off-board the community?"
-
         }
         confirmLabel={"Yes"}
         cancelLabel={"No"}
-        onConfirm={handleModal}
+        onConfirm={offBoard}
         onCancel={handleModal}
       />
     </Box>

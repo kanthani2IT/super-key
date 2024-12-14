@@ -8,7 +8,7 @@ import {
   Checkbox,
   FormControlLabel,
   FormHelperText,
-  Grid,
+
   Link,
   Stack,
   Typography,
@@ -23,6 +23,7 @@ import { FormOutLinedField } from "components/AppComponents/FormOutLinedField";
 import { useLoginUser } from "hooks/useLogin";
 import { useAuthCookies } from "utils/cookie";
 import { createValidationSchema } from "utils/loginUtils";
+import AppGrid from "components/AppComponents/AppGrid";
 
 export default function AuthLogin(props) {
   const { fieldsConfig } = props;
@@ -55,9 +56,9 @@ export default function AuthLogin(props) {
         values,
       }) => (
         <form noValidate onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
+          <AppGrid container spacing={3}>
             {fieldsConfig.map((field) => (
-              <Grid item xs={12} key={field.name}>
+              <AppGrid item size={{ xs: 12 }} key={field.name}>
                 <FormOutLinedField
                   id={field.id}
                   type={field.type}
@@ -70,35 +71,54 @@ export default function AuthLogin(props) {
                   // touched={touched[field.name]}
                   error={touched[field.name] && errors[field.name]}
                 />
-              </Grid>
+              </AppGrid>
             ))}
 
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checked}
-                    onChange={(event) => setChecked(event.target.checked)}
-                    name="checked"
-                    color="primary"
-                    size="small"
-                  />
-                }
-                label={
-                  <Typography variant="h7" color="#5B738B" fontSize="0.75rem">
-                    Remember Password
-                  </Typography>
-                }
-              />
-            </Grid>
+            <AppGrid item size={{ xs: 12 }}>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                spacing={2}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={checked}
+                      onChange={(event) => setChecked(event.target.checked)}
+                      name="checked"
+                      size="small"
+                      color="info"
+
+                    />
+                  }
+                  label={
+                    <Typography variant="h7" color="#5B738B" fontSize="0.75rem">
+                      Remember Password
+                    </Typography>
+                  }
+                />
+                <Link
+                  variant="h7"
+                  component={RouterLink}
+                  fontWeight={600}
+                  underline=""
+                  to="/reset/forgot"
+                  color="info"
+
+                >
+                  Forget Password?
+                </Link>
+              </Stack>
+            </AppGrid>
 
             {errors.submit && (
-              <Grid item xs={12}>
+              <AppGrid item size={{ xs: 12 }}>
                 <FormHelperText error>{errors.submit}</FormHelperText>
-              </Grid>
+              </AppGrid>
             )}
 
-            <Grid item xs={12}>
+            <AppGrid item size={{ xs: 12 }}>
               <AnimateButton>
                 <Button
                   disableElevation
@@ -107,35 +127,15 @@ export default function AuthLogin(props) {
                   size="large"
                   type="submit"
                   variant="contained"
-                  color="primary"
+                  color="info"
                 >
                   Login
                 </Button>
               </AnimateButton>
-            </Grid>
+            </AppGrid>
 
-            <Grid item xs={12} sx={{ mt: -1 }}>
-              <Stack
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                spacing={2}
-              >
-                <Typography variant="h7" color="#5B738B" fontSize="0.75rem">
-                  Forgot Password?
-                </Typography>
-                <Link
-                  variant="h7"
-                  component={RouterLink}
-                  color="error"
-                  fontWeight={600}
-                  to="/reset/forgot"
-                >
-                  Reset Password
-                </Link>
-              </Stack>
-            </Grid>
-          </Grid>
+
+          </AppGrid>
         </form>
       )}
     </Formik>

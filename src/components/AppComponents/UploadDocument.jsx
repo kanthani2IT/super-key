@@ -47,7 +47,7 @@ const InsuranceDocument = ({
     if (invalidFormatFiles.length > 0) {
       updateSnackbar({
         message:
-          "Unsupported file format. Please select files with the following formats: DOCX, XLSX, CSV.",
+          "Unsupported file format. Please select files with the following formats: DOCX, XLSX, CSV, Pdf",
         severity: SEVERITY.error,
       });
     }
@@ -109,10 +109,10 @@ const InsuranceDocument = ({
       p={3}
       textAlign="center"
       onDragEnter={handleDragEnter}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          sx={{cursor:"pointer"}}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      sx={{ cursor: "pointer" }}
     >
       {/* Icon */}
       <UploadIcon />
@@ -137,7 +137,7 @@ const InsuranceDocument = ({
       {/* Import Button */}
       {enable && (
         <div
-          
+
         >
           <FileUploadButton
             onFileChange={(event) => handleFileUpload(event.target.files)}

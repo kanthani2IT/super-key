@@ -66,7 +66,7 @@ const onBoardingStepper = [
     height: "60vh",
   },
   {
-    title: "Insurance Documentation",
+    title: "Insurance Documents",
     component: InsuranceUpload,
     height: "auto",
     width: "60%",
@@ -179,6 +179,19 @@ const OnboardingIndex = ({ refetch }) => {
     resetOnboarding();
   };
 
+  const handleOpen = () => {
+    setOpen(true);
+    resetOnboarding();
+    let queryParams = "?onboarding=true";
+    if (!currentStep) {
+      queryParams = "?onboarding=true&cs=0";
+    }
+    navigate({
+      pathname: location.pathname,
+      search: !open ? queryParams : "",
+    });
+  };
+
   const footer = () => {
     return (
       <AppRowBox>
@@ -186,6 +199,8 @@ const OnboardingIndex = ({ refetch }) => {
           {activeStep ? (
             <Button
               fullWidth
+              size="large"
+
               color="secondary"
               onClick={handleBack}
               variant="outlined"
@@ -196,20 +211,23 @@ const OnboardingIndex = ({ refetch }) => {
             <div></div>
           )}
         </AppGrid>
-        <AppGrid item size={{ xs: 2 }}>
-          <Button
-            fullWidth
-            color="info"
-            type="submit"
-            onClick={() => handleSubmit()}
-            variant="contained"
-            disabled={
-              activeStep === 4 && show == "true" && selectedFiles.length == 0
-            }
-          >
-            {selectedFiles.length > 0 ? "Save" : finalStep ? "Save" : "Next"}
-          </Button>
-        </AppGrid>
+
+        {(activeStep < 4 ||
+          (activeStep === 4 &&
+            !(show === "true" && selectedFiles.length === 0))) && (
+            <AppGrid item size={{ xs: 2 }}>
+              <Button
+                fullWidth
+                size='large'
+                color="info"
+                type="submit"
+                onClick={() => handleSubmit()}
+                variant="contained"
+              >
+                {finalStep ? "Save" : "Next"}
+              </Button>
+            </AppGrid>
+          )}
       </AppRowBox>
     );
   };
@@ -247,6 +265,7 @@ const OnboardingIndex = ({ refetch }) => {
   });
   const {
     values,
+    dirty,
     errors,
     touched,
     setFieldValue,
@@ -256,18 +275,6 @@ const OnboardingIndex = ({ refetch }) => {
     resetForm,
   } = formik;
 
-  const handleOpen = () => {
-    setOpen(true);
-    resetOnboarding();
-    let queryParams = "?onboarding=true";
-    if (!currentStep) {
-      queryParams = "?onboarding=true&cs=0";
-    }
-    navigate({
-      pathname: location.pathname,
-      search: !open ? queryParams : "",
-    });
-  };
 
   return (
     <>
@@ -281,6 +288,7 @@ const OnboardingIndex = ({ refetch }) => {
         Add New Community
       </Button>
       <AppModal
+        confirmModal={dirty || activeStep}
         cardHeight={onBoardingStepper[activeStep]?.height || undefined}
         open={open}
         onClose={handleClose}
@@ -316,13 +324,13 @@ const OnboardingIndex = ({ refetch }) => {
         <Backdrop
           sx={{
             color: "#fff",
-            zIndex: (theme) => theme.zIndex.drawer + 1,
+            zIndex: (theme) => theme.zIndex.modal + 1,
           }}
           open={communityCreationLoading}
         >
           <CircularLoader />
         </Backdrop>
-      </AppModal>
+      </AppModal >
     </>
   );
 };

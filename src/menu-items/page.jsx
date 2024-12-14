@@ -7,6 +7,7 @@ import InsuranceIcon from 'assets/images/icons/NavIcons/InsuranceIcon';
 import PaymentIcon from 'assets/images/icons/NavIcons/PaymentIcon';
 import PropertyIcon from 'assets/images/icons/NavIcons/PropertyIcon';
 import SettingsIcon from 'assets/images/icons/NavIcons/SettingsIcon';
+import TaskIcon from 'assets/images/icons/NavIcons/TaskIcon';
 // icons
 const icons = {
   SettingsIcon,
@@ -16,7 +17,8 @@ const icons = {
   ClaimsIcon,
   HelpIcon,
   PaymentIcon,
-  DocumentIcon
+  DocumentIcon,
+  TaskIcon
 };
 
 // ==============================|| MENU ITEMS - EXTRA PAGES ||============================== //
@@ -39,29 +41,64 @@ const pages = {
           title: 'Communities',
           url: '/onboarding',
           type: "item",
-          // icon: icons.HelpIcon,
         }, , {
           id: 'documents',
           title: 'Documents',
           url: '/documents',
           type: "item",
-          // icon: icons.HelpIcon,
+          disable: true,
+
         },
         {
           id: 'assets',
           title: 'Assets',
           url: '/community-assets',
           type: "item",
-          // icon: icons.HelpIcon,
+          disable: true,
+
         },
         {
           id: 'hoa',
           title: 'HOA',
           url: '/community-hoa',
           type: "item",
-          // icon: icons.HelpIcon,
+          disable: true,
+
         }]
 
+      },
+      {
+        id: 'documents',
+        title: 'Documents',
+        url: '/documents',
+        disable: true,
+        icon: icons.DocumentIcon,
+        type: "collapse",
+        children: [{
+          id: 'repository',
+          title: 'Repository',
+          url: '/repository',
+          type: "item",
+          showTitle: true,
+          // icon: icons.HelpIcon,
+        }, , {
+          id: 'coi',
+          title: 'COI',
+          url: '/coi',
+          type: "item",
+          showTitle: true,
+          // icon: icons.HelpIcon,
+        },
+        ]
+      },
+      {
+        id: 'task',
+        title: 'Task Management',
+        url: '/tasks',
+        icon: icons.TaskIcon,
+        type: "item",
+        disable: true,
+        badge: 2
       }, {
         id: 'property',
         title: 'Property',
@@ -90,39 +127,8 @@ const pages = {
         disable: true,
         icon: icons.ClaimsIcon,
       },
-      {
-        id: 'documents-repository',
-        title: 'Documents Repository',
-        url: '/documents-repository',
-        icon: icons.DocumentIcon,
-        type: "collapse",
-        children: [{
-          id: 'all_documents',
-          title: 'All Documents',
-          url: '/all-documents',
-          type: "item",
-          disable: true,
-          showTitle: true,
-          // icon: icons.HelpIcon,
-        }, , {
-          id: 'coi',
-          title: 'COI',
-          url: '/coi',
-          type: "item",
-          showTitle: true,
-          // icon: icons.HelpIcon,
-        },
-        ]
-      },
-      {
-        id: 'payments',
-        title: 'Payments',
-        url: '/payments',
-        disable: true,
-        icon: icons.PaymentIcon,
-        type: "item",
-        badge: 2
-      },
+
+
       {
         id: 'analytics',
         title: 'Analytics',
@@ -138,7 +144,6 @@ const pages = {
         disable: true,
         icon: icons.SettingsIcon,
         type: "item",
-        target: true
       },
       {
         id: 'help-support',
@@ -147,7 +152,6 @@ const pages = {
         disable: true,
         icon: icons.HelpIcon,
         type: "item",
-        target: true
       }
 
     ]

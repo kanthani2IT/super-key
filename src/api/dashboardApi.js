@@ -22,7 +22,11 @@ const getCompletedTask = async () => {
 const getActiveAndCompletedTaskByFilter = async (body) => {
   const response = await http({
     method: "POST",
-    url: DASHBOARD.getActiveAndCompletedTaskByFilter(body.sort, body.orderBy),
+    url: DASHBOARD.getActiveAndCompletedTaskByFilter(
+      body.sort,
+      body.orderBy,
+      body.id
+    ),
     data: body.data,
   });
   return response;

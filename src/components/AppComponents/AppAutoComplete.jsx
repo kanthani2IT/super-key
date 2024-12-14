@@ -50,7 +50,7 @@ const filterOption = createFilterOptions();
 const AppAutoComplete = ({
   freeSolo = true,
   options = [],
-  nameParam = "label",
+  nameParam = "name",
   valueParam = "id",
   placeholder = "type",
   inputValue,
@@ -68,6 +68,7 @@ const AppAutoComplete = ({
   disabled,
   readOnly = false,
   focused,
+  size = 'small',
   ...props
 }) => {
   const [open, setOpen] = useState(false);
@@ -104,6 +105,7 @@ const AppAutoComplete = ({
 
   return (
     <Autocomplete
+
       {...props}
       disableClearable={isLoading || disableClearable}
       name={name}
@@ -138,9 +140,11 @@ const AppAutoComplete = ({
 
         return filtered;
       }}
+
+      size={size}
       renderInput={(params) => (
         <TextField
-        focused={focused}
+          focused={focused}
           multiline
           variant={variant}
           {...params}
