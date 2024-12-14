@@ -199,6 +199,7 @@ const OnboardingIndex = ({ refetch }) => {
           {activeStep ? (
             <Button
               fullWidth
+              size="large"
               color="secondary"
               onClick={handleBack}
               variant="outlined"
@@ -212,6 +213,8 @@ const OnboardingIndex = ({ refetch }) => {
         <AppGrid item size={{ xs: 2 }}>
           <Button
             fullWidth
+            size="large"
+
             color="info"
             type="submit"
             onClick={() => handleSubmit()}
@@ -283,7 +286,7 @@ const OnboardingIndex = ({ refetch }) => {
         Add New Community
       </Button>
       <AppModal
-        confirmModal={dirty}
+        confirmModal={dirty || activeStep}
         cardHeight={onBoardingStepper[activeStep]?.height || undefined}
         open={open}
         onClose={handleClose}
@@ -319,7 +322,7 @@ const OnboardingIndex = ({ refetch }) => {
         <Backdrop
           sx={{
             color: "#fff",
-            zIndex: (theme) => theme.zIndex.drawer + 1,
+            zIndex: (theme) => theme.zIndex.modal + 1,
           }}
           open={communityCreationLoading}
         >

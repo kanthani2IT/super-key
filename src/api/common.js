@@ -57,10 +57,22 @@ const getAllDocTypes = async (queries) => {
   }
 };
 
+const getAllVerunaUsers = async (queries) => {
+  try {
+    const requestUrl = addQueryParams(COMMON.getUsers, queries);
+    const response = await getRequest(requestUrl);
+    return response;
+  } catch (error) {
+    console.error("Error fetching document types:", error);
+    throw error;
+  }
+};
+
 export const commonApi = {
   getAllLocation,
   getAllCommunity,
   getAllCommunityManager,
   getAllPropertyManager,
   getAllDocTypes,
+  getAllVerunaUsers,
 };
