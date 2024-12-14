@@ -61,7 +61,7 @@ export default function TableCell(theme) {
           fontWeight: 700,
           position: "sticky",
           top: 0,
-          zIndex: theme.zIndex.appBar,
+          zIndex: theme.zIndex.appBar - 1,
           backgroundColor: theme.palette.background.paper,
           ...commonCell,
         },

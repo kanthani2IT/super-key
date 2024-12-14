@@ -1,13 +1,14 @@
 import { Drawer } from "@mui/material";
 
 import AppGrid from "components/AppComponents/AppGrid";
-import { useCommunityList, useDeleteCommunityById } from "hooks/useCommunity";
+import { useCommunityList, useDeleteCommunityById, useOffBoardCommunity } from "hooks/useCommunity";
 import CommunityTable from "pages/community/CommunityTable";
 import { RadiusStyledButton } from "components/StyledComponents";
 import { useEffect, useState } from "react";
 import { useDebounceFn } from "utils/helpers";
 import EditCommunity from "./edit-community";
 import OnboardingIndex from "./onboarding";
+import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
 
 const initialValue = {
   page: 1,
@@ -24,10 +25,9 @@ const CommunityOnboarding = () => {
   const [edit, setEdit] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [filters, setFilters] = useState(initialValue);
+  const [modal, setModal] = useState(false);
+  const [offboardData, setOffboardData]=useState([])
 
-  // const { refetch } = useCommunityListQuery();
-
-  const { mutate: deleteUserById } = useDeleteCommunityById();
   const {
     mutate: getCommunityList,
     data: communityListData,
@@ -39,6 +39,8 @@ const CommunityOnboarding = () => {
     fetchData(filters.sort, filters.search, newPage);
     setPage(newPage);
     setFilters({ ...filters, page: newPage })
+    handleSelectionChange([])
+    setOffboardData([])
   };
   //handlers
   const openDrawer = (id) => {
@@ -49,16 +51,27 @@ const CommunityOnboarding = () => {
     setEdit(false);
   };
 
+  const handleModal = () => {
+    setModal(!modal);
+  };
+
+  const { mutate } = useOffBoardCommunity();
   const handleOffBoard = () => {
-    const payload = {
-      mappings: [
-        {
-          communityId: communityData?.communityId,
-          cmcId: communityData?.communityId,
-        },
-      ],
-    };
-    // deleteUserById({ id: communityData?.communityId, body: payload });
+    // const payload = {
+    //   mappings: [
+    //     {
+    //       communityId: communityData?.communityId,
+    //       cmcId: communityData?.communityId,
+    //     },
+    //   ],
+    // };
+console.log(offboardData,"$$$$")
+
+    const payload ={ mappings: offboardData, };
+    mutate(payload);
+    setModal(!modal);
+    handleSelectionChange([])
+    setOffboardData([])
   };
 
   const handleSelectionChange = (selected) => {
@@ -143,7 +156,7 @@ const CommunityOnboarding = () => {
               width="227px"
               height="50px"
               borderRadius="10px"
-              // onClick={handleOffBoard}
+              onClick={handleModal}
               sx={{
                 border: "0.5px solid #E12929",
               }}
@@ -158,6 +171,7 @@ const CommunityOnboarding = () => {
 
       <AppGrid item size={{ xs: 12 }}>
         <CommunityTable
+        setOffboardData={setOffboardData}
           height={"80vh"}
           isLoading={communityListLoading}
           communityList={communityListData?.data || []}
@@ -173,6 +187,8 @@ const CommunityOnboarding = () => {
           page={page}
           selectedRows={selectedRows}
           setPage={setPage}
+          rowSecondKey={`communityManager.managerId`}
+          offboardData={offboardData}
         />
       </AppGrid>
       <Drawer sx={{
@@ -186,7 +202,17 @@ const CommunityOnboarding = () => {
           refetch={refetch}
         />
       </Drawer>
-
+      <ConfirmationModal
+        open={modal}
+        onClose={handleModal}
+        message={
+          "Do you want to off board selected communities?"
+        }
+        confirmLabel={"Yes"}
+        cancelLabel={"No"}
+        onConfirm={handleOffBoard}
+        onCancel={handleModal}
+      />
     </AppGrid>
   );
 };

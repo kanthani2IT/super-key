@@ -10,10 +10,10 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { BoldTypographyHeader } from "components/StyledComponents";
+import { BoldTypographyHeader, Image } from "components/StyledComponents";
 import AppPagination from "./AppPagination";
 import AppSkeleton from "./AppSkeleton";
-
+import noData from 'assets/images/icons/noData.svg'
 const AppTable = ({
   isLoading,
   columns,
@@ -27,21 +27,48 @@ const AppTable = ({
   totalItems,
   pageSize,
   onPageChange,
-  selected = []
+  selected = [],
+  rowSecondKey="id",
+  selectedData=null,
+  offboardData,
 }) => {
 
   const rowCount = rows.length;
   const numSelected = selected.length;
 
   const onSelectAllClick = (event) => {
+    console.log(event,"event target")
     const newSelected = event.target.checked
       ? rows.map((row) => row[rowKey])
       : [];
 
     onSelectionChange?.(newSelected);
+    
+    if(event.target.checked){
+// Extract the result based on matching communityId and mapping the managerId
+const result = newSelected?.map(communityId => {
+  const community = rows.find(item => item.communityId === communityId);
+  if (community&&community?.communityManager?.managerId) {
+    return {
+      cmcId: community?.communityManager?.managerId||"234567",
+      communityId: communityId
+    };
+  }
+  return null;
+}).filter(item => item !== null);
+selectedData([...offboardData,...result])
+    }else{
+      console.log("first method correction")
+      const currentPageData=rows.map((row) => row[rowKey])
+      const filteredData = offboardData.filter(item => !currentPageData.includes(item.communityId));
+      selectedData([])
+      console.log(filteredData,offboardData,currentPageData,"first method correction")
+      
+    }
+    console.log(newSelected,"$$$ newSelected")
   };
 
-  const handleRowClick = (id) => {
+  const handleRowClick = (id, secondId) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -60,7 +87,24 @@ const AppTable = ({
 
 
     onSelectionChange?.(newSelected);
+    if(selectedData){
+      let isAlreadySelectedData=offboardData.find(item => item.communityId == id);
+      if(isAlreadySelectedData){
+        const filteredData = offboardData.filter(item => item.communityId !== id);
+        selectedData(filteredData)
+        console.log(offboardData, selectedIndex,"$$$ data")
+      }else{
+        let data={
+          cmcId:secondId,
+          communityId:id,
+        }
+        selectedData([...offboardData,data])
+      }
+      
+    }
   };
+
+  console.log(rowCount, numSelected,rowCount,totalItems,"$$$ row count, 333" )
   return (
     <TableContainer sx={{ maxHeight: "calc(100vh - 300px)" }}>
       <Table stickyHeader>
@@ -110,7 +154,7 @@ const AppTable = ({
                       color="success"
                       padding="0px"
                       checked={isSelected}
-                      onClick={() => handleRowClick(row[rowKey])}
+                      onClick={() => handleRowClick(row[rowKey], row[`communityManager`][`managerId`])}
                     />
                   </TableCell>
                   {columns.map((col, idx) => (
@@ -135,10 +179,11 @@ const AppTable = ({
             <TableRow>
               <TableCell colSpan={columns.length + 1} align="center">
                 <Box sx={{ py: 2 }}>
-                  <Typography variant="body1" color="textSecondary">
-                    {noDataText}
-                  </Typography>
+                  <Image width={'40%'} height={'10%'} src={noData} />
                 </Box>
+                <Typography variant="body1" color="textSecondary">
+                  {noDataText}
+                </Typography>
               </TableCell>
             </TableRow>
           )}

@@ -16,13 +16,13 @@ const options = [
 
 const CommunityAddress = ({ handleChange, formValues, touched, errors }) => {
   const [address, setAddress] = useState("usa");
-  
+
   const onSearch = useDebounceFn((searchString) => {
-    if(searchString.length>=3)
-    setAddress(searchString || "usa"); // Fallback to the initial static value
+    if (searchString.length >= 3)
+      setAddress(searchString || "usa"); // Fallback to the initial static value
   }, 1000);
 
-  const { data: addressList, isLoading:isAddressFetching } = useLocationsQuery(address);
+  const { data: addressList, isLoading: isAddressFetching } = useLocationsQuery(address);
 
 
   return (
@@ -42,6 +42,7 @@ const CommunityAddress = ({ handleChange, formValues, touched, errors }) => {
           label={"What is the address of your community?"}
         >
           <AppAutoComplete
+            size="medium"
             valueParam="description"
             nameParam="description"
             name="communityAddress"

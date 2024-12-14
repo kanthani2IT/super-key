@@ -1,7 +1,8 @@
-import { TextField, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import AppAutoComplete from "components/AppComponents/AppAutoComplete";
 import AppGrid from "components/AppComponents/AppGrid";
 import AppLabelComponent from "components/AppComponents/AppLabelComponent";
+import AppTextField from "components/AppComponents/AppTextField";
 import { StyledTypography } from "components/StyledComponents";
 import {
   useCommunityManagersQuery,
@@ -101,7 +102,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
         </AppGrid>
         <AppGrid item size={mobileSize}>
           <AppLabelComponent label={"Mobile Number"}>
-            <TextField
+            <AppTextField
               type="number"
               focused={false}
               placeholder="+123423355"
@@ -126,7 +127,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
 
   const handleManger = (event) => {
     const { name, value } = event.target;
-    const [id, key] = name.split(".");
+    const [id] = name.split(".");
     let exitingValue = formValues[id];
 
     if (value) {
@@ -182,7 +183,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
           </AppGrid>
           <AppGrid item size={size}>
             <AppLabelComponent label={"Email"}>
-              <TextField
+              <AppTextField
                 inputProps={{ readOnly: true }}
                 required
                 id="communityManager"
@@ -203,20 +204,21 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
                 focused={false}
 
               />
-            </AppLabelComponent>
-          </AppGrid>
+            </AppLabelComponent >
+          </AppGrid >
 
-          {Mobile({
-            key: "communityManager",
-            values: values.communityManager,
-            mobileError:
-              touched?.communityManager?.phone &&
-              errors?.communityManager?.phone,
-            handleBlur,
-            handleChange,
-          })}
-        </AppGrid>
-      </AppGrid>
+          {
+            Mobile({
+              key: "communityManager",
+              values: values.communityManager,
+              mobileError:
+                touched?.communityManager?.phone &&
+                errors?.communityManager?.phone,
+              handleBlur,
+              handleChange,
+            })}
+        </AppGrid >
+      </AppGrid >
 
       <AppGrid item container size={{ xs: 12 }} rowSpacing={3}>
         <AppGrid item container spacing={2}>
@@ -246,7 +248,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
           </AppGrid>
           <AppGrid item size={size}>
             <AppLabelComponent label={"Email"}>
-              <TextField
+              <AppTextField
                 inputProps={{ readOnly: true }}
                 focused={false}
 
@@ -266,19 +268,20 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
                   errors.propertyManager?.email
                 }
               />
-            </AppLabelComponent>
-          </AppGrid>
+            </AppLabelComponent >
+          </AppGrid >
 
-          {Mobile({
-            key: "propertyManager",
-            values: values.propertyManager,
-            mobileError:
-              touched?.propertyManager?.phone && errors?.propertyManager?.phone,
-            handleBlur,
-            handleChange,
-          })}
-        </AppGrid>
-      </AppGrid>
+          {
+            Mobile({
+              key: "propertyManager",
+              values: values.propertyManager,
+              mobileError:
+                touched?.propertyManager?.phone && errors?.propertyManager?.phone,
+              handleBlur,
+              handleChange,
+            })}
+        </AppGrid >
+      </AppGrid >
 
       {/* <AppGrid item container size={{ xs: 12 }} rowSpacing={3}>
         <AppGrid item container spacing={2}>
@@ -332,7 +335,7 @@ const CommunityDetails = ({ formValues, errors, touched, setFieldValue }) => {
 
         </AppGrid>
       </AppGrid> */}
-    </AppGrid>
+    </AppGrid >
   );
 };
 

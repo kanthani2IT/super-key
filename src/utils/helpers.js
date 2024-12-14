@@ -40,3 +40,15 @@ export function useDebounceFn(fn, delay = 500) {
     }, delay);
   };
 }
+export const removeExtraSpaces = (input = "") => {
+  return input.replace(/^\s+/, "").replace(/\s+/g, " ");
+};
+
+// Dollar formatting function
+export const formatAsDollar = (number) => {
+  return `${new Intl.NumberFormat("en-US").format(number)}`;
+};
+
+export const compareeJson = (a, b) => {
+  return JSON.stringify(a) !== JSON.stringify(b);
+};

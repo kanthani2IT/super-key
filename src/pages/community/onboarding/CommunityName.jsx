@@ -76,6 +76,7 @@ const CommunityName = ({ handleChange, formValues, touched, errors }) => {
           label={"What is the name of your community?"}
         >
           <AppAutoComplete
+            size="medium"
             valueParam="communityId"
             nameParam="name"
             name="communityName"

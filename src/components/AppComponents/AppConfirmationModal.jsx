@@ -1,4 +1,4 @@
-import { Card, CardActions, CardContent, Typography } from "@mui/material";
+import { Card, CardActions, CardContent, CardHeader, Typography } from "@mui/material";
 
 import { RadiusStyledButton } from "components/StyledComponents";
 import AppModal from "./AppModal";
@@ -17,10 +17,10 @@ const ConfirmationModal = ({
   return (
     <AppModal open={open} onClose={onClose} height={height} align={align}>
       <Card sx={{ boxShadow: "none" }}>
-        <CardContent sx={{ textAlign: "center" }}>
-          <Typography variant="h5">{message}</Typography>
-        </CardContent>
-        <CardActions sx={{ justifyContent: "center" }}>
+        <CardHeader title={<Typography variant="h5">{message}</Typography>} />
+
+
+        <CardActions sx={{ justifyContent: "center", mt: 1 }}>
           <RadiusStyledButton
             onClick={onConfirm}
             color="info"

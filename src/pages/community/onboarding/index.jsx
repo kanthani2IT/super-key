@@ -66,7 +66,7 @@ const onBoardingStepper = [
     height: "60vh",
   },
   {
-    title: "Insurance Documentation",
+    title: "Insurance Documents",
     component: InsuranceUpload,
     height: "auto",
     width: "60%",
@@ -179,6 +179,19 @@ const OnboardingIndex = ({ refetch }) => {
     resetOnboarding();
   };
 
+  const handleOpen = () => {
+    setOpen(true);
+    resetOnboarding();
+    let queryParams = "?onboarding=true";
+    if (!currentStep) {
+      queryParams = "?onboarding=true&cs=0";
+    }
+    navigate({
+      pathname: location.pathname,
+      search: !open ? queryParams : "",
+    });
+  };
+
   const footer = () => {
     return (
       <AppRowBox>
@@ -247,6 +260,7 @@ const OnboardingIndex = ({ refetch }) => {
   });
   const {
     values,
+    dirty,
     errors,
     touched,
     setFieldValue,
@@ -256,18 +270,6 @@ const OnboardingIndex = ({ refetch }) => {
     resetForm,
   } = formik;
 
-  const handleOpen = () => {
-    setOpen(true);
-    resetOnboarding();
-    let queryParams = "?onboarding=true";
-    if (!currentStep) {
-      queryParams = "?onboarding=true&cs=0";
-    }
-    navigate({
-      pathname: location.pathname,
-      search: !open ? queryParams : "",
-    });
-  };
 
   return (
     <>
@@ -281,6 +283,7 @@ const OnboardingIndex = ({ refetch }) => {
         Add New Community
       </Button>
       <AppModal
+        confirmModal={dirty}
         cardHeight={onBoardingStepper[activeStep]?.height || undefined}
         open={open}
         onClose={handleClose}
@@ -322,7 +325,7 @@ const OnboardingIndex = ({ refetch }) => {
         >
           <CircularLoader />
         </Backdrop>
-      </AppModal>
+      </AppModal >
     </>
   );
 };

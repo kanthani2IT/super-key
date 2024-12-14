@@ -42,7 +42,7 @@ export default function ComponentsOverrides(theme) {
     TableCell(theme),
     Tabs(theme),
     Typography(theme),
-    TextField(),
+    TextField(theme),
     Select(),
     Modal(theme),
     Divider(theme),
