@@ -200,6 +200,7 @@ const OnboardingIndex = ({ refetch }) => {
             <Button
               fullWidth
               size="large"
+
               color="secondary"
               onClick={handleBack}
               variant="outlined"
@@ -210,22 +211,23 @@ const OnboardingIndex = ({ refetch }) => {
             <div></div>
           )}
         </AppGrid>
-        <AppGrid item size={{ xs: 2 }}>
-          <Button
-            fullWidth
-            size="large"
 
-            color="info"
-            type="submit"
-            onClick={() => handleSubmit()}
-            variant="contained"
-            disabled={
-              activeStep === 4 && show == "true" && selectedFiles.length == 0
-            }
-          >
-            {selectedFiles.length > 0 ? "Save" : finalStep ? "Save" : "Next"}
-          </Button>
-        </AppGrid>
+        {(activeStep < 4 ||
+          (activeStep === 4 &&
+            !(show === "true" && selectedFiles.length === 0))) && (
+            <AppGrid item size={{ xs: 2 }}>
+              <Button
+                fullWidth
+                size='large'
+                color="info"
+                type="submit"
+                onClick={() => handleSubmit()}
+                variant="contained"
+              >
+                {finalStep ? "Save" : "Next"}
+              </Button>
+            </AppGrid>
+          )}
       </AppRowBox>
     );
   };

@@ -9,10 +9,9 @@ import AppRowBox from "components/AppComponents/AppRowBox";
 import { RadiusStyledButton } from "components/StyledComponents";
 import { useFormik } from "formik";
 import {
-  useDeleteCommunityById,
   useGetCommunityById,
-  useUpdateCommunityById,
   useOffBoardCommunity,
+  useUpdateCommunityById
 } from "hooks/useCommunity";
 import {
   useCommunityManagersQuery,
@@ -21,12 +20,11 @@ import {
 
 import { useEffect, useState } from "react";
 
+import AppTextField from "components/AppComponents/AppTextField";
 import { countryPhoneCodes, insuranceOptions } from "utils/constants";
 import { useDebounceFn } from "utils/helpers";
 import * as Yup from "yup";
 import { getContactInfo, removeExtraSpaces } from "../onboarding/utils";
-import AppTextField from "components/AppComponents/AppTextField";
-const defaultCountryCode = { label: "+1", value: "+1" };
 
 const initialValues = {
   addressDetails: {
@@ -92,7 +90,6 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     communityManager: "",
     propertyManager: "",
   });
-  const [communityDetails, setCommunityDetails] = useState({});
   const successHandler = () => {
     refetch();
     onClose();
@@ -102,7 +99,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   );
   const { mutate: updateCommunity, isLoading: isUpdating } =
     useUpdateCommunityById(successHandler);
-  const { mutate: deleteUserById } = useDeleteCommunityById();
+
 
   const { data: communityManagerData } = useCommunityManagersQuery(
     seachString.communityManager
@@ -139,8 +136,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     setFieldValue,
     setValues,
     handleSubmit,
-    setTouched,
-    setErrors,
+
     handleChange,
   } = formik;
   const onReset = () => {
@@ -200,7 +196,6 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   useEffect(() => {
     if (communityInfo?.data) {
       const data = communityInfo?.data;
-      setCommunityDetails(data);
       updateCommunityFields(data);
     }
   }, [communityInfo]);
@@ -261,9 +256,9 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
         },
       ],
     };
-    console.log(payload);
     mutate(payload);
     setModal(false);
+    successHandler()
   };
 
   const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 };
@@ -327,11 +322,9 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               ? "Do you want to off-board the community?"
               : "Are you sure you want to discard the changes?"
           }
-          confirmLabel={offBoard ? "Yes" : "No"}
-          cancelLabel={offBoard ? "No" : "Yes, Discard"}
-          // onConfirm={offBoard ? handleModalDiscard : handleModal}
-          // onCancel={handleModalDiscard}
-          onConfirm={offBoard ? handleOffBoard : handleModal}
+          confirmLabel={offBoard ? "Yes" : "Yes,Discard"}
+          cancelLabel={"No"}
+          onConfirm={offBoard ? handleOffBoard : handleModalDiscard}
           onCancel={handleModal}
         />
       </>
