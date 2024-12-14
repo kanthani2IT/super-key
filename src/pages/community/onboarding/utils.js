@@ -54,5 +54,9 @@ export const removeExtraSpaces = (input = "") => {
 
 // Dollar formatting function
 export const formatAsDollar = (number) => {
-  return `${new Intl.NumberFormat('en-US').format(number)}`;
+  return `${new Intl.NumberFormat("en-US").format(number)}`;
+};
+
+export const generateUniqueId = () => {
+  return `id-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 };

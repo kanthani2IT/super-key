@@ -11,8 +11,27 @@ import { useFormik } from "formik";
 import { useOnboardCommunity } from "hooks/useCommunity";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { bulkUploadData, draftData } from "utils/constants";
 import * as Yup from "yup";
 import { transformDocuments } from "./utils";
+
+const bulkUploadValidationSchema = Yup.object({
+  editedList: Yup.array().of(
+    Yup.object().shape({
+      communityName: Yup.string().trim().required("Community Name is required"),
+      communityEmail: Yup.string()
+        .trim()
+        .required("Community Email is required"),
+      communityManagerName: Yup.string()
+        .trim()
+        .required("Community Manager Name is required"),
+      propertyManagerName: Yup.string()
+        .trim()
+        .required("Property Manager Name is required"),
+      address: Yup.string().trim().required("Address is required"),
+    })
+  ),
+});
 
 const AddNewCommunity = React.lazy(() => import("./AddNewCommunity"));
 const CommunityAddress = React.lazy(() => import("./CommunityAddress"));
@@ -114,8 +133,11 @@ const multiDefaultValue = {
 };
 
 const initialBulkUploadValues = {
-  fileData: [],
+  fileData: bulkUploadData,
+  // fileData: [],
   editedList: [],
+  // draftData: [],
+  draftData: draftData,
 };
 
 const OnboardingIndex = ({ refetch }) => {
@@ -152,10 +174,20 @@ const OnboardingIndex = ({ refetch }) => {
 
   const multiCommunityFormik = useFormik({
     initialValues: initialBulkUploadValues,
+    validationSchema: bulkUploadValidationSchema,
   });
 
-  const { values: bulkUploadValues, setFieldValue: setBulkUploadFieldValue } =
-    multiCommunityFormik;
+  const {
+    values: bulkUploadValues,
+    setFieldValue: setBulkUploadFieldValue,
+    setValues: setBulkUploadValues,
+    handleBlur: handleBulkUploadBlur,
+    handleChange: handleBulkUploadChange,
+    handleSubmit: handleBulkUploadSubmit,
+    errors: bulkUploadError,
+    touched: bulkUploadTouched,
+    isValid: isBulkUploadValid,
+  } = multiCommunityFormik;
 
   const successHandler = () => {
     resetOnboarding();
@@ -249,6 +281,7 @@ const OnboardingIndex = ({ refetch }) => {
       pathname: location.pathname,
       search: "",
     });
+    setBulkUploadValues(initialBulkUploadValues);
     setOnboardingType(defaultValue.onboardingType);
     setActiveStep(defaultValue.activeStep);
     setMultiActiveStep(multiDefaultValue.activeStep);
@@ -275,7 +308,12 @@ const OnboardingIndex = ({ refetch }) => {
             type="submit"
             onClick={handleNextMulti}
             variant="contained"
-            disabled={bulkUploadValues.fileData.length === 0 ? true : false}
+            disabled={
+              bulkUploadValues?.fileData?.length === 0 ||
+              bulkUploadValues?.editedList?.length > 0
+                ? true
+                : false
+            }
           >
             {multiActiveStep === 2 ? "Save" : "Next"}
           </Button>
@@ -378,6 +416,7 @@ const OnboardingIndex = ({ refetch }) => {
     if (!currentStep) {
       queryParams = "?onboarding=true&cs=0";
     }
+
     navigate({
       pathname: location.pathname,
       search: !open ? queryParams : "",
@@ -406,7 +445,16 @@ const OnboardingIndex = ({ refetch }) => {
             {multiOnBoardingStepper[multiActiveStep]?.component &&
               React.createElement(
                 multiOnBoardingStepper[multiActiveStep]?.component,
-                { bulkUploadValues, setBulkUploadFieldValue }
+                {
+                  bulkUploadValues,
+                  setBulkUploadFieldValue,
+                  handleBulkUploadBlur,
+                  handleBulkUploadChange,
+                  handleBulkUploadSubmit,
+                  bulkUploadError,
+                  bulkUploadTouched,
+                  isBulkUploadValid,
+                }
               )}
           </Suspense>
         </div>

@@ -2,166 +2,181 @@ import { Box, Button, IconButton, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import DeleteIcon from "assets/images/icons/CommunityIcons/DeleteIcon";
 import PreviewIcon from "assets/images/icons/CommunityIcons/PreviewIcon";
+import AppDialogBox from "components/AppComponents/AppDialogBox";
 import CustomUploadTable from "components/AppComponents/CustomUploadTable";
 import { StyledBulkTextField } from "components/AppComponents/StyledComponent";
+import { useMemo, useState } from "react";
 
 const pageSize = 5;
-const UploadCommunityList = ({ bulkUploadValues, setBulkUploadFieldValue }) => {
+const UploadCommunityList = ({
+  bulkUploadValues,
+  setBulkUploadFieldValue,
+  handleBulkUploadBlur,
+  handleBulkUploadChange,
+  handleBulkUploadSubmit,
+  bulkUploadError,
+  bulkUploadTouched,
+  isBulkUploadValid,
+}) => {
   const theme = useTheme();
-  const { fileData, editedList } = bulkUploadValues ?? {};
-  // const [page, setPage] = useState(0);
+  const { fileData, editedList, draftData } = bulkUploadValues ?? {};
+  const [page, setPage] = useState(1);
+  const [open, setOpen] = useState(false);
+  const [currentRow, setCurrentRow] = useState(null);
 
-  // const paginatedData = useMemo(() => {
-  //   const startIndex = page * pageSize;
-  //   return fileData?.slice(startIndex, startIndex + pageSize);
-  // }, [page, pageSize]);
-
-  // console.log(paginatedData);
+  const paginatedData = useMemo(() => {
+    return fileData?.slice((page - 1) * pageSize, page * pageSize);
+  }, [page, pageSize, fileData]);
 
   const columns = [
     {
-      field: "CommunityName",
+      field: "communityName",
       headerName: "Community Name",
       flex: 1,
       renderComponent: (row, index) => {
         if (row?.isEdit) {
           return (
             <StyledBulkTextField
-              value={editedList?.[row?.index]?.CommunityName}
-              name={`editedList[${row.index}].CommunityName`}
-              onChange={(e) =>
-                handleChange(e.target.value, "CommunityName", row?.index)
-              }
               variant="outlined"
+              value={editedList?.[row?.index]?.communityName}
+              name={`editedList[${row.index}].communityName`}
+              onChange={handleBulkUploadChange}
+              onBlur={handleBulkUploadBlur}
+              error={
+                Boolean(
+                  bulkUploadError?.editedList?.[row?.index]?.communityName
+                ) && bulkUploadTouched?.editedList?.[row?.index]?.communityName
+              }
+              helperText={
+                bulkUploadTouched?.editedList?.[row?.index]?.communityName &&
+                bulkUploadError?.editedList?.[row?.index]?.communityName
+              }
             />
           );
         } else {
           return (
             <Typography fontWeight={600} color="black">
-              {row?.CommunityName}
+              {row?.communityName}
             </Typography>
           );
         }
       },
     },
     {
-      field: "CommunityEmail",
+      field: "communityEmail",
       headerName: "Community Email",
       renderComponent: (row, index) => {
         if (row?.isEdit) {
           return (
             <StyledBulkTextField
-              value={editedList?.[row?.index]?.CommunityEmail}
-              name={`editedList[${row.index}].CommunityEmail`}
-              onChange={(e) =>
-                handleChange(e.target.value, "CommunityEmail", row?.index)
-              }
               variant="outlined"
+              value={editedList?.[row?.index]?.communityEmail}
+              name={`editedList[${row.index}].communityEmail`}
+              onChange={handleBulkUploadChange}
+              onBlur={handleBulkUploadBlur}
+              error={
+                Boolean(
+                  bulkUploadError?.editedList?.[row?.index]?.communityEmail
+                ) && bulkUploadTouched?.editedList?.[row?.index]?.communityEmail
+              }
+              helperText={
+                bulkUploadTouched?.editedList?.[row?.index]?.communityEmail &&
+                bulkUploadError?.editedList?.[row?.index]?.communityEmail
+              }
             />
           );
         } else {
-          return <Typography>{row?.CommunityEmail}</Typography>;
+          return <Typography>{row?.communityEmail}</Typography>;
         }
       },
     },
     {
-      field: "ContactNo",
-      headerName: "Contact No",
+      field: "communityManagerName",
+      headerName: "Community Manager Name",
       renderComponent: (row, index) => {
         if (row?.isEdit) {
-          return (
-            <StyledBulkTextField
-              value={editedList?.[row?.index]?.ContactNo}
-              name={`editedList[${row.index}].ContactNo`}
-              onChange={(e) =>
-                handleChange(e.target.value, "ContactNo", row?.index)
-              }
-              variant="outlined"
-            />
-          );
+          // return (
+          //   <StyledBulkTextField
+          //     variant="outlined"
+          //     value={editedList?.[row?.index]?.communityManagerName}
+          //     name={`editedList[${row.index}].communityManagerName`}
+          //     onChange={handleBulkUploadChange}
+          //     onBlur={handleBulkUploadBlur}
+          //     error={
+          //       Boolean(
+          //         bulkUploadError?.editedList?.[row?.index]
+          //           ?.communityManagerName
+          //       ) &&
+          //       bulkUploadTouched?.editedList?.[row?.index]
+          //         ?.communityManagerName
+          //     }
+          //     helperText={
+          //       bulkUploadTouched?.editedList?.[row?.index]
+          //         ?.communityManagerName &&
+          //       bulkUploadError?.editedList?.[row?.index]?.communityManagerName
+          //     }
+          //   />
+          // );
         } else {
-          return <Typography>{row?.ContactNo}</Typography>;
+          return <Typography>{row?.communityManagerName?.username}</Typography>;
         }
       },
     },
 
     {
-      field: "InsurancrStatus",
-      headerName: "Insurance Status",
+      field: "propertyManagerName",
+      headerName: "Property Manager Name",
       renderComponent: (row, index) => {
         if (row?.isEdit) {
-          return (
-            <StyledBulkTextField
-              value={editedList?.[row?.index]?.InsurancrStatus}
-              name={`editedList[${row.index}].InsurancrStatus`}
-              onChange={(e) =>
-                handleChange(e.target.value, "InsurancrStatus", row?.index)
-              }
-              variant="outlined"
-            />
-          );
+          // return (
+          //   <StyledBulkTextField
+          //     variant="outlined"
+          //     value={editedList?.[row?.index]?.propertyManagerName}
+          //     name={`editedList[${row.index}].propertyManagerName`}
+          //     onChange={handleBulkUploadChange}
+          //     onBlur={handleBulkUploadBlur}
+          //     error={
+          //       Boolean(
+          //         bulkUploadError?.editedList?.[row?.index]?.propertyManagerName
+          //       ) &&
+          //       bulkUploadTouched?.editedList?.[row?.index]?.propertyManagerName
+          //     }
+          //     helperText={
+          //       bulkUploadTouched?.editedList?.[row?.index]
+          //         ?.propertyManagerName &&
+          //       bulkUploadError?.editedList?.[row?.index]?.propertyManagerName
+          //     }
+          //   />
+          // );
         } else {
-          return <Typography>{row?.InsurancrStatus}</Typography>;
+          return <Typography>{row?.propertyManagerName?.username}</Typography>;
         }
       },
     },
     {
-      field: "CommunityManager",
-      headerName: "Community Manager",
+      field: "address",
+      headerName: "Address (Address,City,StateCode, ZipCode, Country)",
       renderComponent: (row, index) => {
         if (row?.isEdit) {
           return (
             <StyledBulkTextField
-              value={editedList?.[row?.index]?.CommunityManager}
-              name={`editedList[${row.index}].CommunityManager`}
-              onChange={(e) =>
-                handleChange(e.target.value, "CommunityManager", row?.index)
-              }
               variant="outlined"
+              value={editedList?.[row?.index]?.address}
+              name={`editedList[${row.index}].address`}
+              onChange={handleBulkUploadChange}
+              onBlur={handleBulkUploadBlur}
+              error={
+                Boolean(bulkUploadError?.editedList?.[row?.index]?.address) &&
+                bulkUploadTouched?.editedList?.[row?.index]?.address
+              }
+              helperText={
+                bulkUploadTouched?.editedList?.[row?.index]?.address &&
+                bulkUploadError?.editedList?.[row?.index]?.address
+              }
             />
           );
         } else {
-          return <Typography>{row?.CommunityManager}</Typography>;
-        }
-      },
-    },
-    {
-      field: "PropertyMangerNo",
-      headerName: "PropertyManager No",
-      renderComponent: (row, index) => {
-        if (row?.isEdit) {
-          return (
-            <StyledBulkTextField
-              value={editedList?.[row?.index]?.PropertyMangerNo}
-              name={`editedList[${row.index}].PropertyMangerNo`}
-              onChange={(e) =>
-                handleChange(e.target.value, "PropertyMangerNo", row?.index)
-              }
-              variant="outlined"
-            />
-          );
-        } else {
-          return <Typography>{row?.PropertyMangerNo}</Typography>;
-        }
-      },
-    },
-    {
-      field: "Address",
-      headerName: "Address",
-      renderComponent: (row, index) => {
-        if (row?.isEdit) {
-          return (
-            <StyledBulkTextField
-              value={editedList?.[row?.index]?.Address}
-              name={`editedList[${row.index}].Address`}
-              onChange={(e) =>
-                handleChange(e.target.value, "Address", row?.index)
-              }
-              variant="outlined"
-            />
-          );
-        } else {
-          return <Typography>{row?.Address}</Typography>;
+          return <Typography>{row?.address}</Typography>;
         }
       },
     },
@@ -202,14 +217,16 @@ const UploadCommunityList = ({ bulkUploadValues, setBulkUploadFieldValue }) => {
     },
   ];
 
-  const handleEdit = (row, index) => {
-    const mapEditData = [...editedList, { id: index, ...row }];
+  const handleEdit = (row) => {
+    const mapEditData = [...editedList, row];
     const mapTableData = fileData?.map((item, idx) => {
-      if (index === idx) {
+      if (row?.documentId === item?.documentId) {
         return {
           ...item,
           isEdit: true,
-          index: mapEditData?.findIndex((el) => el.id === idx),
+          index: mapEditData?.findIndex(
+            (el) => el.documentId === item?.documentId
+          ),
         };
       } else return item;
     });
@@ -217,34 +234,56 @@ const UploadCommunityList = ({ bulkUploadValues, setBulkUploadFieldValue }) => {
     setBulkUploadFieldValue("fileData", mapTableData);
   };
 
-  const handleDelete = (row, index) => {};
-
-  const handleSave = (row, index) => {
-    const filterEditedList = editedList?.filter((el) => el.id !== index);
-    const findEditData = editedList?.find((el) => el?.id === index);
-    const mapTableData = fileData?.map((item, idx) => {
-      if (index === idx) {
-        return {
-          ...item,
-          CommunityName: findEditData?.CommunityName,
-          CommunityEmail: findEditData?.CommunityEmail,
-          ContactNo: findEditData?.ContactNo,
-          InsurancrStatus: findEditData?.InsurancrStatus,
-          CommunityManager: findEditData?.CommunityManager,
-          PropertyMangerNo: findEditData?.PropertyMangerNo,
-          Address: findEditData?.Address,
-          isEdit: false,
-          index: null,
-        };
-      } else return item;
-    });
-    setBulkUploadFieldValue("editedList", filterEditedList);
-    setBulkUploadFieldValue("fileData", mapTableData);
+  const handleDelete = (row) => {
+    setCurrentRow(row);
+    setOpen(true);
   };
 
-  const handleCancel = (row, index) => {
+  const handleSave = async (row) => {
+    const findEditData = editedList?.find(
+      (el) => el?.documentId === row?.documentId
+    );
+    const valid = checkManualValidation(findEditData);
+    if (isBulkUploadValid || valid) {
+      const filterEditedList = editedList?.filter(
+        (el) => el?.documentId !== row?.documentId
+      );
+      const mapTableData = fileData?.map((item, idx) => {
+        if (row?.documentId === item?.documentId) {
+          return {
+            ...item,
+            communityName: findEditData?.communityName,
+            communityEmail: findEditData?.communityEmail,
+            communityManagerName: findEditData?.communityManagerName,
+            propertyManagerName: findEditData?.propertyManagerName,
+            address: findEditData?.address,
+            isEdit: false,
+            index: null,
+          };
+        } else return item;
+      });
+      setBulkUploadFieldValue("editedList", filterEditedList);
+      setBulkUploadFieldValue("fileData", mapTableData);
+    }
+  };
+
+  const checkManualValidation = (value) => {
+    if (
+      value?.communityName?.trim()?.length === 0 ||
+      value?.communityEmail?.trim()?.length === 0 ||
+      value?.communityManagerName?.trim()?.length === 0 ||
+      value?.propertyManagerName?.trim()?.length === 0 ||
+      value?.address?.trim()?.length === 0
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const handleCancel = (row) => {
     const mapTableData = fileData?.map((item, idx) => {
-      if (index === idx) {
+      if (row?.documentId === item?.documentId) {
         return {
           ...item,
           isEdit: false,
@@ -252,26 +291,55 @@ const UploadCommunityList = ({ bulkUploadValues, setBulkUploadFieldValue }) => {
         };
       } else return item;
     });
-    const filterEditData = editedList?.filter((el) => el?.id !== index);
+    const filterEditData = editedList?.filter(
+      (el) => el?.documentId !== row?.documentId
+    );
     setBulkUploadFieldValue("editedList", filterEditData);
     setBulkUploadFieldValue("fileData", mapTableData);
   };
 
-  const handleChange = (value, field, index) => {
-    setBulkUploadFieldValue(`editedList[${index}].${field}`, value);
+  const handlePageChange = (e, newPage) => {
+    setPage(newPage);
   };
 
-  console.log({ editedList });
+  const handleCancelPopup = () => {
+    setCurrentRow(null);
+    setOpen(false);
+  };
+
+  const handleDeletePopup = () => {
+    const filterRow = fileData?.filter(
+      (el) => el?.documentId !== currentRow?.documentId
+    );
+    setBulkUploadFieldValue("fileData", filterRow);
+    setOpen(false);
+  };
+
+  console.log(fileData, draftData);
 
   return (
     <>
       <Typography variant="h5" color={theme.palette.text.grey}>
-        Uploaded Communities
+        Uploaded Communities{" "}
+        {`(${fileData.length}: Uploaded, ${draftData.length}: Draft)`}
       </Typography>
 
       {fileData.length > 0 && (
-        <CustomUploadTable cols={columns} tableData={fileData} />
+        <CustomUploadTable
+          cols={columns}
+          tableData={paginatedData}
+          currentPage={page}
+          pageSize={pageSize}
+          totalItems={fileData?.length}
+          handlePageChange={handlePageChange}
+          pageDisable={editedList?.length > 0 ? true : false}
+        />
       )}
+      <AppDialogBox
+        open={open}
+        handleCancel={handleCancelPopup}
+        handleDelete={handleDeletePopup}
+      />
     </>
   );
 };

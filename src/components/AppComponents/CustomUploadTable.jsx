@@ -15,9 +15,11 @@ import { StyledTableCell, StyledTableRow } from "./StyledComponent";
 const CustomUploadTable = ({
   cols,
   tableData,
-  pageSize,
   currentPage,
+  pageSize,
   totalItems,
+  handlePageChange,
+  pageDisable = false,
 }) => {
   return (
     <TableContainer>
@@ -79,9 +81,11 @@ const CustomUploadTable = ({
         </Typography>
       </AppRowBox>
       <AppPagination
-        pageSize={pageSize || 6}
-        currentPage={currentPage || 1}
-        totalItems={totalItems || 10}
+        pageSize={pageSize}
+        currentPage={currentPage}
+        totalItems={totalItems}
+        onPageChange={handlePageChange}
+        pageDisable={pageDisable}
       />
     </TableContainer>
   );

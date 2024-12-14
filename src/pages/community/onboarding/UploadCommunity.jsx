@@ -2,20 +2,30 @@ import { Typography } from "@mui/material";
 
 import icons from "assets/images/icons/mui-icons/Icons";
 import AppGrid from "components/AppComponents/AppGrid";
+import { useSnackbar } from "components/AppComponents/SnackBarProvider";
 import InsuranceDocument from "components/AppComponents/UploadDocument";
 import { RadiusStyledButton } from "components/StyledComponents";
+import {
+  useCommunityManagersQuery,
+  usePropertyManagersQuery,
+} from "hooks/useDropDown";
+import { SEVERITY } from "utils/message";
 import * as XLSX from "xlsx";
+import { generateUniqueId } from "./utils";
 
 const validHeaders = [
   "CommunityName",
   "CommunityEmail",
-  "ContactNo",
-  "InsurancrStatus",
-  "CommunityManager",
-  "PropertyMangerNo",
-  "Address",
+  "CommunityManagerName",
+  "PropertyManagerName",
+  "Address(Address,City,StateCode, ZipCode, Country)",
 ];
+
 const UploadCommunity = ({ setBulkUploadFieldValue }) => {
+  const { updateSnackbar } = useSnackbar();
+  const { data: communityManagerList } = useCommunityManagersQuery();
+  const { data: propertyManagerList } = usePropertyManagersQuery();
+
   const handleFileUpload = async (file) => {
     if (file[0]) {
       const reader = new FileReader();
@@ -30,18 +40,60 @@ const UploadCommunity = ({ setBulkUploadFieldValue }) => {
           header.includes(col)
         );
         if (isIncludedAllRequiredColumns) {
-          const sheetData = json?.map((item) => {
-            return {
-              ...item,
+          const fileData = [];
+          const draftData = [];
+          json?.map((item) => {
+            const isValid = checkManualEmptyValue(item);
+            const communityManagerName = isValid
+              ? communityManagerList?.data?.find(
+                  (el) => el?.username === item?.CommunityManagerName
+                ) || null
+              : null;
+            const propertyManagerName = isValid
+              ? propertyManagerList?.data?.find(
+                  (el) => el?.username === item?.PropertyManagerName
+                ) || null
+              : null;
+            const obj = {
+              documentId: generateUniqueId() || null,
+              communityName: item?.CommunityName || null,
+              communityEmail: item?.CommunityEmail || null,
+              communityManagerName: communityManagerName,
+              propertyManagerName: propertyManagerName,
+              address:
+                item?.["Address(Address,City,StateCode, ZipCode, Country)"] ||
+                null,
               isEdit: false,
             };
+            if (isValid && propertyManagerName && communityManagerName) {
+              fileData.push(obj);
+            } else {
+              draftData.push(obj);
+            }
           });
-          setBulkUploadFieldValue("fileData", sheetData);
+          setBulkUploadFieldValue("fileData", fileData);
+          setBulkUploadFieldValue("draftData", draftData);
         } else {
-          console.log("invalid column");
+          updateSnackbar({
+            message: "Invalid Column Name",
+            severity: SEVERITY.error,
+          });
         }
       };
       reader.readAsArrayBuffer(file[0]);
+    }
+  };
+
+  const checkManualEmptyValue = (item) => {
+    const header = Object.keys(item);
+    const isIncludedAllRequiredColumns = validHeaders.every((col) =>
+      header.includes(col)
+    );
+    if (isIncludedAllRequiredColumns) {
+      const valid = Object.values(item).some((el) => el?.trim()?.length === 0);
+      return !valid;
+    } else {
+      return false;
     }
   };
 

@@ -1,13 +1,13 @@
-import React from 'react';
-import { Box, Pagination } from '@mui/material';
-import { communityStyles } from 'components/StyledComponents';
+import { Box, Pagination } from "@mui/material";
+import { communityStyles } from "components/StyledComponents";
 
 const AppPagination = ({
   currentPage,
   totalItems,
   pageSize,
   onPageChange,
-  showCount = true
+  showCount = true,
+  pageDisable = false,
 }) => {
   const totalPages = Math.ceil(totalItems / pageSize);
 
@@ -23,9 +23,10 @@ const AppPagination = ({
         page={currentPage}
         onChange={onPageChange}
         shape="rounded"
-        variant='outlined'
-        color='success'
+        variant="outlined"
+        color="success"
         sx={communityStyles.pagination}
+        disabled={pageDisable}
       />
     </Box>
   );

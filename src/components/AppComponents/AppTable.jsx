@@ -10,7 +10,6 @@ import {
   Typography,
 } from "@mui/material";
 import { BoldTypographyHeader } from "components/StyledComponents";
-import { useState } from "react";
 import AppPagination from "./AppPagination";
 import AppSkeleton from "./AppSkeleton";
 
@@ -27,9 +26,8 @@ const AppTable = ({
   totalItems,
   pageSize,
   onPageChange,
-  selected = []
+  selected = [],
 }) => {
-
   const rowCount = rows.length;
   const numSelected = selected.length;
 
@@ -57,7 +55,6 @@ const AppTable = ({
         selected.slice(selectedIndex + 1)
       );
     }
-
 
     onSelectionChange?.(newSelected);
   };
