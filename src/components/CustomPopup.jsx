@@ -1,13 +1,12 @@
-import React, { useState } from "react";
 import {
   Box,
-  Typography,
-  Divider,
-  Checkbox,
-  FormControlLabel,
   Button,
+  Checkbox,
+  Divider,
+  FormControlLabel,
   Popover,
 } from "@mui/material";
+import { useState } from "react";
 import AppPriorityItems from "./AppPriorityComponent";
 
 const FilterDrawer = ({

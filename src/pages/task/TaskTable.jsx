@@ -6,6 +6,7 @@ import AppMenu from "components/AppComponents/AppMenu";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
+import FilterDrawer from "components/CustomPopup";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
 import { useState } from "react";
 
@@ -32,7 +33,26 @@ export default function TaskTable({
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(false);
-
+  const [openFilter, setOpenFilter] = useState(false);
+  const [selectedPriority, setSelectedPriority] = useState([
+    { name: "High", color: "#E81616" },
+    { name: "Medium", color: "#EB6C0B" },
+    { name: "Low", color: "#DEC013" },
+  ]);
+  const [selectedProperty, setSelectedProperties] = useState([
+    { id: 1, data: "Desert Springs", selected: false },
+    { id: 2, data: "Rose Dale", selected: false },
+    { id: 3, data: "Rose Dal", selected: false },
+    { id: 4, data: "Oak Ridge Estates", selected: false },
+    { id: 5, data: "Mountain Vista", selected: false },
+  ]);
+  const toggleFilter = (id) => {
+    setSelectedProperties((prev) =>
+      prev.map((filter) =>
+        filter.id === id ? { ...filter, selected: !filter.selected } : filter
+      )
+    );
+  };
   const pageSize = 10;
 
   const columns = [
@@ -154,10 +174,10 @@ export default function TaskTable({
     );
   };
 
-  const renderPriorityComponent = () => {
+  const renderPriorityComponent = (e) => {
     return (
       <>
-        <StyledMenuItem onClick={() => console.log("task")}>
+        <StyledMenuItem onClick={() => setAnchorEl(e.currentTarget)}>
           View details
         </StyledMenuItem>
         <StyledMenuItem onClick={() => console.log("task")}>
@@ -185,6 +205,18 @@ export default function TaskTable({
             {
               component: <SwapVert />,
               onClick: (e) => handleSort(e),
+            },
+            {
+              component: (
+                <FilterDrawer
+                  openFilter={openFilter}
+                  setOpenFilter={setOpenFilter}
+                  selectedProperty={selectedProperty}
+                  selectedPriority={selectedPriority}
+                  toggleFilter={toggleFilter}
+                  anchorEl={anchorEl}
+                />
+              ),
             },
           ]}
         />
