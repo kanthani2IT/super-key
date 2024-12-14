@@ -46,18 +46,24 @@ const pages = {
           title: 'Documents',
           url: '/documents',
           type: "item",
+          disable: true,
+
         },
         {
           id: 'assets',
           title: 'Assets',
           url: '/community-assets',
           type: "item",
+          disable: true,
+
         },
         {
           id: 'hoa',
           title: 'HOA',
           url: '/community-hoa',
           type: "item",
+          disable: true,
+
         }]
 
       },
@@ -91,6 +97,7 @@ const pages = {
         url: '/tasks',
         icon: icons.TaskIcon,
         type: "item",
+        disable: true,
         badge: 2
       }, {
         id: 'property',
