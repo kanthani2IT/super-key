@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import { forwardRef, useState } from "react";
 
 import { ExpandAltOutlined } from "@ant-design/icons";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { Box, Button, Chip, Stack } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -45,12 +44,11 @@ function MainCard(
 ) {
   const theme = useTheme();
   boxShadow = theme.palette.mode === "dark" ? boxShadow || true : boxShadow;
-  const [openFilter, setOpenFilter] = useState(false);
+
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleFilterButtonClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setOpenFilter((prev) => !prev);
   };
   // const [selectedPriority, setSelectedPriority] = useState([
   //   { name: "High", color: "#E81616" },
@@ -183,12 +181,11 @@ function MainCard(
           }}
         >
           <FilterDrawer
-            openFilter={openFilter}
-            setOpenFilter={setOpenFilter}
             selectedProperty={selectedProperty}
             selectedPriority={selectedPriority}
             toggleFilter={toggleFilter}
             anchorEl={anchorEl}
+            setAnchorEl={setAnchorEl}
           />
           {children}
         </CardContent>
