@@ -10,10 +10,10 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import noData from "assets/images/icons/noData.svg";
 import { BoldTypographyHeader, Image } from "components/StyledComponents";
 import AppPagination from "./AppPagination";
 import AppSkeleton from "./AppSkeleton";
-import noData from 'assets/images/icons/noData.svg'
 const AppTable = ({
   isLoading,
   columns,
@@ -27,9 +27,8 @@ const AppTable = ({
   totalItems,
   pageSize,
   onPageChange,
-  selected = []
+  selected = [],
 }) => {
-
   const rowCount = rows.length;
   const numSelected = selected.length;
 
@@ -58,9 +57,9 @@ const AppTable = ({
       );
     }
 
-
     onSelectionChange?.(newSelected);
   };
+  console.log(currentPage, totalItems, "apptable");
   return (
     <TableContainer sx={{ maxHeight: "calc(100vh - 300px)" }}>
       <Table stickyHeader>
@@ -135,7 +134,7 @@ const AppTable = ({
             <TableRow>
               <TableCell colSpan={columns.length + 1} align="center">
                 <Box sx={{ py: 2 }}>
-                  <Image width={'40%'} height={'10%'} src={noData} />
+                  <Image width={"40%"} height={"10%"} src={noData} />
                 </Box>
                 <Typography variant="body1" color="textSecondary">
                   {noDataText}
@@ -144,23 +143,22 @@ const AppTable = ({
             </TableRow>
           )}
         </TableBody>
-        {totalItems ? (<TableFooter>
-          <TableRow>
-            <TableCell colSpan={columns.length + 1} align="right">
-
-              <AppPagination
-                pageSize={pageSize}
-                currentPage={currentPage}
-                totalItems={totalItems}
-                onPageChange={onPageChange}
-              />
-            </TableCell>
-          </TableRow>
-        </TableFooter>
+        {totalItems ? (
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={columns.length + 1} align="right">
+                <AppPagination
+                  pageSize={pageSize}
+                  currentPage={currentPage}
+                  totalItems={totalItems}
+                  onPageChange={onPageChange}
+                />
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         ) : null}
-
       </Table>
-    </TableContainer >
+    </TableContainer>
   );
 };
 
