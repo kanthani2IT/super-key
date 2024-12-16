@@ -1,10 +1,12 @@
-import { ExpandMore, MoreVert, SwapVert } from "@mui/icons-material";
+import { MoreVert, SwapVert } from "@mui/icons-material";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { Button, IconButton, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
 import AppMenu from "components/AppComponents/AppMenu";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
+import AppTaskCard from "components/AppComponents/AppTaskCard";
 import { getStatus } from "components/AppComponents/CustomField";
 import FilterDrawer from "components/CustomPopup";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
@@ -25,7 +27,7 @@ export default function TaskTable({
   filters,
   handleSearch,
   handleChangePage,
-  page = 1,
+  page,
   selectedRows = [],
 }) {
   const theme = useTheme();
@@ -54,7 +56,7 @@ export default function TaskTable({
     );
   };
   const pageSize = 10;
-
+  console.log(page, "page");
   const columns = [
     {
       field: "index",
@@ -65,7 +67,7 @@ export default function TaskTable({
       },
     },
     {
-      field: "name",
+      field: "taskName",
       headerName: "Task Name",
       flex: 1,
     },
@@ -80,7 +82,7 @@ export default function TaskTable({
       flex: 1,
     },
     {
-      field: "dueDate",
+      field: "dueDateString",
       headerName: "Due Date",
       flex: 1,
     },
@@ -90,29 +92,29 @@ export default function TaskTable({
       flex: 1,
     },
 
-    // {
-    //   field: "status",
-    //   headerName: "Status",
-    //   align: "center",
-    //   renderCell: (row) => {
-    //     if (row?.status != null && row?.status != "null") {
-    //       return (
-    //         <Typography
-    //           color={row?.status === "ACTIVE" ? "success" : "error"}
-    //           display={"flex"}
-    //           alignItems={"center"}
-    //           justifyContent={"center"}
-    //           gap={0.5}
-    //         >
-    //           <FiberManualRecordIcon fontSize="12px" />
-    //           {row?.status === "ACTIVE" ? "Active" : "Inactive"}
-    //         </Typography>
-    //       );
-    //     } else {
-    //       return "-";
-    //     }
-    //   },
-    // },
+    {
+      field: "status",
+      headerName: "Status",
+      align: "center",
+      renderCell: (row) => {
+        if (row?.status != null && row?.status != "null") {
+          return (
+            <Typography
+              color={row?.status === "ACTIVE" ? "success" : "error"}
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              gap={0.5}
+            >
+              {/* <FiberManualRecordIcon fontSize="12px" /> */}
+              {row?.status === "ACTIVE" ? "Active" : "Inactive"}
+            </Typography>
+          );
+        } else {
+          return "-";
+        }
+      },
+    },
     {
       field: "action",
       headerName: "Action",
@@ -136,7 +138,7 @@ export default function TaskTable({
     },
   ];
 
-  const filteredRows = taskList?.filter((row) =>
+  const filteredRows = taskList?.content?.filter((row) =>
     Object.values(row).some((value) =>
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
@@ -158,26 +160,45 @@ export default function TaskTable({
 
   const PriorityFilter = () => {
     return (
-      <Button
-        onClick={(e) => {
-          //   e.stopPropagation();
-          //   setMenuAnchorEl(e.currentTarget);
-        }}
-        endIcon={<ExpandMore />}
-        variant="outlined"
-        size="small"
-        color="secondary"
-      >
-        {" "}
-        Priority
-      </Button>
+      <>
+        <Button
+          variant="outlined"
+          color="black"
+          onClick={(e) => {
+            e.stopPropagation();
+            setAnchorEl(e.currentTarget);
+            setOpenFilter((prev) => !prev);
+          }}
+          endIcon={<FilterAltIcon sx={{ width: "22px", height: "24px" }} />}
+          sx={{
+            height: "42px",
+            borderRadius: "10px",
+            borderWidth: "0.5px",
+            borderColor: "#000",
+            fontSize: "16px",
+            fontWeight: "500",
+            "&:hover": { backgroundColor: "#E9F3FF" },
+          }}
+        >
+          {" "}
+          {"Filter"}{" "}
+        </Button>
+        <FilterDrawer
+          openFilter={openFilter}
+          setOpenFilter={setOpenFilter}
+          selectedProperty={selectedProperty}
+          selectedPriority={selectedPriority}
+          toggleFilter={toggleFilter}
+          anchorEl={anchorEl}
+        />
+      </>
     );
   };
 
   const renderPriorityComponent = (e) => {
     return (
       <>
-        <StyledMenuItem onClick={() => setAnchorEl(e.currentTarget)}>
+        <StyledMenuItem onClick={() => console.log("task")}>
           View details
         </StyledMenuItem>
         <StyledMenuItem onClick={() => console.log("task")}>
@@ -206,21 +227,15 @@ export default function TaskTable({
               component: <SwapVert />,
               onClick: (e) => handleSort(e),
             },
-            {
-              component: (
-                <FilterDrawer
-                  openFilter={openFilter}
-                  setOpenFilter={setOpenFilter}
-                  selectedProperty={selectedProperty}
-                  selectedPriority={selectedPriority}
-                  toggleFilter={toggleFilter}
-                  anchorEl={anchorEl}
-                />
-              ),
-            },
           ]}
         />
-
+        <Button
+          onClick={() => {
+            setModal(true);
+          }}
+        >
+          View Details
+        </Button>
         <AppTable
           rowKey="taskId"
           isLoading={isLoading}
@@ -229,7 +244,7 @@ export default function TaskTable({
           getStatus={getStatus}
           onSelectionChange={onSelectionChange}
           currentPage={page}
-          totalItems={taskList?.totalElements || 3}
+          totalItems={taskList?.totalElements}
           pageSize={pageSize}
           onPageChange={handleChangePage}
           selected={selectedRows}
@@ -242,6 +257,8 @@ export default function TaskTable({
                 handleClose={handleMenuAnchorClose}
                 renderComponent={renderMenuComponent()}
             /> */}
+      <AppTaskCard open={modal} onClose={() => setModal(false)} />
+
       <AppMenu
         anchorEl={menuAnchorEl}
         handleClose={handleMenuAnchorClose}

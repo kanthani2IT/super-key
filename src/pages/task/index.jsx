@@ -1,21 +1,25 @@
 import AppGrid from "components/AppComponents/AppGrid";
 import { ButtonGroup, RadiusStyledButton } from "components/StyledComponents";
 import { useGetActiveAndCompletedTaskByFilter } from "hooks/useDashboard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import TaskTable from "./TaskTable";
 import TaskCreation from "./create";
 
 const Task = () => {
+  const [page, setPage] = useState(1);
   const {
     data: taskData,
     mutate: fetchActiveAndCompletedTaskByFilter,
     isLoading: isTaskLoading,
   } = useGetActiveAndCompletedTaskByFilter();
+
   useEffect(() => {
     let reqBody = {
       sort: "createdAt",
       orderBy: "desc",
-      id: "34678098765",
+      id: "0017x00000kF1kTAAS",
+      page: page,
+      size: 10,
       data: [
         {
           column: "status",
@@ -24,10 +28,15 @@ const Task = () => {
         },
       ],
     };
-    let communityId = "4567890-";
-    fetchActiveAndCompletedTaskByFilter(reqBody, communityId);
-  }, []);
 
+    fetchActiveAndCompletedTaskByFilter(reqBody);
+  }, [page]);
+  const handleChangePage = (event, newPage) => {
+    //fetchActiveAndCompletedTaskByFilter(reqBody);
+    // fetchData(filters.sort, filters.search, newPage);
+    setPage(newPage);
+    // setFilters({ ...filters, page: newPage })
+  };
   return (
     <AppGrid container spacing={4}>
       <AppGrid
@@ -48,7 +57,12 @@ const Task = () => {
         </ButtonGroup>
       </AppGrid>
       <AppGrid item size={{ xs: 12 }}>
-        <TaskTable height={"80vh"} taskList={taskData?.data} />
+        <TaskTable
+          height={"80vh"}
+          taskList={taskData?.data}
+          handleChangePage={handleChangePage}
+          page={page}
+        />
       </AppGrid>
     </AppGrid>
   );
