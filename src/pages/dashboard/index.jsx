@@ -16,10 +16,13 @@ import {
   useGetDashboardMetrics,
 } from "hooks/useDashboard";
 import { ColorBox } from "pages/component-overview/color";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserTable from "../community/CommunityTable";
 import RenewalPieChart from "./RenewalPieChart";
 import TaskTable from "./TaskTable";
+import CustomUploadTable from "components/AppComponents/CustomUploadTable";
+import Columns from "./TaskTableDashBoard";
+import TaskTableDashBoard from "./TaskTableDashBoard";
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 const tabs = [
@@ -58,6 +61,19 @@ export default function DashboardDefault() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const [editedList, setEditedList] = React.useState([]);
+
+  const handleChanges = (value, field, index) => {
+    setEditedList((prevList) => {
+      const updatedList = [...prevList];
+      updatedList[index] = {
+        ...updatedList[index],
+        [field]: value,
+      };
+      return updatedList;
+    });
+  };
 
   const fetchData = (status) => {
     let reqBody = {
@@ -190,7 +206,10 @@ export default function DashboardDefault() {
             value={selectedTab}
             tabs={tabs}
           />
-          <TaskTable tableData={taskData?.data || []} loading={isTaskLoading} />
+          <TaskTableDashBoard
+            tableData={taskData?.data || []}
+            loading={isTaskLoading}
+          ></TaskTableDashBoard>
         </MainCard>
       </AppGrid>
     </AppGrid>
