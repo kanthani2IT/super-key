@@ -28,6 +28,7 @@ function MainCard(
     darkTitle,
     elevation,
     secondary,
+    showSecondary = true,
     shadow,
     sx = {},
     title,
@@ -36,6 +37,8 @@ function MainCard(
     isFilter,
     noStyles = false,
     onFilterClick,
+    selectedProperty,
+    selectedPriority,
     ...others
   },
   ref
@@ -49,18 +52,18 @@ function MainCard(
     setAnchorEl(event.currentTarget);
     setOpenFilter((prev) => !prev);
   };
-  const [selectedPriority, setSelectedPriority] = useState([
-    { name: "High", color: "#E81616" },
-    { name: "Medium", color: "#EB6C0B" },
-    { name: "Low", color: "#DEC013" },
-  ]);
-  const [selectedProperty, setSelectedProperties] = useState([
-    { id: 1, data: "Desert Springs", selected: false },
-    { id: 2, data: "Rose Dale", selected: false },
-    { id: 3, data: "Rose Dal", selected: false },
-    { id: 4, data: "Oak Ridge Estates", selected: false },
-    { id: 5, data: "Mountain Vista", selected: false },
-  ]);
+  // const [selectedPriority, setSelectedPriority] = useState([
+  //   { name: "High", color: "#E81616" },
+  //   { name: "Medium", color: "#EB6C0B" },
+  //   { name: "Low", color: "#DEC013" },
+  // ]);
+  // const [selectedProperty, setSelectedProperties] = useState([
+  //   { id: 1, data: "Desert Springs", selected: false },
+  //   { id: 2, data: "Rose Dale", selected: false },
+  //   { id: 3, data: "Rose Dal", selected: false },
+  //   { id: 4, data: "Oak Ridge Estates", selected: false },
+  //   { id: 5, data: "Mountain Vista", selected: false },
+  // ]);
 
   const toggleFilter = (id) => {
     setSelectedProperties((prev) =>
@@ -142,22 +145,23 @@ function MainCard(
                     {"Filter"}{" "}
                   </Button>
                 ) : null}
-
-                <Typography
-                  variant="body1"
-                  sx={{
-                    textDecoration: "none",
-                    cursor: "pointer",
-                  }}
-                  color="primary"
-                  onClick={secondaryAction && secondaryAction}
-                >
-                  <ExpandAltOutlined
-                    style={{ marginRight: 2 }}
-                    fontSize="medium"
-                  />
-                  {secondary}
-                </Typography>
+                {showSecondary && (
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      textDecoration: "none",
+                      cursor: "pointer",
+                    }}
+                    color="primary"
+                    onClick={secondaryAction && secondaryAction}
+                  >
+                    <ExpandAltOutlined
+                      style={{ marginRight: 2 }}
+                      fontSize="medium"
+                    />
+                    {secondary}
+                  </Typography>
+                )}
               </Box>
             )
           }
