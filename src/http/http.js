@@ -7,17 +7,15 @@ const apiBaseUrl = import.meta.env.VITE_API_URL;
 const http = axios.create({
   baseURL: `${apiBaseUrl}/`,
   headers: {
-    "Content-Type": "application/json",  // For API requests with JSON payload
+    "Content-Type": "application/json", // For API requests with JSON payload
   },
-  // Uncomment if you need credentials (cookies) to be sent with requests
-  // withCredentials: true, // todo
 });
 
 // Axios instance for form-data (file uploads)
 const formDataHttp = axios.create({
   baseURL: `${apiBaseUrl}/`,
   headers: {
-    'Content-Type': 'multipart/form-data',  // For API requests with file upload
+    "Content-Type": "multipart/form-data", // For API requests with file upload
   },
   // Uncomment if you need credentials (cookies) to be sent with requests
   // withCredentials: true, // todo

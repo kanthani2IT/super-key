@@ -1,5 +1,5 @@
 import { AddCircle } from '@mui/icons-material'
-import { Button, TextField, Typography } from '@mui/material'
+import { Backdrop, Button, TextField } from '@mui/material'
 import AppAutoComplete from 'components/AppComponents/AppAutoComplete'
 import AppDatePicker from 'components/AppComponents/AppDatePicker'
 import AppGrid from 'components/AppComponents/AppGrid'
@@ -7,12 +7,13 @@ import AppLabelComponent from 'components/AppComponents/AppLabelComponent'
 import AppModal from 'components/AppComponents/AppModal'
 import AppRowBox from 'components/AppComponents/AppRowBox'
 import AppTextField from 'components/AppComponents/AppTextField'
+import CircularLoader from 'components/CircularLoader'
 import dayjs from 'dayjs'
 import { useFormik } from 'formik'
+import { useCommunitiesQuery, useTaskPrioritiesQuery, useTaskStatusQuery, useTaskTypesQuery, useVerunaUsersQuery } from 'hooks/useDropDown'
+import { useTaskCreation } from 'hooks/useTask'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
-import { cManagers, pManagers, priority, status, type } from 'utils/constants'
-import { compareeJson } from 'utils/helpers'
 import * as Yup from "yup"
 
 
@@ -23,7 +24,7 @@ const validationSchema = Yup.object({
     dueDate: Yup.date().required("Due date is required"),
     priority: Yup.object().required("Priority is required"),
     status: Yup.object().required("Status is required"),
-    relatedTo: Yup.object().required("Related to is required"),
+    // commmunity: Yup.object().required("Community is required"),
     // comments: Yup.string().required("Comments are required"),
 });
 
@@ -34,11 +35,11 @@ const initialValues = {
     dueDate: dayjs(),
     priority: null,
     status: null,
-    relatedTo: null,
+    commmunity: null,
     comments: '',
 }
 
-const TaskCreation = () => {
+const TaskCreation = ({ refetch }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -47,6 +48,22 @@ const TaskCreation = () => {
         Boolean(searchParams.get("task"));
 
     const [open, setOpen] = useState(modalOpen || false)
+
+    const successHandler = () => {
+        refetch();
+        handleClose()
+    };
+
+    //API
+    const { data: statusData, isLoading: statusLoading } = useTaskStatusQuery()
+    const { data: typesData, isLoading: typesLoading } = useTaskTypesQuery()
+    const { data: prioritiesData, isLoading: prioritiesLoading } = useTaskPrioritiesQuery()
+    const { data: communitiesData, isLoading: communitiesLoading } = useCommunitiesQuery()
+    const { data: assigneToData, isLoading: assigneToLoading } = useVerunaUsersQuery()
+    const { mutate, isLoading: taskCreationLoading } =
+        useTaskCreation(successHandler);
+
+
     const handleOpen = () => {
         setOpen(true);
         let queryParams = "?task=true";
@@ -79,17 +96,29 @@ const TaskCreation = () => {
         validationSchema,
         enableReinitialize: true,
         onSubmit: (values) => {
-            console.log(values)
+            let payload = {
+                taskName: values?.taskName,
+                type: values?.type?.name,
+                assignedTo: values?.assignedTo?.Id,
+                dueDate: values?.dueDate,
+                priority: values?.priority?.name,
+                status: values?.status?.name,
+                comments: values?.comments,
+                communityId: values?.commmunity?.id || '0017x00000kF1kTAAS',
+                "name": "003bn00000B2haPAAR"
+            }
+            mutate(payload)
+
         },
     })
 
     const { values, dirty, errors, touched, resetForm, handleChange, handleSubmit } = formik
-
     return (
         <>
             <Button startIcon={<AddCircle />} size='large' color='info' variant='contained' onClick={handleOpen}>
                 Create New Task
             </Button>
+
             <AppModal cardHeight={'50vh'} footer={footer()} confirmModal={dirty} title={'Create New Task'} enableCard open={open} onClose={handleClose}>
                 <AppGrid container spacing={3}>
                     <AppGrid item size={{ xs: 12 }}>
@@ -104,32 +133,48 @@ const TaskCreation = () => {
                         </AppLabelComponent>
                     </AppGrid>
                     <AppGrid item size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-                        <AppLabelComponent label={'Type'}>
-
-                            <AppAutoComplete
-                                freeSolo={false}
-                                name="type"
-                                options={type}
-                                nameParam='label'
-                                placeholder="Select type"
-                                value={values.type}
+                        <AppLabelComponent label={'Community'}>
+                            <AppAutoComplete freeSolo={false} placeholder='Select Community'
+                                name="community"
+                                valueParam="communityId"
+                                nameParam="name"
+                                options={communitiesData}
+                                loading={communitiesLoading}
+                                value={values.commmunity}
                                 onChange={handleChange}
-                                error={touched.type && errors.type}
-                            />
+                                error={touched.commmunity && errors.commmunity} />
                         </AppLabelComponent>
                     </AppGrid>
+
                     <AppGrid item size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                         <AppLabelComponent label={'Assigned to'}>
                             <AppAutoComplete
                                 freeSolo={false}
                                 placeholder='Select'
                                 name="assignedTo"
-                                options={pManagers}
-                                nameParam="username"
-                                valueParam="managerId"
+                                nameParam='Name'
+                                valueParam='Id'
+                                loading={assigneToLoading}
+                                options={assigneToData}
                                 value={values.assignedTo}
                                 onChange={handleChange}
                                 error={touched.assignedTo && errors.assignedTo} />
+                        </AppLabelComponent>
+                    </AppGrid>
+                    <AppGrid item size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+                        <AppLabelComponent label={'Type'}>
+
+                            <AppAutoComplete
+                                filter={false}
+                                name="type"
+                                valueParam='name'
+                                loading={typesLoading}
+                                options={typesData}
+                                placeholder="Select type"
+                                value={values.type}
+                                onChange={handleChange}
+                                error={touched.type && errors.type}
+                            />
                         </AppLabelComponent>
                     </AppGrid>
                     <AppGrid item size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
@@ -147,8 +192,9 @@ const TaskCreation = () => {
                         <AppLabelComponent label={'Priority'}>
                             <AppAutoComplete freeSolo={false} placeholder='Select Priority'
                                 name="priority"
-                                options={priority}
-
+                                loading={prioritiesLoading}
+                                options={prioritiesData}
+                                valueParam='name'
                                 value={values.priority}
                                 onChange={handleChange}
                                 error={touched.priority && errors.priority} />
@@ -157,23 +203,15 @@ const TaskCreation = () => {
                         <AppLabelComponent label={'Status'}>
                             <AppAutoComplete freeSolo={false} placeholder='Select Status'
                                 name="status"
-                                options={status}
+                                options={statusData}
+                                loading={statusLoading}
+                                valueParam='name'
                                 value={values.status}
                                 onChange={handleChange}
                                 error={touched.status && errors.status} />
                         </AppLabelComponent>
-                    </AppGrid><AppGrid item size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-                        <AppLabelComponent label={'Related to'}>
-                            <AppAutoComplete freeSolo={false} placeholder='Select'
-                                name="relatedTo"
-                                options={cManagers}
-                                nameParam="username"
-                                valueParam="managerId"
-                                value={values.relatedTo}
-                                onChange={handleChange}
-                                error={touched.relatedTo && errors.relatedTo} />
-                        </AppLabelComponent>
                     </AppGrid>
+
                     <AppGrid item size={{ xs: 12 }}>
                         <AppLabelComponent label={'Comments'}>
                             <TextField minRows={4} multiline placeholder='Type your comments...'
@@ -185,6 +223,16 @@ const TaskCreation = () => {
                         </AppLabelComponent>
                     </AppGrid>
                 </AppGrid>
+
+                <Backdrop
+                    sx={{
+                        color: "#fff",
+                        zIndex: (theme) => theme.zIndex.modal + 1,
+                    }}
+                    open={taskCreationLoading}
+                >
+                    <CircularLoader />
+                </Backdrop>
             </AppModal>
         </>
     )

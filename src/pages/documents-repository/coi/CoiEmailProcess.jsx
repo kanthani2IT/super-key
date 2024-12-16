@@ -1,183 +1,211 @@
-import { Autocomplete, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material'
+import { Button, FormControlLabel, Radio, RadioGroup } from '@mui/material'
+import AppAutoComplete from 'components/AppComponents/AppAutoComplete'
 import AppGrid from 'components/AppComponents/AppGrid'
 import AppLabelComponent from 'components/AppComponents/AppLabelComponent'
+import AppModal from 'components/AppComponents/AppModal'
+import AppRowBox from 'components/AppComponents/AppRowBox'
+import AppTextField from 'components/AppComponents/AppTextField'
+import { useFormik } from 'formik'
+import { usePropertyManagersQuery } from 'hooks/useDropDown'
 import { useState } from 'react'
-import { cManagers } from 'utils/constants'
+import { CREDENTIAL_ERRORS, EMAIL_VALIDATION } from 'utils/loginUtils'
+import * as Yup from "yup";
 
 const initialValues = {
+    toPropertyManager: "yes",
     propertyManager: null,
-    name: "",
     email: "",
+    sms: "yes",
     mobile: "",
-}
-const CoiEmailProcess = ({ formik }) => {
-    const { values, setFieldValue, errors, touched, resetForm } = formik
+};
 
-    const [mailDetails, setMailDetails] = useState({
-        toPropertyManager: values?.toPropertyManager,
-        propertyManager: values?.id ? {
-            id: values?.id,
-            name: values?.name,
-        } : null,
-        name: values.name,
-        email: values.email,
-        sms: values.sms,
-        mobile: values.mobile,
-    })
+const getValidationSchema = (isPropertyManagerRequired) =>
+    Yup.object().shape({
+        propertyManager: isPropertyManagerRequired
+            ? Yup.object().required("Property Manager is required")
+            : Yup.object().nullable(),
+        email: Yup.string().email("Invalid email format").required("Email is required"),
+        mobile: Yup.string()
+            .min(10, "Mobile number must be at least 10 digits.")
+            .max(15, "Mobile number cannot exceed 15 digits.")
+            .required("Mobile number is required"),
+    });
+const CoiEmailProcess = ({ open, setOpen }) => {
+    const [validationSchema, setValidationSchema] = useState(getValidationSchema(true))
 
-    const updateEmailDetails = (key, value) => {
-        setMailDetails((preDetails) => ({
-            ...preDetails,
-            [key]: value
-        }))
-    }
+    const { data: propertyManageData, isLoading } = usePropertyManagersQuery()
+
+    const footer = () => {
+        return (
+            <AppRowBox justifyContent="end">
+                <AppGrid item size={{ xs: 2 }}>
+                    <Button
+                        fullWidth
+                        size="large"
+                        color="info"
+                        type="submit"
+                        onClick={() => handleSubmit()} // Trigger Formik handleSubmit here
+                        variant="contained"
+                    >
+                        {"Send"}
+                    </Button>
+                </AppGrid>
+            </AppRowBox>
+        );
+    };
+
+    const handleEmailModalClose = () => {
+        setOpen(false);
+        resetForm();
+    };
+
+
     const dynamicDataUpdates = (key, value) => {
+
         if (key == 'toPropertyManager') {
-            setMailDetails((preDetails) => ({
-                ...preDetails,
-                ...initialValues
-            }))
             resetForm()
-
-
+            const updatedValidationSchema = getValidationSchema(value == 'yes')
+            setValidationSchema(updatedValidationSchema)
+        }
+        if (key == 'propertyManager') {
+            setFieldValue('email', value?.email)
+            setFieldValue('mobile', value?.phone)
         }
 
     }
-    const handleMailDetails = (event) => {
-        const { name, value } = event.target
-        updateEmailDetails(name, value)
-    }
-
     const handleBlur = (event) => {
         const { name, value } = event.target
         dynamicDataUpdates(name, value)
         setFieldValue(name, value);
-
     };
 
     const dynamicAttributes = (toPropertyManager) => {
         return {
             emailLabel: toPropertyManager == 'yes' ? 'Property Manager Email Id' : "Enter recipient’s email address",
             mobileLabel: toPropertyManager == 'yes' ? 'Property Manager Number' : "Contact Number",
-
         }
     }
+    const formik = useFormik({
+        initialValues,
+        validationSchema,
+        enableReinitialize: true,
+        onSubmit: (values) => {
+            console.log(values)
+        },
+    });
+
+    const { values, setFieldValue, setValues, errors, dirty, touched, resetForm, handleSubmit, handleChange } = formik
+
+
     return (
-        <AppGrid container spacing={4}  >
-            <AppGrid item size={{ xs: 12 }}>
+        <AppModal
+            confirmModal={dirty}
+            cardHeight={"50vh"}
+            enableCard
+            title={'Add Recipient '}
+            open={open}
+            onClose={handleEmailModalClose}
+            footer={footer()}
+        >
+            <AppGrid container spacing={4} justifyContent='center'>
+                <AppGrid item size={{ xs: 8 }}>
 
-                <AppLabelComponent label={`Do you want to send ${values?.certificate?.title} to Property Manager ?`} justifyContent={'space-between'} >
-                    <RadioGroup
-                        sx={{ gap: 5 }}
-                        name='toPropertyManager'
-                        row
-                        value={values.toPropertyManager}
-                        onClick={handleBlur}
-                    >
-                        <FormControlLabel
-                            value="yes"
-                            control={<Radio color='success' />}
-                            label="Yes"
-                        />
-                        <FormControlLabel
-                            value="no"
-                            control={<Radio color='success' />}
-                            label="No"
-                        />
-                    </RadioGroup>
-                </AppLabelComponent>
-
-            </AppGrid>
-            {values.toPropertyManager == 'yes' && <AppGrid item size={{ xs: 8 }}>
-                <AppLabelComponent label={'Select Property Manager'} justifyContent={'space-between'} >
-                    <Autocomplete
-
-                        name="propertyManager"
-                        options={cManagers}
-                        getOptionLabel={(option) => {
-                            if (typeof option === 'string') {
-                                return option;
-                            }
-                            if (option.label) {
-                                return option.label;
-                            }
-                            return option.name;
-                        }}
-                        value={mailDetails?.propertyManager || ''}
-                        onChange={(event, value) => {
-                            updateEmailDetails("propertyManager", value ? value : '');
-                            setFieldValue('name', value ? value.name : '');
-                            setFieldValue('id', value ? value.id : '');
-                        }}
-                        renderInput={(params) => (
-                            <TextField
-                                required
-                                {...params}
-                                placeholder="Select Property Manager"
-                                error={Boolean(touched?.name && errors?.name)}
-                                helperText={touched?.name && errors?.name}
+                    <AppLabelComponent label={`Do you want to send ${values?.certificate?.title} to Property Manager ?`} justifyContent={'space-between'} >
+                        <RadioGroup
+                            sx={{ gap: 5 }}
+                            name='toPropertyManager'
+                            row
+                            value={values.toPropertyManager}
+                            onClick={handleBlur}
+                        >
+                            <FormControlLabel
+                                value="yes"
+                                control={<Radio color='success' />}
+                                label="Yes"
                             />
-                        )}
-                        fullWidth
-                    />
-                </AppLabelComponent>
-            </AppGrid>}
+                            <FormControlLabel
+                                value="no"
+                                control={<Radio color='success' />}
+                                label="No"
+                            />
+                        </RadioGroup>
+                    </AppLabelComponent>
 
-            <AppGrid size={{ xs: 8 }}>
-                <AppLabelComponent label={dynamicAttributes(values?.toPropertyManager).emailLabel}>
-                    <TextField
-                        placeholder={'xxx@gmail.com'}
-                        required
-                        fullWidth
-                        name="email"
-                        value={mailDetails?.email}
-                        onChange={handleMailDetails}
-                        onBlur={handleBlur}
-                        error={Boolean(touched?.email && errors?.email)}
-                        helperText={touched?.email && errors?.email}
-                    />
-                </AppLabelComponent>
-            </AppGrid>
-            <AppGrid item size={{ xs: 12 }}>
+                </AppGrid>
+                {values.toPropertyManager == 'yes' &&
+                    <AppGrid item size={{ xs: 8 }}>
+                        <AppLabelComponent label={'Select Property Manager'}  >
+                            <AppAutoComplete name="propertyManager"
+                                loading={isLoading}
+                                options={propertyManageData?.data}
+                                valueParam='userId'
+                                nameParam='username'
+                                value={values?.propertyManager}
+                                onChange={handleBlur}
+                                placeholder="Select Property Manager"
+                                error={touched?.propertyManager && errors?.propertyManager}
 
-                <AppLabelComponent label={`Do you want to send an alert over SMS as well ?`} justifyContent={'space-between'} >
-                    <RadioGroup
-                        sx={{ gap: 5 }}
-                        name='sms'
-                        row
-                        value={values.sms}
-                        onClick={handleBlur}
-                    >
-                        <FormControlLabel
-                            value="yes"
-                            control={<Radio color='success' />}
-                            label="Yes"
+                            />
+
+                        </AppLabelComponent>
+                    </AppGrid>}
+
+                <AppGrid size={{ xs: 8 }}>
+                    <AppLabelComponent label={dynamicAttributes(values?.toPropertyManager).emailLabel}>
+                        <AppTextField
+                            placeholder={'xxx@gmail.com'}
+                            required
+                            fullWidth
+                            name="email"
+                            value={values?.email}
+                            onChange={handleChange}
+
+                            error={Boolean(touched?.email && errors?.email)}
+                            helperText={touched?.email && errors?.email}
                         />
-                        <FormControlLabel
-                            value="no"
-                            control={<Radio color='success' />}
-                            label="No"
-                        />
-                    </RadioGroup>
-                </AppLabelComponent>
+                    </AppLabelComponent>
+                </AppGrid>
+                <AppGrid item size={{ xs: 8 }}>
 
+                    <AppLabelComponent label={`Do you want to send an alert over SMS as well ?`} justifyContent={'space-between'} >
+                        <RadioGroup
+                            sx={{ gap: 5 }}
+                            name='sms'
+                            row
+                            value={values.sms}
+                            onClick={handleBlur}
+                        >
+                            <FormControlLabel
+                                value="yes"
+                                control={<Radio color='success' />}
+                                label="Yes"
+                            />
+                            <FormControlLabel
+                                value="no"
+                                control={<Radio color='success' />}
+                                label="No"
+                            />
+                        </RadioGroup>
+                    </AppLabelComponent>
+
+                </AppGrid>
+                {values?.sms == 'yes' && <AppGrid size={{ xs: 8 }}>
+                    <AppLabelComponent label={dynamicAttributes(values?.toPropertyManager).mobileLabel}>
+                        <AppTextField
+                            placeholder={'+123423355'}
+                            required
+                            fullWidth
+                            name="mobile"
+                            value={values?.mobile}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={Boolean(touched?.mobile && errors?.mobile)}
+                            helperText={touched?.mobile && errors?.mobile}
+                        />
+                    </AppLabelComponent>
+                </AppGrid>}
             </AppGrid>
-            {values?.sms == 'yes' && <AppGrid size={{ xs: 8 }}>
-                <AppLabelComponent label={dynamicAttributes(values?.toPropertyManager).mobileLabel}>
-                    <TextField
-                        placeholder={'+123423355'}
-                        required
-                        fullWidth
-                        name="mobile"
-                        value={mailDetails?.mobile}
-                        onChange={handleMailDetails}
-                        onBlur={handleBlur}
-                        error={Boolean(touched?.mobile && errors?.mobile)}
-                        helperText={touched?.mobile && errors?.mobile}
-                    />
-                </AppLabelComponent>
-            </AppGrid>}
-        </AppGrid>
+        </AppModal>
     )
 }
 

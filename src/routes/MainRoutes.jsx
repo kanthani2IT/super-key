@@ -51,7 +51,7 @@ const MainRoutes = {
       ],
     },
     {
-      path: "documents-repository",
+      path: "documents",
       children: [
         // {
         //   path: 'all-documents',
