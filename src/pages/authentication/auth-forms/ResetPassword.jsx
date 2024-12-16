@@ -17,7 +17,7 @@ import { createValidationSchema } from 'utils/loginUtils';
 export default function ResetPassword(props) {
   const { fieldsConfig } = props
   const { id } = useParams();
-  const { getCookie } = useAuthCookies()
+  const { getCookie, setAuthCookie } = useAuthCookies()
   const user = getCookie("superkey")
   const newPasswordMutation = useNewPassword();
   const resetPasswordMutation = useResetPassword();
@@ -27,17 +27,22 @@ export default function ResetPassword(props) {
     setSubmitting(false);
     if (id == "change") {
       let payload = {
-        email: user?.email,
+        email: values?.email,
         password: values.password,
         newPassword: values.newPassword,
       }
       newPasswordMutation.mutate(payload);
     } else {
       let payload = {
+        email: values?.email,
         password: values.newPassword,
+        newPassword: values.newPassword,
+
       };
       resetPasswordMutation.mutate(payload);
     }
+    setAuthCookie("superkey", { email: values.email });
+
   };
 
   return (
@@ -80,7 +85,7 @@ export default function ResetPassword(props) {
 
             <Grid item xs={12}>
               <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="info">
                   Reset Password
                 </Button>
               </AnimateButton>

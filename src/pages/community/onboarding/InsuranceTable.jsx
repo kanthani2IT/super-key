@@ -294,7 +294,7 @@ const InsuranceUpload = ({
           {!selectedFiles.length ? (
             <>
               <Typography variant="h5">
-                Do you have any documentation available?
+                Do you have any documents available?
               </Typography>
               <RadioGroup
                 row
@@ -411,6 +411,11 @@ const InsuranceUpload = ({
           selected={selected}
           setSelected={setSelected}
         />
+      )}
+      {selectedFiles.length > 0 && (
+        <Box p={4}>
+          <PreviewButton index={0} onPreview={onClickPreview} previewAll />
+        </Box>
       )}
     </Grid>
   );

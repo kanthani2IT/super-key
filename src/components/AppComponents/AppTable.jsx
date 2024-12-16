@@ -5,15 +5,15 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
   TableRow,
   Typography,
 } from "@mui/material";
-import { BoldTypographyHeader } from "components/StyledComponents";
-import { useState } from "react";
+import { BoldTypographyHeader, Image } from "components/StyledComponents";
 import AppPagination from "./AppPagination";
 import AppSkeleton from "./AppSkeleton";
-
+import noData from 'assets/images/icons/noData.svg'
 const AppTable = ({
   isLoading,
   columns,
@@ -62,7 +62,7 @@ const AppTable = ({
     onSelectionChange?.(newSelected);
   };
   return (
-    <TableContainer>
+    <TableContainer sx={{ maxHeight: "calc(100vh - 300px)" }}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
@@ -135,24 +135,32 @@ const AppTable = ({
             <TableRow>
               <TableCell colSpan={columns.length + 1} align="center">
                 <Box sx={{ py: 2 }}>
-                  <Typography variant="body1" color="textSecondary">
-                    {noDataText}
-                  </Typography>
+                  <Image width={'40%'} height={'10%'} src={noData} />
                 </Box>
+                <Typography variant="body1" color="textSecondary">
+                  {noDataText}
+                </Typography>
               </TableCell>
             </TableRow>
           )}
         </TableBody>
+        {totalItems ? (<TableFooter>
+          <TableRow>
+            <TableCell colSpan={columns.length + 1} align="right">
+
+              <AppPagination
+                pageSize={pageSize}
+                currentPage={currentPage}
+                totalItems={totalItems}
+                onPageChange={onPageChange}
+              />
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+        ) : null}
+
       </Table>
-      {totalItems ? (
-        <AppPagination
-          pageSize={pageSize}
-          currentPage={currentPage}
-          totalItems={totalItems}
-          onPageChange={onPageChange}
-        />
-      ) : null}
-    </TableContainer>
+    </TableContainer >
   );
 };
 

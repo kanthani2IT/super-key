@@ -19,6 +19,7 @@ const headerSX = {
 
 function MainCard(
   {
+    background = true,
     border = true,
     boxShadow,
     children,
@@ -95,7 +96,7 @@ function MainCard(
             fontSize: "0.75rem",
           },
           ...sx,
-          backgroundColor: theme.palette.primary.lighter,
+          backgroundColor: background && theme.palette.primary.lighter,
         }
       }
     >

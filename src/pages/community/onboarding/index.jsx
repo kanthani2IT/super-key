@@ -1,5 +1,5 @@
 import { AddCircle } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Backdrop, Button } from "@mui/material";
 import { useGlobalStore } from "store/store";
 
 import AppGrid from "components/AppComponents/AppGrid";
@@ -46,44 +46,44 @@ const onBoardingStepper = [
     component: CommunityDetails,
     initialValidationSchema: {
       communityManager: Yup.object().shape({
-        username: Yup.string().required("Name is required"),
+        username: Yup.string().required("Please enter Name"),
         email: Yup.string()
-          .email("Invalid email format")
-          .required("Email is required"),
+          .email("Invalid Email format")
+          .required("Please enter Email"),
         phone: Yup.string()
           .min(10, "Mobile number must be at least 10 digits.")
           .max(15, "Mobile number cannot exceed 15 digits.")
-          .required("Mobile number is required"),
+          .required("Please enter Mobile number"),
       }),
       propertyManager: Yup.object().shape({
-        username: Yup.string().required("Name is required"),
+        username: Yup.string().required("Please enter Name"),
         email: Yup.string()
-          .email("Invalid email format")
-          .required("Email is required"),
+          .email("Invalid Email format")
+          .required("Please enter Email"),
         phone: Yup.string()
           .min(10, "Mobile number must be at least 10 digits.")
           .max(15, "Mobile number cannot exceed 15 digits.")
-          .required("Mobile number is required"),
+          .required("Please enter Mobile number"),
       }),
     },
     height: "60vh",
   },
   {
-    title: "Insurance Documentation",
+    title: "Insurance Documents",
     component: InsuranceUpload,
     height: "auto",
     width: "60%",
   },
-  {
-    title: "",
-    component: ({ handleClose }) => (
-      <SuccessScreen
-        title="Your Community Onboarded Successfully!"
-        handleClose={handleClose}
-      />
-    ),
-    height: "100vh",
-  },
+  // {
+  //   title: "",
+  //   component: ({ handleClose }) => (
+  //     <SuccessScreen
+  //       title="Your Community Onboarded Successfully!"
+  //       handleClose={handleClose}
+  //     />
+  //   ),
+  //   height: "100vh",
+  // },
 ];
 
 const multiOnBoardingStepper = [
@@ -161,6 +161,7 @@ const OnboardingIndex = ({ refetch }) => {
     resetOnboarding();
     handleNext();
     refetch();
+    handleClose();
   };
 
   const handleQueryParams = (step) => {
@@ -244,53 +245,27 @@ const OnboardingIndex = ({ refetch }) => {
     resetOnboarding();
   };
 
-  const handleCloseMultiModal = () => {
+  const handleOpen = () => {
+    setOpen(true);
+    resetOnboarding();
+    let queryParams = "?onboarding=true";
+    if (!currentStep) {
+      queryParams = "?onboarding=true&cs=0";
+    }
     navigate({
       pathname: location.pathname,
-      search: "",
+      search: !open ? queryParams : "",
     });
-    setOnboardingType(defaultValue.onboardingType);
-    setActiveStep(defaultValue.activeStep);
-    setMultiActiveStep(multiDefaultValue.activeStep);
-    setOpenMulti(false);
-  };
-
-  const multiFooter = () => {
-    return (
-      <AppRowBox>
-        <AppGrid item size={{ xs: 2 }}>
-          <Button
-            fullWidth
-            color="secondary"
-            onClick={handleBackMulti}
-            variant="outlined"
-          >
-            Back
-          </Button>
-        </AppGrid>
-        <AppGrid item size={{ xs: 2 }}>
-          <Button
-            fullWidth
-            color="info"
-            type="submit"
-            onClick={handleNextMulti}
-            variant="contained"
-            disabled={bulkUploadValues.fileData.length === 0 ? true : false}
-          >
-            {multiActiveStep === 2 ? "Save" : "Next"}
-          </Button>
-        </AppGrid>
-      </AppRowBox>
-    );
   };
 
   const footer = () => {
     return (
       <AppRowBox>
         <AppGrid item size={{ xs: 2 }}>
-          {activeStep && !finalStep ? (
+          {activeStep ? (
             <Button
               fullWidth
+              size="large"
               color="secondary"
               onClick={handleBack}
               variant="outlined"
@@ -304,6 +279,7 @@ const OnboardingIndex = ({ refetch }) => {
         <AppGrid item size={{ xs: 2 }}>
           <Button
             fullWidth
+            size="large"
             color="info"
             type="submit"
             onClick={() => handleSubmit()}
@@ -312,7 +288,7 @@ const OnboardingIndex = ({ refetch }) => {
               activeStep === 4 && show == "true" && selectedFiles.length == 0
             }
           >
-            {finalStep ? "Done" : "Next"}
+            {selectedFiles.length > 0 ? "Save" : finalStep ? "Save" : "Next"}
           </Button>
         </AppGrid>
       </AppRowBox>
@@ -328,7 +304,7 @@ const OnboardingIndex = ({ refetch }) => {
       : null,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      if (activeStep == onBoardingStepper?.length - 2) {
+      if (finalStep) {
         const formData = new FormData();
 
         let payload = {
@@ -362,6 +338,7 @@ const OnboardingIndex = ({ refetch }) => {
   });
   const {
     values,
+    dirty,
     errors,
     touched,
     setFieldValue,
@@ -370,19 +347,6 @@ const OnboardingIndex = ({ refetch }) => {
     setTouched,
     resetForm,
   } = formik;
-
-  const handleOpen = () => {
-    setOpen(true);
-    resetOnboarding();
-    let queryParams = "?onboarding=true";
-    if (!currentStep) {
-      queryParams = "?onboarding=true&cs=0";
-    }
-    navigate({
-      pathname: location.pathname,
-      search: !open ? queryParams : "",
-    });
-  };
 
   const renderMultiModal = () => {
     return (
@@ -417,14 +381,14 @@ const OnboardingIndex = ({ refetch }) => {
   const renderSingleModal = () => {
     return (
       <AppModal
-        height={finalStep ? "40vh" : "auto"}
+        confirmModal={dirty}
         cardHeight={onBoardingStepper[activeStep]?.height || undefined}
         open={open}
         onClose={handleClose}
-        enableCard={!finalStep}
+        enableCard
         title={onBoardingStepper[activeStep]?.title}
         activeStep={activeStep}
-        footer={!finalStep && footer()}
+        footer={footer()}
         steps={onBoardingStepper}
         align={finalStep ? "center" : ""}
         width={onBoardingStepper[activeStep]?.width || undefined}

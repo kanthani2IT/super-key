@@ -60,7 +60,6 @@ export const useDeleteCommunityById = () =>
       console.error(error);
     },
   });
-// Return the necessary states: data, isLoading, isError, error
 
 export const useOnboardCommunity = (successHandler) => {
   const { updateSnackbar } = useSnackbar();
@@ -75,8 +74,7 @@ export const useOnboardCommunity = (successHandler) => {
       });
     },
     onError: (error) => {
-      const errorMessage = error?.response?.data?.token || "An error occurred.";
-      console.error("Mutation error:", errorMessage);
+      const errorMessage = error?.response?.data || "An error occurred.";
       updateSnackbar({
         message: errorMessage,
         severity: SEVERITY.error,

@@ -5,7 +5,7 @@ const AppGrid = ({
     children,
     container = false,
     item = false,
-    spacing = container ? 2 : undefined,
+    spacing = 2,
     sx = {},
     ...props
 }) => {

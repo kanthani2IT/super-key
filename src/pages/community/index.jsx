@@ -25,9 +25,7 @@ const CommunityOnboarding = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [filters, setFilters] = useState(initialValue);
 
-  // const { refetch } = useCommunityListQuery();
 
-  const { mutate: deleteUserById } = useDeleteCommunityById();
   const {
     mutate: getCommunityList,
     data: communityListData,
@@ -58,7 +56,6 @@ const CommunityOnboarding = () => {
         },
       ],
     };
-    deleteUserById({ id: communityData?.communityId, body: payload });
   };
 
   const handleSelectionChange = (selected) => {
@@ -143,7 +140,7 @@ const CommunityOnboarding = () => {
               width="227px"
               height="50px"
               borderRadius="10px"
-              onClick={handleOffBoard}
+              // onClick={handleOffBoard}
               sx={{
                 border: "0.5px solid #E12929",
               }}

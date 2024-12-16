@@ -17,6 +17,7 @@ import {
 } from "hooks/useDashboard";
 import { ColorBox } from "pages/component-overview/color";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import UserTable from "../community/CommunityTable";
 import RenewalPieChart from "./RenewalPieChart";
 import TaskTable from "./TaskTable";
@@ -33,6 +34,7 @@ const tabs = [
 export default function DashboardDefault() {
   const [selectedTab, setSelectedTab] = useState(tabs[0].value);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const { data, isLoading } = useGetUsers();
   const { data: dashboardData, isLoading: isWidgetLoading } =
     useGetDashboardMetrics();
@@ -121,7 +123,11 @@ export default function DashboardDefault() {
         <AppGrid container rowSpacing={2} columnSpacing={2}>
           <AppGrid size={{ xs: 12 }}>
             <AppSkeletonWrapper loading={isWidgetLoading} height={"200px"}>
-              <MainCard title="Communities" secondary={"Full View"}>
+              <MainCard
+                title="Communities"
+                secondary={"Full View"}
+                secondaryAction={() => navigate("/community/onboarding")}
+              >
                 <Stack spacing={2}>
                   <Typography variant="h6">Communities Managed</Typography>
                   <Typography variant="subtitle2" color="success">

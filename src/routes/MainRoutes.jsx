@@ -5,6 +5,7 @@ import Loadable from "components/Loadable";
 import Dashboard from "layout/Dashboard";
 import PageNotFound from "pages/extra-pages/PageNotFound";
 import ProtectedRoute from "./ProtectedRoutes";
+import Task from "pages/task";
 
 const Color = Loadable(lazy(() => import("pages/component-overview/color")));
 const Typography = Loadable(
@@ -51,7 +52,7 @@ const MainRoutes = {
       ],
     },
     {
-      path: "documents-repository",
+      path: "documents",
       children: [
         // {
         //   path: 'all-documents',
@@ -62,6 +63,10 @@ const MainRoutes = {
           element: <COI />,
         },
       ],
+    },
+    {
+      path: "tasks",
+      element: <Task />,
     },
     {
       path: "*",

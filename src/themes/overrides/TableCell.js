@@ -3,7 +3,7 @@
 export default function TableCell(theme) {
   const commonCell = {
     "&:not(:last-of-type)": {
-      position: "relative",
+      // position: "relative", // Consider removing this if sticky headers break
       "&:after": {
         position: "absolute",
         content: '""',
@@ -20,9 +20,9 @@ export default function TableCell(theme) {
       styleOverrides: {
         root: {
           "&.Mui-selected": {
-            backgroundColor: theme.palette.success.lighter, // Change selected row background
+            backgroundColor: theme.palette.success.lighter,
             "&:hover": {
-              backgroundColor: theme.palette.success.light, // Optional: Hover effect
+              backgroundColor: theme.palette.success.light,
             },
           },
         },
@@ -59,12 +59,19 @@ export default function TableCell(theme) {
         head: {
           fontSize: "0.75rem",
           fontWeight: 700,
-          // textTransform: "uppercase",
+          position: "sticky",
+          top: 0,
+          zIndex: theme.zIndex.appBar - 1,
+          backgroundColor: theme.palette.background.paper,
           ...commonCell,
         },
         footer: {
           fontSize: "0.75rem",
-          // textTransform: "uppercase",
+          position: "sticky", // Sticky footer
+          bottom: 0,
+          zIndex: theme.zIndex.appBar - 1,
+          backgroundColor: theme.palette.background.paper,
+
           ...commonCell,
         },
       },

@@ -1,9 +1,8 @@
-import { Button, Grid2 as Grid, Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import CardGrid from "components/AppComponents/AppDataCard";
 import AppGrid from "components/AppComponents/AppGrid";
 import AppModalContainer from "components/AppComponents/AppModalContainer";
 import AppRowBox from "components/AppComponents/AppRowBox";
-import React from "react";
 
 const header = (title, onClick, certificates) => {
   return (

@@ -1,5 +1,7 @@
 import http from "http/http";
+import { getRequest } from "http/request";
 import { DASHBOARD } from "utils/endpoints";
+import { addQueryParams } from "utils/helpers";
 
 const getActiveTask = async () => {
   const response = await http({
@@ -20,7 +22,11 @@ const getCompletedTask = async () => {
 const getActiveAndCompletedTaskByFilter = async (body) => {
   const response = await http({
     method: "POST",
-    url: DASHBOARD.getActiveAndCompletedTaskByFilter(body.sort, body.orderBy),
+    url: DASHBOARD.getActiveAndCompletedTaskByFilter(
+      body.sort,
+      body.orderBy,
+      body.id
+    ),
     data: body.data,
   });
   return response;
@@ -34,9 +40,21 @@ const getDashboardMetrics = async () => {
   return response;
 };
 
+const getRenewals = async (queries) => {
+  try {
+    const requestUrl = addQueryParams(DASHBOARD.getRenewals, queries);
+    const response = await getRequest(requestUrl);
+    return response;
+  } catch (error) {
+    console.error("Error fetching community managers:", error);
+    throw error;
+  }
+};
+
 export const dashboardApi = {
   getActiveTask,
   getCompletedTask,
   getActiveAndCompletedTaskByFilter,
   getDashboardMetrics,
+  getRenewals,
 };

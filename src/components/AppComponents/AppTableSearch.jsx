@@ -27,10 +27,14 @@ const AppTableSearch = ({
         sx={communityStyles.searchInput}
       />
       <Box sx={communityStyles.iconGroup}>
-        {icons.map((icon, index) => (
-          <IconButton key={index} onClick={icon.onClick}>
+        {icons.map((icon, index,) => (
+
+          icon.onClick ? <IconButton key={index} onClick={icon.onClick}>
             {icon.component}
-          </IconButton>
+          </IconButton> : (
+            <React.Fragment key={index}>{icon.component}</React.Fragment>
+          )
+
         ))}
       </Box>
     </Box>

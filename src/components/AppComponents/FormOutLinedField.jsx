@@ -17,6 +17,7 @@ export const FormOutLinedField = ({
   placeholder,
   label,
   error,
+  size = 'small'
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,6 +36,7 @@ export const FormOutLinedField = ({
         {label}
       </Typography>
       <OutlinedInput
+        size={size}
         id={id}
         type={type === 'password' && showPassword ? 'text' : type}
         value={value}
