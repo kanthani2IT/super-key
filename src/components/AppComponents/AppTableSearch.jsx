@@ -1,10 +1,9 @@
-import React from 'react';
-import { Box, TextField, InputAdornment, IconButton } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import { communityStyles } from 'components/StyledComponents';
+import SearchIcon from "@mui/icons-material/Search";
+import { Box, IconButton, InputAdornment, TextField } from "@mui/material";
+import { communityStyles } from "components/StyledComponents";
 
 const AppTableSearch = ({
-  placeholder = 'Search...',
+  placeholder = "Search...",
   searchTerm,
   onSearchChange,
   icons = [],
@@ -27,15 +26,17 @@ const AppTableSearch = ({
         sx={communityStyles.searchInput}
       />
       <Box sx={communityStyles.iconGroup}>
-        {icons.map((icon, index,) => (
-
-          icon.onClick ? <IconButton key={index} onClick={icon.onClick}>
-            {icon.component}
-          </IconButton> : (
-            <React.Fragment key={index}>{icon.component}</React.Fragment>
+        {icons.map((icon, index) =>
+          icon?.iconButton ? (
+            <IconButton key={index} onClick={icon.onClick}>
+              {icon.component}
+            </IconButton>
+          ) : (
+            <div onClick={icon.onClick} key={index}>
+              {icon.component}
+            </div>
           )
-
-        ))}
+        )}
       </Box>
     </Box>
   );

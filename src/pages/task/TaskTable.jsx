@@ -35,7 +35,7 @@ export default function TaskTable({
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(false);
-  const [openFilter, setOpenFilter] = useState(false);
+
   const [selectedPriority, setSelectedPriority] = useState([
     { name: "High", color: "#E81616" },
     { name: "Medium", color: "#EB6C0B" },
@@ -164,11 +164,6 @@ export default function TaskTable({
         <Button
           variant="outlined"
           color="black"
-          onClick={(e) => {
-            e.stopPropagation();
-            setAnchorEl(e.currentTarget);
-            setOpenFilter((prev) => !prev);
-          }}
           endIcon={<FilterAltIcon sx={{ width: "22px", height: "24px" }} />}
           sx={{
             height: "42px",
@@ -183,14 +178,6 @@ export default function TaskTable({
           {" "}
           {"Filter"}{" "}
         </Button>
-        <FilterDrawer
-          openFilter={openFilter}
-          setOpenFilter={setOpenFilter}
-          selectedProperty={selectedProperty}
-          selectedPriority={selectedPriority}
-          toggleFilter={toggleFilter}
-          anchorEl={anchorEl}
-        />
       </>
     );
   };
@@ -210,7 +197,10 @@ export default function TaskTable({
       </>
     );
   };
-
+  const handleClick = (e) => {
+    e.stopPropagation();
+    setAnchorEl(e.currentTarget);
+  };
   return (
     <Box sx={communityStyles.container(height)}>
       <>
@@ -221,7 +211,8 @@ export default function TaskTable({
           icons={[
             {
               component: <PriorityFilter />,
-              // onClick: (e) => handleSort(e),
+              onClick: (e) => handleClick(e),
+              IconButton: true,
             },
             {
               component: <SwapVert />,
@@ -236,6 +227,13 @@ export default function TaskTable({
         >
           View Details
         </Button>
+        <FilterDrawer
+          selectedProperty={selectedProperty}
+          selectedPriority={selectedPriority}
+          toggleFilter={toggleFilter}
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+        />
         <AppTable
           rowKey="taskId"
           isLoading={isLoading}
