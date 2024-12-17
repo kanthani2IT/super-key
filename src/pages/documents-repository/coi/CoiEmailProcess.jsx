@@ -14,6 +14,7 @@ import * as Yup from "yup";
 const initialValues = {
     toPropertyManager: "yes",
     propertyManager: null,
+    name: "",
     email: "",
     sms: "yes",
     mobile: "",
@@ -21,9 +22,10 @@ const initialValues = {
 
 const getValidationSchema = (isPropertyManagerRequired) =>
     Yup.object().shape({
-        propertyManager: isPropertyManagerRequired
-            ? Yup.object().required("Property Manager is required")
-            : Yup.object().nullable(),
+        // propertyManager: isPropertyManagerRequired
+        //     ? Yup.object().required("Property Manager is required")
+        //     : Yup.object().nullable(),
+        name: Yup.string().min(3, "Name be at least 3 characters").required("Name is required"),
         email: Yup.string().email("Invalid email format").required("Email is required"),
         mobile: Yup.string()
             .min(10, "Mobile number must be at least 10 digits.")
@@ -68,6 +70,7 @@ const CoiEmailProcess = ({ open, setOpen }) => {
             setValidationSchema(updatedValidationSchema)
         }
         if (key == 'propertyManager') {
+            setFieldValue('name', value?.username)
             setFieldValue('email', value?.email)
             setFieldValue('mobile', value?.phone)
         }
@@ -81,6 +84,7 @@ const CoiEmailProcess = ({ open, setOpen }) => {
 
     const dynamicAttributes = (toPropertyManager) => {
         return {
+            nameLabel: toPropertyManager == 'yes' ? 'Property Manager Name' : "Enter recipient’s Name",
             emailLabel: toPropertyManager == 'yes' ? 'Property Manager Email Id' : "Enter recipient’s email address",
             mobileLabel: toPropertyManager == 'yes' ? 'Property Manager Number' : "Contact Number",
         }
@@ -143,13 +147,26 @@ const CoiEmailProcess = ({ open, setOpen }) => {
                                 value={values?.propertyManager}
                                 onChange={handleBlur}
                                 placeholder="Select Property Manager"
-                                error={touched?.propertyManager && errors?.propertyManager}
+                                error={touched?.name && errors?.name}
 
                             />
 
                         </AppLabelComponent>
                     </AppGrid>}
-
+                {!values?.propertyManager && <AppGrid size={{ xs: 8 }}>
+                    <AppLabelComponent label={dynamicAttributes(values?.toPropertyManager).nameLabel}>
+                        <AppTextField
+                            placeholder={'Allen'}
+                            required
+                            fullWidth
+                            name="name"
+                            value={values?.name}
+                            onChange={handleChange}
+                            error={Boolean(touched?.name && errors?.name)}
+                            helperText={touched?.name && errors?.name}
+                        />
+                    </AppLabelComponent>
+                </AppGrid>}
                 <AppGrid size={{ xs: 8 }}>
                     <AppLabelComponent label={dynamicAttributes(values?.toPropertyManager).emailLabel}>
                         <AppTextField
