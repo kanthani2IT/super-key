@@ -1,10 +1,11 @@
 import { storeResetsFns } from "store/store";
 
-let initialState = {
+const initialState = {
   user: {
     id: "",
     email: "",
     name: "",
+    cmcId: "",
   },
 };
 
@@ -12,11 +13,12 @@ export const createLoginSlice = (set, get) => {
   storeResetsFns.add(() => reset(set));
   return {
     ...initialState,
-    login: (email) => {
+    login: (email, cmcId) => {
       set((state) => ({
         user: {
           ...state.user,
           email,
+          cmcId,
         },
       }));
     },

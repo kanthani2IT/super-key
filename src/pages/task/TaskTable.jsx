@@ -11,6 +11,7 @@ import AppTaskCard from "components/AppComponents/AppTaskCard";
 import { getStatus } from "components/AppComponents/CustomField";
 import FilterDrawer from "components/CustomPopup";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
+import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
 import { useRef, useState } from "react";
 const options = [
   { value: "ACTIVE", label: "Status: Active" },
@@ -36,12 +37,10 @@ export default function TaskTable({
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(null);
+  const { data: assigneToData, isLoading: assigneToLoading } =
+    useVerunaUsersQuery();
+  const { data: priorityData } = useVerunaPriorityQuery();
 
-  const [selectedPriority, setSelectedPriority] = useState([
-    { name: "High", color: "#E81616" },
-    { name: "Medium", color: "#EB6C0B" },
-    { name: "Low", color: "#DEC013" },
-  ]);
   const [selectedProperty, setSelectedProperties] = useState([
     { id: 1, data: "Desert Springs", selected: false },
     { id: 2, data: "Rose Dale", selected: false },
@@ -57,7 +56,7 @@ export default function TaskTable({
     );
   };
   const pageSize = 10;
-  console.log(page, "page");
+
   const columns = [
     {
       field: "index",
@@ -232,8 +231,8 @@ export default function TaskTable({
           View Details
         </Button>
         <FilterDrawer
-          selectedProperty={selectedProperty}
-          selectedPriority={selectedPriority}
+          selectedProperty={assigneToData?.records || selectedProperty}
+          selectedPriority={priorityData}
           toggleFilter={toggleFilter}
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}

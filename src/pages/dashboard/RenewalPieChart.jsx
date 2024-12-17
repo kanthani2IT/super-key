@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cell, Pie, PieChart, Sector, Text } from "recharts";
+import { Cell, Label, Pie, PieChart, Sector, Text } from "recharts";
 
 const colorCode = ["#E08414", "#1CD1D5", "#7086FD"];
 
@@ -16,6 +16,7 @@ const renderActiveShape = (props) => {
     fill,
     payload,
     value,
+    chartData,
   } = props;
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
@@ -29,9 +30,7 @@ const renderActiveShape = (props) => {
 
   return (
     <g>
-      <Text x={cx} y={cy} dy={8} textAnchor="middle" fontSize={20} fill="#333">
-        {18}
-      </Text>
+      
       <Sector
         cx={cx}
         cy={cy}
@@ -118,6 +117,12 @@ const RenewalPieChart = ({ chartData }) => {
             style={{ outline: "none" }}
           />
         ))}
+        <Label
+            value={chartData?.reduce((sum, item) => sum + item.value, 0)??0}
+            position="center"
+            style={{ fontSize: "16px", fontWeight: "bold", fill: "#333" }}
+          />
+      
       </Pie>
     </PieChart>
   );
