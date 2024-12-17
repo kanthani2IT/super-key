@@ -73,7 +73,6 @@ const pages = {
         url: '/tasks',
         icon: icons.TaskIcon,
         type: "item",
-        disable: false,
         badge: 2
       },
       {
@@ -82,6 +81,8 @@ const pages = {
         url: '/documents',
         icon: icons.DocumentIcon,
         type: "collapse",
+        disable: true,
+
         children: [{
           id: 'repository',
           title: 'Repository',

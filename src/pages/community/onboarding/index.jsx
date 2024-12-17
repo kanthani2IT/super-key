@@ -1,5 +1,5 @@
 import { AddCircle } from "@mui/icons-material";
-import { Backdrop, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import { useGlobalStore } from "store/store";
 
 import AppGrid from "components/AppComponents/AppGrid";
@@ -11,16 +11,15 @@ import { useFormik } from "formik";
 import { useOnboardCommunity } from "hooks/useCommunity";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useAuthCookies } from "utils/cookie";
 import * as Yup from "yup";
 import { transformDocuments } from "./utils";
-import { useAuthCookies } from "utils/cookie";
 
 const AddNewCommunity = React.lazy(() => import("./AddNewCommunity"));
 const CommunityAddress = React.lazy(() => import("./CommunityAddress"));
 const CommunityDetails = React.lazy(() => import("./CommunityDetails"));
 const CommunityName = React.lazy(() => import("./CommunityName"));
 const InsuranceUpload = React.lazy(() => import("./InsuranceTable"));
-const SuccessScreen = React.lazy(() => import("./SuccessScreen"));
 const UploadCommunity = React.lazy(() => import("./UploadCommunity"));
 const UploadCommunityList = React.lazy(() => import("./UploadCommunityList"));
 

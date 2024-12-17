@@ -21,9 +21,11 @@ import FilePreview from "components/AppComponents/AppFilePreview";
 import PreviewButton from "components/AppComponents/PreviewButton";
 import { useDocumentsQuery } from "hooks/useDropDown";
 import { useEffect, useState } from "react";
-import InsuranceDocument from "../../../components/AppComponents/UploadDocument";
-import { truncateFileName } from "./utils";
+
 import AppGrid from "./AppGrid";
+import UploadDocument from "./UploadDocument";
+import { truncateFileName } from "utils/helpers";
+import AppLabelComponent from "./AppLabelComponent";
 
 // Document types
 export const documentTypes = [{ name: "Endorsement", value: "Endosement" }];
@@ -221,9 +223,8 @@ const FileRow = ({
 
 // Main Component
 const AppDocumentUploader = ({
-    show,
-    setShow,
-    selectedFiles,
+
+    selectedFiles = [],
     setSelectedFiles,
 }) => {
     const [files, setFiles] = useState([]);
@@ -242,9 +243,8 @@ const AppDocumentUploader = ({
 
     const handleTypeChange = (index, data) => {
         if (index == "all") {
-            setSelectedFiles((prevFiles) =>
-                prevFiles.map((file) => ({ ...file, docType: data }))
-            );
+            const updatedFiles = selectedFiles.map((file) => ({ ...file, docType: data }))
+            setSelectedFiles(updatedFiles);
             setDocType(data);
         } else {
             const updatedFiles = [...selectedFiles]; // Create a copy of the array
@@ -265,9 +265,8 @@ const AppDocumentUploader = ({
     const handleSelectAll = () => {
         const newSelectAll = !selectAll;
         setSelectAll(newSelectAll);
-        setSelectedFiles((prevFiles) =>
-            prevFiles.map((file) => ({ ...file, active: newSelectAll }))
-        );
+        const updatedFiles = selectedFiles.map((file) => ({ ...file, active: newSelectAll }));
+        setSelectedFiles(updatedFiles);
     };
 
     const handleActiveChange = (index) => {
@@ -287,128 +286,100 @@ const AppDocumentUploader = ({
 
     return (
         <AppGrid container spacing={4}>
-            <AppGrid item size={{ xs: 12 }}>
-                <Stack
-                    spacing={2}
-                    textAlign={!selectedFiles.length ? "start" : "center"}
-                >
-                    {!selectedFiles.length ? (
-                        <>
-                            <Typography variant="h5">
-                                Do you have any documents available?
-                            </Typography>
-                            <RadioGroup
-                                row
-                                sx={{ gap: 5 }}
-                                name="manager"
-                                value={show}
-                                onChange={(event) => setShow(event.target.value)}
-                            >
-                                <FormControlLabel
-                                    value="true"
-                                    control={<Radio color="success" />}
-                                    label="Yes"
-                                />
-                                <FormControlLabel
-                                    value="false"
-                                    control={<Radio color="success" />}
-                                    label="No"
-                                />
-                            </RadioGroup>
-                        </>
-                    ) : (
-                        <Typography variant="h5" color="gray">
-                            Update the Document types for the uploaded files
-                        </Typography>
-                    )}
-                </Stack>
-            </AppGrid>
-            {show === "true" && (
+
+            {!selectedFiles.length && (
+                <AppGrid item size={{ xs: 12 }}>
+                    <UploadDocument
+                        enable
+                        setSelectedFiles={setSelectedFiles}
+                        selectedFiles={selectedFiles}
+                        documentTypesData={documentTypesData?.data}
+                        isMultiple
+                    />
+                </AppGrid>
+            )}
+
+            {selectedFiles.length > 0 && (
                 <>
-                    {!selectedFiles.length && (
-                        <AppGrid item size={{ xs: 12 }}>
-                            <InsuranceDocument
-                                enable
-                                setSelectedFiles={setSelectedFiles}
-                                selectedFiles={selectedFiles}
-                                documentTypesData={documentTypesData?.data}
-                                isMultiple
-                            />
-                        </AppGrid>
-                    )}
+
 
                     <AppGrid item size={{ xs: 12 }}>
-                        {selectedFiles.length > 0 && (
-                            <StyledBox>
-                                <StyledTable>
-                                    <TableBody>
-                                        <StickyRow>
+                        {/* <AppLabelComponent align={'center'} variant="body1" label={'Update the Document types for the uploaded files'} /> */}
+                        <StyledBox>
+                            <StyledTable>
+                                <TableBody>
+                                    <StickyRow>
 
-                                            <EllipsisCell colSpan={3} />
-                                            <EllipsisCell>
-                                                <Checkbox
-                                                    onChange={handleSelectAll}
-                                                    checked={selectAll}
-                                                />{" "}
-                                                <Typography
-                                                    variant="h7"
-                                                    sx={{
-                                                        fontSize: "0.85rem",
-                                                        color: "#000",
-                                                        cursor: "pointer",
-                                                    }}
-                                                    onClick={handleSelectAll}
-                                                >
-                                                    Select All
-                                                </Typography>
-                                            </EllipsisCell>
-                                        </StickyRow>
-                                        {selectedFiles.map((files, index) => (
-                                            <FileRow
-                                                key={index}
-                                                files={files}
-                                                index={index}
-                                                onRemove={handleRemoveFile}
-                                                onTypeChange={handleTypeChange}
-                                                onActiveChange={handleActiveChange}
-                                                isActive={files[index]?.active}
-                                                hoveredRow={hoveredRow}
-                                                setHoveredRow={setHoveredRow}
-                                                onClickPreview={onClickPreview}
-                                                setHoveredSingleRow={setHoveredSingleRow}
-                                                hoveredSingleRow={hoveredSingleRow}
-                                                documentTypesData={documentTypesData?.data}
-                                            />
-                                        ))}
-                                    </TableBody>
-                                </StyledTable>
-                            </StyledBox>
-                        )}
+                                        <EllipsisCell colSpan={3} />
+                                        <EllipsisCell>
+                                            <Checkbox
+                                                onChange={handleSelectAll}
+                                                checked={selectAll}
+                                            />{" "}
+                                            <Typography
+                                                variant="h7"
+                                                sx={{
+                                                    fontSize: "0.85rem",
+                                                    color: "#000",
+                                                    cursor: "pointer",
+                                                }}
+                                                onClick={handleSelectAll}
+                                            >
+                                                Select All
+                                            </Typography>
+                                        </EllipsisCell>
+                                    </StickyRow>
+                                    {selectedFiles.map((files, index) => (
+                                        <FileRow
+                                            key={index}
+                                            files={files}
+                                            index={index}
+                                            onRemove={handleRemoveFile}
+                                            onTypeChange={handleTypeChange}
+                                            onActiveChange={handleActiveChange}
+                                            isActive={files[index]?.active}
+                                            hoveredRow={hoveredRow}
+                                            setHoveredRow={setHoveredRow}
+                                            onClickPreview={onClickPreview}
+                                            setHoveredSingleRow={setHoveredSingleRow}
+                                            hoveredSingleRow={hoveredSingleRow}
+                                            documentTypesData={documentTypesData?.data}
+                                        />
+                                    ))}
+                                </TableBody>
+                            </StyledTable>
+                        </StyledBox>
                     </AppGrid>
                 </>
             )}
-            {show === "true" && files.length > 0 && (
-                <Box display="flex" justifyContent="flex-end" mt={3}>
-                    <Button variant="contained" color="primary" size="large">
-                        Upload
-                    </Button>
-                </Box>
-            )}
-            {selectedFiles.length > 0 && (
-                <FilePreview
-                    setIsModalOpen={setIsModalOpen}
-                    isModalOpen={isModalOpen}
-                    selectedFiles={selectedFiles}
-                    selected={selected}
-                    setSelected={setSelected}
-                />
-            )}
-            {selectedFiles.length > 0 && (
-                <Box p={4}>
-                    <PreviewButton index={0} onPreview={onClickPreview} previewAll />
-                </Box>
-            )}
-        </AppGrid>
+            {
+                files.length > 0 && (
+                    <Box display="flex" justifyContent="flex-end" mt={3}>
+                        <Button variant="contained" color="primary" size="large">
+                            Upload
+                        </Button>
+                    </Box>
+                )
+            }
+            {
+                selectedFiles.length > 0 && (
+                    <FilePreview
+                        setIsModalOpen={setIsModalOpen}
+                        isModalOpen={isModalOpen}
+                        selectedFiles={selectedFiles}
+                        selected={selected}
+                        setSelected={setSelected}
+                    />
+                )
+            }
+            {
+                selectedFiles.length > 0 && (
+                    <Box p={4}>
+                        <PreviewButton index={0} onPreview={onClickPreview} previewAll />
+                    </Box>
+                )
+            }
+        </AppGrid >
     );
 };
 

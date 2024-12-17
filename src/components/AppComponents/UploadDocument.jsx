@@ -73,7 +73,7 @@ const InsuranceDocument = ({
             severity: SEVERITY.error,
           });
         } else {
-          setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);
+          setSelectedFiles([...selectedFiles, ...filesArray]);
         }
       }
     }
