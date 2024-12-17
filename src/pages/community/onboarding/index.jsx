@@ -308,10 +308,9 @@ const OnboardingIndex = ({ refetch }) => {
     onSubmit: async (values) => {
       if (finalStep) {
         const formData = new FormData();
-
         let payload = {
           name: values?.communityName?.name,
-          contactInfo: values?.communityAddress?.label,
+          contactInfo: values?.communityAddress?.description || "",
           propertyManagerId: values?.propertyManager?.userId,
           communityManagerId: values?.communityManager?.managerId,
           companyId: values?.communityManager?.managementCompanyId,
