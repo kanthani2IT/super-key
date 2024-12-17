@@ -59,30 +59,30 @@ export default function CommunityTable({
 
   const pageSize = 10;
 
-//   const tableData = [{
-//     name: "Community Name",
-//     communityManagerName: "Community Manager",
-//     propertyManagerName: "Property Manager",
-//     insuredCoverage: "Insured",
-//     status: "Status",
-//     action: "Action",
-//   },
-// {
-//   name: "Community Name",
-//   communityManagerName: "Community Manager",
-//   propertyManagerName: "Property Manager",
-//   insuredCoverage: "Insured",
-//   status: "Status",
-//   action: "Action",
-// },
-// {
-//   name: "Community Name",
-//   communityManagerName: "Community Manager",
-//   propertyManagerName: "Property Manager",
-//   insuredCoverage: "Insured",
-//   status: "Status",
-//   action: "Action",
-// }]
+  //   const tableData = [{
+  //     name: "Community Name",
+  //     communityManagerName: "Community Manager",
+  //     propertyManagerName: "Property Manager",
+  //     insuredCoverage: "Insured",
+  //     status: "Status",
+  //     action: "Action",
+  //   },
+  // {
+  //   name: "Community Name",
+  //   communityManagerName: "Community Manager",
+  //   propertyManagerName: "Property Manager",
+  //   insuredCoverage: "Insured",
+  //   status: "Status",
+  //   action: "Action",
+  // },
+  // {
+  //   name: "Community Name",
+  //   communityManagerName: "Community Manager",
+  //   propertyManagerName: "Property Manager",
+  //   insuredCoverage: "Insured",
+  //   status: "Status",
+  //   action: "Action",
+  // }]
 
   const columns = [
     {
@@ -98,13 +98,27 @@ export default function CommunityTable({
       headerName: "Community Name",
       flex: 1,
     },
+
+    // {
+    //   field: `communityManagerName`,
+    //   headerName: "Community Manager",
+    // },
+    // {
+    //   field: "propertyManagerName",
+    //   headerName: "Property Manager",
+    // },
     {
-      field: `communityManagerName`,
-      headerName: "Community Manager",
+      field: `type`,
+      headerName: "Type",
+    },
+
+    {
+      field: "state",
+      headerName: "State",
     },
     {
-      field: "propertyManagerName",
-      headerName: "Property Manager",
+      field: "city",
+      headerName: "City",
     },
     //Future use
     // {
@@ -119,7 +133,7 @@ export default function CommunityTable({
       headerName: "Insured",
       renderCell: (row) => {
         return (
-          <Typography>{formatAsDollar(row?.insuredCoverage) ?? "-"}</Typography>
+          <Typography>{row?.insuredCoverage ? formatAsDollar(row?.insuredCoverage) : "-"}</Typography>
         );
       },
     },
@@ -142,7 +156,16 @@ export default function CommunityTable({
             </Typography>
           );
         } else {
-          return "-";
+          return <Typography
+            color={"success"}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            gap={0.5}
+          >
+            <FiberManualRecordIcon fontSize="12px" />
+            {"Active"}
+          </Typography>;
         }
       },
     },
@@ -165,8 +188,8 @@ export default function CommunityTable({
       ),
     },
   ];
-
-  const filteredRows = communityList?.content?.filter((row) =>
+  console.log(communityList)
+  const filteredRows = communityList?.filter((row) =>
     Object.values(row).some((value) =>
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
@@ -196,7 +219,7 @@ export default function CommunityTable({
 
   const { mutate } = useOffBoardCommunity();
   const offBoard = () => {
-    console.log("you try to off-board",selectedRows, communityInfo);
+    console.log("you try to off-board", selectedRows, communityInfo);
     const payload = {
       mappings: [
         {
@@ -205,7 +228,6 @@ export default function CommunityTable({
         },
       ],
     };
-    console.log(payload)
     mutate(payload);
     setModal(!modal);
   };
@@ -278,7 +300,7 @@ export default function CommunityTable({
         getStatus={getStatus}
         onSelectionChange={onSelectionChange}
         currentPage={page}
-        totalItems={communityList?.totalElements}
+        totalItems={communityList?.length}
         pageSize={pageSize}
         onPageChange={handleChangePage}
         selected={selectedRows}

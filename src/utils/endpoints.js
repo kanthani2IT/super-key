@@ -11,16 +11,16 @@ const COMMUNITY = {
   createCommunity: "/api/community/createWithFile",
   getAllCommunityList: "/api/community/pagings",
   getCommunityList: (page, size, sortBy, orderBy, status, search) =>
-    `/api/community/pagings/CMCID?page=${page}&size=${size}`,
+    `/api/community/pagings/CMCID?page=${page}&size=${1000}`,
   getUsers: "/api/veruna/users",
-  getCommunityById: (id) => `/api/community/${id}`,
+  getCommunityById: (id) => `/api/community/CMCID/communities/${id}`,
   updateCommunityById: (id) => `/api/community/update/${id}`,
   deleteCommunityById: (id) => `/api/community/${id}`,
   offBoardCommunity: `/api/community/offboardingCommunities`,
 };
 const COMMON = {
   getAllLocation: `api/googlemaps/autocomplete`,
-  getAllCommunity: `/api/community`,
+  getAllCommunity: `/api/community/CMCID/name`,
   getAllCommunityManager: `/api/manager`,
   getAllPropertyManager: `/api/property-managers/all`,
   getAllDocTypes: `/api/document-types`,

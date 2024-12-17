@@ -13,6 +13,7 @@ import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import * as Yup from "yup";
 import { transformDocuments } from "./utils";
+import { useAuthCookies } from "utils/cookie";
 
 const AddNewCommunity = React.lazy(() => import("./AddNewCommunity"));
 const CommunityAddress = React.lazy(() => import("./CommunityAddress"));
@@ -148,6 +149,8 @@ const OnboardingIndex = ({ refetch }) => {
   const [validationSchema, setValidationSchema] = useState(
     onBoardingStepper[activeStep]?.initialValidationSchema || null
   );
+  const { getCookie } = useAuthCookies()
+  const cmcId = getCookie('cmcId')
   const finalStep = activeStep == onBoardingStepper?.length - 1;
 
   const multiCommunityFormik = useFormik({
@@ -313,6 +316,7 @@ const OnboardingIndex = ({ refetch }) => {
           contactInfo: values?.communityAddress?.description || "",
           propertyManagerId: values?.propertyManager?.userId,
           communityManagerId: values?.communityManager?.managerId,
+          cmcId: cmcId,
           companyId: values?.communityManager?.managementCompanyId,
           documents: transformDocuments(selectedFiles),
           status: "ACTIVE",
