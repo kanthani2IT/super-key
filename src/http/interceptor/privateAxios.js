@@ -1,4 +1,5 @@
 import { useAuthCookies } from "utils/cookie";
+import { mergeCMCId } from "utils/helpers";
 
 const privateAxios = (http) => {
   // Attach request interceptor
@@ -7,6 +8,7 @@ const privateAxios = (http) => {
       const { getCookie } = useAuthCookies();
 
       const authToken = getCookie("token");
+      config.url = mergeCMCId(config.url);
       if (authToken) {
         config.headers["Authorization"] = `Bearer ${authToken}`;
       }
