@@ -59,7 +59,7 @@ const AppTable = ({
 
     onSelectionChange?.(newSelected);
   };
-  console.log(currentPage, totalItems, "apptable");
+
   return (
     <TableContainer sx={{ maxHeight: "calc(100vh - 300px)" }}>
       <Table stickyHeader>

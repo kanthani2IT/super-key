@@ -13,9 +13,9 @@ const FilterDrawer = ({
   selectedProperty = [],
   selectedPriority = [],
   setSelectedPriority,
-  toggleFilter,
   anchorEl,
   setAnchorEl,
+  setSelectedProperties,
 }) => {
   const [selectedTab, setSelectedTab] = useState("Properties");
   const isAnyFilteredSelect = selectedProperty.some(
@@ -26,24 +26,50 @@ const FilterDrawer = ({
     setSelectedTab(tab);
   };
   const handleApply = () => {
-    if (!isAnyFilteredSelect) return;
-    const appliedFilters = selectedProperty.filter((filter) => filter.selected);
-    console.log("Applied Filters:", appliedFilters);
+    const appliedProperties = selectedProperty.filter(
+      (filter) => filter.selected
+    );
+    const appliedPriorities = selectedPriority.filter(
+      (priority) => priority.selected
+    );
+
+    console.log("Applied Filters: ", appliedProperties, appliedPriorities);
+
     setAnchorEl(null);
   };
 
-  const colors = {
-    0: "#E81616",
-    1: "#EB6C0B",
-    2: "#DEC013",
+  const toggleFilter = (idOrName) => {
+    console.log(idOrName, "onChange");
+    if (selectedTab === "Properties") {
+      setSelectedProperties((prev) =>
+        prev.map((filter) =>
+          filter.id === idOrName
+            ? { ...filter, selected: !filter.selected }
+            : filter
+        )
+      );
+    } else if (selectedTab === "Priority") {
+      setSelectedPriority((prev) =>
+        prev.map((priority) =>
+          priority.name === idOrName
+            ? { ...priority, selected: !priority.selected }
+            : priority
+        )
+      );
+    }
   };
+  // const colors = {
+  //   0: "#E81616",
+  //   1: "#EB6C0B",
+  //   2: "#DEC013",
+  // };
 
-  Object.keys(selectedPriority).forEach((key) => {
-    selectedPriority[key] = {
-      ...selectedPriority[key],
-      color: colors[key],
-    };
-  });
+  // Object.keys(selectedPriority).forEach((key) => {
+  //   selectedPriority[key] = {
+  //     ...selectedPriority[key],
+  //     color: colors[key],
+  //   };
+  // });
 
   const renderComponent = () => {
     return (
@@ -117,7 +143,7 @@ const FilterDrawer = ({
                       name={priority.name}
                       color={priority.color}
                       isSelected={priority.name === selectedPriority}
-                      onClick={() => setSelectedPriority(priority.name)}
+                      onClick={() => toggleFilter(priority.name)}
                     />
                   ))}
             </Box>
