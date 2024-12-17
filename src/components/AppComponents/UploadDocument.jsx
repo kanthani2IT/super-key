@@ -109,10 +109,10 @@ const InsuranceDocument = ({
       p={3}
       textAlign="center"
       onDragEnter={handleDragEnter}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          sx={{cursor:"pointer"}}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      sx={{ cursor: "pointer" }}
     >
       {/* Icon */}
       <UploadIcon />
@@ -124,7 +124,7 @@ const InsuranceDocument = ({
         gutterBottom
         sx={{ mt: "1rem" }}
       >
-        {importPolicyData.title}
+        {readData ? "Upload the Template File" : importPolicyData.title}
       </Typography>
 
       {/* Instructions */}
@@ -136,12 +136,11 @@ const InsuranceDocument = ({
 
       {/* Import Button */}
       {enable && (
-        <div
-          
-        >
+        <div>
           <FileUploadButton
             onFileChange={(event) => handleFileUpload(event.target.files)}
             fileTypes={importPolicyData.fileTypes}
+            isMultiple={isMultiple}
           />
         </div>
       )}
@@ -157,7 +156,9 @@ const InsuranceDocument = ({
 
       {/* Footer Text */}
       <Typography variant="caption" color="textSecondary">
-        {importPolicyData.footerText}
+        {readData
+          ? "Support file under 100 MB. Import files in  XLSX "
+          : importPolicyData.footerText}
       </Typography>
     </Box>
   );
