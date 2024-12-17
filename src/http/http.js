@@ -22,8 +22,8 @@ const formDataHttp = axios.create({
 });
 
 // Apply privateAxios interceptors to handle authentication (if required)
-// privateAxios(formDataHttp);  // Apply interceptors for form-data HTTP requests if necessary
-// privateAxios(http);  // Apply interceptors for standard HTTP requests if necessary
+privateAxios(formDataHttp);  // Apply interceptors for form-data HTTP requests if necessary
+privateAxios(http);  // Apply interceptors for standard HTTP requests if necessary
 
 // Export both instances, `http` as the default and `formDataHttp` as a named export
 export { formDataHttp };
