@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   TableContainer,
   Table,
@@ -16,6 +16,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AppSkeleton from "components/AppComponents/AppSkeleton";
 import { StyledMenuItem } from "components/StyledComponents";
 import AppMenu from "components/AppComponents/AppMenu";
+import AppTaskCard from "components/AppComponents/AppTaskCard";
 
 const columns = [
   { field: "S.No", headerName: "S.No" },
@@ -38,26 +39,6 @@ const getPriorityColor = (priority) => {
     default:
       return "black";
   }
-};
-const renderPriorityComponent = (row, onClose) => {
-  const handleOptionClick = (option) => {
-    console.log(`${option} clicked:`, row);
-    onClose();
-  };
-
-  return (
-    <>
-      <StyledMenuItem onClick={() => handleOptionClick("View Details")}>
-        View Details
-      </StyledMenuItem>
-      <StyledMenuItem onClick={() => handleOptionClick("Send Email")}>
-        Send Email
-      </StyledMenuItem>
-      <StyledMenuItem onClick={() => handleOptionClick("Mark as Completed")}>
-        Mark as Completed
-      </StyledMenuItem>
-    </>
-  );
 };
 
 const cellStyle = {
@@ -87,6 +68,36 @@ const truncateText = (text, limit = 50) => {
   return text.length > limit ? `${text.slice(0, limit)}...` : text;
 };
 const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
+  const anchorRef = useRef(null);
+  const [modal, setModal] = useState(null);
+  const [viewDetails, setViewDetails] = useState(null);
+  const renderPriorityComponent = (row, onClose) => {
+    const handleOptionClick = (option) => {
+      console.log(`${option} clicked:`, row);
+      onClose();
+    };
+
+    return (
+      <>
+        <StyledMenuItem
+          onClick={(e) => {
+            console.log(e.currentTarget, "currentTarget");
+            setModal(e.currentTarget);
+            setViewDetails(row);
+          }}
+          ref={anchorRef}
+        >
+          View Details
+        </StyledMenuItem>
+        <StyledMenuItem onClick={() => handleOptionClick("Send Email")}>
+          Send Email
+        </StyledMenuItem>
+        <StyledMenuItem onClick={() => handleOptionClick("Mark as Completed")}>
+          Mark as Completed
+        </StyledMenuItem>
+      </>
+    );
+  };
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [menuRowData, setMenuRowData] = useState(null);
 
@@ -114,7 +125,12 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
             height={"60px"}
           />
         ) : (
-          <Table>
+          <Table
+            sx={{
+              borderSpacing: "0 10px",
+              borderCollapse: "separate",
+            }}
+          >
             <TableHead>
               <TableRow>
                 {columns.map((col) => (
@@ -160,6 +176,20 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
         )}
       </TableContainer>
       <AppMenu
+        anchorEl={modal}
+        handleClose={() => setModal(null)}
+        renderComponent={
+          <AppTaskCard
+            roleName={viewDetails?.assignTo}
+            role="Property Manager Name"
+            type="GRT"
+            number="+1 432 567 987"
+          />
+        }
+        borderRadius={"20px"}
+      />
+
+      <AppMenu
         anchorEl={menuAnchorEl}
         handleClose={handleMenuAnchorClose}
         renderComponent={
@@ -167,7 +197,7 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
           renderPriorityComponent(menuRowData, handleMenuAnchorClose)
         }
       />
-      {displayedTasks.length > 4 && (
+      {tableData.length > 4 && (
         <Box display="flex" justifyContent="center" mt={2}>
           <Button
             variant="text"

@@ -17,7 +17,7 @@ const FilterDrawer = ({
   anchorEl,
   setAnchorEl,
 }) => {
-  const [selectedTab, setSelectedTab] = useState("Properties");
+  const [selectedTab, setSelectedTab] = useState("Assigned to");
   const isAnyFilteredSelect = selectedProperty.some(
     (filter) => filter.selected
   );
@@ -38,20 +38,20 @@ const FilterDrawer = ({
         <Box sx={{ display: "flex", height: "100%" }}>
           <Box sx={{ width: "100%" }}>
             <Button
-              variant={selectedTab === "Properties" ? "contained" : "none"}
-              color={selectedTab === "Properties" ? "none" : "default"}
-              onClick={() => handleTabClick("Properties")}
+              variant={selectedTab === "Assigned to" ? "contained" : "none"}
+              color={selectedTab === "Assigned to" ? "none" : "default"}
+              onClick={() => handleTabClick("Assigned to")}
               sx={{
                 width: "155px",
                 height: "41px",
                 margin: "8px 7px",
                 borderRadius: "8px",
                 backgroundColor:
-                  selectedTab === "Properties" ? "#E0EDFF" : "transparent",
-                color: selectedTab === "Properties" ? "#2954E1" : "black",
+                  selectedTab === "Assigned to" ? "#E0EDFF" : "transparent",
+                color: selectedTab === "Assigned to" ? "#2954E1" : "black",
               }}
             >
-              Properties
+              Assigned to
             </Button>
             <Button
               variant={selectedTab === "Priority" ? "contained" : "none"}
@@ -83,7 +83,7 @@ const FilterDrawer = ({
             }}
           >
             <Box sx={{ mt: 1 }}>
-              {selectedTab === "Properties"
+              {selectedTab === "Assigned to"
                 ? selectedProperty.map((filter, index) => (
                     <FormControlLabel
                       key={filter.id}
