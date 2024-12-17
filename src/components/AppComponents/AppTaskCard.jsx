@@ -1,13 +1,30 @@
 import MailIcon from "@mui/icons-material/Mail";
-import { Avatar, Button, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import CopyContentIcon from "assets/images/icons/CopyContent";
 import OfficeIcon from "assets/images/icons/OfficeIcon";
 import PhoneIcon from "assets/images/icons/PhoneIcon";
 import avatar1 from "assets/images/users/avatar-1.png";
+import { useState } from "react";
 import AppCard from "./AppCard";
 import AppGrid from "./AppGrid";
 
 const AppTaskCard = ({ roleName, role, type, number }) => {
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = () => {
+    const email = "example@example.com";
+    navigator.clipboard.writeText(email).then(() => {
+      setIsCopied(true);
+    });
+  };
+
   const Footer = () => {
     return (
       <>
@@ -21,7 +38,9 @@ const AppTaskCard = ({ roleName, role, type, number }) => {
           {" "}
           Send Mail
         </Button>
-        <CopyContentIcon />
+        <Tooltip title={isCopied ? "Email Copied!" : "Copy Email"}>
+          <IconButton onClick={handleCopy}>{<CopyContentIcon />}</IconButton>
+        </Tooltip>
       </>
     );
   };
