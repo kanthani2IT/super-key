@@ -273,7 +273,7 @@ export default function TaskTable({
           />
         }
         borderRadius={"20px"}
-        width={"25vw"}
+        width={"20vw"}
       />
 
       <AppMenu
