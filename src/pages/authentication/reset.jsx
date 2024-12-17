@@ -18,7 +18,7 @@ export default function Reset() {
       type: 'email',
       label: 'Email ID',
       placeholder: 'Enter Your Email ID',
-      hide: id === "forgot",
+      // hide: id === "forgot",
       validation: EMAIL_VALIDATION,
     },
     {
@@ -37,6 +37,8 @@ export default function Reset() {
       label: 'New Password',
       placeholder: 'Enter new password',
       validation: PASSWORD_VALIDATION({ name: "New " }),
+      hide: id === "forgot",
+
     },
     {
       id: 'confirmPassword-reset',
@@ -45,6 +47,8 @@ export default function Reset() {
       label: 'Confirm Password',
       placeholder: 'Confirm new password',
       validation: CONFIRM_PASSWORD,
+      hide: id === "forgot",
+
     }
   ].filter(items => !items.hide);
 

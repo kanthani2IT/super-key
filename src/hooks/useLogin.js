@@ -10,17 +10,17 @@ export const useLoginUser = () => {
   const navigate = useNavigate();
   const { setAuthCookie } = useAuthCookies();
   const { updateSnackbar } = useSnackbar(); // Get the updateSnackbar function
-  const { login } = useGlobalStore();
   const { mutate, isSuccess, isError, error } = useMutation({
     mutationKey: ["login"],
     mutationFn: ({ values }) => api.login.userLogin(values), // Pass `credentialData` to `mutate`
     onSuccess: (data, { values, checked }) => {
       const userEmail = data?.data?.email;
+      const cmcId = data?.data?.cmcAdminDTO ?? "001bn00001CitW2AAJ";
       if (data.data.token == "Please set you own password.") {
         navigate("/reset/change", { state: { email: userEmail } });
       } else {
         setAuthCookie("token", data.data.token);
-        login(userEmail, "001bn00001CitW2AAJ");
+        setAuthCookie("cmcId", cmcId);
         navigate("/home");
         updateSnackbar({
           message: MESSAGE.loginSuccess,
@@ -61,11 +61,10 @@ export const useRequestReset = () => {
       });
     },
     onError: (error) => {
-      //Todo: After enabling the email have to uncomment this code
-      // updateSnackbar({
-      //   message:error.response.data.token,
-      //   severity:SEVERITY.error
-      // });
+      updateSnackbar({
+        message: error.response.data,
+        severity: SEVERITY.error,
+      });
       console.error(error);
     },
   });

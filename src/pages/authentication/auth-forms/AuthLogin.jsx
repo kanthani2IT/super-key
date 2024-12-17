@@ -102,7 +102,7 @@ export default function AuthLogin(props) {
                   component={RouterLink}
                   fontWeight={600}
                   underline=""
-                  to="/reset/change"
+                  to="/reset/forgot"
                   color="info"
 
                 >
