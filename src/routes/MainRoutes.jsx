@@ -17,11 +17,11 @@ const DashboardDefault = Loadable(lazy(() => import("pages/dashboard/index")));
 const CommunityOnboarding = Loadable(
   lazy(() => import("pages/community/index"))
 );
-const AllDocuments = Loadable(
-  lazy(() => import("pages/documents-repository/all-documents/index"))
+const Repository = Loadable(
+  lazy(() => import("pages/documents/repository/index"))
 );
 const COI = Loadable(
-  lazy(() => import("pages/documents-repository/coi/index"))
+  lazy(() => import("pages/documents/coi/index"))
 );
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -54,10 +54,10 @@ const MainRoutes = {
     {
       path: "documents",
       children: [
-        // {
-        //   path: 'all-documents',
-        //   element: <AllDocuments />
-        // },
+        {
+          path: 'repository',
+          element: <Repository />
+        },
         {
           path: "coi",
           element: <COI />,
