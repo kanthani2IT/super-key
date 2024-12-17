@@ -201,7 +201,9 @@ export default function TaskTable({
     e.stopPropagation();
     setAnchorEl(e.currentTarget);
   };
-
+  const onClose = () => {
+    setModal(null);
+  };
   return (
     <Box sx={communityStyles.container(height)}>
       <>
@@ -267,6 +269,7 @@ export default function TaskTable({
             role="Property Manager Name"
             type="GRT"
             number="+1 432 567 987"
+            onClose={onClose}
           />
         }
         borderRadius={"20px"}

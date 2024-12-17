@@ -1,3 +1,4 @@
+import styled from "@emotion/styled";
 import MailIcon from "@mui/icons-material/Mail";
 import {
   Avatar,
@@ -15,7 +16,7 @@ import { useState } from "react";
 import AppCard from "./AppCard";
 import AppGrid from "./AppGrid";
 
-const AppTaskCard = ({ roleName, role, type, number }) => {
+const AppTaskCard = ({ roleName, role, type, number, onClose }) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopy = () => {
@@ -24,7 +25,16 @@ const AppTaskCard = ({ roleName, role, type, number }) => {
       setIsCopied(true);
     });
   };
-
+  const StyledTooltip = styled(({ className, ...props }) => (
+    <Tooltip
+      {...props}
+      componentsProps={{ tooltip: { className: className } }}
+    />
+  ))(`
+      color: black;
+      background-color: gray;
+     
+  `);
   const Footer = () => {
     return (
       <>
@@ -38,14 +48,20 @@ const AppTaskCard = ({ roleName, role, type, number }) => {
           {" "}
           Send Mail
         </Button>
-        <Tooltip title={isCopied ? "Email Copied!" : "Copy Email"}>
+        <StyledTooltip title={isCopied ? "Email Copied!" : "Copy Email"}>
           <IconButton onClick={handleCopy}>{<CopyContentIcon />}</IconButton>
-        </Tooltip>
+        </StyledTooltip>
       </>
     );
   };
   return (
-    <AppCard height={"auto"} footer={<Footer />} width="400px" custom>
+    <AppCard
+      height={"auto"}
+      footer={<Footer />}
+      width="400px"
+      custom
+      onClose={onClose}
+    >
       <AppGrid container direction={"column"}>
         <AppGrid>
           <Stack direction="row" spacing={1.25} alignItems="center">
