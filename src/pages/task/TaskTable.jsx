@@ -11,6 +11,7 @@ import AppTaskCard from "components/AppComponents/AppTaskCard";
 import { getStatus } from "components/AppComponents/CustomField";
 import FilterDrawer from "components/CustomPopup";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
+import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
 import { useRef, useState } from "react";
 const options = [
   { value: "ACTIVE", label: "Status: Active" },
@@ -36,6 +37,9 @@ export default function TaskTable({
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(null);
+  const { data: assigneToData, isLoading: assigneToLoading } =
+    useVerunaUsersQuery();
+  const { data: priorityData } = useVerunaPriorityQuery();
 
   const [selectedPriority, setSelectedPriority] = useState([
     { name: "High", color: "#E81616" },
@@ -232,8 +236,8 @@ export default function TaskTable({
           View Details
         </Button>
         <FilterDrawer
-          selectedProperty={selectedProperty}
-          selectedPriority={selectedPriority}
+          selectedProperty={assigneToData?.records || selectedProperty}
+          selectedPriority={priorityData || selectedPriority}
           toggleFilter={toggleFilter}
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
