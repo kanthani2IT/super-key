@@ -4,6 +4,8 @@ import { DASHBOARD } from "utils/endpoints";
 import { addQueryParams } from "utils/helpers";
 
 const getActiveTask = async () => {
+  const requestUrl = addQueryParams(DASHBOARD.getActiveTask);
+
   const response = await http({
     method: "GET",
     url: DASHBOARD.getActiveTask,
@@ -12,6 +14,8 @@ const getActiveTask = async () => {
 };
 
 const getCompletedTask = async () => {
+  const requestUrl = addQueryParams(DASHBOARD.getCompletedTask);
+
   const response = await http({
     method: "GET",
     url: DASHBOARD.getCompletedTask,
@@ -20,6 +24,18 @@ const getCompletedTask = async () => {
 };
 
 const getActiveAndCompletedTaskByFilter = async (body) => {
+  const { sort, orderBy, id, page, size } = body;
+  const requestUrl = addQueryParams(
+    DASHBOARD.getActiveAndCompletedTaskByFilter,
+    {
+      sort,
+      orderBy,
+      id,
+      page,
+      size,
+    }
+  );
+
   const response = await http({
     method: "POST",
     url: DASHBOARD.getActiveAndCompletedTaskByFilter(
@@ -35,6 +51,8 @@ const getActiveAndCompletedTaskByFilter = async (body) => {
 };
 
 const getDashboardMetrics = async () => {
+  const requestUrl = addQueryParams(DASHBOARD.getRenewals, queries);
+
   const response = await http({
     method: "GET",
     url: DASHBOARD.getDashboardMetrics,
