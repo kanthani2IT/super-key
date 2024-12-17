@@ -336,6 +336,7 @@ export default function TaskTable({
         anchorEl={modal}
         handleClose={() => setModal(null)}
         renderComponent={singleViewComponent()}
+        borderRadius={"20px"}
       />
 
       <AppMenu

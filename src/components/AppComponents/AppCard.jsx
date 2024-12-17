@@ -41,7 +41,6 @@ const AppCard = ({
       sx={{
         boxShadow: "none",
         width: width ? width : "auto",
-        borderRadius: "20px",
       }}
     >
       <CardHeader
@@ -54,7 +53,13 @@ const AppCard = ({
       />
 
       {!custom && <Divider />}
-      <CardContent sx={{ height: height ? height : "85vh", overflowY: "auto" }}>
+      <CardContent
+        sx={{
+          height: height ? height : "85vh",
+          overflowY: "auto",
+          paddingTop: custom ? "2px" : "",
+        }}
+      >
         {children}
       </CardContent>
 
