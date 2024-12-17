@@ -24,6 +24,7 @@ const COMMON = {
   getAllPropertyManager: `/api/property-managers/all`,
   getAllDocTypes: `/api/document-types`,
   getUsers: "/api/veruna/users",
+  getPriority: "/api/tasks/priority",
 };
 const TASK = {
   getStatus: "/api/tasks/status",

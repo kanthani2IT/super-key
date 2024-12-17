@@ -16,11 +16,15 @@ import {
   useGetDashboardMetrics,
 } from "hooks/useDashboard";
 import { ColorBox } from "pages/component-overview/color";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import UserTable from "../community/CommunityTable";
 import RenewalPieChart from "./RenewalPieChart";
 import TaskTable from "./TaskTable";
+import CustomUploadTable from "components/AppComponents/CustomUploadTable";
+import Columns from "./TaskTableDashBoard";
+import TaskTableDashBoard from "./TaskTableDashBoard";
+import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 const tabs = [
@@ -42,6 +46,10 @@ export default function DashboardDefault() {
     totalPremium,
     upcomingRenewals,
   } = dashboardData?.data ?? {};
+  const { data: assigneToData, isLoading: assigneToLoading } =
+    useVerunaUsersQuery();
+  const { data: priorityData } = useVerunaPriorityQuery();
+  console.log("assigneToData", assigneToData);
 
   const {
     data: taskData,
@@ -61,10 +69,26 @@ export default function DashboardDefault() {
     fetchData();
   }, []);
 
+  const [editedList, setEditedList] = React.useState([]);
+
+  const handleChanges = (value, field, index) => {
+    setEditedList((prevList) => {
+      const updatedList = [...prevList];
+      updatedList[index] = {
+        ...updatedList[index],
+        [field]: value,
+      };
+      return updatedList;
+    });
+  };
+
   const fetchData = (status) => {
     let reqBody = {
       sort: "createdAt",
       orderBy: "desc",
+      id: "0017x00000kF1kTAAS",
+      page: 1,
+      size: 10,
       data: [
         {
           column: "status",
@@ -190,13 +214,23 @@ export default function DashboardDefault() {
         </MainCard>
       </AppModal>
       <AppGrid size={{ xs: 12 }}>
-        <MainCard title={"Task Assigned"} secondary={"Full View"} isFilter>
+        <MainCard
+          title={"Task Assigned"}
+          secondary={"Full View"}
+          isFilter
+          showSecondary={false}
+          selectedProperty={assigneToData}
+          selectedPriority={priorityData}
+        >
           <MainTabs
             handleChange={handleChange}
             value={selectedTab}
             tabs={tabs}
           />
-          <TaskTable tableData={taskData?.data || []} loading={isTaskLoading} />
+          <TaskTableDashBoard
+            tableData={taskData?.data || []}
+            loading={isTaskLoading}
+          ></TaskTableDashBoard>
         </MainCard>
       </AppGrid>
     </AppGrid>

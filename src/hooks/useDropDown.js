@@ -135,3 +135,18 @@ export const useVerunaUsersQuery = (search) =>
       console.error("Error fetching types:", error);
     },
   });
+
+// Custom hook for Priorities Query
+export const useVerunaPriorityQuery = (search) =>
+  useQuery({
+    queryKey: ["allVerunaPriority", search],
+    queryFn: () => api.common.getAllVerunaPriority({ search }),
+    keepPreviousData: true,
+    select: (data) => {
+      return data?.data?.records || [];
+    },
+    onSuccess: (data) => {},
+    onError: (error) => {
+      console.error("Error fetching types:", error);
+    },
+  });
