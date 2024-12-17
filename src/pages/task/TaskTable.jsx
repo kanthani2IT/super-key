@@ -1,17 +1,23 @@
 import { MoreVert, SwapVert } from "@mui/icons-material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { Button, IconButton, Typography } from "@mui/material";
+
+import MailIcon from "@mui/icons-material/Mail";
+import { Avatar, Button, IconButton, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
+import CopyContentIcon from "assets/images/icons/CopyContent";
+import OfficeIcon from "assets/images/icons/OfficeIcon";
+import PhoneIcon from "assets/images/icons/PhoneIcon";
+import avatar1 from "assets/images/users/avatar-1.png";
+import AppCard from "components/AppComponents/AppCard";
+import AppGrid from "components/AppComponents/AppGrid";
 import AppMenu from "components/AppComponents/AppMenu";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
-import AppTaskCard from "components/AppComponents/AppTaskCard";
 import { getStatus } from "components/AppComponents/CustomField";
 import FilterDrawer from "components/CustomPopup";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
-import { useState } from "react";
-
+import { useRef, useState } from "react";
 const options = [
   { value: "ACTIVE", label: "Status: Active" },
   { value: "INACTIVE", label: "Status: Inactive" },
@@ -30,11 +36,12 @@ export default function TaskTable({
   page,
   selectedRows = [],
 }) {
+  const anchorRef = useRef(null);
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(null);
 
   const [selectedPriority, setSelectedPriority] = useState([
     { name: "High", color: "#E81616" },
@@ -201,6 +208,74 @@ export default function TaskTable({
     e.stopPropagation();
     setAnchorEl(e.currentTarget);
   };
+  const Footer = () => {
+    return (
+      <>
+        <Button
+          startIcon={<MailIcon />}
+          size="large"
+          color="info"
+          variant="contained"
+          fullWidth
+        >
+          {" "}
+          Send Mail
+        </Button>
+        <CopyContentIcon />
+      </>
+    );
+  };
+  const singleViewComponent = () => {
+    return (
+      <AppCard height={"auto"} footer={<Footer />} width="400px" custom>
+        <AppGrid container direction={"column"}>
+          <AppGrid>
+            <Stack direction="row" spacing={1.25} alignItems="center">
+              <Avatar
+                alt="profile user"
+                src={avatar1}
+                sx={{ width: 32, height: 32 }}
+              />
+              <Stack>
+                <Typography variant="subtitle2">Richard</Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Property Manager Name
+                </Typography>
+              </Stack>
+            </Stack>
+          </AppGrid>
+          <AppGrid>
+            <Stack direction="row" spacing={1.25} alignItems="center">
+              <Avatar
+                alt="profile user"
+                sx={{ width: 32, height: 32, backgroundColor: "white" }}
+              >
+                <OfficeIcon />
+              </Avatar>
+
+              <Stack>
+                <Typography variant="subtitle2">GRT</Typography>
+              </Stack>
+            </Stack>
+          </AppGrid>
+          <AppGrid>
+            <Stack direction="row" spacing={1.25} alignItems="center">
+              <Avatar
+                alt="profile user"
+                sx={{ width: 32, height: 32, backgroundColor: "white" }}
+              >
+                <PhoneIcon />
+              </Avatar>
+              <Stack flexDirection={"row"} gap={"20px"}>
+                <Typography variant="subtitle2"> +1 432 567 987</Typography>
+                <CopyContentIcon />
+              </Stack>
+            </Stack>
+          </AppGrid>
+        </AppGrid>
+      </AppCard>
+    );
+  };
   return (
     <Box sx={communityStyles.container(height)}>
       <>
@@ -221,9 +296,11 @@ export default function TaskTable({
           ]}
         />
         <Button
-          onClick={() => {
-            setModal(true);
+          onClick={(e) => {
+            console.log(e.currentTarget, "currentTarget");
+            setModal(e.currentTarget);
           }}
+          ref={anchorRef}
         >
           View Details
         </Button>
@@ -255,7 +332,11 @@ export default function TaskTable({
                 handleClose={handleMenuAnchorClose}
                 renderComponent={renderMenuComponent()}
             /> */}
-      <AppTaskCard open={modal} onClose={() => setModal(false)} />
+      <AppMenu
+        anchorEl={modal}
+        handleClose={() => setModal(null)}
+        renderComponent={singleViewComponent()}
+      />
 
       <AppMenu
         anchorEl={menuAnchorEl}

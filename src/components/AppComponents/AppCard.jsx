@@ -9,13 +9,29 @@ import {
 } from "@mui/material";
 import AppRowBox from "./AppRowBox";
 
-const AppCard = ({ onClose, children, title, footer }) => {
+const AppCard = ({
+  onClose,
+  children,
+  title,
+  footer,
+  height,
+  width,
+  custom,
+}) => {
   const Header = () => {
     return (
       <AppRowBox>
         <Typography variant="h4">{title}</Typography>
 
-        <Button onClick={onClose} disableTouchRipple variant="text" size="small" color="secondary">Close</Button>
+        <Button
+          onClick={onClose}
+          disableTouchRipple
+          variant="text"
+          size="small"
+          color="secondary"
+        >
+          Close
+        </Button>
       </AppRowBox>
     );
   };
@@ -24,17 +40,21 @@ const AppCard = ({ onClose, children, title, footer }) => {
     <Card
       sx={{
         boxShadow: "none",
+        width: width ? width : "auto",
+        borderRadius: "20px",
       }}
     >
       <CardHeader
         title={<Header />}
         sx={{
-          height: "5vh",
+          height: custom ? "1vh" : "5vh",
+          padding: custom ? "5px" : "20px",
+          marginTop: custom ? "5px" : "",
         }}
       />
 
-      <Divider />
-      <CardContent sx={{ height: "85vh", overflowY: "auto" }}>
+      {!custom && <Divider />}
+      <CardContent sx={{ height: height ? height : "85vh", overflowY: "auto" }}>
         {children}
       </CardContent>
 
