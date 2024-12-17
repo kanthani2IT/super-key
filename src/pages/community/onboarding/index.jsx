@@ -138,6 +138,7 @@ const initialBulkUploadValues = {
   fileData: [],
   editedList: [],
   draftData: [],
+  fileCount: { uploadDataCount: 0, draftDataCount: 0 },
 };
 
 const OnboardingIndex = ({ refetch }) => {
