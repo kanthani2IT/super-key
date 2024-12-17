@@ -21,6 +21,7 @@ import { useNavigate } from "react-router";
 import UserTable from "../community/CommunityTable";
 import RenewalPieChart from "./RenewalPieChart";
 import TaskTable from "./TaskTable";
+import { transformedRenewalData } from "utils/helpers";
 import CustomUploadTable from "components/AppComponents/CustomUploadTable";
 import Columns from "./TaskTableDashBoard";
 import TaskTableDashBoard from "./TaskTableDashBoard";
@@ -36,7 +37,8 @@ export default function DashboardDefault() {
   const [selectedTab, setSelectedTab] = useState(tabs[0].value);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { data, isLoading } = useGetUsers();
+  //Todo Users
+  // const { data, isLoading } = useGetUsers();
   const { data: dashboardData, isLoading: isWidgetLoading } =
     useGetDashboardMetrics();
   const {
@@ -46,6 +48,7 @@ export default function DashboardDefault() {
     totalPremium,
     upcomingRenewals,
   } = dashboardData?.data ?? {};
+  console.log(dashboardData,"$$$$")
   const { data: assigneToData, isLoading: assigneToLoading } =
     useVerunaUsersQuery();
   const { data: priorityData } = useVerunaPriorityQuery();
@@ -196,12 +199,13 @@ export default function DashboardDefault() {
         <AppSkeletonWrapper loading={isWidgetLoading} height={"370px"}>
           <MainCard title={"Upcoming Renewals"}>
             <AppGrid size={{ xs: 12 }} justifyItems={"center"}>
-              <RenewalPieChart chartData={upcomingRenewals ?? []} />
+              <RenewalPieChart chartData={transformedRenewalData(upcomingRenewals) ?? []} />
             </AppGrid>
           </MainCard>
         </AppSkeletonWrapper>
       </AppGrid>
-      <AppModal open={open} onClose={handleClose} height="auto" width="70%">
+      {/* {Todo Users} */}
+      {/* <AppModal open={open} onClose={handleClose} height="auto" width="70%">
         <MainCard
           noStyles={true}
           title={"Community Users"}
@@ -212,7 +216,7 @@ export default function DashboardDefault() {
             isLoading={isLoading}
           />
         </MainCard>
-      </AppModal>
+      </AppModal> */}
       <AppGrid size={{ xs: 12 }}>
         <MainCard
           title={"Task Assigned"}
