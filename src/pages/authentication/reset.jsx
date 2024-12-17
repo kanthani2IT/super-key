@@ -18,6 +18,7 @@ export default function Reset() {
       type: 'email',
       label: 'Email ID',
       placeholder: 'Enter Your Email ID',
+      hide: id === "forgot",
       validation: EMAIL_VALIDATION,
     },
     {

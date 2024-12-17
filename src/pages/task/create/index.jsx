@@ -165,6 +165,7 @@ const TaskCreation = ({ refetch }) => {
                         <AppLabelComponent label={'Type'}>
 
                             <AppAutoComplete
+                                freeSolo={false}
                                 filter={false}
                                 name="type"
                                 valueParam='name'

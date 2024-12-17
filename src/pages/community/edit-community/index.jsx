@@ -268,7 +268,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     return (
       <>
         <AppRowBox>
-          <AppGrid item size={{ xs: 6, sx: 6, lg: 8 }}>
+          <AppGrid item size={{ xs: 5, sx: 5, lg: 8 }}>
             <RadiusStyledButton
               color="#FFFFFF"
               textColor="#E12929"

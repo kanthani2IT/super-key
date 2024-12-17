@@ -115,13 +115,6 @@ const AppTable = ({
     }
   };
 
-  console.log(
-    rowCount,
-    numSelected,
-    rowCount,
-    totalItems,
-    "$$$ row count, 333"
-  );
   return (
     <TableContainer sx={{ maxHeight: "calc(100vh - 300px)" }}>
       <Table stickyHeader>

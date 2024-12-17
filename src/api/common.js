@@ -67,6 +67,16 @@ const getAllVerunaUsers = async (queries) => {
     throw error;
   }
 };
+const getAllVerunaPriority = async (queries) => {
+  try {
+    const requestUrl = addQueryParams(COMMON.getPriority, queries);
+    const response = await getRequest(requestUrl);
+    return response;
+  } catch (error) {
+    console.error("Error fetching document types:", error);
+    throw error;
+  }
+};
 
 export const commonApi = {
   getAllLocation,
@@ -75,4 +85,5 @@ export const commonApi = {
   getAllPropertyManager,
   getAllDocTypes,
   getAllVerunaUsers,
+  getAllVerunaPriority,
 };

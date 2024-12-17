@@ -97,7 +97,7 @@ const pages = {
         url: '/tasks',
         icon: icons.TaskIcon,
         type: "item",
-        disable: true,
+        disable: false,
         badge: 2
       }, {
         id: 'property',
