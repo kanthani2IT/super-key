@@ -76,7 +76,7 @@ const CommunityOnboarding = () => {
   const fetchData = (sort, search, page = filters.page) => {
     const sortData = sort === "ACTIVE" || sort === "INACTIVE" ? "" : "name";
     const orderByData =
-      sort === "lowToHigh" ? "asc" : sort === "highToLow" ? "desc" : "";
+      sort === "lowToHigh" ? "asc" : "desc";
     const statusData = sort === "ACTIVE" || sort === "INACTIVE" ? sort : "";
     const body = {
       page: page,
