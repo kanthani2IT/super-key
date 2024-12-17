@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 
-// material-ui
 import { ExpandAltOutlined } from "@ant-design/icons";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -11,8 +10,8 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
+import FilterDrawer from "./CustomPopup";
 
-// header style
 const headerSX = {
   px: 3,
   "& .MuiCardHeader-action": { m: "0px auto", alignSelf: "center" },
@@ -20,6 +19,7 @@ const headerSX = {
 
 function MainCard(
   {
+    background = true,
     border = true,
     boxShadow,
     children,
@@ -35,13 +35,40 @@ function MainCard(
     secondaryAction,
     isFilter,
     noStyles = false,
+    onFilterClick,
     ...others
   },
   ref
 ) {
   const theme = useTheme();
   boxShadow = theme.palette.mode === "dark" ? boxShadow || true : boxShadow;
+  const [openFilter, setOpenFilter] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
+  const handleFilterButtonClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpenFilter((prev) => !prev);
+  };
+  const [selectedPriority, setSelectedPriority] = useState([
+    { name: "High", color: "#E81616" },
+    { name: "Medium", color: "#EB6C0B" },
+    { name: "Low", color: "#DEC013" },
+  ]);
+  const [selectedProperty, setSelectedProperties] = useState([
+    { id: 1, data: "Desert Springs", selected: false },
+    { id: 2, data: "Rose Dale", selected: false },
+    { id: 3, data: "Rose Dal", selected: false },
+    { id: 4, data: "Oak Ridge Estates", selected: false },
+    { id: 5, data: "Mountain Vista", selected: false },
+  ]);
+
+  const toggleFilter = (id) => {
+    setSelectedProperties((prev) =>
+      prev.map((filter) =>
+        filter.id === id ? { ...filter, selected: !filter.selected } : filter
+      )
+    );
+  };
   return (
     <Card
       elevation={elevation || 0}
@@ -65,12 +92,11 @@ function MainCard(
           p: 0,
           "& pre": {
             m: 0,
-            // p: '15px !important',
             fontFamily: theme.typography.fontFamily,
             fontSize: "0.75rem",
           },
           ...sx,
-          backgroundColor: theme.palette.primary.lighter,
+          backgroundColor: background && theme.palette.primary.lighter,
         }
       }
     >
@@ -84,7 +110,6 @@ function MainCard(
                 <Chip
                   variant="combined"
                   color={"success"}
-                  // icon={isLoss ? <FallOutlined style={iconSX} /> : <RiseOutlined style={iconSX} />}
                   label={`${count}`}
                   sx={{ ml: 2 }}
                   size="small"
@@ -98,23 +123,39 @@ function MainCard(
                 {isFilter ? (
                   <Button
                     variant="outlined"
-                    startIcon={<FilterAltIcon />}
-                    endIcon={<ArrowDropDownIcon fontSize="large" />}
+                    color="black"
+                    onClick={handleFilterButtonClick}
+                    endIcon={
+                      <FilterAltIcon sx={{ width: "22px", height: "24px" }} />
+                    }
+                    sx={{
+                      height: "42px",
+                      borderRadius: "10px",
+                      borderWidth: "0.5px",
+                      borderColor: "#000",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      "&:hover": { backgroundColor: "#E9F3FF" },
+                    }}
                   >
-                    {"Filter"}
+                    {" "}
+                    {"Filter"}{" "}
                   </Button>
                 ) : null}
 
                 <Typography
                   variant="body1"
-                  sx={{ textDecoration: "none", cursor: "pointer" }}
+                  sx={{
+                    textDecoration: "none",
+                    cursor: "pointer",
+                  }}
                   color="primary"
                   onClick={secondaryAction && secondaryAction}
                 >
                   <ExpandAltOutlined
                     style={{ marginRight: 2 }}
                     fontSize="medium"
-                  />{" "}
+                  />
                   {secondary}
                 </Typography>
               </Box>
@@ -133,10 +174,18 @@ function MainCard(
             overflow: "scroll",
             ...contentSX,
             "&::-webkit-scrollbar": {
-              display: "none", // For Chrome, Safari, and Edge
+              display: "none",
             },
           }}
         >
+          <FilterDrawer
+            openFilter={openFilter}
+            setOpenFilter={setOpenFilter}
+            selectedProperty={selectedProperty}
+            selectedPriority={selectedPriority}
+            toggleFilter={toggleFilter}
+            anchorEl={anchorEl}
+          />
           {children}
         </CardContent>
       )}
@@ -163,4 +212,5 @@ MainCard.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   modal: PropTypes.bool,
   others: PropTypes.any,
+  onFilterClick: PropTypes.func,
 };

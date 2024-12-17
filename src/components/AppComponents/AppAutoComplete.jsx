@@ -19,6 +19,7 @@ const AddManuallyButton = styled(Typography)({
   marginLeft: "auto",
   fontSize: "0.875rem",
   fontWeight: 500,
+  minWidth: "fit-content"
 });
 
 const AddManuallyOptionWrapper = styled(Box)({
@@ -28,6 +29,8 @@ const AddManuallyOptionWrapper = styled(Box)({
   "&:hover": {
     backgroundColor: "transparent !important", // Prevent hover color change
   },
+  wordBreak: "break-all",
+  gap: "8"
 });
 const OptionWrapper = styled(Box)(({ theme, isSelected }) => ({
   // px: 2,
@@ -37,6 +40,9 @@ const OptionWrapper = styled(Box)(({ theme, isSelected }) => ({
   "&:hover": {
     backgroundColor: theme.palette.action.hover,
   },
+  wordBreak: "break-all",
+  gap: "8"
+
 }));
 
 const filterOption = createFilterOptions();
@@ -44,7 +50,7 @@ const filterOption = createFilterOptions();
 const AppAutoComplete = ({
   freeSolo = true,
   options = [],
-  nameParam = "label",
+  nameParam = "name",
   valueParam = "id",
   placeholder = "type",
   inputValue,
@@ -60,6 +66,9 @@ const AppAutoComplete = ({
   variant = "outlined",
   disableClearable,
   disabled,
+  readOnly = false,
+  focused,
+  size = 'small',
   ...props
 }) => {
   const [open, setOpen] = useState(false);
@@ -81,13 +90,14 @@ const AppAutoComplete = ({
   };
   const handleInputChange = (_, newInputValue, reason) => {
     if (reason == "input") {
-      onSearch?.(newInputValue, searchKey ?? name);
+      onSearch?.(removeExtraSpaces(newInputValue), searchKey ?? name);
     }
   };
 
   const handleChange = (event, newValue) => {
     onChange?.({ target: { name, value: newValue } });
   };
+  //Todo: Need to check this
   const handleBlur = (event) => {
     onBlur?.({ target: { name, value } });
   };
@@ -95,15 +105,17 @@ const AppAutoComplete = ({
 
   return (
     <Autocomplete
+
       {...props}
       disableClearable={isLoading || disableClearable}
       name={name}
       value={value}
       options={options}
+      readOnly={readOnly}
       clearOnBlur
       openOnFocus
       disabled={isLoading || disabled}
-      freeSolo={freeSolo}
+      freeSolo={freeSolo || !focused}
       onChange={handleChange}
       onBlur={handleBlur}
       onInputChange={handleInputChange}
@@ -115,11 +127,11 @@ const AppAutoComplete = ({
       }}
       filterOptions={(options, params) => {
         const filtered = filter ? filterOption(options, params) : options;
-        if (freeSolo && params.inputValue !== "") {
+        if (freeSolo && params.inputValue.trimStart() !== "") {
           return [
             {
               id: "add-manually",
-              [nameParam]: params.inputValue,
+              [nameParam]: removeExtraSpaces(params?.inputValue),
               isCustom: true,
             },
             ...filtered,
@@ -128,8 +140,12 @@ const AppAutoComplete = ({
 
         return filtered;
       }}
+
+      size={size}
       renderInput={(params) => (
         <TextField
+          focused={focused}
+          multiline
           variant={variant}
           {...params}
           placeholder={placeholder}

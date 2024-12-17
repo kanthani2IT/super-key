@@ -67,44 +67,44 @@ const onBoardingStepper = [
     component: CommunityDetails,
     initialValidationSchema: {
       communityManager: Yup.object().shape({
-        username: Yup.string().required("Name is required"),
+        username: Yup.string().required("Please enter Name"),
         email: Yup.string()
-          .email("Invalid email format")
-          .required("Email is required"),
+          .email("Invalid Email format")
+          .required("Please enter Email"),
         phone: Yup.string()
           .min(10, "Mobile number must be at least 10 digits.")
           .max(15, "Mobile number cannot exceed 15 digits.")
-          .required("Mobile number is required"),
+          .required("Please enter Mobile number"),
       }),
       propertyManager: Yup.object().shape({
-        username: Yup.string().required("Name is required"),
+        username: Yup.string().required("Please enter Name"),
         email: Yup.string()
-          .email("Invalid email format")
-          .required("Email is required"),
+          .email("Invalid Email format")
+          .required("Please enter Email"),
         phone: Yup.string()
           .min(10, "Mobile number must be at least 10 digits.")
           .max(15, "Mobile number cannot exceed 15 digits.")
-          .required("Mobile number is required"),
+          .required("Please enter Mobile number"),
       }),
     },
     height: "60vh",
   },
   {
-    title: "Insurance Documentation",
+    title: "Insurance Documents",
     component: InsuranceUpload,
     height: "auto",
     width: "60%",
   },
-  {
-    title: "",
-    component: ({ handleClose }) => (
-      <SuccessScreen
-        title="Your Community Onboarded Successfully!"
-        handleClose={handleClose}
-      />
-    ),
-    height: "100vh",
-  },
+  // {
+  //   title: "",
+  //   component: ({ handleClose }) => (
+  //     <SuccessScreen
+  //       title="Your Community Onboarded Successfully!"
+  //       handleClose={handleClose}
+  //     />
+  //   ),
+  //   height: "100vh",
+  // },
 ];
 
 const multiOnBoardingStepper = [
@@ -195,6 +195,7 @@ const OnboardingIndex = ({ refetch }) => {
     resetOnboarding();
     handleNext();
     refetch();
+    handleClose();
   };
 
   const handleQueryParams = (step) => {
@@ -443,6 +444,7 @@ const OnboardingIndex = ({ refetch }) => {
     handleChange,
     setTouched,
     resetForm,
+    dirty,
   } = formik;
 
   const handleOpen = () => {
@@ -501,14 +503,14 @@ const OnboardingIndex = ({ refetch }) => {
   const renderSingleModal = () => {
     return (
       <AppModal
-        height={finalStep ? "40vh" : "auto"}
+        confirmModal={dirty || activeStep}
         cardHeight={onBoardingStepper[activeStep]?.height || undefined}
         open={open}
         onClose={handleClose}
-        enableCard={!finalStep}
+        enableCard
         title={onBoardingStepper[activeStep]?.title}
         activeStep={activeStep}
-        footer={!finalStep && footer()}
+        footer={footer()}
         steps={onBoardingStepper}
         align={finalStep ? "center" : ""}
         width={onBoardingStepper[activeStep]?.width || undefined}

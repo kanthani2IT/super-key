@@ -6,15 +6,16 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import { Collapse, List } from '@mui/material';
+import { Collapse, List, Tooltip } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useGetMenuMaster } from 'api/menu';
 import styled from '@emotion/styled';
+import AppToolTip from 'components/AppComponents/AppToolTip';
 
 export default function NavItem({ subMenu = false, navUrl, item, level, collapse = false, handleActiveItem, activeNav }) {
   const theme = useTheme();
   const { menuMaster } = useGetMenuMaster();
-
+  const { disable } = item
   const [collapseOpen, setCollapseOpen] = useState(false);
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
   const { pathname } = useLocation();
@@ -54,7 +55,6 @@ export default function NavItem({ subMenu = false, navUrl, item, level, collapse
     paddingY: !drawerOpen && level === 1 ? theme.spacing(1.25) : theme.spacing(1),
     // ...(drawerOpen && {
     borderRadius: '0.625rem',
-
     '&:hover': {
       backgroundColor: theme.palette.success.light,
     },
@@ -79,10 +79,8 @@ export default function NavItem({ subMenu = false, navUrl, item, level, collapse
   const StyledCollapse = styled(Collapse)(({ theme }) => ({
     margin: '5%',
     gap: theme.spacing(0.5),
-    // paddingLeft: theme.spacing(1.5),
     borderRadius: '10px',
     backgroundColor: theme.palette.grey[100],
-    // border: `1px solid ${theme.palette.success.main}`,
   }));
   useEffect(() => {
     if (collapseOpen && !isSelected) {
@@ -93,10 +91,10 @@ export default function NavItem({ subMenu = false, navUrl, item, level, collapse
     }
   }, [isSelected])
   return (
-    <>
+    <AppToolTip placement='right' title={disable ? 'Coming Soon' : ""}>
       <StyledListItemButton
         {...listItemProps}
-        disabled={item.disabled}
+        disabled={disable}
         onClick={() => handleMenuClick(item.url)}
         selected={isSelected}
         subItem
@@ -123,6 +121,7 @@ export default function NavItem({ subMenu = false, navUrl, item, level, collapse
             {itemIcon}
           </ListItemIcon>
         )}
+
         {(drawerOpen || (!drawerOpen && level !== 1)) && (
           <ListItemText
             sx={{
@@ -159,7 +158,7 @@ export default function NavItem({ subMenu = false, navUrl, item, level, collapse
       )
       }
 
-    </>
+    </AppToolTip>
   );
 }
 

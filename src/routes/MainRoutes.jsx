@@ -4,6 +4,7 @@ import { lazy } from "react";
 import Loadable from "components/Loadable";
 import Dashboard from "layout/Dashboard";
 import PageNotFound from "pages/extra-pages/PageNotFound";
+import Task from "pages/task";
 import ProtectedRoute from "./ProtectedRoutes";
 
 const Color = Loadable(lazy(() => import("pages/component-overview/color")));
@@ -29,7 +30,7 @@ const MainRoutes = {
   path: "/",
   element: (
     <ProtectedRoute>
-      <Dashboard />
+      <Dashboard />,
     </ProtectedRoute>
   ),
   children: [
@@ -51,7 +52,7 @@ const MainRoutes = {
       ],
     },
     {
-      path: "documents-repository",
+      path: "documents",
       children: [
         // {
         //   path: 'all-documents',
@@ -62,6 +63,10 @@ const MainRoutes = {
           element: <COI />,
         },
       ],
+    },
+    {
+      path: "tasks",
+      element: <Task />,
     },
     {
       path: "*",

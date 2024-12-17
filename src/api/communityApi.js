@@ -34,8 +34,13 @@ const updateCommunityById = async (id, body) => {
 };
 
 const createCommunity = async (payload) => {
-  const reponse = await postFormRequest(COMMUNITY.createCommunity, payload);
-  return reponse;
+  try {
+    const reponse = await postFormRequest(COMMUNITY.createCommunity, payload);
+    return reponse;
+  } catch (error) {
+    console.error("Error fetching locations:", error);
+    throw error;
+  }
 };
 
 const deleteCommunityById = async (id, body) => {
@@ -63,15 +68,16 @@ const getAllCommunityList = async (queries) => {
 };
 
 const getCommunityList = async (body) => {
+  const { page, size, sortBy, orderBy, status, search } = body;
   const response = await http({
     method: "GET",
     url: COMMUNITY.getCommunityList(
-      body.page,
-      body.size,
-      body.sortBy,
-      body.orderBy,
-      body.status,
-      body.search
+      page,
+      size,
+      sortBy,
+      orderBy,
+      status,
+      search
     ),
   });
   return response;
@@ -94,6 +100,18 @@ const createMultiCommunity = async (body) => {
   });
   return response;
 };
+const offBoardCommunity = async (payload) => {
+  // const payload = {
+  //   mappings: [
+  //     {
+  //       communityId,
+  //       cmcId,
+  //     },
+  //   ],
+  // };
+  const response = await putRequest(COMMUNITY.offBoardCommunity, payload);
+  return response;
+};
 
 export const communityApi = {
   getUsersData,
@@ -105,4 +123,5 @@ export const communityApi = {
   getCommunityList,
   downloadOnboardingTemplate,
   createMultiCommunity,
+  offBoardCommunity,
 };

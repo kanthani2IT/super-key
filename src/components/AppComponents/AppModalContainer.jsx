@@ -11,6 +11,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
+import ConfirmationModal from "./AppConfirmationModal";
 
 const StyledPaper = styled(Paper)(
   ({ theme, width, height, align, fullWidth }) => ({
@@ -67,7 +69,20 @@ const AppModalContainer = ({
   align,
   onClose,
   fullWidth = false,
+  confirmModal = false,
 }) => {
+  const [closeModal, setCloseModal] = useState(false);
+  const handleClose = () => {
+    setCloseModal(false);
+    onClose?.();
+  };
+  const handleCloseModal = () => {
+    if (confirmModal) {
+      setCloseModal(true);
+    } else {
+      onClose?.();
+    }
+  };
   return (
     <StyledPaper
       fullWidth={fullWidth}
@@ -81,7 +96,7 @@ const AppModalContainer = ({
             <>
               <Box sx={{ display: "flex", justifyContent: "end" }}>
                 <Button
-                  onClick={onClose}
+                  onClick={handleCloseModal}
                   disableTouchRipple
                   variant="text"
                   size="small"
@@ -122,6 +137,16 @@ const AppModalContainer = ({
       ) : (
         children
       )}
+      {/* Close Modal */}
+
+      <ConfirmationModal
+        open={closeModal}
+        message={"Are you sure that you want to Close?"}
+        confirmLabel={"Yes"}
+        cancelLabel={"Continue"}
+        onConfirm={handleClose}
+        onCancel={() => setCloseModal(false)}
+      />
     </StyledPaper>
   );
 };

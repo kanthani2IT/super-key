@@ -2,7 +2,7 @@ export const importPolicyData = {
   title: "Upload Documents",
   instructions: "Select or drag and drop here. Can bulk upload",
   footerText:
-    "Support file under 100 MB. 20 files per upload. Import files in DOCX, XLSX, CSV",
+    "Support file under 100 MB. 20 files per upload. Import files in DOCX, XLSX, CSV, PDF",
   fileTypes: [".docx", ".xlsx", ".csv", ".pdf"],
 };
 
@@ -49,7 +49,7 @@ export const getContactInfo = (addressDetails) => {
 };
 
 export const removeExtraSpaces = (input = "") => {
-  return input.replace(/\s+/g, " ").trim();
+  return input.replace(/^\s+/, "").replace(/\s+/g, " ");
 };
 
 // Dollar formatting function

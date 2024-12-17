@@ -19,7 +19,8 @@ import AppMenu from "components/AppComponents/AppMenu";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
-import { communityStyles, StyledMenuItem } from "components/StyledComponents";
+import { StyledMenuItem, communityStyles } from "components/StyledComponents";
+import { useOffBoardCommunity } from "hooks/useCommunity";
 import { formatAsDollar } from "pages/community/onboarding/utils";
 import { useState } from "react";
 
@@ -30,7 +31,7 @@ const options = [
   { value: "lowToHigh", label: "Insured value: Low to High" },
 ];
 
-export default function UserTable({
+export default function CommunityTable({
   isLoading,
   height = 400,
   onSelectionChange,
@@ -46,6 +47,9 @@ export default function UserTable({
   page,
   setPage,
   selectedRows,
+  setOffboardData,
+  rowSecondKey,
+  offboardData,
 }) {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -54,6 +58,31 @@ export default function UserTable({
   const [modal, setModal] = useState(false);
 
   const pageSize = 10;
+
+  //   const tableData = [{
+  //     name: "Community Name",
+  //     communityManagerName: "Community Manager",
+  //     propertyManagerName: "Property Manager",
+  //     insuredCoverage: "Insured",
+  //     status: "Status",
+  //     action: "Action",
+  //   },
+  // {
+  //   name: "Community Name",
+  //   communityManagerName: "Community Manager",
+  //   propertyManagerName: "Property Manager",
+  //   insuredCoverage: "Insured",
+  //   status: "Status",
+  //   action: "Action",
+  // },
+  // {
+  //   name: "Community Name",
+  //   communityManagerName: "Community Manager",
+  //   propertyManagerName: "Property Manager",
+  //   insuredCoverage: "Insured",
+  //   status: "Status",
+  //   action: "Action",
+  // }]
 
   const columns = [
     {
@@ -165,6 +194,22 @@ export default function UserTable({
     setModal(!modal);
   };
 
+  const { mutate } = useOffBoardCommunity();
+  const offBoard = () => {
+    console.log("you try to off-board", selectedRows, communityInfo);
+    const payload = {
+      mappings: [
+        {
+          communityId: communityInfo.communityId,
+          cmcId: communityInfo.communityManager.managementCompanyId,
+        },
+      ],
+    };
+    console.log(payload);
+    mutate(payload);
+    setModal(!modal);
+  };
+
   const renderSortComponent = () => {
     return (
       <FormControl>
@@ -213,33 +258,35 @@ export default function UserTable({
 
   return (
     <Box sx={communityStyles.container(height)}>
-      <>
-        <AppTableSearch
-          placeholder="Search Documents"
-          searchTerm={filters.search}
-          onSearchChange={handleSearch}
-          icons={[
-            {
-              component: <SwapVert />,
-              onClick: (e) => handleSort(e),
-            },
-          ]}
-        />
+      <AppTableSearch
+        placeholder="Search Community"
+        searchTerm={filters.search}
+        onSearchChange={handleSearch}
+        icons={[
+          {
+            component: <SwapVert />,
+            onClick: (e) => handleSort(e),
+          },
+        ]}
+      />
 
-        <AppTable
-          rowKey="communityId"
-          isLoading={isLoading}
-          columns={columns}
-          rows={flatRows || []}
-          getStatus={getStatus}
-          onSelectionChange={onSelectionChange}
-          currentPage={page}
-          totalItems={communityList?.totalElements}
-          pageSize={pageSize}
-          onPageChange={handleChangePage}
-          selected={selectedRows}
-        />
-      </>
+      <AppTable
+        rowKey="communityId"
+        isLoading={isLoading}
+        columns={columns}
+        rows={flatRows || []}
+        getStatus={getStatus}
+        onSelectionChange={onSelectionChange}
+        currentPage={page}
+        totalItems={communityList?.totalElements}
+        pageSize={pageSize}
+        onPageChange={handleChangePage}
+        selected={selectedRows}
+        noDataText={"No Community Found"}
+        selectedData={setOffboardData}
+        rowSecondKey={rowSecondKey}
+        offboardData={offboardData}
+      />
 
       <AppMenu
         anchorEl={menuAnchorEl}
@@ -258,7 +305,7 @@ export default function UserTable({
         message={"Do you want to off-board the community?"}
         confirmLabel={"Yes"}
         cancelLabel={"No"}
-        onConfirm={handleModal}
+        onConfirm={offBoard}
         onCancel={handleModal}
       />
     </Box>
