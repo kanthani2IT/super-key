@@ -1,14 +1,23 @@
-import { ExpandMore, MoreVert, SwapVert } from "@mui/icons-material";
-import { Button, IconButton, Typography } from "@mui/material";
+import { MoreVert, SwapVert } from "@mui/icons-material";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+
+import MailIcon from "@mui/icons-material/Mail";
+import { Avatar, Button, IconButton, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
+import CopyContentIcon from "assets/images/icons/CopyContent";
+import OfficeIcon from "assets/images/icons/OfficeIcon";
+import PhoneIcon from "assets/images/icons/PhoneIcon";
+import avatar1 from "assets/images/users/avatar-1.png";
+import AppCard from "components/AppComponents/AppCard";
+import AppGrid from "components/AppComponents/AppGrid";
 import AppMenu from "components/AppComponents/AppMenu";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
+import FilterDrawer from "components/CustomPopup";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
-import { useState } from "react";
-
+import { useRef, useState } from "react";
 const options = [
   { value: "ACTIVE", label: "Status: Active" },
   { value: "INACTIVE", label: "Status: Inactive" },
@@ -24,17 +33,37 @@ export default function TaskTable({
   filters,
   handleSearch,
   handleChangePage,
-  page = 1,
+  page,
   selectedRows = [],
 }) {
+  const anchorRef = useRef(null);
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(null);
 
+  const [selectedPriority, setSelectedPriority] = useState([
+    { name: "High", color: "#E81616" },
+    { name: "Medium", color: "#EB6C0B" },
+    { name: "Low", color: "#DEC013" },
+  ]);
+  const [selectedProperty, setSelectedProperties] = useState([
+    { id: 1, data: "Desert Springs", selected: false },
+    { id: 2, data: "Rose Dale", selected: false },
+    { id: 3, data: "Rose Dal", selected: false },
+    { id: 4, data: "Oak Ridge Estates", selected: false },
+    { id: 5, data: "Mountain Vista", selected: false },
+  ]);
+  const toggleFilter = (id) => {
+    setSelectedProperties((prev) =>
+      prev.map((filter) =>
+        filter.id === id ? { ...filter, selected: !filter.selected } : filter
+      )
+    );
+  };
   const pageSize = 10;
-
+  console.log(page, "page");
   const columns = [
     {
       field: "index",
@@ -45,7 +74,7 @@ export default function TaskTable({
       },
     },
     {
-      field: "name",
+      field: "taskName",
       headerName: "Task Name",
       flex: 1,
     },
@@ -60,7 +89,7 @@ export default function TaskTable({
       flex: 1,
     },
     {
-      field: "dueDate",
+      field: "dueDateString",
       headerName: "Due Date",
       flex: 1,
     },
@@ -70,29 +99,29 @@ export default function TaskTable({
       flex: 1,
     },
 
-    // {
-    //   field: "status",
-    //   headerName: "Status",
-    //   align: "center",
-    //   renderCell: (row) => {
-    //     if (row?.status != null && row?.status != "null") {
-    //       return (
-    //         <Typography
-    //           color={row?.status === "ACTIVE" ? "success" : "error"}
-    //           display={"flex"}
-    //           alignItems={"center"}
-    //           justifyContent={"center"}
-    //           gap={0.5}
-    //         >
-    //           <FiberManualRecordIcon fontSize="12px" />
-    //           {row?.status === "ACTIVE" ? "Active" : "Inactive"}
-    //         </Typography>
-    //       );
-    //     } else {
-    //       return "-";
-    //     }
-    //   },
-    // },
+    {
+      field: "status",
+      headerName: "Status",
+      align: "center",
+      renderCell: (row) => {
+        if (row?.status != null && row?.status != "null") {
+          return (
+            <Typography
+              color={row?.status === "ACTIVE" ? "success" : "error"}
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              gap={0.5}
+            >
+              {/* <FiberManualRecordIcon fontSize="12px" /> */}
+              {row?.status === "ACTIVE" ? "Active" : "Inactive"}
+            </Typography>
+          );
+        } else {
+          return "-";
+        }
+      },
+    },
     {
       field: "action",
       headerName: "Action",
@@ -116,7 +145,7 @@ export default function TaskTable({
     },
   ];
 
-  const filteredRows = taskList?.filter((row) =>
+  const filteredRows = taskList?.content?.filter((row) =>
     Object.values(row).some((value) =>
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
@@ -138,23 +167,29 @@ export default function TaskTable({
 
   const PriorityFilter = () => {
     return (
-      <Button
-        onClick={(e) => {
-          //   e.stopPropagation();
-          //   setMenuAnchorEl(e.currentTarget);
-        }}
-        endIcon={<ExpandMore />}
-        variant="outlined"
-        size="small"
-        color="secondary"
-      >
-        {" "}
-        Priority
-      </Button>
+      <>
+        <Button
+          variant="outlined"
+          color="black"
+          endIcon={<FilterAltIcon sx={{ width: "22px", height: "24px" }} />}
+          sx={{
+            height: "42px",
+            borderRadius: "10px",
+            borderWidth: "0.5px",
+            borderColor: "#000",
+            fontSize: "16px",
+            fontWeight: "500",
+            "&:hover": { backgroundColor: "#E9F3FF" },
+          }}
+        >
+          {" "}
+          {"Filter"}{" "}
+        </Button>
+      </>
     );
   };
 
-  const renderPriorityComponent = () => {
+  const renderPriorityComponent = (e) => {
     return (
       <>
         <StyledMenuItem onClick={() => console.log("task")}>
@@ -169,7 +204,78 @@ export default function TaskTable({
       </>
     );
   };
+  const handleClick = (e) => {
+    e.stopPropagation();
+    setAnchorEl(e.currentTarget);
+  };
+  const Footer = () => {
+    return (
+      <>
+        <Button
+          startIcon={<MailIcon />}
+          size="large"
+          color="info"
+          variant="contained"
+          fullWidth
+        >
+          {" "}
+          Send Mail
+        </Button>
+        <CopyContentIcon />
+      </>
+    );
+  };
+  const singleViewComponent = () => {
+    return (
+      <AppCard height={"auto"} footer={<Footer />} width="400px" custom>
+        <AppGrid container direction={"column"}>
+          <AppGrid>
+            <Stack direction="row" spacing={1.25} alignItems="center">
+              <Avatar
+                alt="profile user"
+                src={avatar1}
+                sx={{ width: 32, height: 32 }}
+              />
+              <Stack>
+                <Typography variant="subtitle2">Richard</Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Property Manager Name
+                </Typography>
+              </Stack>
+            </Stack>
+          </AppGrid>
+          <AppGrid>
+            <Stack direction="row" spacing={1.25} alignItems="center">
+              <Avatar
+                alt="profile user"
+                sx={{ width: 32, height: 32, backgroundColor: "white" }}
+              >
+                <OfficeIcon />
+              </Avatar>
 
+              <Stack>
+                <Typography variant="subtitle2">GRT</Typography>
+              </Stack>
+            </Stack>
+          </AppGrid>
+          <AppGrid>
+            <Stack direction="row" spacing={1.25} alignItems="center">
+              <Avatar
+                alt="profile user"
+                sx={{ width: 32, height: 32, backgroundColor: "white" }}
+              >
+                <PhoneIcon />
+              </Avatar>
+              <Stack flexDirection={"row"} gap={"20px"}>
+                <Typography variant="subtitle2"> +1 432 567 987</Typography>
+                <CopyContentIcon />
+              </Stack>
+            </Stack>
+          </AppGrid>
+        </AppGrid>
+      </AppCard>
+    );
+  };
   return (
     <Box sx={communityStyles.container(height)}>
       <>
@@ -180,7 +286,8 @@ export default function TaskTable({
           icons={[
             {
               component: <PriorityFilter />,
-              // onClick: (e) => handleSort(e),
+              onClick: (e) => handleClick(e),
+              IconButton: true,
             },
             {
               component: <SwapVert />,
@@ -188,7 +295,22 @@ export default function TaskTable({
             },
           ]}
         />
-
+        <Button
+          onClick={(e) => {
+            console.log(e.currentTarget, "currentTarget");
+            setModal(e.currentTarget);
+          }}
+          ref={anchorRef}
+        >
+          View Details
+        </Button>
+        <FilterDrawer
+          selectedProperty={selectedProperty}
+          selectedPriority={selectedPriority}
+          toggleFilter={toggleFilter}
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+        />
         <AppTable
           rowKey="taskId"
           isLoading={isLoading}
@@ -197,7 +319,7 @@ export default function TaskTable({
           getStatus={getStatus}
           onSelectionChange={onSelectionChange}
           currentPage={page}
-          totalItems={taskList?.totalElements || 0}
+          totalItems={taskList?.totalElements}
           pageSize={pageSize}
           onPageChange={handleChangePage}
           selected={selectedRows}
@@ -210,6 +332,13 @@ export default function TaskTable({
                 handleClose={handleMenuAnchorClose}
                 renderComponent={renderMenuComponent()}
             /> */}
+      <AppMenu
+        anchorEl={modal}
+        handleClose={() => setModal(null)}
+        renderComponent={singleViewComponent()}
+        borderRadius={"20px"}
+      />
+
       <AppMenu
         anchorEl={menuAnchorEl}
         handleClose={handleMenuAnchorClose}

@@ -1,6 +1,6 @@
 import { StyledMenu } from "components/StyledComponents";
 
-const AppMenu = ({ anchorEl, handleClose, renderComponent }) => {
+const AppMenu = ({ anchorEl, handleClose, renderComponent, borderRadius }) => {
   const open = Boolean(anchorEl);
   return (
     <StyledMenu
@@ -14,6 +14,7 @@ const AppMenu = ({ anchorEl, handleClose, renderComponent }) => {
         horizontal: "right",
         vertical: "top",
       }}
+      borderRadius={borderRadius}
     >
       {renderComponent && renderComponent}
     </StyledMenu>
