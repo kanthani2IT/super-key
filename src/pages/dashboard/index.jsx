@@ -48,7 +48,7 @@ export default function DashboardDefault() {
     totalPremium,
     upcomingRenewals,
   } = dashboardData?.data ?? {};
-  console.log(dashboardData,"$$$$")
+  console.log(dashboardData, "$$$$")
   const { data: assigneToData, isLoading: assigneToLoading } =
     useVerunaUsersQuery();
   const { data: priorityData } = useVerunaPriorityQuery();
@@ -222,7 +222,8 @@ export default function DashboardDefault() {
           title={"Task Assigned"}
           secondary={"Full View"}
           isFilter
-          showSecondary={false}
+          // showSecondary={false}
+          secondaryAction={() => navigate("/tasks")}
           selectedProperty={assigneToData}
           selectedPriority={priorityData}
         >

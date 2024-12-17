@@ -37,7 +37,7 @@ const TASK = {
 const DASHBOARD = {
   getActiveTask: "/api/tasks",
   getCompletedTask: "api/tasks/history",
-  getActiveAndCompletedTaskByFilter: (sort, orderBy, id, page, size) =>
+  getActiveAndCompletedTaskByFilter: (sort, orderBy, id, page = 1, size = 10) =>
     `/api/tasks/community/CMCID?sort=${sort}&orderBy=${orderBy}&page=${page}&size=${size}`,
   //`api/tasks/community/0017x00000kF1kTAAS?sort=createdAt&orderBy=desc&page=1&size=30`,
   getDashboardMetrics: () => `/api/dashboard/metrics/CMCID`,

@@ -20,9 +20,9 @@ import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
+import { useOffBoardCommunity } from "hooks/useCommunity";
 import { formatAsDollar } from "pages/community/onboarding/utils";
 import { useState } from "react";
-import { useOffBoardCommunity } from "hooks/useCommunity";
 
 const options = [
   { value: "ACTIVE", label: "Status: Active" },
@@ -49,14 +49,14 @@ export default function CommunityTable({
   selectedRows,
   setOffboardData,
   rowSecondKey,
-  offboardData
+  offboardData,
+  cmcId,
 }) {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(false);
-
   const pageSize = 10;
 
   //   const tableData = [{
@@ -188,12 +188,12 @@ export default function CommunityTable({
       ),
     },
   ];
-  console.log(communityList)
-  const filteredRows = communityList?.filter((row) =>
+
+  const filteredRows = communityList?.length ? communityList?.filter((row) =>
     Object.values(row).some((value) =>
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
-  );
+  ) : [];
 
   // Flatten the rows
   const flatRows = filteredRows?.map((row) => ({
@@ -201,6 +201,17 @@ export default function CommunityTable({
     communityManagerName: row.communityManager?.username || "",
     propertyManagerName: row.propertyManager?.username || "",
   }));
+
+  const handleUISearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
+    setPage(1);
+  }
+
+
+  const paginatedRows = flatRows && flatRows?.slice(
+    (page - 1) * pageSize,
+    page * pageSize
+  );
 
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);
@@ -223,13 +234,14 @@ export default function CommunityTable({
     const payload = {
       mappings: [
         {
-          communityId: communityInfo.communityId,
-          cmcId: communityInfo.communityManager.managementCompanyId,
+          communityId: communityInfo?.communityId,
+          cmcId: cmcId,
         },
       ],
     };
     mutate(payload);
     setModal(!modal);
+    setMenuAnchorEl(null)
   };
 
   const renderSortComponent = () => {
@@ -282,8 +294,8 @@ export default function CommunityTable({
     <Box sx={communityStyles.container(height)}>
       <AppTableSearch
         placeholder="Search Community"
-        searchTerm={filters.search}
-        onSearchChange={handleSearch}
+        searchTerm={filters.search || searchTerm}
+        onSearchChange={handleUISearch}
         icons={[
           {
             component: <SwapVert />,
@@ -296,11 +308,11 @@ export default function CommunityTable({
         rowKey="communityId"
         isLoading={isLoading}
         columns={columns}
-        rows={flatRows || []}
+        rows={paginatedRows || []}
         getStatus={getStatus}
         onSelectionChange={onSelectionChange}
         currentPage={page}
-        totalItems={communityList?.length}
+        totalItems={flatRows?.length}
         pageSize={pageSize}
         onPageChange={handleChangePage}
         selected={selectedRows}

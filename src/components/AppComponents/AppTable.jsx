@@ -28,43 +28,42 @@ const AppTable = ({
   pageSize,
   onPageChange,
   selected = [],
-  rowSecondKey="id",
-  selectedData=null,
+  rowSecondKey = "id",
+  selectedData = null,
   offboardData,
 }) => {
   const rowCount = rows.length;
   const numSelected = selected.length;
 
   const onSelectAllClick = (event) => {
-    console.log(event,"event target")
+    console.log(event, "event target")
     const newSelected = event.target.checked
       ? rows.map((row) => row[rowKey])
       : [];
 
     onSelectionChange?.(newSelected);
-    
-    if(event.target.checked){
-// Extract the result based on matching communityId and mapping the managerId
-const result = newSelected?.map(communityId => {
-  const community = rows.find(item => item.communityId === communityId);
-  if (community&&community?.communityManager?.managerId) {
-    return {
-      cmcId: community?.communityManager?.managerId||"234567",
-      communityId: communityId
-    };
-  }
-  return null;
-}).filter(item => item !== null);
-selectedData([...offboardData,...result])
-    }else{
-      console.log("first method correction")
-      const currentPageData=rows.map((row) => row[rowKey])
+
+    if (event.target.checked) {
+      // Extract the result based on matching communityId and mapping the managerId
+      const result = newSelected?.map(communityId => {
+        const community = rows.find(item => item.communityId === communityId);
+        if (community && community?.communityManager?.managerId) {
+          return {
+            cmcId: community?.communityManager?.managerId || "001bn00001CitW2AAJ",
+            communityId: communityId
+          };
+        }
+        return null;
+      }).filter(item => item !== null);
+      selectedData([...offboardData, ...result])
+    } else {
+      const currentPageData = rows.map((row) => row[rowKey])
       const filteredData = offboardData.filter(item => !currentPageData.includes(item.communityId));
       selectedData([])
-      console.log(filteredData,offboardData,currentPageData,"first method correction")
-      
+      console.log(filteredData, offboardData, currentPageData, "first method correction")
+
     }
-    console.log(newSelected,"$$$ newSelected")
+    console.log(newSelected, "$$$ newSelected")
   };
 
   const handleRowClick = (id, secondId) => {
@@ -85,20 +84,20 @@ selectedData([...offboardData,...result])
     }
 
     onSelectionChange?.(newSelected);
-    if(selectedData){
-      let isAlreadySelectedData=offboardData.find(item => item.communityId == id);
-      if(isAlreadySelectedData){
+    if (selectedData) {
+      let isAlreadySelectedData = offboardData.find(item => item.communityId == id);
+      if (isAlreadySelectedData) {
         const filteredData = offboardData.filter(item => item.communityId !== id);
         selectedData(filteredData)
-        console.log(offboardData, selectedIndex,"$$$ data")
-      }else{
-        let data={
-          cmcId:secondId,
-          communityId:id,
+        console.log(offboardData, selectedIndex, "$$$ data")
+      } else {
+        let data = {
+          cmcId: secondId,
+          communityId: id,
         }
-        selectedData([...offboardData,data])
+        selectedData([...offboardData, data])
       }
-      
+
     }
   };
 
@@ -166,7 +165,7 @@ selectedData([...offboardData,...result])
                           ? index + 1
                           : col.field === "status" && col.getStatus
                             ? col.getStatus(row)
-                            : row?.[col.field] || "-"}
+                            : !row?.[col.field] || row?.[col.field] == 'null' ? '-' : row?.[col.field]}
                     </TableCell>
                   ))}
                 </TableRow>
