@@ -46,26 +46,40 @@ const pages = {
           title: 'Documents',
           url: '/documents',
           type: "item",
+          disable: true,
+
         },
         {
           id: 'assets',
           title: 'Assets',
           url: '/community-assets',
           type: "item",
+          disable: true,
+
         },
         {
           id: 'hoa',
           title: 'HOA',
           url: '/community-hoa',
           type: "item",
+          disable: true,
+
         }]
 
+      },
+      {
+        id: 'task',
+        title: 'Task Management',
+        url: '/tasks',
+        icon: icons.TaskIcon,
+        type: "item",
+        disable: false,
+        badge: 2
       },
       {
         id: 'documents',
         title: 'Documents',
         url: '/documents',
-        disable: true,
         icon: icons.DocumentIcon,
         type: "collapse",
         children: [{
@@ -86,13 +100,6 @@ const pages = {
         ]
       },
       {
-        id: 'task',
-        title: 'Task Management',
-        url: '/tasks',
-        icon: icons.TaskIcon,
-        type: "item",
-        badge: 2
-      }, {
         id: 'property',
         title: 'Property',
         url: '/property',

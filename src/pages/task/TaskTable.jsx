@@ -256,7 +256,7 @@ export default function TaskTable({
             },
           ]}
         />
-        <Button
+        {/* <Button
           onClick={(e) => {
             console.log(e.currentTarget, "currentTarget");
             setModal(e.currentTarget);
@@ -264,7 +264,7 @@ export default function TaskTable({
           ref={anchorRef}
         >
           View Details
-        </Button>
+        </Button> */}
         <FilterDrawer
           selectedProperty={assigneToData?.records || selectedProperty}
           selectedPriority={selectedPriority}

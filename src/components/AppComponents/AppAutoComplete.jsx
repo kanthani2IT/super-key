@@ -69,6 +69,7 @@ const AppAutoComplete = ({
   readOnly = false,
   focused,
   size = 'small',
+  multiline = false,
   ...props
 }) => {
   const [open, setOpen] = useState(false);
@@ -145,7 +146,7 @@ const AppAutoComplete = ({
       renderInput={(params) => (
         <TextField
           focused={focused}
-          multiline
+          multiline={multiline}
           variant={variant}
           {...params}
           placeholder={placeholder}
@@ -192,7 +193,7 @@ const AppAutoComplete = ({
             </>
           );
         }
-        const isSelected = value && option[valueParam] === value[valueParam];
+        const isSelected = value && option[nameParam] === value[nameParam] && option[valueParam] === value[valueParam];
 
         return (
           <>

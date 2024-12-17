@@ -9,9 +9,9 @@ import AppRowBox from "components/AppComponents/AppRowBox";
 import { RadiusStyledButton } from "components/StyledComponents";
 import { useFormik } from "formik";
 import {
-  useDeleteCommunityById,
   useGetCommunityById,
-  useUpdateCommunityById,
+  useOffBoardCommunity,
+  useUpdateCommunityById
 } from "hooks/useCommunity";
 import {
   useCommunityManagersQuery,
@@ -20,12 +20,11 @@ import {
 
 import { useEffect, useState } from "react";
 
+import AppTextField from "components/AppComponents/AppTextField";
 import { countryPhoneCodes, insuranceOptions } from "utils/constants";
 import { useDebounceFn } from "utils/helpers";
 import * as Yup from "yup";
 import { getContactInfo, removeExtraSpaces } from "../onboarding/utils";
-import AppTextField from "components/AppComponents/AppTextField";
-const defaultCountryCode = { label: "+1", value: "+1" };
 
 const initialValues = {
   addressDetails: {
@@ -83,7 +82,7 @@ const initialValidationSchema = {
   }),
 };
 
-const EditCommunity = ({ onClose, communityData, refetch }) => {
+const EditCommunity = ({ onClose, communityData, refetch, cmcId }) => {
   const [enableEdit, setEnableEdit] = useState(false);
   const [modal, setModal] = useState(false);
   const [offBoard, setOffBoard] = useState(false);
@@ -91,7 +90,6 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     communityManager: "",
     propertyManager: "",
   });
-  const [communityDetails, setCommunityDetails] = useState({});
   const successHandler = () => {
     refetch();
     onClose();
@@ -101,7 +99,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   );
   const { mutate: updateCommunity, isLoading: isUpdating } =
     useUpdateCommunityById(successHandler);
-  const { mutate: deleteUserById } = useDeleteCommunityById();
+
 
   const { data: communityManagerData } = useCommunityManagersQuery(
     seachString.communityManager
@@ -138,8 +136,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     setFieldValue,
     setValues,
     handleSubmit,
-    setTouched,
-    setErrors,
+
     handleChange,
   } = formik;
   const onReset = () => {
@@ -199,7 +196,6 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
   useEffect(() => {
     if (communityInfo?.data) {
       const data = communityInfo?.data;
-      setCommunityDetails(data);
       updateCommunityFields(data);
     }
   }, [communityInfo]);
@@ -247,18 +243,24 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
     const data = communityInfo?.data;
     updateCommunityFields(data);
     setModal(false);
-  };
+  }
+
+  const { mutate } = useOffBoardCommunity();
   const handleOffBoard = () => {
+    console.log("You try to off-board", communityData, communityManagerData);
     const payload = {
       mappings: [
         {
           communityId: communityData?.communityId,
-          cmcId: communityData?.communityManager?.managementCompanyId,
+          cmcId: cmcId,
         },
       ],
     };
-    deleteUserById({ id: communityData?.communityId, body: payload });
+    mutate(payload);
+    setModal(false);
+    successHandler()
   };
+
   const countryCodeSize = { xs: 3, sm: 3, md: 3, lg: 2, xl: 2 };
   const mobileSize = { xs: 8, sm: 8, md: 9, lg: 4, xl: 4 };
   const size = { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 };
@@ -274,7 +276,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               width="auto"
               height="50px"
               borderRadius="10px"
-              // onClick={onReset}
+              onClick={onReset}
               sx={{
                 border: "0.5px solid #E12929",
               }}
@@ -320,10 +322,10 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
               ? "Do you want to off-board the community?"
               : "Are you sure you want to discard the changes?"
           }
-          confirmLabel={offBoard ? "Yes" : "No"}
-          cancelLabel={offBoard ? "No" : "Yes, Discard"}
-          onConfirm={offBoard ? handleModalDiscard : handleModal}
-          onCancel={handleModalDiscard}
+          confirmLabel={offBoard ? "Yes" : "Yes,Discard"}
+          cancelLabel={"No"}
+          onConfirm={offBoard ? handleOffBoard : handleModalDiscard}
+          onCancel={handleModal}
         />
       </>
     );
@@ -441,7 +443,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.addressDetails?.zipcode &&
-                    errors.addressDetails?.zipcode
+                  errors.addressDetails?.zipcode
                 )}
                 helperText={
                   touched.addressDetails?.zipcode &&
@@ -494,11 +496,11 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   fullWidth
                   onChange={handleChange}
                   name="communityManager.email"
-                  placeholder="CommunityManager@gmail.com"
+                  placeholder="communitymanager@gmail.com"
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.communityManager?.email &&
-                      errors.communityManager?.email
+                    errors.communityManager?.email
                   )}
                   helperText={
                     touched.communityManager?.email &&
@@ -542,7 +544,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                     disabled={!enableEdit}
                     error={Boolean(
                       touched.communityManager?.phone &&
-                        errors.communityManager?.phone
+                      errors.communityManager?.phone
                     )}
                     helperText={
                       touched.communityManager?.phone &&
@@ -597,11 +599,11 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   fullWidth
                   onChange={handleChange}
                   name="propertyManager.email"
-                  placeholder="PropertyManager@gmail.com"
+                  placeholder="propertymanager@gmail.com"
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.propertyManager?.email &&
-                      errors.propertyManager?.email
+                    errors.propertyManager?.email
                   )}
                   helperText={
                     touched.propertyManager?.email &&
@@ -645,7 +647,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                     disabled={!enableEdit}
                     error={Boolean(
                       touched.propertyManager?.phone &&
-                        errors.propertyManager?.phone
+                      errors.propertyManager?.phone
                     )}
                     helperText={
                       touched.propertyManager?.phone &&
@@ -709,7 +711,7 @@ const EditCommunity = ({ onClose, communityData, refetch }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.insuranceDetails?.insuredCoverage &&
-                      errors.insuranceDetails?.insuredCoverage
+                    errors.insuranceDetails?.insuredCoverage
                   )}
                   helperText={
                     touched.insuranceDetails?.insuredCoverage &&

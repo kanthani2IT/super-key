@@ -12,62 +12,69 @@ const InsuranceDocument = ({
   selectedFiles,
   setSelectedFiles,
   documentTypesData = [],
+  handleFile,
+  isMultiple,
+  readData,
 }) => {
   const { updateSnackbar } = useSnackbar();
   const [isDragging, setIsDragging] = useState(false);
   const handleFileValidation = (fileList) => {
-    const allowedExtensions = importPolicyData?.fileTypes || [];
+    if (handleFile) {
+      handleFile(fileList);
+    } else {
+      const allowedExtensions = importPolicyData?.fileTypes || [];
 
-    const validFiles = fileList.filter(
-      (file) =>
-        allowedExtensions.some((ext) =>
-          file.name.toLowerCase().endsWith(ext.toLowerCase())
-        ) && file.size <= hundredMbValidation
-    );
+      const validFiles = fileList.filter(
+        (file) =>
+          allowedExtensions.some((ext) =>
+            file.name.toLowerCase().endsWith(ext.toLowerCase())
+          ) && file.size <= hundredMbValidation
+      );
 
-    const invalidSizeFiles = fileList.filter(
-      (file) => file.size > hundredMbValidation
-    );
-    const invalidFormatFiles = fileList.filter(
-      (file) =>
-        !allowedExtensions.some((ext) =>
-          file.name.toLowerCase().endsWith(ext.toLowerCase())
-        )
-    );
+      const invalidSizeFiles = fileList.filter(
+        (file) => file.size > hundredMbValidation
+      );
+      const invalidFormatFiles = fileList.filter(
+        (file) =>
+          !allowedExtensions.some((ext) =>
+            file.name.toLowerCase().endsWith(ext.toLowerCase())
+          )
+      );
 
-    // Show error for files exceeding size limit
-    if (invalidSizeFiles.length > 0) {
-      updateSnackbar({
-        message: "One or more files exceed the maximum size of 100 MB.",
-        severity: SEVERITY.error,
-      });
-    }
-
-    // Show error for files with unsupported format
-    if (invalidFormatFiles.length > 0) {
-      updateSnackbar({
-        message:
-          "Unsupported file format. Please select files with the following formats: DOCX, XLSX, CSV.",
-        severity: SEVERITY.error,
-      });
-    }
-
-    if (validFiles.length > 0) {
-      const filesArray = validFiles.map((file) => ({
-        file,
-        docType: documentTypesData?.[0] || [],
-        active: false,
-      }));
-
-      const totalFiles = selectedFiles.length + filesArray.length;
-
-      if (totalFiles > 20) {
+      // Show error for files exceeding size limit
+      if (invalidSizeFiles.length > 0) {
         updateSnackbar({
-          message: "You can only upload a maximum of 20 files.",
+          message: "One or more files exceed the maximum size of 100 MB.",
           severity: SEVERITY.error,
         });
-      } else {
-        setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);
+      }
+
+      // Show error for files with unsupported format
+      if (invalidFormatFiles.length > 0) {
+        updateSnackbar({
+          message:
+            "Unsupported file format. Please select files with the following formats: DOCX, XLSX, CSV, Pdf",
+          severity: SEVERITY.error,
+        });
+      }
+
+      if (validFiles.length > 0) {
+        const filesArray = validFiles.map((file) => ({
+          file,
+          docType: documentTypesData?.[0] || [],
+          active: false,
+        }));
+
+        const totalFiles = selectedFiles.length + filesArray.length;
+
+        if (totalFiles > 20) {
+          updateSnackbar({
+            message: "You can only upload a maximum of 20 files.",
+            severity: SEVERITY.error,
+          });
+        } else {
+          setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);
+        }
       }
     }
   };
@@ -124,7 +131,7 @@ const InsuranceDocument = ({
         gutterBottom
         sx={{ mt: "1rem" }}
       >
-        {readData ? "Upload the Template File" : importPolicyData.title}
+        {importPolicyData.title}
       </Typography>
 
       {/* Instructions */}

@@ -1,8 +1,7 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { api } from "api";
 import { useSnackbar } from "components/AppComponents/SnackBarProvider";
 import { useNavigate } from "react-router";
-import { useGlobalStore } from "store/store";
 import { useAuthCookies } from "utils/cookie";
 import { MESSAGE, SEVERITY } from "utils/message";
 
@@ -15,7 +14,8 @@ export const useLoginUser = () => {
     mutationFn: ({ values }) => api.login.userLogin(values), // Pass `credentialData` to `mutate`
     onSuccess: (data, { values, checked }) => {
       const userEmail = data?.data?.email;
-      const cmcId = data?.data?.cmcAdminDTO ?? "001bn00001CitW2AAJ";
+      const cmcId =
+        data?.data?.cmcAdminDTO?.managementCompanyId ?? "001bn00001CitW2AAJ";
       if (data.data.token == "Please set you own password.") {
         navigate("/reset/change", { state: { email: userEmail } });
       } else {

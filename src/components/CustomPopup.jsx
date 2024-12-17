@@ -1,15 +1,18 @@
+import React, { useState } from "react";
 import {
   Box,
-  Button,
-  Checkbox,
+  Typography,
   Divider,
+  Checkbox,
   FormControlLabel,
+  Button,
+  Popover,
 } from "@mui/material";
-import { useState } from "react";
-import AppMenu from "./AppComponents/AppMenu";
 import AppPriorityItems from "./AppPriorityComponent";
 
 const FilterDrawer = ({
+  openFilter,
+  setOpenFilter,
   selectedProperty = [],
   selectedPriority = [],
   setSelectedPriority,
@@ -21,6 +24,8 @@ const FilterDrawer = ({
   const isAnyFilteredSelect = selectedProperty.some(
     (filter) => filter.selected
   );
+
+  if (!openFilter) return null;
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
