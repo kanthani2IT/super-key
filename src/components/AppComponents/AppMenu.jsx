@@ -4,8 +4,8 @@ const AppMenu = ({
   anchorEl,
   handleClose,
   renderComponent,
-  borderRadius,
-  width,
+  borderRadius = "4px",
+  width = "auto",
 }) => {
   const open = Boolean(anchorEl);
   return (

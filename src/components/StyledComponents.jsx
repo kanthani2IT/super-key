@@ -269,8 +269,8 @@ export const StyledMenu = styled(Menu)(({ theme, borderRadius, width }) => ({
   borderRadius: "0.625rem",
   boxShadow: "#00000045 0px 7px 29px 0px",
   "& .MuiPaper-root": {
-    borderRadius: borderRadius ? borderRadius : "4px",
-    width: width ? width : "",
+    borderRadius: borderRadius,
+    width: width,
   },
 }));
 
