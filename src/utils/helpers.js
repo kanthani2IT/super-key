@@ -52,3 +52,16 @@ export const formatAsDollar = (number) => {
 export const compareeJson = (a, b) => {
   return JSON.stringify(a) !== JSON.stringify(b);
 };
+
+
+export const transformedRenewalData = (inputData) => {
+  // Check if inputData is null, undefined, or not an object
+  if (!inputData || typeof inputData !== 'object') {
+    return []; // Return an empty array when inputData is invalid
+  }
+
+  return Object.keys(inputData).map((key) => ({
+    name: key?.toLowerCase(),
+    value: inputData[key]
+  }));
+};

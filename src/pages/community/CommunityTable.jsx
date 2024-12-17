@@ -1,11 +1,16 @@
-import { MoreVert, RadioButtonChecked, RadioButtonUnchecked, SwapVert } from "@mui/icons-material";
+import {
+  MoreVert,
+  RadioButtonChecked,
+  RadioButtonUnchecked,
+  SwapVert,
+} from "@mui/icons-material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import {
   Checkbox,
   FormControl,
   FormControlLabel,
   IconButton,
-  Typography
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
@@ -50,7 +55,7 @@ export default function CommunityTable({
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [modal, setModal] = useState(false)
+  const [modal, setModal] = useState(false);
 
   const pageSize = 10;
 
@@ -113,7 +118,9 @@ export default function CommunityTable({
       field: "insuredCoverage",
       headerName: "Insured",
       renderCell: (row) => {
-        return <Typography>{formatAsDollar(row?.insuredCoverage) ?? "-"}</Typography>;
+        return (
+          <Typography>{formatAsDollar(row?.insuredCoverage) ?? "-"}</Typography>
+        );
       },
     },
     {
@@ -148,7 +155,7 @@ export default function CommunityTable({
           <MoreVert
             onClick={(e) => {
               e.stopPropagation();
-              onSelectionChange([])
+              onSelectionChange([]);
               setMenuAnchorEl(e.currentTarget);
               setCommunityInfo(row);
             }}
@@ -205,18 +212,19 @@ export default function CommunityTable({
 
   const renderSortComponent = () => {
     return (
-      <FormControl >
-
+      <FormControl>
         {options?.map(({ value, label }) => (
           <FormControlLabel
             key={value}
             value={value}
-            control={<Checkbox
-              icon={<RadioButtonUnchecked />}
-              checkedIcon={<RadioButtonChecked />}
-              checked={filters?.sort == value}
-              onChange={() => handleChangeRadio(value)}
-            />}
+            control={
+              <Checkbox
+                icon={<RadioButtonUnchecked />}
+                checkedIcon={<RadioButtonChecked />}
+                checked={filters?.sort == value}
+                onChange={() => handleChangeRadio(value)}
+              />
+            }
             label={label}
             sx={{
               borderRadius: "10px",
@@ -280,7 +288,6 @@ export default function CommunityTable({
         offboardData={offboardData}
       />
 
-
       <AppMenu
         anchorEl={menuAnchorEl}
         handleClose={handleMenuAnchorClose}
@@ -295,9 +302,7 @@ export default function CommunityTable({
       <ConfirmationModal
         open={modal}
         onClose={handleModal}
-        message={
-          "Do you want to off-board the community?"
-        }
+        message={"Do you want to off-board the community?"}
         confirmLabel={"Yes"}
         cancelLabel={"No"}
         onConfirm={offBoard}

@@ -331,6 +331,7 @@ const InsuranceUpload = ({
                 setSelectedFiles={setSelectedFiles}
                 selectedFiles={selectedFiles}
                 documentTypesData={documentTypesData?.data}
+                isMultiple
               />
             </Grid>
           )}

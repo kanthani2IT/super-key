@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import { forwardRef, useState } from "react";
 
 import { ExpandAltOutlined } from "@ant-design/icons";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { Box, Button, Chip, Stack } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -28,6 +27,7 @@ function MainCard(
     darkTitle,
     elevation,
     secondary,
+    showSecondary = true,
     shadow,
     sx = {},
     title,
@@ -36,6 +36,8 @@ function MainCard(
     isFilter,
     noStyles = false,
     onFilterClick,
+    selectedProperty,
+    selectedPriority,
     ...others
   },
   ref
@@ -47,20 +49,19 @@ function MainCard(
 
   const handleFilterButtonClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setOpenFilter((prev) => !prev);
   };
-  const [selectedPriority, setSelectedPriority] = useState([
-    { name: "High", color: "#E81616" },
-    { name: "Medium", color: "#EB6C0B" },
-    { name: "Low", color: "#DEC013" },
-  ]);
-  const [selectedProperty, setSelectedProperties] = useState([
-    { id: 1, data: "Desert Springs", selected: false },
-    { id: 2, data: "Rose Dale", selected: false },
-    { id: 3, data: "Rose Dal", selected: false },
-    { id: 4, data: "Oak Ridge Estates", selected: false },
-    { id: 5, data: "Mountain Vista", selected: false },
-  ]);
+  // const [selectedPriority, setSelectedPriority] = useState([
+  //   { name: "High", color: "#E81616" },
+  //   { name: "Medium", color: "#EB6C0B" },
+  //   { name: "Low", color: "#DEC013" },
+  // ]);
+  // const [selectedProperty, setSelectedProperties] = useState([
+  //   { id: 1, data: "Desert Springs", selected: false },
+  //   { id: 2, data: "Rose Dale", selected: false },
+  //   { id: 3, data: "Rose Dal", selected: false },
+  //   { id: 4, data: "Oak Ridge Estates", selected: false },
+  //   { id: 5, data: "Mountain Vista", selected: false },
+  // ]);
 
   const toggleFilter = (id) => {
     setSelectedProperties((prev) =>
@@ -142,22 +143,23 @@ function MainCard(
                     {"Filter"}{" "}
                   </Button>
                 ) : null}
-
-                <Typography
-                  variant="body1"
-                  sx={{
-                    textDecoration: "none",
-                    cursor: "pointer",
-                  }}
-                  color="primary"
-                  onClick={secondaryAction && secondaryAction}
-                >
-                  <ExpandAltOutlined
-                    style={{ marginRight: 2 }}
-                    fontSize="medium"
-                  />
-                  {secondary}
-                </Typography>
+                {showSecondary && (
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      textDecoration: "none",
+                      cursor: "pointer",
+                    }}
+                    color="primary"
+                    onClick={secondaryAction && secondaryAction}
+                  >
+                    <ExpandAltOutlined
+                      style={{ marginRight: 2 }}
+                      fontSize="medium"
+                    />
+                    {secondary}
+                  </Typography>
+                )}
               </Box>
             )
           }
@@ -179,12 +181,11 @@ function MainCard(
           }}
         >
           <FilterDrawer
-            openFilter={openFilter}
-            setOpenFilter={setOpenFilter}
             selectedProperty={selectedProperty}
             selectedPriority={selectedPriority}
             toggleFilter={toggleFilter}
             anchorEl={anchorEl}
+            setAnchorEl={setAnchorEl}
           />
           {children}
         </CardContent>

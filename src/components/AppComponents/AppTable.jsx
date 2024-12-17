@@ -10,10 +10,10 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import noData from "assets/images/icons/noData.svg";
 import { BoldTypographyHeader, Image } from "components/StyledComponents";
 import AppPagination from "./AppPagination";
 import AppSkeleton from "./AppSkeleton";
-import noData from 'assets/images/icons/noData.svg'
 const AppTable = ({
   isLoading,
   columns,
@@ -32,7 +32,6 @@ const AppTable = ({
   selectedData=null,
   offboardData,
 }) => {
-
   const rowCount = rows.length;
   const numSelected = selected.length;
 
@@ -85,7 +84,6 @@ selectedData([...offboardData,...result])
       );
     }
 
-
     onSelectionChange?.(newSelected);
     if(selectedData){
       let isAlreadySelectedData=offboardData.find(item => item.communityId == id);
@@ -104,7 +102,6 @@ selectedData([...offboardData,...result])
     }
   };
 
-  console.log(rowCount, numSelected,rowCount,totalItems,"$$$ row count, 333" )
   return (
     <TableContainer sx={{ maxHeight: "calc(100vh - 300px)" }}>
       <Table stickyHeader>
@@ -179,7 +176,7 @@ selectedData([...offboardData,...result])
             <TableRow>
               <TableCell colSpan={columns.length + 1} align="center">
                 <Box sx={{ py: 2 }}>
-                  <Image width={'40%'} height={'10%'} src={noData} />
+                  <Image width={"40%"} height={"10%"} src={noData} />
                 </Box>
                 <Typography variant="body1" color="textSecondary">
                   {noDataText}
@@ -188,23 +185,22 @@ selectedData([...offboardData,...result])
             </TableRow>
           )}
         </TableBody>
-        {totalItems ? (<TableFooter>
-          <TableRow>
-            <TableCell colSpan={columns.length + 1} align="right">
-
-              <AppPagination
-                pageSize={pageSize}
-                currentPage={currentPage}
-                totalItems={totalItems}
-                onPageChange={onPageChange}
-              />
-            </TableCell>
-          </TableRow>
-        </TableFooter>
+        {totalItems ? (
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={columns.length + 1} align="right">
+                <AppPagination
+                  pageSize={pageSize}
+                  currentPage={currentPage}
+                  totalItems={totalItems}
+                  onPageChange={onPageChange}
+                />
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         ) : null}
-
       </Table>
-    </TableContainer >
+    </TableContainer>
   );
 };
 
