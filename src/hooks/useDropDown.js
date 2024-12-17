@@ -143,7 +143,7 @@ export const useVerunaPriorityQuery = (search) =>
     queryFn: () => api.common.getAllVerunaPriority({ search }),
     keepPreviousData: true,
     select: (data) => {
-      return data?.data?.records || [];
+      return data?.data || [];
     },
     onSuccess: (data) => {},
     onError: (error) => {
