@@ -1,5 +1,6 @@
 import { MoreVert, SwapVert } from "@mui/icons-material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+
 import { Button, IconButton, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
@@ -10,8 +11,7 @@ import AppTaskCard from "components/AppComponents/AppTaskCard";
 import { getStatus } from "components/AppComponents/CustomField";
 import FilterDrawer from "components/CustomPopup";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
-import { useState } from "react";
-
+import { useRef, useState } from "react";
 const options = [
   { value: "ACTIVE", label: "Status: Active" },
   { value: "INACTIVE", label: "Status: Inactive" },
@@ -30,11 +30,12 @@ export default function TaskTable({
   page,
   selectedRows = [],
 }) {
+  const anchorRef = useRef(null);
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(null);
 
   const [selectedPriority, setSelectedPriority] = useState([
     { name: "High", color: "#E81616" },
@@ -201,6 +202,7 @@ export default function TaskTable({
     e.stopPropagation();
     setAnchorEl(e.currentTarget);
   };
+
   return (
     <Box sx={communityStyles.container(height)}>
       <>
@@ -221,9 +223,11 @@ export default function TaskTable({
           ]}
         />
         <Button
-          onClick={() => {
-            setModal(true);
+          onClick={(e) => {
+            console.log(e.currentTarget, "currentTarget");
+            setModal(e.currentTarget);
           }}
+          ref={anchorRef}
         >
           View Details
         </Button>
@@ -255,7 +259,19 @@ export default function TaskTable({
                 handleClose={handleMenuAnchorClose}
                 renderComponent={renderMenuComponent()}
             /> */}
-      <AppTaskCard open={modal} onClose={() => setModal(false)} />
+      <AppMenu
+        anchorEl={modal}
+        handleClose={() => setModal(null)}
+        renderComponent={
+          <AppTaskCard
+            roleName="Richard"
+            role="Property Manager Name"
+            type="GRT"
+            number="+1 432 567 987"
+          />
+        }
+        borderRadius={"20px"}
+      />
 
       <AppMenu
         anchorEl={menuAnchorEl}
