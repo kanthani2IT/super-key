@@ -11,7 +11,7 @@ const COMMUNITY = {
   createCommunity: "/api/community/createWithFile",
   getAllCommunityList: "/api/community/pagings",
   getCommunityList: (page, size, sortBy, orderBy, status, search) =>
-    `/api/community/paging?page=${page}&size=${size}&sortBy=${sortBy}&direction=${orderBy}&status=${status}&name=${search}`,
+    `/api/community/pagings?page=${page}&size=${size}&sortBy=${sortBy}&direction=${orderBy}&status=${status}&name=${search}`,
   getUsers: "/api/veruna/users",
   getCommunityById: (id) => `/api/community/${id}`,
   updateCommunityById: (id) => `/api/community/update/${id}`,
@@ -38,9 +38,9 @@ const DASHBOARD = {
   getActiveTask: "/api/tasks",
   getCompletedTask: "api/tasks/history",
   getActiveAndCompletedTaskByFilter: (sort, orderBy, id, page, size) =>
-    `/api/tasks/community/${id}?sort=${sort}&orderBy=${orderBy}&page=${page}&size=${size}`,
+    `/api/tasks/community/CMCID?sort=${sort}&orderBy=${orderBy}&page=${page}&size=${size}`,
   //`api/tasks/community/0017x00000kF1kTAAS?sort=createdAt&orderBy=desc&page=1&size=30`,
-  getDashboardMetrics:(cmcId)=> `/api/dashboard/metrics/${cmcId}`,
+  getDashboardMetrics: () => `/api/dashboard/metrics/CMCID`,
   getRenewals: `/api/dashboard/renewal/001bn00001CitW2AAJ`,
 };
 
