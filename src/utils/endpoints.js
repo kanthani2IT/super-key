@@ -11,7 +11,7 @@ const COMMUNITY = {
   createCommunity: "/api/community/createWithFile",
   getAllCommunityList: "/api/community/pagings",
   getCommunityList: (page, size, sortBy, orderBy, status, search) =>
-    `/api/community/pagings?page=${page}&size=${size}&sortBy=${sortBy}&direction=${orderBy}&status=${status}&name=${search}`,
+    `/api/community/pagings/CMCID?page=${page}&size=${size}`,
   getUsers: "/api/veruna/users",
   getCommunityById: (id) => `/api/community/${id}`,
   updateCommunityById: (id) => `/api/community/update/${id}`,
@@ -19,7 +19,7 @@ const COMMUNITY = {
   offBoardCommunity: `/api/community/offboardingCommunities`,
 };
 const COMMON = {
-  getAllLocation: `api/googlemap/autocomplete`,
+  getAllLocation: `api/googlemaps/autocomplete`,
   getAllCommunity: `/api/community`,
   getAllCommunityManager: `/api/manager`,
   getAllPropertyManager: `/api/property-managers/all`,

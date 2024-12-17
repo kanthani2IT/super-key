@@ -5,7 +5,7 @@ import { api } from "api";
 export const useLocationsQuery = (input) =>
   useQuery({
     queryKey: ["allLocationList", input],
-    queryFn: () => api.common.getAllLocation({ input }),
+    queryFn: () => api.common.getAllLocation({ input, sessionToken: 12345678 }),
     keepPreviousData: true,
     onSuccess: (data) => {},
     onError: (error) => {

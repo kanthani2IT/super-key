@@ -19,8 +19,8 @@ const CommunityAddress = ({ handleChange, formValues, touched, errors }) => {
 
   const onSearch = useDebounceFn((searchString) => {
     if (searchString.length >= 3)
-      setAddress(searchString || "usa"); // Fallback to the initial static value
-  }, 1000);
+      setAddress(searchString || "usa");
+  }, 800);
 
   const { data: addressList, isLoading: isAddressFetching } = useLocationsQuery(address);
 
