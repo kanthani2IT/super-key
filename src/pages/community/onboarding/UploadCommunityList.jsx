@@ -2,9 +2,14 @@ import { Box, Button, IconButton, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import DeleteIcon from "assets/images/icons/CommunityIcons/DeleteIcon";
 import PreviewIcon from "assets/images/icons/CommunityIcons/PreviewIcon";
+import AppAutoComplete from "components/AppComponents/AppAutoComplete";
 import AppDialogBox from "components/AppComponents/AppDialogBox";
 import CustomUploadTable from "components/AppComponents/CustomUploadTable";
 import { StyledBulkTextField } from "components/AppComponents/StyledComponent";
+import {
+  useCommunityManagersQuery,
+  usePropertyManagersQuery,
+} from "hooks/useDropDown";
 import { useMemo, useState } from "react";
 
 const pageSize = 5;
@@ -23,6 +28,8 @@ const UploadCommunityList = ({
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState(null);
+  const { data: communityManagerList } = useCommunityManagersQuery();
+  const { data: propertyManagerList } = usePropertyManagersQuery();
 
   const paginatedData = useMemo(() => {
     return fileData?.slice((page - 1) * pageSize, page * pageSize);
@@ -95,28 +102,25 @@ const UploadCommunityList = ({
       headerName: "Community Manager Name",
       renderComponent: (row, index) => {
         if (row?.isEdit) {
-          // return (
-          //   <StyledBulkTextField
-          //     variant="outlined"
-          //     value={editedList?.[row?.index]?.communityManagerName}
-          //     name={`editedList[${row.index}].communityManagerName`}
-          //     onChange={handleBulkUploadChange}
-          //     onBlur={handleBulkUploadBlur}
-          //     error={
-          //       Boolean(
-          //         bulkUploadError?.editedList?.[row?.index]
-          //           ?.communityManagerName
-          //       ) &&
-          //       bulkUploadTouched?.editedList?.[row?.index]
-          //         ?.communityManagerName
-          //     }
-          //     helperText={
-          //       bulkUploadTouched?.editedList?.[row?.index]
-          //         ?.communityManagerName &&
-          //       bulkUploadError?.editedList?.[row?.index]?.communityManagerName
-          //     }
-          //   />
-          // );
+          return (
+            <AppAutoComplete
+              name={`editedList[${row.index}].communityManagerName`}
+              freeSolo={false}
+              error={
+                bulkUploadTouched?.editedList?.[row?.index]
+                  ?.communityManagerName &&
+                bulkUploadError?.editedList?.[row?.index]?.communityManagerName
+              }
+              onChange={handleChangeDropDown}
+              nameParam="username"
+              valueParam="managerId"
+              searchKey="communityManager"
+              value={editedList?.[row?.index]?.communityManagerName || ""}
+              options={communityManagerList?.data}
+              onBlur={handleBulkUploadBlur}
+              placeholder="Select Manager"
+            />
+          );
         } else {
           return <Typography>{row?.communityManagerName?.username}</Typography>;
         }
@@ -128,26 +132,25 @@ const UploadCommunityList = ({
       headerName: "Property Manager Name",
       renderComponent: (row, index) => {
         if (row?.isEdit) {
-          // return (
-          //   <StyledBulkTextField
-          //     variant="outlined"
-          //     value={editedList?.[row?.index]?.propertyManagerName}
-          //     name={`editedList[${row.index}].propertyManagerName`}
-          //     onChange={handleBulkUploadChange}
-          //     onBlur={handleBulkUploadBlur}
-          //     error={
-          //       Boolean(
-          //         bulkUploadError?.editedList?.[row?.index]?.propertyManagerName
-          //       ) &&
-          //       bulkUploadTouched?.editedList?.[row?.index]?.propertyManagerName
-          //     }
-          //     helperText={
-          //       bulkUploadTouched?.editedList?.[row?.index]
-          //         ?.propertyManagerName &&
-          //       bulkUploadError?.editedList?.[row?.index]?.propertyManagerName
-          //     }
-          //   />
-          // );
+          return (
+            <AppAutoComplete
+              name={`editedList[${row.index}].propertyManagerName`}
+              freeSolo={false}
+              onChange={handleChangeDropDown}
+              nameParam="username"
+              valueParam="managerId"
+              searchKey="propertyManager"
+              value={editedList?.[row?.index]?.propertyManagerName || ""}
+              options={propertyManagerList?.data}
+              placeholder="Select Manager"
+              onBlur={handleBulkUploadBlur}
+              error={
+                bulkUploadTouched?.editedList?.[row?.index]
+                  ?.propertyManagerName &&
+                bulkUploadError?.editedList?.[row?.index]?.propertyManagerName
+              }
+            />
+          );
         } else {
           return <Typography>{row?.propertyManagerName?.username}</Typography>;
         }
@@ -217,6 +220,11 @@ const UploadCommunityList = ({
     },
   ];
 
+  const handleChangeDropDown = (event) => {
+    const { value, name } = event.target;
+    setBulkUploadFieldValue(name, value);
+  };
+
   const handleEdit = (row) => {
     const mapEditData = [...editedList, row];
     const mapTableData = fileData?.map((item, idx) => {
@@ -271,8 +279,8 @@ const UploadCommunityList = ({
     if (
       value?.communityName?.trim()?.length === 0 ||
       value?.communityEmail?.trim()?.length === 0 ||
-      value?.communityManagerName?.trim()?.length === 0 ||
-      value?.propertyManagerName?.trim()?.length === 0 ||
+      value?.communityManagerName === null ||
+      value?.propertyManagerName === null ||
       value?.address?.trim()?.length === 0
     ) {
       return false;
@@ -311,11 +319,14 @@ const UploadCommunityList = ({
     const filterRow = fileData?.filter(
       (el) => el?.documentId !== currentRow?.documentId
     );
-    setBulkUploadFieldValue("fileData", filterRow);
+    if (filterRow.length === 0 && draftData.length > 0) {
+      setBulkUploadFieldValue("fileData", draftData);
+      setBulkUploadFieldValue("draftData", []);
+    } else {
+      setBulkUploadFieldValue("fileData", filterRow);
+    }
     setOpen(false);
   };
-
-  console.log(fileData, draftData);
 
   return (
     <>

@@ -77,6 +77,24 @@ const getCommunityList = async (body) => {
   return response;
 };
 
+const downloadOnboardingTemplate = async () => {
+  const response = await http({
+    method: "GET",
+    url: COMMUNITY.downloadOnboardingTemplate,
+    responseType: "arraybuffer",
+  });
+  return response;
+};
+
+const createMultiCommunity = async (body) => {
+  const response = await http({
+    method: "POST",
+    url: COMMUNITY.createMultiCommunity,
+    data: body,
+  });
+  return response;
+};
+
 export const communityApi = {
   getUsersData,
   getCommunityById,
@@ -85,4 +103,6 @@ export const communityApi = {
   createCommunity,
   getAllCommunityList,
   getCommunityList,
+  downloadOnboardingTemplate,
+  createMultiCommunity,
 };

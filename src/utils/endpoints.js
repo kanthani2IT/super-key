@@ -16,6 +16,8 @@ const COMMUNITY = {
   getCommunityById: (id) => `/api/community/${id}`,
   updateCommunityById: (id) => `/api/community/update/${id}`,
   deleteCommunityById: (id) => `/api/community/${id}`,
+  downloadOnboardingTemplate: `api/community/bulk-upload-template`,
+  createMultiCommunity: `api/community/bulk-create`,
 };
 const COMMON = {
   getAllLocation: `/api/autocomplete`,

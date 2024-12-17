@@ -5,6 +5,7 @@ import AppGrid from "components/AppComponents/AppGrid";
 import { useSnackbar } from "components/AppComponents/SnackBarProvider";
 import InsuranceDocument from "components/AppComponents/UploadDocument";
 import { RadiusStyledButton } from "components/StyledComponents";
+import { useDownloadOnboardingTemplate } from "hooks/useCommunity";
 import {
   useCommunityManagersQuery,
   usePropertyManagersQuery,
@@ -18,13 +19,14 @@ const validHeaders = [
   "CommunityEmail",
   "CommunityManagerName",
   "PropertyManagerName",
-  "Address(Address,City,StateCode, ZipCode, Country)",
+  "Address(Street, City, StateCode, ZipCode, Country)",
 ];
 
 const UploadCommunity = ({ setBulkUploadFieldValue }) => {
   const { updateSnackbar } = useSnackbar();
   const { data: communityManagerList } = useCommunityManagersQuery();
   const { data: propertyManagerList } = usePropertyManagersQuery();
+  const { mutateAsync: downloadTemplate } = useDownloadOnboardingTemplate();
 
   const handleFileUpload = async (file) => {
     if (file[0]) {
@@ -61,7 +63,7 @@ const UploadCommunity = ({ setBulkUploadFieldValue }) => {
               communityManagerName: communityManagerName,
               propertyManagerName: propertyManagerName,
               address:
-                item?.["Address(Address,City,StateCode, ZipCode, Country)"] ||
+                item?.["Address(Street, City, StateCode, ZipCode, Country)"] ||
                 null,
               isEdit: false,
             };
@@ -97,6 +99,27 @@ const UploadCommunity = ({ setBulkUploadFieldValue }) => {
     }
   };
 
+  const handleDownload = async () => {
+    try {
+      const response = await downloadTemplate();
+      let blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      let myUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = myUrl;
+      link.setAttribute("download", "template.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      updateSnackbar({
+        message: err.data.message,
+        severity: SEVERITY.error,
+      });
+    }
+  };
+
   return (
     <>
       <AppGrid container spacing={5}>
@@ -128,6 +151,7 @@ const UploadCommunity = ({ setBulkUploadFieldValue }) => {
             textColor="#2954E1"
             borderRadius="10px"
             width="auto"
+            onClick={handleDownload}
           >
             Download the Template
           </RadiusStyledButton>

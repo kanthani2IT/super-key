@@ -8,10 +8,12 @@ import AppRowBox from "components/AppComponents/AppRowBox";
 import CircularLoader from "components/CircularLoader";
 import { RadiusStyledButton } from "components/StyledComponents";
 import { useFormik } from "formik";
-import { useOnboardCommunity } from "hooks/useCommunity";
+import {
+  useCreateMultiCommunity,
+  useOnboardCommunity,
+} from "hooks/useCommunity";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
-import { bulkUploadData, draftData } from "utils/constants";
 import * as Yup from "yup";
 import { transformDocuments } from "./utils";
 
@@ -22,12 +24,12 @@ const bulkUploadValidationSchema = Yup.object({
       communityEmail: Yup.string()
         .trim()
         .required("Community Email is required"),
-      communityManagerName: Yup.string()
-        .trim()
-        .required("Community Manager Name is required"),
-      propertyManagerName: Yup.string()
-        .trim()
-        .required("Property Manager Name is required"),
+      communityManagerName: Yup.object().required(
+        "Community Manager Name is required"
+      ),
+      propertyManagerName: Yup.object().required(
+        "Property Manager Name is required"
+      ),
       address: Yup.string().trim().required("Address is required"),
     })
   ),
@@ -133,11 +135,9 @@ const multiDefaultValue = {
 };
 
 const initialBulkUploadValues = {
-  fileData: bulkUploadData,
-  // fileData: [],
+  fileData: [],
   editedList: [],
-  // draftData: [],
-  draftData: draftData,
+  draftData: [],
 };
 
 const OnboardingIndex = ({ refetch }) => {
@@ -172,6 +172,8 @@ const OnboardingIndex = ({ refetch }) => {
   );
   const finalStep = activeStep == onBoardingStepper?.length - 1;
 
+  const { mutateAsync: createMultiCommunity } = useCreateMultiCommunity();
+
   const multiCommunityFormik = useFormik({
     initialValues: initialBulkUploadValues,
     validationSchema: bulkUploadValidationSchema,
@@ -205,10 +207,41 @@ const OnboardingIndex = ({ refetch }) => {
 
   const handleNextMulti = () => {
     if (multiActiveStep === 2) {
-      handleCloseMultiModal();
+      handleCreateMultiCommunity();
     } else {
       handleQueryParams(multiActiveStep + 1);
       setMultiActiveStep((prevStep) => prevStep + 1);
+    }
+  };
+
+  const handleCreateMultiCommunity = async () => {
+    try {
+      const reqBody = bulkUploadValues.fileData.map((item) => {
+        return {
+          name: item?.communityName,
+          contactInfo: item?.address,
+          propertyManagerId: item?.propertyManagerName?.userId ?? null,
+          communityManagerId: item?.communityManagerName?.managerId ?? null,
+          companyId: item?.communityManagerName?.managementCompanyId ?? null,
+          status: "ACTIVE",
+        };
+      });
+      const response = await createMultiCommunity(reqBody);
+      if (response.status === 200) {
+        if (bulkUploadValues.draftData.length > 0) {
+          setBulkUploadFieldValue("fileData", bulkUploadValues.draftData);
+          setBulkUploadFieldValue(
+            "draftData",
+            initialBulkUploadValues.draftData
+          );
+        } else {
+          handleCloseMultiModal();
+        }
+      } else {
+        console.log(response, "######");
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -243,6 +276,8 @@ const OnboardingIndex = ({ refetch }) => {
 
   const handleBackMulti = () => {
     if (multiActiveStep === 1) {
+      setActiveStep(defaultValue.activeStep);
+      setValidationSchema(null);
       navigate({
         pathname: location.pathname,
         search: `?onboarding=true&cs=0`,
@@ -281,6 +316,7 @@ const OnboardingIndex = ({ refetch }) => {
       pathname: location.pathname,
       search: "",
     });
+    setValidationSchema(null);
     setBulkUploadValues(initialBulkUploadValues);
     setOnboardingType(defaultValue.onboardingType);
     setActiveStep(defaultValue.activeStep);

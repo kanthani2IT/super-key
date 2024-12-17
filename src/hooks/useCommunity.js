@@ -108,6 +108,18 @@ export const useCommunityList = () => {
   });
 };
 
+export const useDownloadOnboardingTemplate = () => {
+  return useMutation({
+    mutationFn: api.community.downloadOnboardingTemplate,
+  });
+};
+
+export const useCreateMultiCommunity = () => {
+  return useMutation({
+    mutationFn: (body) => api.community.createMultiCommunity(body),
+  });
+};
+
 // export const useLoginUser = () => {
 //   const navigate = useNavigate();
 //   const {setAuthCookie}=useAuthCookies()
