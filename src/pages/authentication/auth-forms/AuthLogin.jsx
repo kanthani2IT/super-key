@@ -36,7 +36,6 @@ export default function AuthLogin(props) {
     setSubmitting(false);
     loginMutation.mutate({ values, checked });
   };
-  console.log(user?.email)
   return (
     <Formik
       initialValues={{
@@ -103,7 +102,7 @@ export default function AuthLogin(props) {
                   component={RouterLink}
                   fontWeight={600}
                   underline=""
-                  to="/reset/forgot"
+                  to="/reset/change"
                   color="info"
 
                 >

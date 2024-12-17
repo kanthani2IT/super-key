@@ -19,6 +19,7 @@ export default function ResetPassword(props) {
   const { id } = useParams();
   const { getCookie, setAuthCookie } = useAuthCookies()
   const user = getCookie("superkey")
+  const token = getCookie("t")
   const newPasswordMutation = useNewPassword();
   const resetPasswordMutation = useResetPassword();
   const validationSchema = createValidationSchema(fieldsConfig);
@@ -36,6 +37,7 @@ export default function ResetPassword(props) {
       let payload = {
         email: values?.email,
         password: values.newPassword,
+
         newPassword: values.newPassword,
 
       };

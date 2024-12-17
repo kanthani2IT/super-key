@@ -1,10 +1,10 @@
-import { Box, Stepper } from "@mui/material";
-import { CustomConnector, CustomStep } from "components/StyledComponents";
+import { Box } from "@mui/material";
+import { CustomConnector, CustomStep, Customstepper } from "./StyledComponent";
 
 const AppStepper = ({ activeStep, steps }) => {
   return (
-    <Box sx={{ width: "100%", mb: 2, mt: 0 }}>
-      <Stepper
+    <Box sx={{ width: "auto", mb: 2, mt: 1 }}>
+      <Customstepper
         activeStep={activeStep}
         alternativeLabel
         connector={<CustomConnector />}
@@ -12,7 +12,7 @@ const AppStepper = ({ activeStep, steps }) => {
         {steps.map((_, index) => (
           <CustomStep key={index} completed={activeStep > index}></CustomStep>
         ))}
-      </Stepper>
+      </Customstepper>
     </Box>
   );
 };

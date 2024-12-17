@@ -24,6 +24,7 @@ const COMMON = {
   getAllPropertyManager: `/api/property-managers/all`,
   getAllDocTypes: `/api/document-types`,
   getUsers: "/api/veruna/users",
+  getPriority: "/api/tasks/priority",
 };
 const TASK = {
   getStatus: "/api/tasks/status",
@@ -38,7 +39,7 @@ const DASHBOARD = {
   getActiveAndCompletedTaskByFilter: (sort, orderBy, id, page, size) =>
     `/api/tasks/community/${id}?sort=${sort}&orderBy=${orderBy}&page=${page}&size=${size}`,
   //`api/tasks/community/0017x00000kF1kTAAS?sort=createdAt&orderBy=desc&page=1&size=30`,
-  getDashboardMetrics: `/api/dashboard/metrics`,
+  getDashboardMetrics:(cmcId)=> `/api/dashboard/metrics/${cmcId}`,
   getRenewals: `/api/dashboard/renewal/001bn00001CitW2AAJ`,
 };
 
