@@ -10,16 +10,13 @@ import ListItemText from '@mui/material/ListItemText';
 // assets
 import EditOutlined from '@ant-design/icons/EditOutlined';
 import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
-import { useNavigate } from 'react-router';
-import { useAuthCookies } from 'utils/cookie';
 import { logoutUser } from 'utils/helpers';
 
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
 export default function ProfileTab() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const navigate = useNavigate()
-
+  ø
   const handleListItemClick = (index) => {
     setSelectedIndex(index);
   };
