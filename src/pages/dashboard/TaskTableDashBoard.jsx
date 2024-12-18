@@ -17,6 +17,7 @@ import AppSkeleton from "components/AppComponents/AppSkeleton";
 import { StyledMenuItem } from "components/StyledComponents";
 import AppMenu from "components/AppComponents/AppMenu";
 import AppTaskCard from "components/AppComponents/AppTaskCard";
+import PropTypes from "prop-types";
 
 const columns = [
   { field: "S.No", headerName: "S.No" },
@@ -107,8 +108,9 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
     setMenuAnchorEl(event.currentTarget);
     setMenuRowData(row);
   };
-  const displayedTasks = showAll ? tableData : tableData.slice(0, 4);
-  console.log("tableData", tableData);
+  const sliceTableData = Array.isArray(tableData) ? tableData : [];
+  const displayedTasks = showAll ? sliceTableData : sliceTableData.slice(0, 4);
+
   const handleMenuAnchorClose = () => {
     setMenuAnchorEl(null);
     setMenuRowData(null);
