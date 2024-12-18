@@ -1,15 +1,15 @@
 import { Drawer } from "@mui/material";
 
+import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
 import AppGrid from "components/AppComponents/AppGrid";
-import { useCommunityList, useDeleteCommunityById, useOffBoardCommunity } from "hooks/useCommunity";
-import CommunityTable from "pages/community/CommunityTable";
 import { RadiusStyledButton } from "components/StyledComponents";
-import { useEffect, useState } from "react";
+import { useCommunityList, useOffBoardCommunity } from "hooks/useCommunity";
+import CommunityTable from "pages/community/CommunityTable";
+import { useEffect, useMemo, useState } from "react";
+import { useAuthCookies } from "utils/cookie";
 import { useDebounceFn } from "utils/helpers";
 import EditCommunity from "./edit-community";
 import OnboardingIndex from "./onboarding";
-import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
-import { useAuthCookies } from "utils/cookie";
 
 const initialValue = {
   page: 1,
@@ -27,10 +27,10 @@ const CommunityOnboarding = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [filters, setFilters] = useState(initialValue);
   const [modal, setModal] = useState(false);
-  const [offboardData, setOffboardData] = useState([])
-  const { getCookie } = useAuthCookies()
+  const [offboardData, setOffboardData] = useState([]);
+  const { getCookie } = useAuthCookies();
 
-  const cmcId = getCookie('cmcId')
+  const cmcId = getCookie("cmcId");
 
   const {
     mutate: getCommunityList,
@@ -39,12 +39,13 @@ const CommunityOnboarding = () => {
   } = useCommunityList();
 
   const { content } = communityListData?.data ?? {};
+
   const handleChangePage = (event, newPage) => {
     // fetchData(filters.sort, filters.search, newPage);
     setPage(newPage);
-    setFilters({ ...filters, page: newPage })
-    handleSelectionChange([])
-    setOffboardData([])
+    setFilters({ ...filters, page: newPage });
+    handleSelectionChange([]);
+    setOffboardData([]);
   };
   //handlers
   const openDrawer = (id) => {
@@ -70,11 +71,11 @@ const CommunityOnboarding = () => {
     //   ],
     // };
 
-    const payload = { mappings: offboardData, };
+    const payload = { mappings: offboardData };
     mutate(payload);
     setModal(!modal);
-    handleSelectionChange([])
-    setOffboardData([])
+    handleSelectionChange([]);
+    setOffboardData([]);
   };
 
   const handleSelectionChange = (selected) => {
@@ -82,20 +83,19 @@ const CommunityOnboarding = () => {
   };
 
   const handleChangeRadio = (value) => {
-    let newValue = filters.sort == value ? null : value
+    let newValue = filters.sort == value ? null : value;
     setFilters((prev) => ({
       ...prev,
       sort: newValue,
     }));
 
     fetchData(newValue, filters.search, 1);
-    setPage(1)
+    setPage(1);
   };
 
   const fetchData = (sort, search, page = filters?.page) => {
     const sortData = sort === "ACTIVE" || sort === "INACTIVE" ? "" : "name";
-    const orderByData =
-      sort === "lowToHigh" ? "asc" : "desc";
+    const orderByData = sort === "lowToHigh" ? "asc" : "desc";
     const statusData = sort === "ACTIVE" || sort === "INACTIVE" ? sort : "";
     const body = {
       page: page || 1,
@@ -110,7 +110,7 @@ const CommunityOnboarding = () => {
 
   const onSearch = useDebounceFn((searchString) => {
     fetchData(filters.sort, searchString, 1);
-    setPage(1)
+    setPage(1);
   }, 500);
 
   const handleSearch = (value) => {
@@ -124,8 +124,13 @@ const CommunityOnboarding = () => {
   }, []);
   const refetch = () => {
     fetchData(filters.sort, filters.search, 1);
-    setPage(1)
+    setPage(1);
   };
+
+  const memoizedOnboardingComponent = useMemo(() => {
+    return <OnboardingIndex refetch={refetch} />;
+  }, []);
+
   return (
     <AppGrid container spacing={4}>
       <AppGrid
@@ -167,7 +172,7 @@ const CommunityOnboarding = () => {
               Off Board Community
             </RadiusStyledButton>
           ) : (
-            <OnboardingIndex refetch={refetch} />
+            memoizedOnboardingComponent
           )}
         </AppGrid>
       </AppGrid>
@@ -195,11 +200,16 @@ const CommunityOnboarding = () => {
           cmcId={cmcId}
         />
       </AppGrid>
-      <Drawer sx={{
-        "& .MuiDrawer-paper": {
-          width: "50%",
-        },
-      }} open={edit} onClose={closeDrawer} anchor="right">
+      <Drawer
+        sx={{
+          "& .MuiDrawer-paper": {
+            width: "50%",
+          },
+        }}
+        open={edit}
+        onClose={closeDrawer}
+        anchor="right"
+      >
         <EditCommunity
           onClose={closeDrawer}
           communityData={communityData}
@@ -210,9 +220,7 @@ const CommunityOnboarding = () => {
       <ConfirmationModal
         open={modal}
         onClose={handleModal}
-        message={
-          "Do you want to off board selected communities?"
-        }
+        message={"Do you want to off board selected communities?"}
         confirmLabel={"Yes"}
         cancelLabel={"No"}
         onConfirm={handleOffBoard}
