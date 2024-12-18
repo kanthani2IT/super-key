@@ -62,16 +62,11 @@ const CommunityOnboarding = () => {
 
   const { mutate } = useOffBoardCommunity();
   const handleOffBoard = () => {
-    // const payload = {
-    //   mappings: [
-    //     {
-    //       communityId: communityData?.communityId,
-    //       cmcId: communityData?.communityId,
-    //     },
-    //   ],
-    // };
-
-    const payload = { mappings: offboardData };
+    const formattedData = selectedRows.map(id => ({ 
+      communityId: id, 
+      cmcId: cmcId,
+  }));
+    const payload = { mappings: formattedData };
     mutate(payload);
     setModal(!modal);
     handleSelectionChange([]);
