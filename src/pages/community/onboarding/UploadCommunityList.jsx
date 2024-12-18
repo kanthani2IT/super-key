@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { Box, Chip, IconButton, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import DeleteIcon from "assets/images/icons/CommunityIcons/DeleteIcon";
 import PreviewIcon from "assets/images/icons/CommunityIcons/PreviewIcon";
@@ -25,10 +25,17 @@ const UploadCommunityList = ({
   isBulkUploadValid,
   setBulkUploadValues,
   handleApplyAutoValidation,
+  bulkUploadFormSubmit,
 }) => {
   const theme = useTheme();
-  const { fileData, editedList, draftData, fileCount, isPagination } =
-    bulkUploadValues ?? {};
+  const {
+    fileData,
+    editedList,
+    draftData,
+    fileCount,
+    isPagination,
+    errorResponse,
+  } = bulkUploadValues ?? {};
   const { draftDataCount, uploadDataCount } = fileCount ?? {};
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
@@ -204,17 +211,18 @@ const UploadCommunityList = ({
             <Box sx={{ display: "flex", gap: 1 }}>
               <AppCustomButton
                 variant="contained"
-                onClick={() => handleSave(row, index)}
-                loading
+                onClick={() => handleSave(row, index)} // SAVE ROW LOGIC
               >
                 Save
               </AppCustomButton>
-              <Button
-                variant="outlined"
-                onClick={() => handleCancel(row, index)}
-              >
-                Cancel
-              </Button>
+              {isPagination ? (
+                <AppCustomButton
+                  variant="outlined"
+                  onClick={() => handleCancel(row, index)} // CANCEL ROW LOGIC
+                >
+                  Cancel
+                </AppCustomButton>
+              ) : null}
             </Box>
           );
         } else {
@@ -239,8 +247,9 @@ const UploadCommunityList = ({
   };
 
   const handleEdit = (row) => {
-    const mapEditData = [...editedList, row];
+    const mapEditData = [...editedList, row]; // TO SET EDIT LIST DATA
     const mapTableData = fileData?.map((item, idx) => {
+      // TO SET TABLE DATA
       if (row?.documentId === item?.documentId) {
         return {
           ...item,
@@ -256,6 +265,7 @@ const UploadCommunityList = ({
   };
 
   const handleDelete = (row) => {
+    // DELETE CURRENT ROW
     setCurrentRow(row);
     setOpen(true);
   };
@@ -264,7 +274,7 @@ const UploadCommunityList = ({
     const findEditData = editedList?.find(
       (el) => el?.documentId === row?.documentId
     );
-    const valid = checkManualValidation(findEditData);
+    const valid = checkManualValidation(findEditData); // CHECK MANUAL VALIDATION
     if (isBulkUploadValid || valid) {
       const filterEditedList = editedList?.filter(
         (el) => el?.documentId !== row?.documentId
@@ -281,7 +291,13 @@ const UploadCommunityList = ({
             isEdit: false,
             index: null,
           };
-        } else return item;
+        } else
+          return {
+            ...item,
+            index: filterEditedList?.findIndex(
+              (el) => el.documentId === item?.documentId
+            ),
+          };
       });
       setBulkUploadFieldValue("editedList", filterEditedList);
       setBulkUploadFieldValue("fileData", mapTableData);
@@ -290,6 +306,9 @@ const UploadCommunityList = ({
 
   const checkManualValidation = (value) => {
     if (
+      value?.communityName === null ||
+      value?.communityEmail === null ||
+      value?.address === null ||
       value?.communityName?.trim()?.length === 0 ||
       value?.communityEmail?.trim()?.length === 0 ||
       value?.communityManagerName === null ||
@@ -345,6 +364,7 @@ const UploadCommunityList = ({
     } else {
       setBulkUploadFieldValue("fileData", filterRow);
       if (!isPagination) {
+        // TO SET THE FILE COUNT FOR UPLOAD AND DRAFT
         setBulkUploadFieldValue("fileCount", {
           ...fileCount,
           draftDataCount: filterRow?.length,
@@ -361,28 +381,58 @@ const UploadCommunityList = ({
 
   return (
     <>
-      <Typography variant="h5" color={theme.palette.text.grey}>
-        Uploaded Communities{" "}
-        {`(${uploadDataCount}: Uploaded, ${draftDataCount}: Draft)`}
-      </Typography>
+      {errorResponse?.length > 0 ? ( // for showing api response message
+        <>
+          {errorResponse?.map((item) => (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                p: 1,
+                m: 1,
+              }}
+            >
+              <Typography variant="h6">
+                <b>Community Name :</b> {item?.communityName}
+              </Typography>
+              <Typography variant="h6">
+                <b>Message :</b> {item?.message}
+              </Typography>
+              <Chip
+                variant="filled"
+                color={item?.created ? "success" : "error"}
+                label={item?.created ? "True" : "False"}
+              />
+            </Box>
+          ))}
+        </>
+      ) : (
+        //FILE UPLOADED DATA'S
+        <>
+          <Typography variant="h5" color={theme.palette.text.grey}>
+            Uploaded Communities{" "}
+            {`(${uploadDataCount}: Uploaded, ${draftDataCount}: Draft)`}
+          </Typography>
 
-      {fileData.length > 0 && (
-        <CustomUploadTable
-          cols={columns}
-          tableData={paginatedData}
-          currentPage={page}
-          pageSize={pageSize}
-          totalItems={fileData?.length}
-          handlePageChange={handlePageChange}
-          pageDisable={editedList?.length > 0 ? true : false}
-          isPagination={isPagination}
-        />
+          {fileData.length > 0 && (
+            <CustomUploadTable
+              cols={columns} // custom columns
+              tableData={paginatedData} // paginated data
+              currentPage={page}
+              pageSize={pageSize}
+              totalItems={fileData?.length}
+              handlePageChange={handlePageChange}
+              pageDisable={editedList?.length > 0 ? true : false}
+              isPagination={isPagination}
+            />
+          )}
+          <AppDialogBox // For deleting record
+            open={open}
+            handleCancel={handleCancelPopup}
+            handleDelete={handleDeletePopup}
+          />
+        </>
       )}
-      <AppDialogBox
-        open={open}
-        handleCancel={handleCancelPopup}
-        handleDelete={handleDeletePopup}
-      />
     </>
   );
 };

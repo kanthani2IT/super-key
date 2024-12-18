@@ -29,9 +29,11 @@ const UploadCommunity = ({
   const { updateSnackbar } = useSnackbar();
   const { data: communityManagerList } = useCommunityManagersQuery();
   const { data: propertyManagerList } = usePropertyManagersQuery();
-  const { mutateAsync: downloadTemplate } = useDownloadOnboardingTemplate();
+  const { mutateAsync: downloadTemplate, isLoading } =
+    useDownloadOnboardingTemplate();
 
   const handleFileUpload = async (file) => {
+    // TEMPLATE UPLOAD LOGIC
     if (file[0]) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -39,7 +41,7 @@ const UploadCommunity = ({
         const workbook = XLSX.read(data, { type: "array" });
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
-        const json = XLSX.utils.sheet_to_json(worksheet);
+        const json = XLSX.utils.sheet_to_json(worksheet); // USING  XLSX PACKAGE TO GET JSON DATA
         const header = Object.keys(json[0]);
         const isIncludedAllRequiredColumns = validHeaders.every((col) =>
           header.includes(col)
@@ -49,16 +51,16 @@ const UploadCommunity = ({
           const draftData = [];
           json?.map((item) => {
             const isValid = checkManualEmptyValue(item);
-            const communityManagerName = isValid
-              ? communityManagerList?.data?.find(
-                  (el) => el?.username === item?.CommunityManagerName
-                ) || null
-              : null;
-            const propertyManagerName = isValid
-              ? propertyManagerList?.data?.find(
-                  (el) => el?.username === item?.PropertyManagerName
-                ) || null
-              : null;
+            const communityManagerName =
+              communityManagerList?.data?.find(
+                (el) => el?.username === item?.CommunityManagerName
+              ) || null;
+
+            const propertyManagerName =
+              propertyManagerList?.data?.find(
+                (el) => el?.username === item?.PropertyManagerName
+              ) || null;
+
             const obj = {
               documentId: generateUniqueId() || null,
               communityName: item?.CommunityName || null,
@@ -70,6 +72,7 @@ const UploadCommunity = ({
                 null,
               isEdit: false,
             };
+            // IF ANY FIELD EMPTY MEANS TO SET THE DRAFT DATA OTHERWISE SET FILE DATA
             if (isValid && propertyManagerName && communityManagerName) {
               fileData.push(obj);
             } else {
@@ -101,6 +104,7 @@ const UploadCommunity = ({
           }
         } else {
           updateSnackbar({
+            // THRO VALIDATION
             message: "Invalid Column Name",
             severity: SEVERITY.error,
           });
@@ -111,6 +115,7 @@ const UploadCommunity = ({
   };
 
   const checkManualEmptyValue = (item) => {
+    // MANUAL VALIDATION CHECKING WHILE UPLOADING FILE
     const header = Object.keys(item);
     const isIncludedAllRequiredColumns = validHeaders.every((col) =>
       header.includes(col)
@@ -170,12 +175,13 @@ const UploadCommunity = ({
         <AppGrid size={{ xl: 6 }} display={"flow"}>
           <RadiusStyledButton
             variant="outlined"
-            startIcon={icons.IconArrowDownward()}
+            startIcon={isLoading ?? icons.IconArrowDownward()}
             color="info"
             textColor="#2954E1"
             borderRadius="10px"
             width="auto"
             onClick={handleDownload}
+            loading={isLoading}
           >
             Download the Template
           </RadiusStyledButton>

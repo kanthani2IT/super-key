@@ -2,10 +2,11 @@ import { AddCircle } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { useGlobalStore } from "store/store";
 
-import { useSnackbar } from "@mui/base";
 import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
+import AppCustomButton from "components/AppComponents/Button";
+import { useSnackbar } from "components/AppComponents/SnackBarProvider";
 import CircularLoader from "components/CircularLoader";
 import { RadiusStyledButton } from "components/StyledComponents";
 import { useFormik } from "formik";
@@ -15,10 +16,10 @@ import {
 } from "hooks/useCommunity";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useAuthCookies } from "utils/cookie";
 import { SEVERITY } from "utils/message";
 import * as Yup from "yup";
 import { transformDocuments } from "./utils";
-import { useAuthCookies } from "utils/cookie";
 
 const bulkUploadValidationSchema = Yup.object({
   editedList: Yup.array().of(
@@ -141,6 +142,7 @@ const initialBulkUploadValues = {
   fileData: [],
   editedList: [],
   draftData: [],
+  errorResponse: [],
   fileCount: { uploadDataCount: 0, draftDataCount: 0 },
   isPagination: true,
 };
@@ -176,11 +178,13 @@ const OnboardingIndex = ({ refetch }) => {
   const [validationSchema, setValidationSchema] = useState(
     onBoardingStepper[activeStep]?.initialValidationSchema || null
   );
-  const { getCookie } = useAuthCookies()
-  const cmcId = getCookie('cmcId')
+  const { getCookie } = useAuthCookies();
+
+  const cmcId = getCookie("cmcId");
   const finalStep = activeStep == onBoardingStepper?.length - 1;
 
-  const { mutateAsync: createMultiCommunity } = useCreateMultiCommunity();
+  const { mutateAsync: createMultiCommunity, isLoading: saveMultiLoading } =
+    useCreateMultiCommunity();
 
   const multiCommunityFormik = useFormik({
     initialValues: initialBulkUploadValues,
@@ -194,6 +198,7 @@ const OnboardingIndex = ({ refetch }) => {
     handleBlur: handleBulkUploadBlur,
     handleChange: handleBulkUploadChange,
     handleSubmit: handleBulkUploadSubmit,
+    submitForm: bulkUploadFormSubmit,
     errors: bulkUploadError,
     touched: bulkUploadTouched,
     isValid: isBulkUploadValid,
@@ -234,12 +239,32 @@ const OnboardingIndex = ({ refetch }) => {
           communityManagerId: item?.communityManagerName?.managerId ?? null,
           companyId: item?.communityManagerName?.managementCompanyId ?? null,
           status: "ACTIVE",
+          cmcId: cmcId,
         };
       });
       const response = await createMultiCommunity(reqBody);
       if (response.status === 200) {
-        if (bulkUploadValues.draftData.length > 0) {
-          const mapFileData = handleApplyAutoValidation(draftData);
+        const filterResponseData = response?.data?.filter((el) => !el?.created);
+        if (filterResponseData?.length > 0) {
+          const filterRemainingData = filterResponseData?.map((item) => {
+            const findFileData = bulkUploadValues.fileData.find(
+              (el) => el.documentId === item.id
+            );
+            return findFileData;
+          });
+          setBulkUploadValues((prev) => ({
+            ...prev,
+            fileData: filterRemainingData,
+            errorResponse: response?.data,
+            fileCount: {
+              ...prev?.fileCount,
+              uploadDataCount: filterRemainingData.length,
+            },
+          }));
+        } else if (bulkUploadValues.draftData.length > 0) {
+          const mapFileData = handleApplyAutoValidation(
+            bulkUploadValues.draftData
+          );
           setBulkUploadValues((prev) => ({
             ...prev,
             fileData: mapFileData,
@@ -252,6 +277,11 @@ const OnboardingIndex = ({ refetch }) => {
             },
           }));
         } else {
+          refetch();
+          updateSnackbar({
+            message: "Community created successfully.",
+            severity: SEVERITY.success,
+          });
           handleCloseMultiModal();
         }
       } else {
@@ -262,7 +292,7 @@ const OnboardingIndex = ({ refetch }) => {
       }
     } catch (err) {
       updateSnackbar({
-        message: response.data.message,
+        message: err.message,
         severity: SEVERITY.error,
       });
     }
@@ -378,33 +408,66 @@ const OnboardingIndex = ({ refetch }) => {
     }
   };
 
+  const handleMultiCommunityContinue = () => {
+    setBulkUploadFieldValue("errorResponse", []);
+  };
+
   const multiFooter = () => {
-    return (
-      <AppRowBox>
-        <AppGrid item size={{ xs: 2 }}>
-          <Button
-            fullWidth
-            color="secondary"
-            onClick={handleBackMulti}
-            variant="outlined"
-          >
-            Back
-          </Button>
-        </AppGrid>
-        <AppGrid item size={{ xs: 2 }}>
-          <Button
-            fullWidth
-            color="info"
-            type="submit"
-            onClick={handleNextMulti}
-            variant="contained"
-            disabled={multiCommunityButtonDisable()}
-          >
-            {multiActiveStep === 2 ? "Save" : "Next"}
-          </Button>
-        </AppGrid>
-      </AppRowBox>
-    );
+    if (bulkUploadValues.errorResponse.length > 0) {
+      return (
+        <AppRowBox>
+          <AppGrid item size={{ xs: 2 }}>
+            <AppCustomButton
+              fullWidth
+              color="secondary"
+              onClick={() => handleCloseMultiModal()}
+              variant="outlined"
+            >
+              Close
+            </AppCustomButton>
+          </AppGrid>
+          <AppGrid item size={{ xs: 2 }}>
+            <AppCustomButton
+              fullWidth
+              color="info"
+              type="submit"
+              onClick={handleMultiCommunityContinue}
+              variant="contained"
+            >
+              {"Continue"}
+            </AppCustomButton>
+          </AppGrid>
+        </AppRowBox>
+      );
+    } else {
+      return (
+        <AppRowBox>
+          <AppGrid item size={{ xs: 2 }}>
+            <AppCustomButton
+              fullWidth
+              color="secondary"
+              onClick={handleBackMulti}
+              variant="outlined"
+            >
+              Back
+            </AppCustomButton>
+          </AppGrid>
+          <AppGrid item size={{ xs: 2 }}>
+            <AppCustomButton
+              fullWidth
+              color="info"
+              type="submit"
+              onClick={handleNextMulti}
+              variant="contained"
+              disabled={multiCommunityButtonDisable()}
+              loading={saveMultiLoading}
+            >
+              {multiActiveStep === 2 ? "Save" : "Next"}
+            </AppCustomButton>
+          </AppGrid>
+        </AppRowBox>
+      );
+    }
   };
 
   const footer = () => {
@@ -451,7 +514,7 @@ const OnboardingIndex = ({ refetch }) => {
       : null,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      if (activeStep == onBoardingStepper?.length - 2) {
+      if (finalStep) {
         const formData = new FormData();
         let payload = {
           name: values?.communityName?.name,
@@ -542,6 +605,7 @@ const OnboardingIndex = ({ refetch }) => {
                   isBulkUploadValid,
                   setBulkUploadValues,
                   handleApplyAutoValidation,
+                  bulkUploadFormSubmit,
                 }
               )}
           </Suspense>
