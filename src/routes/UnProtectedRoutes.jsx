@@ -1,20 +1,16 @@
-import { Navigate } from 'react-router-dom';
-import { useAuthCookies } from 'utils/cookie';
-import { logoutUser } from 'utils/helpers';
-
-const useAuth = () => {
-    const { getCookie } = useAuthCookies()
-
-    const token = getCookie("token");
-    return !!token;
-};
+import { logoutUser, useAuth } from 'utils/helpers';
 
 
+
+const handlleRoutes = (children) => {
+    logoutUser(true)
+    return children
+}
 
 const UnProtectedRoute = ({ children }) => {
     const isAuth = useAuth();
 
-    return isAuth ? logoutUser()
+    return isAuth ? handlleRoutes(children)
 
         : children;
 };
