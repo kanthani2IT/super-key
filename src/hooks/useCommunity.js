@@ -65,7 +65,7 @@ export const useOnboardCommunity = (successHandler) => {
   const { updateSnackbar } = useSnackbar();
   const mutation = useMutation({
     mutationKey: ["community-onboarding"],
-    mutationFn: (payload) => api.community.createCommunity(payload),
+    mutationFn: ({isFileUpload,payload}) => api.community.createCommunity(isFileUpload,payload),
     onSuccess: (data) => {
       successHandler?.();
       updateSnackbar({

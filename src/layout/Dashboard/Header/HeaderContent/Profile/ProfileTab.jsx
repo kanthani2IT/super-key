@@ -16,7 +16,7 @@ import { logoutUser } from 'utils/helpers';
 
 export default function ProfileTab() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  ø
+  
   const handleListItemClick = (index) => {
     setSelectedIndex(index);
   };

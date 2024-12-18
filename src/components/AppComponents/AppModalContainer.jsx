@@ -70,6 +70,7 @@ const AppModalContainer = ({
   onClose,
   fullWidth = false,
   confirmModal = false,
+  flexTitle=false,
 }) => {
   const [closeModal, setCloseModal] = useState(false);
   const handleClose = () => {
@@ -92,7 +93,7 @@ const AppModalContainer = ({
     >
       {enableCard ? (
         <StyledFlexCard elevation={0}>
-          {title && !header && (
+          {title && !header &&!flexTitle && (
             <>
               <Box sx={{ display: "flex", justifyContent: "end" }}>
                 <Button
@@ -123,7 +124,24 @@ const AppModalContainer = ({
           )}
           {header && !title && header}
           {header && <Divider />}
-
+          {flexTitle&&(
+            <>
+            
+              <Box sx={{ display: "flex", justifyContent: "space-between", padding:"0rem 1rem" }}>
+              <Typography variant="h4">{title}</Typography>
+                <Button
+                  onClick={handleCloseModal}
+                  disableTouchRipple
+                  variant="text"
+                  size="small"
+                  color="secondary"
+                >
+                  Close
+                </Button>
+              </Box>
+              
+            </>
+          )}
           <StyledFlexCardContent
             height={cardHeight}
             padding={padding}

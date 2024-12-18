@@ -18,6 +18,7 @@ import { StyledMenuItem } from "components/StyledComponents";
 import AppMenu from "components/AppComponents/AppMenu";
 import AppTaskCard from "components/AppComponents/AppTaskCard";
 import PropTypes from "prop-types";
+import EmailModal from "components/AppComponents/AppEmailModal";
 
 const columns = [
   { field: "S.No", headerName: "S.No" },
@@ -70,6 +71,7 @@ const truncateText = (text, limit = 50) => {
 };
 const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
   const anchorRef = useRef(null);
+  const [openEmailModal, setOpenEmailModal]=useState(false)
   const [modal, setModal] = useState(null);
   const [viewDetails, setViewDetails] = useState(null);
   const renderPriorityComponent = (row, onClose) => {
@@ -77,7 +79,9 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
       console.log(`${option} clicked:`, row);
       onClose();
     };
-
+const handleSendEmail=()=>{
+  // setOpenEmailModal(true)
+}
     return (
       <>
         <StyledMenuItem
@@ -90,7 +94,7 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
         >
           View Details
         </StyledMenuItem>
-        <StyledMenuItem onClick={() => handleOptionClick("Send Email")}>
+        <StyledMenuItem onClick={handleSendEmail}>
           Send Email
         </StyledMenuItem>
         <StyledMenuItem onClick={() => handleOptionClick("Mark as Completed")}>
@@ -209,6 +213,7 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
           </Button>
         </Box>
       )}
+      <EmailModal open={openEmailModal} setOpen={setOpenEmailModal}/>
     </Box>
   );
 };
