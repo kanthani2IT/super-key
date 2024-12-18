@@ -30,6 +30,7 @@ const CommunityName = ({ handleChange, formValues, touched, errors }) => {
           label={"What is the name of your community?"}
         >
           <AppAutoComplete
+            multiline
             size="medium"
             valueParam="communityId"
             nameParam="name"

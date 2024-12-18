@@ -6,7 +6,7 @@ import AppRowBox from "components/AppComponents/AppRowBox";
 import { StyledTextField } from "components/StyledComponents";
 import { useState } from "react";
 import { COIData, certificateData } from "utils/constants";
-import CertificatesCard from "./CertificatesCard";
+import DocumentsCard from "../DocumentsCard";
 import CoiEmailProcess from "./CoiEmailProcess";
 
 
@@ -36,7 +36,7 @@ const COI = () => {
 
 
   return (
-    <AppGrid container spacing={5}>
+    <AppGrid container spacing={4}>
       <AppRowBox>
         <AppGrid size={{ xs: 12, sm: 8, md: 6, lg: 4 }}>
           <StyledTextField
@@ -54,28 +54,33 @@ const COI = () => {
           />
         </AppGrid>
       </AppRowBox>
-      <AppRowBox>
-        <AppGrid size={{ xs: 12, sm: 8, md: 6, lg: 4 }}>
-          <AppRowBox>
-            <Typography variant="h5">Communities</Typography>
-            <Typography variant="body1">
-              {COIData?.length} Communities &nbsp; |&nbsp;{" "}
-              {COIData?.length * 10} COI{" "}
-            </Typography>
-          </AppRowBox>
-        </AppGrid>
-      </AppRowBox>
+      <AppGrid size={{ xs: 12, sm: 8, md: 6, lg: 4 }}>
+        <AppRowBox>
+          <Typography variant="h5">Communities</Typography>
+          <Typography variant="body1">
+            {COIData?.length} Communities &nbsp; |&nbsp;{" "}
+            {COIData?.length * 10} COI{" "}
+          </Typography>
+        </AppRowBox>
+      </AppGrid>
       {!showCertificates ? (
         <AppGrid item size={{ xs: 12 }}>
-          <CardGrid handleClick={handleCertificates} data={COIData} />
+          <CardGrid handleClick={handleCertificates} data={COIData}
+            secondaryText={'Documents'}
+            mail={true}
+          />
         </AppGrid>
       ) : (
         <AppGrid item size={{ xs: 12 }}>
-          <CertificatesCard
+          <DocumentsCard
             title={coi?.community?.title}
-            handleEmail={handleEmailModal}
-            handleCertificates={handleCertificates}
-            certificateData={certificateData}
+            subTitle={'Certificates'}
+            secondaryText={'COI'}
+            handleCardClick={handleEmailModal}
+            handleClose={handleCertificates}
+            data={certificateData}
+            mail
+
           />
         </AppGrid>
       )}

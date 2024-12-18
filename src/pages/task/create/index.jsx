@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
     dueDate: Yup.date().required("Due date is required"),
     priority: Yup.object().required("Priority is required"),
     status: Yup.object().required("Status is required"),
-    // commmunity: Yup.object().required("Community is required"),
+    community: Yup.object().required("Community is required"),
     // comments: Yup.string().required("Comments are required"),
 });
 
@@ -35,7 +35,7 @@ const initialValues = {
     dueDate: dayjs(),
     priority: null,
     status: null,
-    commmunity: null,
+    community: null,
     comments: '',
 }
 
@@ -63,7 +63,7 @@ const TaskCreation = ({ refetch }) => {
     const { mutate, isLoading: taskCreationLoading } =
         useTaskCreation(successHandler);
 
-
+    console.log(communitiesData)
     const handleOpen = () => {
         setOpen(true);
         let queryParams = "?task=true";
@@ -104,7 +104,7 @@ const TaskCreation = ({ refetch }) => {
                 priority: values?.priority?.name,
                 status: values?.status?.name,
                 comments: values?.comments,
-                communityId: values?.commmunity?.id || '0017x00000kF1kTAAS',
+                communityId: values?.community?.id || '0017x00000kF1kTAAS',
                 "name": "003bn00000B2haPAAR"
             }
             mutate(payload)
@@ -113,13 +113,14 @@ const TaskCreation = ({ refetch }) => {
     })
 
     const { values, dirty, errors, touched, resetForm, handleChange, handleSubmit } = formik
+
     return (
         <>
             <Button startIcon={<AddCircle />} size='large' color='info' variant='contained' onClick={handleOpen}>
                 Create New Task
             </Button>
 
-            <AppModal cardHeight={'50vh'} footer={footer()} confirmModal={dirty} title={'Create New Task'} enableCard open={open} onClose={handleClose}>
+            <AppModal cardHeight={'60vh'} footer={footer()} confirmModal={dirty} title={'Create New Task'} enableCard open={open} onClose={handleClose}>
                 <AppGrid container spacing={3}>
                     <AppGrid item size={{ xs: 12 }}>
                         <AppLabelComponent label={'Task Name'}>
@@ -138,11 +139,11 @@ const TaskCreation = ({ refetch }) => {
                                 name="community"
                                 valueParam="communityId"
                                 nameParam="name"
-                                options={communitiesData}
+                                options={communitiesData?.data}
                                 loading={communitiesLoading}
-                                value={values.commmunity}
+                                value={values.community}
                                 onChange={handleChange}
-                                error={touched.commmunity && errors.commmunity} />
+                                error={touched.community && errors.community} />
                         </AppLabelComponent>
                     </AppGrid>
 
@@ -165,6 +166,7 @@ const TaskCreation = ({ refetch }) => {
                         <AppLabelComponent label={'Type'}>
 
                             <AppAutoComplete
+                                freeSolo={false}
                                 filter={false}
                                 name="type"
                                 valueParam='name'

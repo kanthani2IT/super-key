@@ -20,6 +20,7 @@ import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
+import { useOffBoardCommunity } from "hooks/useCommunity";
 import { formatAsDollar } from "pages/community/onboarding/utils";
 import { useState } from "react";
 
@@ -46,14 +47,42 @@ export default function CommunityTable({
   page,
   setPage,
   selectedRows,
+  setOffboardData,
+  rowSecondKey,
+  offboardData,
+  cmcId,
 }) {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(false);
-
   const pageSize = 10;
+
+  //   const tableData = [{
+  //     name: "Community Name",
+  //     communityManagerName: "Community Manager",
+  //     propertyManagerName: "Property Manager",
+  //     insuredCoverage: "Insured",
+  //     status: "Status",
+  //     action: "Action",
+  //   },
+  // {
+  //   name: "Community Name",
+  //   communityManagerName: "Community Manager",
+  //   propertyManagerName: "Property Manager",
+  //   insuredCoverage: "Insured",
+  //   status: "Status",
+  //   action: "Action",
+  // },
+  // {
+  //   name: "Community Name",
+  //   communityManagerName: "Community Manager",
+  //   propertyManagerName: "Property Manager",
+  //   insuredCoverage: "Insured",
+  //   status: "Status",
+  //   action: "Action",
+  // }]
 
   const columns = [
     {
@@ -69,13 +98,27 @@ export default function CommunityTable({
       headerName: "Community Name",
       flex: 1,
     },
+
+    // {
+    //   field: `communityManagerName`,
+    //   headerName: "Community Manager",
+    // },
+    // {
+    //   field: "propertyManagerName",
+    //   headerName: "Property Manager",
+    // },
     {
-      field: `communityManagerName`,
-      headerName: "Community Manager",
+      field: `type`,
+      headerName: "Type",
+    },
+
+    {
+      field: "state",
+      headerName: "State",
     },
     {
-      field: "propertyManagerName",
-      headerName: "Property Manager",
+      field: "city",
+      headerName: "City",
     },
     //Future use
     // {
@@ -90,7 +133,7 @@ export default function CommunityTable({
       headerName: "Insured",
       renderCell: (row) => {
         return (
-          <Typography>{formatAsDollar(row?.insuredCoverage) ?? "-"}</Typography>
+          <Typography>{row?.insuredCoverage ? formatAsDollar(row?.insuredCoverage) : "-"}</Typography>
         );
       },
     },
@@ -113,7 +156,16 @@ export default function CommunityTable({
             </Typography>
           );
         } else {
-          return "-";
+          return <Typography
+            color={"success"}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            gap={0.5}
+          >
+            <FiberManualRecordIcon fontSize="12px" />
+            {"Active"}
+          </Typography>;
         }
       },
     },
@@ -137,11 +189,11 @@ export default function CommunityTable({
     },
   ];
 
-  const filteredRows = communityList?.content?.filter((row) =>
+  const filteredRows = communityList?.length ? communityList?.filter((row) =>
     Object.values(row).some((value) =>
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
-  );
+  ) : [];
 
   // Flatten the rows
   const flatRows = filteredRows?.map((row) => ({
@@ -149,6 +201,17 @@ export default function CommunityTable({
     communityManagerName: row.communityManager?.username || "",
     propertyManagerName: row.propertyManager?.username || "",
   }));
+
+  const handleUISearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
+    setPage(1);
+  }
+
+
+  const paginatedRows = flatRows && flatRows?.slice(
+    (page - 1) * pageSize,
+    page * pageSize
+  );
 
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);
@@ -162,7 +225,23 @@ export default function CommunityTable({
     setMenuAnchorEl(null);
   };
   const handleModal = () => {
-    // setModal(!modal);
+    setModal(!modal);
+  };
+
+  const { mutate } = useOffBoardCommunity();
+  const offBoard = () => {
+    console.log("you try to off-board", selectedRows, communityInfo);
+    const payload = {
+      mappings: [
+        {
+          communityId: communityInfo?.communityId,
+          cmcId: cmcId,
+        },
+      ],
+    };
+    mutate(payload);
+    setModal(!modal);
+    setMenuAnchorEl(null)
   };
 
   const renderSortComponent = () => {
@@ -204,9 +283,9 @@ export default function CommunityTable({
     return (
       <>
         <StyledMenuItem onClick={handleDrawer}>View details</StyledMenuItem>
-        {/* <StyledMenuItem onClick={handleModal}>
+        <StyledMenuItem onClick={handleModal}>
           Off-board Community
-        </StyledMenuItem> */}
+        </StyledMenuItem>
       </>
     );
   };
@@ -215,8 +294,8 @@ export default function CommunityTable({
     <Box sx={communityStyles.container(height)}>
       <AppTableSearch
         placeholder="Search Community"
-        searchTerm={filters.search}
-        onSearchChange={handleSearch}
+        searchTerm={filters.search || searchTerm}
+        onSearchChange={handleUISearch}
         icons={[
           {
             component: <SwapVert />,
@@ -229,15 +308,18 @@ export default function CommunityTable({
         rowKey="communityId"
         isLoading={isLoading}
         columns={columns}
-        rows={flatRows || []}
+        rows={paginatedRows || []}
         getStatus={getStatus}
         onSelectionChange={onSelectionChange}
         currentPage={page}
-        totalItems={communityList?.totalElements}
+        totalItems={flatRows?.length}
         pageSize={pageSize}
         onPageChange={handleChangePage}
         selected={selectedRows}
-        noDataText={"No Community Found"}
+        noDataText={'No Community Found'}
+        selectedData={setOffboardData}
+        rowSecondKey={rowSecondKey}
+        offboardData={offboardData}
       />
 
       <AppMenu
@@ -257,7 +339,7 @@ export default function CommunityTable({
         message={"Do you want to off-board the community?"}
         confirmLabel={"Yes"}
         cancelLabel={"No"}
-        onConfirm={handleModal}
+        onConfirm={offBoard}
         onCancel={handleModal}
       />
     </Box>

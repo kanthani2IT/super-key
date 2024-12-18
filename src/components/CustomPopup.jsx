@@ -6,7 +6,6 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { useState } from "react";
-import AppMenu from "./AppComponents/AppMenu";
 import AppPriorityItems from "./AppPriorityComponent";
 
 const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {

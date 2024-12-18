@@ -10,7 +10,6 @@ const AppRowBox = ({ justifyContent = 'space-between', width = '100%', children 
                 flexDirection: 'row',
                 flexWrap: 'wrap',
                 width: width,
-                alignItems: 'center',
                 padding: 2
             }}
         >

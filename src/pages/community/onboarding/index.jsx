@@ -1,5 +1,5 @@
 import { AddCircle } from "@mui/icons-material";
-import { Backdrop, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import { useGlobalStore } from "store/store";
 
 import AppGrid from "components/AppComponents/AppGrid";
@@ -11,6 +11,7 @@ import { useFormik } from "formik";
 import { useOnboardCommunity } from "hooks/useCommunity";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useAuthCookies } from "utils/cookie";
 import * as Yup from "yup";
 import { transformDocuments } from "./utils";
 
@@ -19,7 +20,6 @@ const CommunityAddress = React.lazy(() => import("./CommunityAddress"));
 const CommunityDetails = React.lazy(() => import("./CommunityDetails"));
 const CommunityName = React.lazy(() => import("./CommunityName"));
 const InsuranceUpload = React.lazy(() => import("./InsuranceTable"));
-const SuccessScreen = React.lazy(() => import("./SuccessScreen"));
 const UploadCommunity = React.lazy(() => import("./UploadCommunity"));
 const UploadCommunityList = React.lazy(() => import("./UploadCommunityList"));
 
@@ -148,6 +148,8 @@ const OnboardingIndex = ({ refetch }) => {
   const [validationSchema, setValidationSchema] = useState(
     onBoardingStepper[activeStep]?.initialValidationSchema || null
   );
+  const { getCookie } = useAuthCookies()
+  const cmcId = getCookie('cmcId')
   const finalStep = activeStep == onBoardingStepper?.length - 1;
 
   const multiCommunityFormik = useFormik({
@@ -276,21 +278,23 @@ const OnboardingIndex = ({ refetch }) => {
             <div></div>
           )}
         </AppGrid>
-        <AppGrid item size={{ xs: 2 }}>
-          <Button
-            fullWidth
-            size="large"
-            color="info"
-            type="submit"
-            onClick={() => handleSubmit()}
-            variant="contained"
-            disabled={
-              activeStep === 4 && show == "true" && selectedFiles.length == 0
-            }
-          >
-            {selectedFiles.length > 0 ? "Save" : finalStep ? "Save" : "Next"}
-          </Button>
-        </AppGrid>
+
+        {(activeStep < 4 ||
+          (activeStep === 4 &&
+            !(show === "true" && selectedFiles.length === 0))) && (
+            <AppGrid item size={{ xs: 2 }}>
+              <Button
+                fullWidth
+                size='large'
+                color="info"
+                type="submit"
+                onClick={() => handleSubmit()}
+                variant="contained"
+              >
+                {finalStep ? "Save" : "Next"}
+              </Button>
+            </AppGrid>
+          )}
       </AppRowBox>
     );
   };
@@ -306,12 +310,12 @@ const OnboardingIndex = ({ refetch }) => {
     onSubmit: async (values) => {
       if (finalStep) {
         const formData = new FormData();
-
         let payload = {
           name: values?.communityName?.name,
-          contactInfo: values?.communityAddress?.label,
+          contactInfo: values?.communityAddress?.description || "",
           propertyManagerId: values?.propertyManager?.userId,
           communityManagerId: values?.communityManager?.managerId,
+          cmcId: cmcId,
           companyId: values?.communityManager?.managementCompanyId,
           documents: transformDocuments(selectedFiles),
           status: "ACTIVE",
@@ -381,7 +385,7 @@ const OnboardingIndex = ({ refetch }) => {
   const renderSingleModal = () => {
     return (
       <AppModal
-        confirmModal={dirty}
+        confirmModal={dirty || activeStep}
         cardHeight={onBoardingStepper[activeStep]?.height || undefined}
         open={open}
         onClose={handleClose}
