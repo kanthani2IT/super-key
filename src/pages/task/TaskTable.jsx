@@ -110,12 +110,12 @@ export default function TaskTable({
       flex: 1,
     },
     {
-      field: "assignedTo",
+      field: "assignee.name",
       headerName: "Assigned to",
       flex: 1,
     },
     {
-      field: "dueDateString",
+      field: "dueDate",
       headerName: "Due Date",
       flex: 1,
     },
