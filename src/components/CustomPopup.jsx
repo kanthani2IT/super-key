@@ -53,9 +53,17 @@ const FilterDrawer = ({
 
     setCheckedFilters(updatedCheckedFilters);
   };
+
+  const priorityColors = {
+    High: "#E81616",
+    Normal: "#EB6C0B",
+    Low: "#DEC013",
+  };
+
   const renderOptions = () => {
     const currentFilters = filterColumns[selectedTab]?.data || [];
     return currentFilters.map((filter) => {
+      const color = priorityColors[filter.name] || "#000";
       if (filterColumns[selectedTab]?.checked) {
         return (
           <FormControlLabel
@@ -76,7 +84,7 @@ const FilterDrawer = ({
         <AppPriorityItems
           key={filter.name}
           name={filter.name}
-          color={filter.color}
+          color={color}
           isSelected={!!checkedFilters[filter.name]}
           onClick={() => toggleFilter(filter.name)}
         />
