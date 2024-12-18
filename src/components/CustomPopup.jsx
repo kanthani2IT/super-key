@@ -29,6 +29,11 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
 
     console.log("Applied Filters: ", appliedFilters);
 
+    if (!isAnyCheckboxSelected) return;
+    const selectedFilters = selectedProperty.filter(
+      (_, index) => checkboxState[index]
+    );
+    console.log("!@#$%^&*:", selectedFilters);
     setAnchorEl(null);
   };
 
@@ -158,9 +163,9 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
     <AppMenu
       renderComponent={renderComponent()}
       anchorEl={anchorEl}
-      handleClose={() => setAnchorEl(null)}
-      width={"500px"}
-      borderRadius={"10px"}
+      handleClose={() => handleClose()}
+      width="500px"
+      borderRadius="10px"
     />
   );
 };

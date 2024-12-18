@@ -18,23 +18,21 @@ import AppGrid from "./AppGrid";
 
 const AppTaskCard = ({ roleName, role, type, number, onClose }) => {
   const [isCopied, setIsCopied] = useState(false);
+  const [isPhoneCopied, setIsPhoneCopied] = useState(false);
 
   const handleCopy = () => {
     const email = "example@example.com";
     navigator.clipboard.writeText(email).then(() => {
       setIsCopied(true);
+      setIsPhoneCopied(false);
     });
   };
-  const StyledTooltip = styled(({ className, ...props }) => (
-    <Tooltip
-      {...props}
-      componentsProps={{ tooltip: { className: className } }}
-    />
-  ))(`
-      color: black;
-      background-color: gray;
-     
-  `);
+  const handlePhoneCopy = () => {
+    navigator.clipboard.writeText(number).then(() => {
+      setIsPhoneCopied(true);
+      setIsCopied(false);
+    });
+  };
   const Footer = () => {
     return (
       <>
@@ -48,12 +46,28 @@ const AppTaskCard = ({ roleName, role, type, number, onClose }) => {
           {" "}
           Send Mail
         </Button>
-        <StyledTooltip title={isCopied ? "Email Copied!" : "Copy Email"}>
-          <IconButton onClick={handleCopy}>{<CopyContentIcon />}</IconButton>
-        </StyledTooltip>
+        <Tooltip
+          title={isCopied ? "Email copied!" : "Copy Email"}
+          placement="bottom"
+          componentsProps={{
+            tooltip: {
+              sx: {
+                color: isCopied ? "#1EE366" : "#000000",
+                backgroundColor: "white",
+                fontSize: "0.875rem",
+                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.21)",
+              },
+            },
+          }}
+        >
+          <IconButton onClick={handleCopy}>
+            <CopyContentIcon />
+          </IconButton>
+        </Tooltip>
       </>
     );
   };
+
   return (
     <AppCard
       height={"auto"}
@@ -93,18 +107,35 @@ const AppTaskCard = ({ roleName, role, type, number, onClose }) => {
           </Stack>
         </AppGrid>
         <AppGrid>
-          <Stack direction="row" spacing={1.25} alignItems="center">
-            <Avatar
-              alt="profile user"
-              sx={{ width: 32, height: 32, backgroundColor: "white" }}
-            >
-              <PhoneIcon />
-            </Avatar>
-            <Stack flexDirection={"row"} gap={"20px"}>
-              <Typography variant="subtitle2">{number}</Typography>
-              <CopyContentIcon />
+          <Tooltip
+            title={isPhoneCopied ? "Phone copied!" : "Copy Phone"}
+            placement="bottom"
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  color: isPhoneCopied ? "#1EE366" : "#000000",
+                  backgroundColor: "white",
+                  fontSize: "0.875rem",
+                  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.21)",
+                },
+              },
+            }}
+          >
+            <Stack direction="row" spacing={1.25} alignItems="center">
+              <Avatar
+                alt="profile user"
+                sx={{ width: 32, height: 32, backgroundColor: "white" }}
+              >
+                <PhoneIcon />
+              </Avatar>
+              <Stack flexDirection={"row"} gap={"20px"}>
+                <Typography variant="subtitle2">{number}</Typography>
+                <IconButton onClick={handlePhoneCopy}>
+                  <CopyContentIcon />
+                </IconButton>
+              </Stack>
             </Stack>
-          </Stack>
+          </Tooltip>
         </AppGrid>
       </AppGrid>
     </AppCard>
