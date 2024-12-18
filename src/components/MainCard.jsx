@@ -46,7 +46,28 @@ function MainCard(
   boxShadow = theme.palette.mode === "dark" ? boxShadow || true : boxShadow;
   const [openFilter, setOpenFilter] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const filterColumns = [
+    {
+      label: "Properties",
+      data: [
+        { id: 1, data: "Desert Springs" },
+        { id: 2, data: "Rose Dale" },
+        { id: 3, data: "Rose Dal" },
+        { id: 4, data: "Oak Ridge Estates" },
+        { id: 5, data: "Mountain Vista" },
+      ],
+      checked: true,
+    },
+    {
+      label: "Priority",
+      data: [
+        { name: "High", color: "#E81616" },
+        { name: "Medium", color: "#EB6C0B" },
+        { name: "Low", color: "#DEC013" },
+      ],
+      checked: false,
+    },
+  ];
   const handleFilterButtonClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -186,6 +207,7 @@ function MainCard(
             toggleFilter={toggleFilter}
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
+            filterColumns={filterColumns}
           />
           {children}
         </CardContent>
