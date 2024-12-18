@@ -40,23 +40,6 @@ export default function TaskTable({
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(null);
-  // const { data: assigneToData, isLoading: assigneToLoading } =
-  //   useVerunaUsersQuery();
-  // const { data: priorityData } = useVerunaPriorityQuery();
-
-  // const filterColumns = [
-  //   {
-  //     label: "Properties",
-  //     data: assigneToData,
-  //     checked: true,
-  //   },
-  //   {
-  //     label: "Priority",
-
-  //     data: priorityData,
-  //     checked: false,
-  //   },
-  // ];
 
   const pageSize = 10;
 
@@ -113,7 +96,7 @@ export default function TaskTable({
               gap={0.5}
             >
               {/* <FiberManualRecordIcon fontSize="12px" /> */}
-              {row?.status === "ACTIVE" ? "Active" : "Inactive"}
+              {row?.status}
             </Typography>
           );
         } else {

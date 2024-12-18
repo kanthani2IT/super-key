@@ -8,7 +8,7 @@ import TaskCreation from "./create";
 //Need to check
 const Task = () => {
   const [page, setPage] = useState(1);
-  const [filterData, setFilterData] = useState("equal");
+  const [filterData, setFilterData] = useState("");
   const {
     data: taskData,
     mutate: fetchActiveAndCompletedTaskByFilter,
@@ -33,19 +33,29 @@ const Task = () => {
   ];
   const initialTab = Object.keys(filterColumns)[0];
   const [selectedTab, setSelectedTab] = useState(initialTab);
+  const [status, setStatus] = useState("active");
 
   useEffect(() => {
     fetchTaskData();
-  }, [page, filterData]);
-  console.log(selectedTab, "filterDara");
+  }, [page, filterData, status]);
+  console.log(selectedTab, "selectedTab");
   const fetchTaskData = () => {
-    const dataFilters = Array.isArray(filterData)
-      ? filterData.map((value) => ({
-          column: selectedTab === 0 ? "status" : "assignedTo",
-          operator: "equals",
-          value: value,
-        }))
-      : [];
+    let dataFilters = [
+      {
+        column: "status",
+        operator: "contains",
+        value: status,
+      },
+    ];
+
+    if (Array.isArray(filterData) && filterData.length > 0) {
+      const additionalFilters = filterData.map((value) => ({
+        column: selectedTab === 0 ? "assignedTo" : "priority",
+        operator: "equals",
+        value: value,
+      }));
+      dataFilters = [...dataFilters, ...additionalFilters];
+    }
 
     let reqBody = {
       sort: "createdAt",
@@ -59,9 +69,12 @@ const Task = () => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-  const onCompleteChange = () => {
-    fetchTaskData();
+  const handleToggleStatus = (newStatus) => {
+    setStatus(newStatus);
+    setFilterData([]);
+    setPage(1);
   };
+  console.log(status, "status");
   return (
     <AppGrid container spacing={4}>
       <AppGrid
@@ -72,9 +85,23 @@ const Task = () => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <ButtonGroup onClick={onCompleteChange}>
-          <RadiusStyledButton variant="contained">Created</RadiusStyledButton>
-          <RadiusStyledButton variant="contained">Completed</RadiusStyledButton>
+        <ButtonGroup>
+          <RadiusStyledButton
+            variant="contained"
+            onClick={() => handleToggleStatus("active")}
+            color={status === "completed" ? "#FFFFFF" : "green"}
+            textColor={status === "completed" ? "#7B828F" : "#E9E9E9"}
+          >
+            Created
+          </RadiusStyledButton>
+          <RadiusStyledButton
+            variant="contained"
+            onClick={() => handleToggleStatus("completed")}
+            color={status === "active" ? "#FFFFFF" : "green"}
+            textColor={status === "active" ? "#7B828F" : "#E9E9E9"}
+          >
+            Completed
+          </RadiusStyledButton>
           {/* <RadiusStyledButton variant="contained">Over Due</RadiusStyledButton> */}
         </ButtonGroup>
         <ButtonGroup>
