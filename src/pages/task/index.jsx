@@ -50,7 +50,7 @@ const Task = () => {
 
     if (Array.isArray(filterData) && filterData.length > 0) {
       const additionalFilters = filterData.map((value) => ({
-        column: selectedTab === 0 ? "assignedTo" : "priority",
+        column: selectedTab == 0 ? "assignedTo" : "priority",
         operator: "equals",
         value: value,
       }));
@@ -66,6 +66,9 @@ const Task = () => {
     };
     fetchActiveAndCompletedTaskByFilter(reqBody);
   };
+  {
+    console.log(selectedTab, "tab");
+  }
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
