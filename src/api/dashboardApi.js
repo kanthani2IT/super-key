@@ -25,7 +25,6 @@ const getActiveAndCompletedTaskByFilter = async (body) => {
     url: DASHBOARD.getActiveAndCompletedTaskByFilter(
       body.sort,
       body.orderBy,
-      body.id,
       body.page,
       body.size
     ),

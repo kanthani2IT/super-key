@@ -1,11 +1,12 @@
 import AppGrid from "components/AppComponents/AppGrid";
 import { ButtonGroup, RadiusStyledButton } from "components/StyledComponents";
 import { useGetActiveAndCompletedTaskByFilter } from "hooks/useDashboard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import TaskTable from "./TaskTable";
 import TaskCreation from "./create";
 //Need to check
 const Task = () => {
+  const [page, setPage] = useState(1);
   const {
     data: taskData,
     mutate: fetchActiveAndCompletedTaskByFilter,
@@ -14,13 +15,15 @@ const Task = () => {
 
   useEffect(() => {
     fetchTaskData();
-  }, []);
+  }, [page]);
 
   const fetchTaskData = () => {
     let reqBody = {
       sort: "createdAt",
       orderBy: "desc",
       id: "34678098765",
+      page: page,
+      size: 10,
       data: [
         {
           column: "status",
@@ -29,10 +32,12 @@ const Task = () => {
         },
       ],
     };
-    let communityId = "4567890-";
-    fetchActiveAndCompletedTaskByFilter(reqBody, communityId);
-  };
 
+    fetchActiveAndCompletedTaskByFilter(reqBody);
+  };
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
   return (
     <AppGrid container spacing={4}>
       <AppGrid
@@ -57,6 +62,9 @@ const Task = () => {
           isLoading={isTaskLoading}
           height={"80vh"}
           taskList={taskData?.data}
+          handleChangePage={handleChangePage}
+          page={page}
+          setPage={setPage}
         />
       </AppGrid>
     </AppGrid>
