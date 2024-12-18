@@ -8,7 +8,7 @@ const LOGIN = {
 
 const COMMUNITY = {
   getAll: "/api/community",
-  createCommunity: "/api/community/createWithFile",
+  createCommunity:(isFileUpload)=> `/api/community/createWithFile?isFileUpload=${isFileUpload}`,
   getAllCommunityList: "/api/community/pagings",
   getCommunityList: (page, size, sortBy, orderBy, status, search) =>
     `/api/community/pagings/CMCID?page=${page}&size=${1000}`,

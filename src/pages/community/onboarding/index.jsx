@@ -169,7 +169,6 @@ const OnboardingIndex = ({ refetch }) => {
   const [openMulti, setOpenMulti] = useState(multiModalOpen);
   const [show, setShow] = useState("true");
   const [selectedFiles, setSelectedFiles] = useState([]);
-
   //for handling onboarding flow
   const [activeStep, setActiveStep] = useState(currentStep);
   const [multiActiveStep, setMultiActiveStep] = useState(currentMultiStep);
@@ -527,7 +526,8 @@ const OnboardingIndex = ({ refetch }) => {
         };
         formData.append("community", JSON.stringify(payload));
         selectedFiles.forEach((item) => formData.append("file", item.file));
-        mutate(formData);
+        const isFileUpload=selectedFiles.length>0?true:false
+        mutate({isFileUpload,payload:formData});
       } else {
         if (onBoardingType === "multiple") {
           searchParams.set("type", onBoardingType);

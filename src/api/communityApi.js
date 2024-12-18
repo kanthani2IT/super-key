@@ -33,9 +33,10 @@ const updateCommunityById = async (id, body) => {
   }
 };
 
-const createCommunity = async (payload) => {
+const createCommunity = async (isFileUpload,payload) => {
   try {
-    const reponse = await postFormRequest(COMMUNITY.createCommunity, payload);
+    console.log(payload,"####")
+    const reponse = await postFormRequest(COMMUNITY.createCommunity(isFileUpload), payload);
     return reponse;
   } catch (error) {
     console.error("Error fetching locations:", error);
