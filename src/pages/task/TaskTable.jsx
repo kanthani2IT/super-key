@@ -40,54 +40,49 @@ export default function TaskTable({
   const { data: assigneToData, isLoading: assigneToLoading } =
     useVerunaUsersQuery();
   const { data: priorityData } = useVerunaPriorityQuery();
-  // const [selectedPriority, setSelectedpriority] = useState(priorityData);
-  const [selectedPriority, setSelectedPriority] = useState([
-    { name: "High", color: "#E81616", selected: false },
-    { name: "Medium", color: "#EB6C0B", selected: false },
-    { name: "Low", color: "#DEC013", selected: false },
-  ]);
 
-  const [selectedProperty, setSelectedProperties] = useState([
-    { id: 1, data: "Desert Springs", selected: false },
-    { id: 2, data: "Rose Dale", selected: false },
-    { id: 3, data: "Rose Dal", selected: false },
-    { id: 4, data: "Oak Ridge Estates", selected: false },
-    { id: 5, data: "Mountain Vista", selected: false },
-  ]);
-  // const toggleFilter = (id, PriorityName) => {
-  //   setSelectedProperties((prev) =>
-  //     prev.map((filter) =>
-  //       filter.id === id ? { ...filter, selected: !filter.selected } : filter
-  //     )
-  //   );
-  //   setSelectedPriority((prev) =>
-  //     prev.map((filter) =>
-  //       filter.name === PriorityName ? { ...filter } : filter
-  //     )
-  //   );
-  // };
-  const toggleFilter = (idOrName) => {
-    if (selectedTab === "Properties") {
-      // Update `selectedProperty`
-      setSelectedProperties((prev) =>
-        prev.map((filter) =>
-          filter.id === idOrName
-            ? { ...filter, selected: !filter.selected }
-            : filter
-        )
-      );
-    } else if (selectedTab === "Priority") {
-      // Update `selectedPriority`
-      setSelectedPriority((prev) =>
-        prev.map((priority) =>
-          priority.name === idOrName
-            ? { ...priority, selected: !priority.selected }
-            : priority
-        )
-      );
-    }
-  };
-
+  const filterColumns = [
+    {
+      label: "Properties",
+      data: [
+        { id: 1, data: "Desert Springs" },
+        { id: 2, data: "Rose Dale" },
+        { id: 3, data: "Rose Dal" },
+        { id: 4, data: "Oak Ridge Estates" },
+        { id: 5, data: "Mountain Vista" },
+      ],
+      checked: true,
+    },
+    {
+      label: "Priority",
+      data: [
+        { name: "High", color: "#E81616" },
+        { name: "Medium", color: "#EB6C0B" },
+        { name: "Low", color: "#DEC013" },
+      ],
+      checked: false,
+    },
+    {
+      label: "Priority",
+      data: [
+        { name: "High", color: "#E81616" },
+        { name: "Medium", color: "#EB6C0B" },
+        { name: "Low", color: "#DEC013" },
+      ],
+      checked: false,
+    },
+    {
+      label: "Properties",
+      data: [
+        { id: 1, data: "Desert Springs" },
+        { id: 2, data: "Rose Dale" },
+        { id: 3, data: "Rose Dal" },
+        { id: 4, data: "Oak Ridge Estates" },
+        { id: 5, data: "Mountain Vista" },
+      ],
+      checked: true,
+    },
+  ];
   const pageSize = 10;
 
   const columns = [
@@ -266,13 +261,9 @@ export default function TaskTable({
           View Details
         </Button>
         <FilterDrawer
-          selectedProperty={assigneToData?.records || selectedProperty}
-          selectedPriority={selectedPriority}
-          setSelectedPriority={setSelectedPriority}
-          // toggleFilter={toggleFilter}
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
-          setSelectedProperties={setSelectedProperties}
+          filterColumns={filterColumns}
         />
         <AppTable
           rowKey="taskId"
