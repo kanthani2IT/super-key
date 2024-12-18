@@ -175,7 +175,7 @@ const UploadCommunity = ({
         <AppGrid size={{ xl: 6 }} display={"flow"}>
           <RadiusStyledButton
             variant="outlined"
-            startIcon={isLoading ?? icons.IconArrowDownward()}
+            startIcon={isLoading ? null : icons.IconArrowDownward()}
             color="info"
             textColor="#2954E1"
             borderRadius="10px"
