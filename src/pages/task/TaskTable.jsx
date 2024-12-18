@@ -4,6 +4,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { Button, IconButton, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
+import EmailModal from "components/AppComponents/AppEmailModal";
 import AppMenu from "components/AppComponents/AppMenu";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
@@ -40,6 +41,7 @@ export default function TaskTable({
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(null);
+  const [openEmailModal, setOpenEmailModal] = useState(false);
 
   const pageSize = 10;
 
@@ -183,7 +185,7 @@ export default function TaskTable({
         >
           View details
         </StyledMenuItem>
-        <StyledMenuItem onClick={() => console.log("task")}>
+        <StyledMenuItem onClick={() => setOpenEmailModal(true)}>
           Send EMail
         </StyledMenuItem>
         <StyledMenuItem onClick={() => console.log("task")}>
@@ -250,7 +252,7 @@ export default function TaskTable({
             /> */}
       <AppMenu
         anchorEl={modal}
-        handleClose={() => setModal(null)}
+        handleClose={onClose}
         renderComponent={
           <AppTaskCard
             roleName="Richard"
@@ -264,6 +266,7 @@ export default function TaskTable({
         width={"20vw"}
       />
 
+      <EmailModal open={openEmailModal} setOpen={setOpenEmailModal} />
       <AppMenu
         anchorEl={menuAnchorEl}
         handleClose={handleMenuAnchorClose}
