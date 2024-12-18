@@ -96,7 +96,8 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
     setMenuAnchorEl(event.currentTarget);
     setMenuRowData(row);
   };
-  const displayedTasks = showAll ? tableData : tableData.slice(0, 4);
+  const sliceTableData = Array.isArray(tableData) ? tableData : [];
+  const displayedTasks = showAll ? sliceTableData : sliceTableData.slice(0, 4);
   console.log("tableData", tableData);
   const handleMenuAnchorClose = () => {
     setMenuAnchorEl(null);

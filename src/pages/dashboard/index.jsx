@@ -233,7 +233,7 @@ export default function DashboardDefault() {
             tabs={tabs}
           />
           <TaskTableDashBoard
-            tableData={taskData?.data || []}
+            tableData={taskData?.data?.content || []}
             loading={isTaskLoading}
           ></TaskTableDashBoard>
         </MainCard>
