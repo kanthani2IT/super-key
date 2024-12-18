@@ -185,7 +185,8 @@ export default function TaskTable({
         >
           View details
         </StyledMenuItem>
-        <StyledMenuItem onClick={() => setOpenEmailModal(true)}>
+        <StyledMenuItem onClick={() =>{setMenuAnchorEl(null)
+         setOpenEmailModal(true)}}>
           Send EMail
         </StyledMenuItem>
         <StyledMenuItem onClick={() => console.log("task")}>
@@ -200,6 +201,7 @@ export default function TaskTable({
   };
   const onClose = () => {
     setModal(null);
+    setOpenEmailModal(true)
   };
   return (
     <Box sx={communityStyles.container(height)}>
@@ -230,6 +232,7 @@ export default function TaskTable({
           setSelectedTab={setSelectedTab}
         />
         <AppTable
+        hasCheckBox={false}
           rowKey="taskId"
           isLoading={isLoading}
           columns={columns}
@@ -252,18 +255,19 @@ export default function TaskTable({
             /> */}
       <AppMenu
         anchorEl={modal}
-        handleClose={onClose}
+        handleClose={()=>setModal(null)}
         renderComponent={
           <AppTaskCard
             roleName="Richard"
             role="Property Manager Name"
             type="GRT"
             number="+1 432 567 987"
-            onClose={onClose}
+            onClose={()=>setModal(null)}
+            handleSendEmail={onClose}
           />
         }
         borderRadius={"20px"}
-        width={"20vw"}
+        // width={"20vw"}
       />
 
       <EmailModal open={openEmailModal} setOpen={setOpenEmailModal} />

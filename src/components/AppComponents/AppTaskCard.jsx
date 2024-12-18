@@ -16,10 +16,9 @@ import AppCard from "./AppCard";
 import EmailModal from "./AppEmailModal";
 import AppGrid from "./AppGrid";
 
-const AppTaskCard = ({ roleName, role, type, number, onClose }) => {
+const AppTaskCard = ({ roleName, role, type, number, onClose, handleSendEmail }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [isPhoneCopied, setIsPhoneCopied] = useState(false);
-  const [openEmailModal, setOpenEmailModal] = useState(false);
   const handleCopy = () => {
     const email = "example@example.com";
     navigator.clipboard.writeText(email).then(() => {
@@ -32,10 +31,6 @@ const AppTaskCard = ({ roleName, role, type, number, onClose }) => {
       setIsPhoneCopied(true);
       setIsCopied(false);
     });
-  };
-  const handleSendEmail = () => {
-    setOpenEmailModal(true);
-    onClose();
   };
 
   const Footer = () => {
@@ -78,7 +73,7 @@ const AppTaskCard = ({ roleName, role, type, number, onClose }) => {
     <AppCard
       height={"auto"}
       footer={<Footer />}
-      width="400px"
+      width="600px"
       custom
       onClose={onClose}
     >
@@ -144,7 +139,7 @@ const AppTaskCard = ({ roleName, role, type, number, onClose }) => {
           </Tooltip>
         </AppGrid>
       </AppGrid>
-      <EmailModal open={openEmailModal} setOpen={setOpenEmailModal} />
+    
     </AppCard>
   );
 };

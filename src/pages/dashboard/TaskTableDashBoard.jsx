@@ -71,17 +71,22 @@ const truncateText = (text, limit = 50) => {
 };
 const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
   const anchorRef = useRef(null);
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const [menuRowData, setMenuRowData] = useState(null);
   const [openEmailModal, setOpenEmailModal]=useState(false)
   const [modal, setModal] = useState(null);
   const [viewDetails, setViewDetails] = useState(null);
+  const handleSendEmail=()=>{
+    setOpenEmailModal(true)
+    setModal(null)
+    setMenuAnchorEl(null)
+  }
   const renderPriorityComponent = (row, onClose) => {
     const handleOptionClick = (option) => {
       console.log(`${option} clicked:`, row);
       onClose();
     };
-const handleSendEmail=()=>{
-  // setOpenEmailModal(true)
-}
+
     return (
       <>
         <StyledMenuItem
@@ -89,6 +94,7 @@ const handleSendEmail=()=>{
             console.log(e.currentTarget, "currentTarget");
             setModal(e.currentTarget);
             setViewDetails(row);
+            setMenuAnchorEl(null)
           }}
           ref={anchorRef}
         >
@@ -103,8 +109,7 @@ const handleSendEmail=()=>{
       </>
     );
   };
-  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-  const [menuRowData, setMenuRowData] = useState(null);
+  
 
   const [showAll, setShowAll] = useState(false);
   const handleMenuOpen = (event, row) => {
@@ -118,6 +123,9 @@ const handleSendEmail=()=>{
     setMenuAnchorEl(null);
     setMenuRowData(null);
   };
+  const onclose=()=>{
+
+  }
   return (
     <Box>
       <TableContainer>
@@ -189,6 +197,8 @@ const handleSendEmail=()=>{
             role="Property Manager Name"
             type="GRT"
             number="+1 432 567 987"
+            handleSendEmail={handleSendEmail}
+            onClose={()=>setModal(null)}
           />
         }
         borderRadius={"20px"}

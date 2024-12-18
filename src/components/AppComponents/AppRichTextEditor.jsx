@@ -44,8 +44,8 @@ import styled from "styled-components";
 // Editor Container with footer positioning
 const EditorContainer = styled.div`
   position: relative;
-  min-height: 17rem;
-  max-height: 17rem;
+  min-height: 21rem;
+  max-height: 21rem;
   display: flex;
   flex-direction: column;
 `;

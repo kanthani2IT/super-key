@@ -31,6 +31,7 @@ const AppTable = ({
   rowSecondKey = "id",
   selectedData = null,
   offboardData,
+  hasCheckBox=true,
 }) => {
   const rowCount = rows.length;
   const numSelected = selected.length;
@@ -69,15 +70,17 @@ const AppTable = ({
     <TableContainer sx={{ maxHeight: "calc(100vh - 300px)" }}>
       <Table stickyHeader>
         <TableHead>
-          <TableRow>
-            <TableCell padding="checkbox">
+          <TableRow>{
+            hasCheckBox&&(<TableCell padding="checkbox">
               <Checkbox
                 color="success"
                 indeterminate={numSelected > 0 && numSelected < rowCount}
                 checked={rowCount > 0 && numSelected === rowCount}
                 onChange={onSelectAllClick}
               />
-            </TableCell>
+            </TableCell>)
+          }
+            
             {columns.map((col, index) => (
               <TableCell key={col.field} align={index > 1 ? "center" : "left"}>
                 <BoldTypographyHeader>{col.headerName}</BoldTypographyHeader>
@@ -109,6 +112,7 @@ const AppTable = ({
                   aria-checked={isSelected}
                   selected={isSelected}
                 >
+                {hasCheckBox&&(
                   <TableCell padding="checkbox">
                     <Checkbox
                       color="success"
@@ -121,7 +125,7 @@ const AppTable = ({
                         )
                       }
                     />
-                  </TableCell>
+                  </TableCell>)}
                   {columns.map((col, idx) => (
                     <TableCell
                       key={col.field}
