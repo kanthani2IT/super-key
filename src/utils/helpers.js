@@ -79,3 +79,10 @@ export const mergeCMCId = (url) => {
   }
   return url;
 };
+
+export const logoutUser = () => {
+  const { removeAuthCookie } = useAuthCookies();
+  removeAuthCookie("token");
+  removeAuthCookie("cmcId");
+  window.location.replace("/login");
+};

@@ -6,6 +6,7 @@ import Loadable from 'components/Loadable';
 import MinimalLayout from 'layout/MinimalLayout';
 import ChangePassword from 'pages/login/ChangePassword';
 import Reset from 'pages/authentication/reset';
+import UnProtectedRoute from './UnProtectedRoutes';
 
 // render - login
 const AuthLogin = Loadable(lazy(() => import('pages/authentication/login')));
@@ -15,7 +16,7 @@ const AuthRegister = Loadable(lazy(() => import('pages/authentication/register')
 
 const LoginRoutes = {
   path: '/',
-  element: <MinimalLayout />,
+  element: <UnProtectedRoute><MinimalLayout /></UnProtectedRoute>,
   children: [
     {
       path: '/',
