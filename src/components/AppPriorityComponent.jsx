@@ -15,7 +15,6 @@ const AppPriorityItems = ({ name, color, isSelected, onClick }) => {
         backgroundColor: isSelected ? "#E0EDFF" : "#FFF",
         padding: "0 8px",
         marginBottom: "8px",
-        border: isSelected ? "1px solid #90CAF9" : "1px solid transparent",
         cursor: "pointer",
       }}
     >

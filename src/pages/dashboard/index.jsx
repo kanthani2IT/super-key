@@ -222,7 +222,7 @@ export default function DashboardDefault() {
           title={"Task Assigned"}
           secondary={"Full View"}
           isFilter
-          // showSecondary={false}
+          showSecondary={false}
           secondaryAction={() => navigate("/tasks")}
           selectedProperty={assigneToData}
           selectedPriority={priorityData}
