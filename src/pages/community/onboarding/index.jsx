@@ -2,6 +2,7 @@ import { AddCircle } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { useGlobalStore } from "store/store";
 
+import { useSnackbar } from "@mui/base";
 import AppGrid from "components/AppComponents/AppGrid";
 import AppModal from "components/AppComponents/AppModal";
 import AppRowBox from "components/AppComponents/AppRowBox";
@@ -14,6 +15,7 @@ import {
 } from "hooks/useCommunity";
 import React, { Suspense, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { SEVERITY } from "utils/message";
 import * as Yup from "yup";
 import { transformDocuments } from "./utils";
 
@@ -139,6 +141,7 @@ const initialBulkUploadValues = {
   editedList: [],
   draftData: [],
   fileCount: { uploadDataCount: 0, draftDataCount: 0 },
+  isPagination: true,
 };
 
 const OnboardingIndex = ({ refetch }) => {
@@ -159,6 +162,7 @@ const OnboardingIndex = ({ refetch }) => {
     multiDefaultValue.modalOpen;
 
   const { onboarding, updateOnboarding, resetOnboarding } = useGlobalStore();
+  const { updateSnackbar } = useSnackbar();
   const [open, setOpen] = useState(modalOpen);
   const [openMulti, setOpenMulti] = useState(multiModalOpen);
   const [show, setShow] = useState("true");
@@ -220,6 +224,7 @@ const OnboardingIndex = ({ refetch }) => {
     try {
       const reqBody = bulkUploadValues.fileData.map((item) => {
         return {
+          id: item?.documentId,
           name: item?.communityName,
           contactInfo: item?.address,
           propertyManagerId: item?.propertyManagerName?.userId ?? null,
@@ -231,19 +236,32 @@ const OnboardingIndex = ({ refetch }) => {
       const response = await createMultiCommunity(reqBody);
       if (response.status === 200) {
         if (bulkUploadValues.draftData.length > 0) {
-          setBulkUploadFieldValue("fileData", bulkUploadValues.draftData);
-          setBulkUploadFieldValue(
-            "draftData",
-            initialBulkUploadValues.draftData
-          );
+          const mapFileData = handleApplyAutoValidation(draftData);
+          setBulkUploadValues((prev) => ({
+            ...prev,
+            fileData: mapFileData,
+            editedList: bulkUploadValues.draftData,
+            draftData: initialBulkUploadValues.draftData,
+            isPagination: false,
+            fileCount: {
+              draftDataCount: mapFileData.length,
+              uploadDataCount: 0,
+            },
+          }));
         } else {
           handleCloseMultiModal();
         }
       } else {
-        console.log(response, "######");
+        updateSnackbar({
+          message: response.data.message,
+          severity: SEVERITY.error,
+        });
       }
     } catch (err) {
-      console.log(err);
+      updateSnackbar({
+        message: response.data.message,
+        severity: SEVERITY.error,
+      });
     }
   };
 
@@ -326,6 +344,37 @@ const OnboardingIndex = ({ refetch }) => {
     setOpenMulti(false);
   };
 
+  const handleApplyAutoValidation = (fileData) => {
+    const mapTableData = fileData?.map((item) => {
+      return {
+        ...item,
+        isEdit: true,
+        index: fileData?.findIndex((el) => el?.documentId === item?.documentId),
+      };
+    });
+    return mapTableData;
+  };
+
+  const multiCommunityButtonDisable = () => {
+    switch (multiActiveStep) {
+      case 1: {
+        if (bulkUploadValues?.fileData?.length === 0) {
+          return true;
+        } else return false;
+      }
+      case 2: {
+        if (
+          bulkUploadValues?.fileData?.length === 0 ||
+          bulkUploadValues?.editedList?.length > 0
+        ) {
+          return true;
+        } else return false;
+      }
+      default:
+        return false;
+    }
+  };
+
   const multiFooter = () => {
     return (
       <AppRowBox>
@@ -346,12 +395,7 @@ const OnboardingIndex = ({ refetch }) => {
             type="submit"
             onClick={handleNextMulti}
             variant="contained"
-            disabled={
-              bulkUploadValues?.fileData?.length === 0 ||
-              bulkUploadValues?.editedList?.length > 0
-                ? true
-                : false
-            }
+            disabled={multiCommunityButtonDisable()}
           >
             {multiActiveStep === 2 ? "Save" : "Next"}
           </Button>
@@ -493,6 +537,8 @@ const OnboardingIndex = ({ refetch }) => {
                   bulkUploadError,
                   bulkUploadTouched,
                   isBulkUploadValid,
+                  setBulkUploadValues,
+                  handleApplyAutoValidation,
                 }
               )}
           </Suspense>

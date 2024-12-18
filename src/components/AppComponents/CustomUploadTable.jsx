@@ -20,6 +20,7 @@ const CustomUploadTable = ({
   totalItems,
   handlePageChange,
   pageDisable = false,
+  isPagination = true,
 }) => {
   return (
     <TableContainer>
@@ -80,13 +81,15 @@ const CustomUploadTable = ({
           can upload the documents in document repository section.
         </Typography>
       </AppRowBox>
-      <AppPagination
-        pageSize={pageSize}
-        currentPage={currentPage}
-        totalItems={totalItems}
-        onPageChange={handlePageChange}
-        pageDisable={pageDisable}
-      />
+      {isPagination ? (
+        <AppPagination
+          pageSize={pageSize}
+          currentPage={currentPage}
+          totalItems={totalItems}
+          onPageChange={handlePageChange}
+          pageDisable={pageDisable}
+        />
+      ) : null}
     </TableContainer>
   );
 };

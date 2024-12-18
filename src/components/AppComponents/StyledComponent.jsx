@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   Menu,
   MenuItem,
   Step,
@@ -112,4 +113,10 @@ export const StyledBulkTextField = styled(TextField)(({ theme }) => ({
       borderColor: "transparent",
     },
   },
+}));
+
+export const ButtonLoader = styled(CircularProgress)(({ theme }) => ({
+  height: "20px !important",
+  width: "20px !important",
+  marginRight: "10px",
 }));

@@ -22,7 +22,10 @@ const validHeaders = [
   "Address(Street, City, StateCode, ZipCode, Country)",
 ];
 
-const UploadCommunity = ({ setBulkUploadFieldValue }) => {
+const UploadCommunity = ({
+  setBulkUploadValues,
+  handleApplyAutoValidation,
+}) => {
   const { updateSnackbar } = useSnackbar();
   const { data: communityManagerList } = useCommunityManagersQuery();
   const { data: propertyManagerList } = usePropertyManagersQuery();
@@ -73,8 +76,29 @@ const UploadCommunity = ({ setBulkUploadFieldValue }) => {
               draftData.push(obj);
             }
           });
-          setBulkUploadFieldValue("fileData", fileData);
-          setBulkUploadFieldValue("draftData", draftData);
+          const count = {
+            uploadDataCount: fileData.length,
+            draftDataCount: draftData.length,
+          };
+          if (fileData.length === 0) {
+            const mapFileData = handleApplyAutoValidation(draftData);
+            setBulkUploadValues((prev) => ({
+              ...prev,
+              fileData: mapFileData,
+              draftData: [],
+              editedList: draftData,
+              fileCount: count,
+              isPagination: false,
+            }));
+          } else {
+            setBulkUploadValues((prev) => ({
+              ...prev,
+              fileData: fileData,
+              draftData: draftData,
+              fileCount: count,
+              isPagination: true,
+            }));
+          }
         } else {
           updateSnackbar({
             message: "Invalid Column Name",

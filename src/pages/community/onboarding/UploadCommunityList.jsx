@@ -4,6 +4,7 @@ import DeleteIcon from "assets/images/icons/CommunityIcons/DeleteIcon";
 import PreviewIcon from "assets/images/icons/CommunityIcons/PreviewIcon";
 import AppAutoComplete from "components/AppComponents/AppAutoComplete";
 import AppDialogBox from "components/AppComponents/AppDialogBox";
+import AppCustomButton from "components/AppComponents/Button";
 import CustomUploadTable from "components/AppComponents/CustomUploadTable";
 import { StyledBulkTextField } from "components/AppComponents/StyledComponent";
 import {
@@ -22,9 +23,13 @@ const UploadCommunityList = ({
   bulkUploadError,
   bulkUploadTouched,
   isBulkUploadValid,
+  setBulkUploadValues,
+  handleApplyAutoValidation,
 }) => {
   const theme = useTheme();
-  const { fileData, editedList, draftData } = bulkUploadValues ?? {};
+  const { fileData, editedList, draftData, fileCount, isPagination } =
+    bulkUploadValues ?? {};
+  const { draftDataCount, uploadDataCount } = fileCount ?? {};
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState(null);
@@ -32,8 +37,13 @@ const UploadCommunityList = ({
   const { data: propertyManagerList } = usePropertyManagersQuery();
 
   const paginatedData = useMemo(() => {
-    return fileData?.slice((page - 1) * pageSize, page * pageSize);
-  }, [page, pageSize, fileData]);
+    if (!isPagination) {
+      // if is false
+      return fileData;
+    } else {
+      return fileData?.slice((page - 1) * pageSize, page * pageSize);
+    }
+  }, [page, pageSize, fileData, isPagination]);
 
   const columns = [
     {
@@ -119,6 +129,7 @@ const UploadCommunityList = ({
               options={communityManagerList?.data}
               onBlur={handleBulkUploadBlur}
               placeholder="Select Manager"
+              size="medium"
             />
           );
         } else {
@@ -149,6 +160,7 @@ const UploadCommunityList = ({
                   ?.propertyManagerName &&
                 bulkUploadError?.editedList?.[row?.index]?.propertyManagerName
               }
+              size="medium"
             />
           );
         } else {
@@ -190,12 +202,13 @@ const UploadCommunityList = ({
         if (row?.isEdit) {
           return (
             <Box sx={{ display: "flex", gap: 1 }}>
-              <Button
+              <AppCustomButton
                 variant="contained"
                 onClick={() => handleSave(row, index)}
+                loading
               >
                 Save
-              </Button>
+              </AppCustomButton>
               <Button
                 variant="outlined"
                 onClick={() => handleCancel(row, index)}
@@ -320,10 +333,28 @@ const UploadCommunityList = ({
       (el) => el?.documentId !== currentRow?.documentId
     );
     if (filterRow.length === 0 && draftData.length > 0) {
-      setBulkUploadFieldValue("fileData", draftData);
-      setBulkUploadFieldValue("draftData", []);
+      const mapFileData = handleApplyAutoValidation(draftData);
+      setBulkUploadValues((prev) => ({
+        ...prev,
+        fileData: mapFileData,
+        editedList: draftData,
+        draftData: [],
+        isPagination: false,
+        fileCount: { draftDataCount: mapFileData?.length, uploadDataCount: 0 },
+      }));
     } else {
       setBulkUploadFieldValue("fileData", filterRow);
+      if (!isPagination) {
+        setBulkUploadFieldValue("fileCount", {
+          ...fileCount,
+          draftDataCount: filterRow?.length,
+        });
+      } else {
+        setBulkUploadFieldValue("fileCount", {
+          ...fileCount,
+          uploadDataCount: filterRow?.length,
+        });
+      }
     }
     setOpen(false);
   };
@@ -332,7 +363,7 @@ const UploadCommunityList = ({
     <>
       <Typography variant="h5" color={theme.palette.text.grey}>
         Uploaded Communities{" "}
-        {`(${fileData.length}: Uploaded, ${draftData.length}: Draft)`}
+        {`(${uploadDataCount}: Uploaded, ${draftDataCount}: Draft)`}
       </Typography>
 
       {fileData.length > 0 && (
@@ -344,6 +375,7 @@ const UploadCommunityList = ({
           totalItems={fileData?.length}
           handlePageChange={handlePageChange}
           pageDisable={editedList?.length > 0 ? true : false}
+          isPagination={isPagination}
         />
       )}
       <AppDialogBox
