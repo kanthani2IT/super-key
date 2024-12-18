@@ -11,7 +11,6 @@ import AppTaskCard from "components/AppComponents/AppTaskCard";
 import { getStatus } from "components/AppComponents/CustomField";
 import FilterDrawer from "components/CustomPopup";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
-import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
 import { useRef, useState } from "react";
 const options = [
   { value: "ACTIVE", label: "Status: Active" },
@@ -31,6 +30,9 @@ export default function TaskTable({
   page,
   selectedRows = [],
   setFilterData,
+  filterColumns,
+  selectedTab,
+  setSelectedTab,
 }) {
   const anchorRef = useRef(null);
   const theme = useTheme();
@@ -38,23 +40,24 @@ export default function TaskTable({
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(null);
-  const { data: assigneToData, isLoading: assigneToLoading } =
-    useVerunaUsersQuery();
-  const { data: priorityData } = useVerunaPriorityQuery();
+  // const { data: assigneToData, isLoading: assigneToLoading } =
+  //   useVerunaUsersQuery();
+  // const { data: priorityData } = useVerunaPriorityQuery();
 
-  const filterColumns = [
-    {
-      label: "Properties",
-      data: assigneToData,
-      checked: true,
-    },
-    {
-      label: "Priority",
+  // const filterColumns = [
+  //   {
+  //     label: "Properties",
+  //     data: assigneToData,
+  //     checked: true,
+  //   },
+  //   {
+  //     label: "Priority",
 
-      data: priorityData,
-      checked: false,
-    },
-  ];
+  //     data: priorityData,
+  //     checked: false,
+  //   },
+  // ];
+
   const pageSize = 10;
 
   const columns = [
@@ -77,9 +80,12 @@ export default function TaskTable({
       flex: 1,
     },
     {
-      field: "assignee.name",
+      field: "assignee",
       headerName: "Assigned to",
       flex: 1,
+      renderCell: (row) => {
+        return <Typography>{row?.assignee?.name}</Typography>;
+      },
     },
     {
       field: "dueDate",
@@ -235,6 +241,8 @@ export default function TaskTable({
           setAnchorEl={setAnchorEl}
           filterColumns={filterColumns}
           setFilterData={setFilterData}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
         />
         <AppTable
           rowKey="taskId"

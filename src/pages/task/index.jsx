@@ -1,6 +1,7 @@
 import AppGrid from "components/AppComponents/AppGrid";
 import { ButtonGroup, RadiusStyledButton } from "components/StyledComponents";
 import { useGetActiveAndCompletedTaskByFilter } from "hooks/useDashboard";
+import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
 import { useEffect, useState } from "react";
 import TaskTable from "./TaskTable";
 import TaskCreation from "./create";
@@ -13,16 +14,35 @@ const Task = () => {
     mutate: fetchActiveAndCompletedTaskByFilter,
     isLoading: isTaskLoading,
   } = useGetActiveAndCompletedTaskByFilter();
+  const { data: assigneToData, isLoading: assigneToLoading } =
+    useVerunaUsersQuery();
+  const { data: priorityData } = useVerunaPriorityQuery();
+
+  const filterColumns = [
+    {
+      label: "Assigned to",
+      data: assigneToData,
+      checked: true,
+    },
+    {
+      label: "Priority",
+
+      data: priorityData,
+      checked: false,
+    },
+  ];
+  const initialTab = Object.keys(filterColumns)[0];
+  const [selectedTab, setSelectedTab] = useState(initialTab);
 
   useEffect(() => {
     fetchTaskData();
   }, [page, filterData]);
-  console.log(filterData, "filterDara");
+  console.log(selectedTab, "filterDara");
   const fetchTaskData = () => {
     const dataFilters = Array.isArray(filterData)
       ? filterData.map((value) => ({
-          column: "status",
-          operator: "equal",
+          column: selectedTab === 0 ? "status" : "assignedTo",
+          operator: "equals",
           value: value,
         }))
       : [];
@@ -70,6 +90,9 @@ const Task = () => {
           page={page}
           setPage={setPage}
           setFilterData={setFilterData}
+          filterColumns={filterColumns}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
         />
       </AppGrid>
     </AppGrid>
