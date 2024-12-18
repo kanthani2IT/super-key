@@ -62,26 +62,6 @@ export default function TaskTable({
       ],
       checked: false,
     },
-    {
-      label: "Priority",
-      data: [
-        { name: "High", color: "#E81616" },
-        { name: "Medium", color: "#EB6C0B" },
-        { name: "Low", color: "#DEC013" },
-      ],
-      checked: false,
-    },
-    {
-      label: "Properties",
-      data: [
-        { id: 1, data: "Desert Springs" },
-        { id: 2, data: "Rose Dale" },
-        { id: 3, data: "Rose Dal" },
-        { id: 4, data: "Oak Ridge Estates" },
-        { id: 5, data: "Mountain Vista" },
-      ],
-      checked: true,
-    },
   ];
   const pageSize = 10;
 
