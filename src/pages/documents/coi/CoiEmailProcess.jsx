@@ -22,9 +22,6 @@ const initialValues = {
 
 const getValidationSchema = (isPropertyManagerRequired) =>
     Yup.object().shape({
-        // propertyManager: isPropertyManagerRequired
-        //     ? Yup.object().required("Property Manager is required")
-        //     : Yup.object().nullable(),
         name: Yup.string().min(3, "Name be at least 3 characters").required("Name is required"),
         email: EMAIL_VALIDATION,
         mobile: MOBILE_VALIDATION,

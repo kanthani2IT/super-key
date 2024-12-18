@@ -40,6 +40,12 @@ export default function TaskTable({
   const { data: assigneToData, isLoading: assigneToLoading } =
     useVerunaUsersQuery();
   const { data: priorityData } = useVerunaPriorityQuery();
+  // const [selectedPriority, setSelectedpriority] = useState(priorityData);
+  const [selectedPriority, setSelectedPriority] = useState([
+    { name: "High", color: "#E81616", selected: false },
+    { name: "Medium", color: "#EB6C0B", selected: false },
+    { name: "Low", color: "#DEC013", selected: false },
+  ]);
 
   const [selectedProperty, setSelectedProperties] = useState([
     { id: 1, data: "Desert Springs", selected: false },
@@ -48,13 +54,40 @@ export default function TaskTable({
     { id: 4, data: "Oak Ridge Estates", selected: false },
     { id: 5, data: "Mountain Vista", selected: false },
   ]);
-  const toggleFilter = (id) => {
-    setSelectedProperties((prev) =>
-      prev.map((filter) =>
-        filter.id === id ? { ...filter, selected: !filter.selected } : filter
-      )
-    );
+  // const toggleFilter = (id, PriorityName) => {
+  //   setSelectedProperties((prev) =>
+  //     prev.map((filter) =>
+  //       filter.id === id ? { ...filter, selected: !filter.selected } : filter
+  //     )
+  //   );
+  //   setSelectedPriority((prev) =>
+  //     prev.map((filter) =>
+  //       filter.name === PriorityName ? { ...filter } : filter
+  //     )
+  //   );
+  // };
+  const toggleFilter = (idOrName) => {
+    if (selectedTab === "Properties") {
+      // Update `selectedProperty`
+      setSelectedProperties((prev) =>
+        prev.map((filter) =>
+          filter.id === idOrName
+            ? { ...filter, selected: !filter.selected }
+            : filter
+        )
+      );
+    } else if (selectedTab === "Priority") {
+      // Update `selectedPriority`
+      setSelectedPriority((prev) =>
+        prev.map((priority) =>
+          priority.name === idOrName
+            ? { ...priority, selected: !priority.selected }
+            : priority
+        )
+      );
+    }
   };
+
   const pageSize = 10;
 
   const columns = [
@@ -77,12 +110,12 @@ export default function TaskTable({
       flex: 1,
     },
     {
-      field: "assignedTo",
+      field: "assignee.name",
       headerName: "Assigned to",
       flex: 1,
     },
     {
-      field: "dueDateString",
+      field: "dueDate",
       headerName: "Due Date",
       flex: 1,
     },
@@ -201,7 +234,9 @@ export default function TaskTable({
     e.stopPropagation();
     setAnchorEl(e.currentTarget);
   };
-
+  const onClose = () => {
+    setModal(null);
+  };
   return (
     <Box sx={communityStyles.container(height)}>
       <>
@@ -232,10 +267,12 @@ export default function TaskTable({
         </Button> */}
         <FilterDrawer
           selectedProperty={assigneToData?.records || selectedProperty}
-          selectedPriority={priorityData}
-          toggleFilter={toggleFilter}
+          selectedPriority={selectedPriority}
+          setSelectedPriority={setSelectedPriority}
+          // toggleFilter={toggleFilter}
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
+          setSelectedProperties={setSelectedProperties}
         />
         <AppTable
           rowKey="taskId"
@@ -267,9 +304,11 @@ export default function TaskTable({
             role="Property Manager Name"
             type="GRT"
             number="+1 432 567 987"
+            onClose={onClose}
           />
         }
         borderRadius={"20px"}
+        width={"20vw"}
       />
 
       <AppMenu

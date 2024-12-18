@@ -1,5 +1,6 @@
+import { useNavigate } from "react-router";
 import { useAuthCookies } from "utils/cookie";
-import { mergeCMCId } from "utils/helpers";
+import { logoutUser, mergeCMCId } from "utils/helpers";
 
 const privateAxios = (http) => {
   // Attach request interceptor
@@ -24,9 +25,15 @@ const privateAxios = (http) => {
   http.interceptors.response.use(
     (response) => response,
     (error) => {
-      if (error.response?.status === 401) {
+      const token = error?.config?.headers["Authorization"];
+
+      let errorStatus = error.response?.status;
+      if (errorStatus === 401) {
         // Handle unauthorized errors (e.g., redirect to login)
         console.error("Unauthorized! Redirecting to login...");
+      } else if (errorStatus === 403 && token) {
+        // Handle token expiration errors
+        logoutUser();
       }
       return Promise.reject(error);
     }

@@ -44,7 +44,6 @@ const CommunityAddress = React.lazy(() => import("./CommunityAddress"));
 const CommunityDetails = React.lazy(() => import("./CommunityDetails"));
 const CommunityName = React.lazy(() => import("./CommunityName"));
 const InsuranceUpload = React.lazy(() => import("./InsuranceTable"));
-const SuccessScreen = React.lazy(() => import("./SuccessScreen"));
 const UploadCommunity = React.lazy(() => import("./UploadCommunity"));
 const UploadCommunityList = React.lazy(() => import("./UploadCommunityList"));
 

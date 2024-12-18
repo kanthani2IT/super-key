@@ -38,6 +38,7 @@ function MainCard(
     onFilterClick,
     selectedProperty,
     selectedPriority,
+    setSelectedProperties,
     ...others
   },
   ref
@@ -70,6 +71,7 @@ function MainCard(
       )
     );
   };
+  
   return (
     <Card
       elevation={elevation || 0}
