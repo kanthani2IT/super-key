@@ -18,6 +18,7 @@ const FilterDrawer = ({
   setSelectedTab,
 }) => {
   const [checkedFilters, setCheckedFilters] = useState({});
+  console.log(filterColumns, "filterColumns");
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
@@ -67,7 +68,7 @@ const FilterDrawer = ({
       if (filterColumns[selectedTab]?.checked) {
         return (
           <FormControlLabel
-            key={filter.id || filter.name}
+            key={filter.Id || filter.Name}
             control={
               <Checkbox
                 checked={!!checkedFilters[filter.Name]}

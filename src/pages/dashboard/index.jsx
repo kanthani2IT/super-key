@@ -34,8 +34,32 @@ const tabs = [
 ];
 
 export default function DashboardDefault() {
+  const { data: assigneToData, isLoading: assigneToLoading } =
+    useVerunaUsersQuery();
+  console.log(assigneToData, "assigneToData");
+
   const [selectedTab, setSelectedTab] = useState(tabs[0].value);
+  const [page, setPage] = useState(1);
+
+  const { data: priorityData } = useVerunaPriorityQuery();
+  const filterColumns = [
+    {
+      label: "Assigned to",
+      data: assigneToData ?? {},
+      checked: true,
+    },
+    {
+      label: "Priority",
+
+      data: priorityData,
+      checked: false,
+    },
+  ];
+  console.log(assigneToData, "assigneToData");
+  const initialTab = Object.keys(filterColumns)[0];
+  const [selectedFilter, setSelectedFilter] = useState(initialTab);
   const [open, setOpen] = useState(false);
+  const [filterData, setFilterData] = useState("equal");
   const navigate = useNavigate();
   //Todo Users
   // const { data, isLoading } = useGetUsers();
@@ -48,10 +72,8 @@ export default function DashboardDefault() {
     totalPremium,
     upcomingRenewals,
   } = dashboardData?.data ?? {};
-  console.log(dashboardData, "$$$$")
-  const { data: assigneToData, isLoading: assigneToLoading } =
-    useVerunaUsersQuery();
-  const { data: priorityData } = useVerunaPriorityQuery();
+  console.log(dashboardData, "$$$$");
+
   console.log("assigneToData", assigneToData);
 
   const {
@@ -84,7 +106,28 @@ export default function DashboardDefault() {
       return updatedList;
     });
   };
+  useEffect(() => {
+    fetchTaskData();
+  }, [page, filterData]);
+  console.log(selectedFilter, "filterDara");
+  const fetchTaskData = () => {
+    const dataFilters = Array.isArray(filterData)
+      ? filterData.map((value) => ({
+          column: selectedFilter === 0 ? "status" : "assignedTo",
+          operator: "equals",
+          value: value,
+        }))
+      : [];
 
+    let reqBody = {
+      sort: "createdAt",
+      orderBy: "desc",
+      page: page,
+      size: 10,
+      data: dataFilters,
+    };
+    fetchActiveAndCompletedTaskByFilter(reqBody);
+  };
   const fetchData = (status) => {
     let reqBody = {
       sort: "createdAt",
@@ -199,7 +242,9 @@ export default function DashboardDefault() {
         <AppSkeletonWrapper loading={isWidgetLoading} height={"370px"}>
           <MainCard title={"Upcoming Renewals"}>
             <AppGrid size={{ xs: 12 }} justifyItems={"center"}>
-              <RenewalPieChart chartData={transformedRenewalData(upcomingRenewals) ?? []} />
+              <RenewalPieChart
+                chartData={transformedRenewalData(upcomingRenewals) ?? []}
+              />
             </AppGrid>
           </MainCard>
         </AppSkeletonWrapper>
@@ -218,14 +263,18 @@ export default function DashboardDefault() {
         </MainCard>
       </AppModal> */}
       <AppGrid size={{ xs: 12 }}>
-        <MainCard
+        {/* <MainCard
           title={"Task Assigned"}
           secondary={"Full View"}
           isFilter
           showSecondary={false}
           secondaryAction={() => navigate("/tasks")}
-          selectedProperty={assigneToData}
-          selectedPriority={priorityData}
+          // selectedProperty={assigneToData}
+          // selectedPriority={priorityData}
+          setFilterData={setFilterData}
+          filterColumns={filterColumns}
+          selectedTab={selectedFilter}
+          setSelectedTab={setSelectedFilter}
         >
           <MainTabs
             handleChange={handleChange}
@@ -236,7 +285,7 @@ export default function DashboardDefault() {
             tableData={taskData?.data?.content || []}
             loading={isTaskLoading}
           ></TaskTableDashBoard>
-        </MainCard>
+        </MainCard> */}
       </AppGrid>
     </AppGrid>
   );
