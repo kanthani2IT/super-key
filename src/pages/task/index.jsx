@@ -7,6 +7,7 @@ import TaskCreation from "./create";
 //Need to check
 const Task = () => {
   const [page, setPage] = useState(1);
+  const [filterData, setFilterData] = useState("equal");
   const {
     data: taskData,
     mutate: fetchActiveAndCompletedTaskByFilter,
@@ -15,28 +16,31 @@ const Task = () => {
 
   useEffect(() => {
     fetchTaskData();
-  }, [page]);
-
+  }, [page, filterData]);
+  console.log(filterData, "filterDara");
   const fetchTaskData = () => {
+    const dataFilters = Array.isArray(filterData)
+      ? filterData.map((value) => ({
+          column: "status",
+          operator: "equal",
+          value: value,
+        }))
+      : [];
+
     let reqBody = {
       sort: "createdAt",
       orderBy: "desc",
-      id: "34678098765",
       page: page,
       size: 10,
-      data: [
-        {
-          column: "status",
-          operator: "contains",
-          value: "",
-        },
-      ],
+      data: dataFilters,
     };
-
     fetchActiveAndCompletedTaskByFilter(reqBody);
   };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+  };
+  const onCompleteChange = () => {
+    fetchTaskData();
   };
   return (
     <AppGrid container spacing={4}>
@@ -48,7 +52,7 @@ const Task = () => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <ButtonGroup>
+        <ButtonGroup onClick={onCompleteChange}>
           <RadiusStyledButton variant="contained">Created</RadiusStyledButton>
           <RadiusStyledButton variant="contained">Completed</RadiusStyledButton>
           {/* <RadiusStyledButton variant="contained">Over Due</RadiusStyledButton> */}
@@ -65,6 +69,7 @@ const Task = () => {
           handleChangePage={handleChangePage}
           page={page}
           setPage={setPage}
+          setFilterData={setFilterData}
         />
       </AppGrid>
     </AppGrid>
