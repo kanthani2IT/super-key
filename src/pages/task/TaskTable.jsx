@@ -30,6 +30,7 @@ export default function TaskTable({
   handleChangePage,
   page,
   selectedRows = [],
+  setFilterData,
 }) {
   const anchorRef = useRef(null);
   const theme = useTheme();
@@ -44,22 +45,13 @@ export default function TaskTable({
   const filterColumns = [
     {
       label: "Properties",
-      data: [
-        { id: 1, data: "Desert Springs" },
-        { id: 2, data: "Rose Dale" },
-        { id: 3, data: "Rose Dal" },
-        { id: 4, data: "Oak Ridge Estates" },
-        { id: 5, data: "Mountain Vista" },
-      ],
+      data: assigneToData,
       checked: true,
     },
     {
       label: "Priority",
-      data: [
-        { name: "High", color: "#E81616" },
-        { name: "Medium", color: "#EB6C0B" },
-        { name: "Low", color: "#DEC013" },
-      ],
+
+      data: priorityData,
       checked: false,
     },
   ];
@@ -193,7 +185,13 @@ export default function TaskTable({
   const renderPriorityComponent = (e) => {
     return (
       <>
-        <StyledMenuItem onClick={() => console.log("task")}>
+        <StyledMenuItem
+          onClick={(e) => {
+            setModal(e.currentTarget);
+            setMenuAnchorEl(null);
+          }}
+          ref={anchorRef}
+        >
           View details
         </StyledMenuItem>
         <StyledMenuItem onClick={() => console.log("task")}>
@@ -231,19 +229,12 @@ export default function TaskTable({
             },
           ]}
         />
-        {/* <Button
-          onClick={(e) => {
-            console.log(e.currentTarget, "currentTarget");
-            setModal(e.currentTarget);
-          }}
-          ref={anchorRef}
-        >
-          View Details
-        </Button> */}
+
         <FilterDrawer
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
           filterColumns={filterColumns}
+          setFilterData={setFilterData}
         />
         <AppTable
           rowKey="taskId"

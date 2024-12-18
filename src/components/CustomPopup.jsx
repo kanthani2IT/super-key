@@ -9,7 +9,12 @@ import { useState } from "react";
 import AppMenu from "./AppComponents/AppMenu";
 import AppPriorityItems from "./AppPriorityComponent";
 
-const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
+const FilterDrawer = ({
+  anchorEl,
+  setAnchorEl,
+  filterColumns,
+  setFilterData,
+}) => {
   const initialTab = Object.keys(filterColumns)[0];
   const [selectedTab, setSelectedTab] = useState(initialTab);
   const [checkedFilters, setCheckedFilters] = useState({});
@@ -26,11 +31,13 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
         appliedFilters.push(key);
       }
     });
+    setFilterData(appliedFilters);
+    console.log("Applied Filters: ", appliedFilters);
 
-    if (!isAnyCheckboxSelected) return;
-    const selectedFilters = selectedProperty.filter(
-      (_, index) => checkboxState[index]
-    );
+    // if (!isAnyCheckboxSelected) return;
+    // const selectedFilters = selectedProperty.filter(
+    //   (_, index) => checkboxState[index]
+    // );
 
     setAnchorEl(null);
   };
@@ -55,8 +62,8 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
             key={filter.id || filter.name}
             control={
               <Checkbox
-                checked={!!checkedFilters[filter.id || filter.name]}
-                onChange={() => toggleFilter(filter.id || filter.name)}
+                checked={!!checkedFilters[filter.Name]}
+                onChange={() => toggleFilter(filter.Name)}
               />
             }
             label={filter.Name}
