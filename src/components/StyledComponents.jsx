@@ -14,6 +14,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import AppCustomButton from "./AppComponents/Button";
 
 export const StyledTypography = styled(Typography)(({ theme, color }) => ({
   color: color ?? theme.palette.text.grey,
@@ -324,7 +325,7 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export const RadiusStyledButton = styled(Button)(
+export const RadiusStyledButton = styled(AppCustomButton)(
   ({ theme, color, height, width, textColor, borderRadius }) => ({
     minWidth: width || "150px",
     width: width || "auto",

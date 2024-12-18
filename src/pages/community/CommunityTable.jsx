@@ -19,7 +19,7 @@ import AppMenu from "components/AppComponents/AppMenu";
 import AppTable from "components/AppComponents/AppTable";
 import AppTableSearch from "components/AppComponents/AppTableSearch";
 import { getStatus } from "components/AppComponents/CustomField";
-import { communityStyles, StyledMenuItem } from "components/StyledComponents";
+import { StyledMenuItem, communityStyles } from "components/StyledComponents";
 import { useOffBoardCommunity } from "hooks/useCommunity";
 import { formatAsDollar } from "pages/community/onboarding/utils";
 import { useState } from "react";
@@ -133,7 +133,9 @@ export default function CommunityTable({
       headerName: "Insured",
       renderCell: (row) => {
         return (
-          <Typography>{row?.insuredCoverage ? formatAsDollar(row?.insuredCoverage) : "-"}</Typography>
+          <Typography>
+            {row?.insuredCoverage ? formatAsDollar(row?.insuredCoverage) : "-"}
+          </Typography>
         );
       },
     },
@@ -156,16 +158,18 @@ export default function CommunityTable({
             </Typography>
           );
         } else {
-          return <Typography
-            color={"success"}
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            gap={0.5}
-          >
-            <FiberManualRecordIcon fontSize="12px" />
-            {"Active"}
-          </Typography>;
+          return (
+            <Typography
+              color={"success"}
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              gap={0.5}
+            >
+              <FiberManualRecordIcon fontSize="12px" />
+              {"Active"}
+            </Typography>
+          );
         }
       },
     },
@@ -189,11 +193,13 @@ export default function CommunityTable({
     },
   ];
 
-  const filteredRows = communityList?.length ? communityList?.filter((row) =>
-    Object.values(row).some((value) =>
-      String(value).toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  ) : [];
+  const filteredRows = communityList?.length
+    ? communityList?.filter((row) =>
+        Object.values(row).some((value) =>
+          String(value).toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      )
+    : [];
 
   // Flatten the rows
   const flatRows = filteredRows?.map((row) => ({
@@ -205,13 +211,10 @@ export default function CommunityTable({
   const handleUISearch = (searchTerm) => {
     setSearchTerm(searchTerm);
     setPage(1);
-  }
+  };
 
-
-  const paginatedRows = flatRows && flatRows?.slice(
-    (page - 1) * pageSize,
-    page * pageSize
-  );
+  const paginatedRows =
+    flatRows && flatRows?.slice((page - 1) * pageSize, page * pageSize);
 
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);
@@ -241,7 +244,7 @@ export default function CommunityTable({
     };
     mutate(payload);
     setModal(!modal);
-    setMenuAnchorEl(null)
+    setMenuAnchorEl(null);
   };
 
   const renderSortComponent = () => {
@@ -316,7 +319,7 @@ export default function CommunityTable({
         pageSize={pageSize}
         onPageChange={handleChangePage}
         selected={selectedRows}
-        noDataText={'No Community Found'}
+        noDataText={"No Community Found"}
         selectedData={setOffboardData}
         rowSecondKey={rowSecondKey}
         offboardData={offboardData}

@@ -9,6 +9,38 @@ import { useState } from "react";
 import AppMenu from "./AppComponents/AppMenu";
 import AppPriorityItems from "./AppPriorityComponent";
 
+const styles = {
+  button: (isSelected) => ({
+    width: "155px",
+    height: "41px",
+    margin: "8px 7px",
+    borderRadius: "8px",
+    backgroundColor: isSelected ? "#E0EDFF" : "transparent",
+    color: isSelected ? "#2954E1" : "black",
+  }),
+  dividerVertical: {
+    mx: 2,
+    marginLeft: "-20px",
+  },
+  scrollContainer: {
+    width: "100%",
+    height: "18rem",
+    overflow: "scroll",
+    padding: "8px",
+  },
+  formControlLabel: {
+    display: "block",
+    mb: 1,
+  },
+  actionButton: {
+    borderRadius: "10px",
+    fontWeight: 500,
+    fontSize: "14px",
+    textTransform: "none",
+    width: "45%",
+  },
+};
+
 const FilterDrawer = ({
   anchorEl,
   setAnchorEl,
@@ -32,12 +64,6 @@ const FilterDrawer = ({
       }
     });
     setFilterData(appliedFilters);
-    console.log("Applied Filters: ", selectedTab, appliedFilters);
-
-    // if (!isAnyCheckboxSelected) return;
-    // const selectedFilters = selectedProperty.filter(
-    //   (_, index) => checkboxState[index]
-    // );
 
     setAnchorEl(null);
   };
@@ -59,7 +85,7 @@ const FilterDrawer = ({
       if (filterColumns[selectedTab]?.checked) {
         return (
           <FormControlLabel
-            key={filter.id || filter.name}
+            key={filter.Id || filter.Name}
             control={
               <Checkbox
                 checked={!!checkedFilters[filter.Name]}

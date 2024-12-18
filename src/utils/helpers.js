@@ -80,11 +80,12 @@ export const mergeCMCId = (url) => {
   return url;
 };
 
-export const logoutUser = () => {
+export const logoutUser = (noRedirect = false, url) => {
   const { removeAuthCookie } = useAuthCookies();
   removeAuthCookie("token");
   removeAuthCookie("cmcId");
-  window.location.replace("/login");
+  !noRedirect && window.location.replace("/login");
+  url && window.location.replace(url);
 };
 
 export const importPolicyData = {
@@ -135,4 +136,11 @@ export const getContactInfo = (addressDetails) => {
   const addressParts = [city, state, zipcode].filter(Boolean);
 
   return addressParts.join(", ");
+};
+
+export const useAuth = () => {
+  const { getCookie } = useAuthCookies();
+
+  const token = getCookie("token");
+  return !!token;
 };

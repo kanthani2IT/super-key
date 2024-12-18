@@ -4,8 +4,8 @@ import { lazy } from "react";
 import Loadable from "components/Loadable";
 import Dashboard from "layout/Dashboard";
 import PageNotFound from "pages/extra-pages/PageNotFound";
-import ProtectedRoute from "./ProtectedRoutes";
 import Task from "pages/task";
+import ProtectedRoute from "./ProtectedRoutes";
 
 const Color = Loadable(lazy(() => import("pages/component-overview/color")));
 const Typography = Loadable(
@@ -30,7 +30,7 @@ const MainRoutes = {
   path: "/",
   element: (
     <ProtectedRoute>
-      <Dashboard />
+      <Dashboard />,
     </ProtectedRoute>
   ),
   children: [

@@ -15,9 +15,12 @@ import { StyledTableCell, StyledTableRow } from "./StyledComponent";
 const CustomUploadTable = ({
   cols,
   tableData,
-  pageSize,
   currentPage,
+  pageSize,
   totalItems,
+  handlePageChange,
+  pageDisable = false,
+  isPagination = true,
 }) => {
   return (
     <TableContainer>
@@ -78,11 +81,15 @@ const CustomUploadTable = ({
           can upload the documents in document repository section.
         </Typography>
       </AppRowBox>
-      <AppPagination
-        pageSize={pageSize || 6}
-        currentPage={currentPage || 1}
-        totalItems={totalItems || 10}
-      />
+      {isPagination ? (
+        <AppPagination
+          pageSize={pageSize}
+          currentPage={currentPage}
+          totalItems={totalItems}
+          onPageChange={handlePageChange}
+          pageDisable={pageDisable}
+        />
+      ) : null}
     </TableContainer>
   );
 };

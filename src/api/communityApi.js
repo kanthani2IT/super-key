@@ -83,18 +83,35 @@ const getCommunityList = async (body) => {
   return response;
 };
 
- const offBoardCommunity = async (payload) => {
-    // const payload = {
-    //   mappings: [
-    //     {
-    //       communityId,
-    //       cmcId,
-    //     },
-    //   ],
-    // };
-    const response = await putRequest(COMMUNITY.offBoardCommunity, payload);
-    return response;
-  };
+const downloadOnboardingTemplate = async () => {
+  const response = await http({
+    method: "GET",
+    url: COMMUNITY.downloadOnboardingTemplate,
+    responseType: "arraybuffer",
+  });
+  return response;
+};
+
+const createMultiCommunity = async (body) => {
+  const response = await http({
+    method: "POST",
+    url: COMMUNITY.createMultiCommunity,
+    data: body,
+  });
+  return response;
+};
+const offBoardCommunity = async (payload) => {
+  // const payload = {
+  //   mappings: [
+  //     {
+  //       communityId,
+  //       cmcId,
+  //     },
+  //   ],
+  // };
+  const response = await putRequest(COMMUNITY.offBoardCommunity, payload);
+  return response;
+};
 
 export const communityApi = {
   getUsersData,
@@ -104,5 +121,7 @@ export const communityApi = {
   createCommunity,
   getAllCommunityList,
   getCommunityList,
+  downloadOnboardingTemplate,
+  createMultiCommunity,
   offBoardCommunity,
 };
