@@ -47,52 +47,36 @@ function MainCard(
   boxShadow = theme.palette.mode === "dark" ? boxShadow || true : boxShadow;
   const [openFilter, setOpenFilter] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  console.log(selectedPriority, selectedProperty, "selectd");
+  // const colors = {
+  //   0: "#E81616",
+  //   1: "#EB6C0B",
+  //   2: "#DEC013",
+  // };
+
+  // Object.keys(selectedPriority).forEach((key) => {
+  //   selectedPriority[key] = {
+  //     ...selectedPriority[key],
+  //     color: colors[key],
+  //   };
+  // });
   const filterColumns = [
     {
       label: "Properties",
-      data: [
-        { id: 1, data: "Desert Springs" },
-        { id: 2, data: "Rose Dale" },
-        { id: 3, data: "Rose Dal" },
-        { id: 4, data: "Oak Ridge Estates" },
-        { id: 5, data: "Mountain Vista" },
-      ],
+
+      data: selectedProperty,
       checked: true,
     },
     {
       label: "Priority",
-      data: [
-        { name: "High", color: "#E81616" },
-        { name: "Medium", color: "#EB6C0B" },
-        { name: "Low", color: "#DEC013" },
-      ],
+      data: selectedPriority,
       checked: false,
     },
   ];
   const handleFilterButtonClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  // const [selectedPriority, setSelectedPriority] = useState([
-  //   { name: "High", color: "#E81616" },
-  //   { name: "Medium", color: "#EB6C0B" },
-  //   { name: "Low", color: "#DEC013" },
-  // ]);
-  // const [selectedProperty, setSelectedProperties] = useState([
-  //   { id: 1, data: "Desert Springs", selected: false },
-  //   { id: 2, data: "Rose Dale", selected: false },
-  //   { id: 3, data: "Rose Dal", selected: false },
-  //   { id: 4, data: "Oak Ridge Estates", selected: false },
-  //   { id: 5, data: "Mountain Vista", selected: false },
-  // ]);
 
-  const toggleFilter = (id) => {
-    setSelectedProperties((prev) =>
-      prev.map((filter) =>
-        filter.id === id ? { ...filter, selected: !filter.selected } : filter
-      )
-    );
-  };
-  
   return (
     <Card
       elevation={elevation || 0}
@@ -204,9 +188,6 @@ function MainCard(
           }}
         >
           <FilterDrawer
-            selectedProperty={selectedProperty}
-            selectedPriority={selectedPriority}
-            toggleFilter={toggleFilter}
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
             filterColumns={filterColumns}

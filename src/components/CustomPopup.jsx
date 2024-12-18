@@ -13,7 +13,7 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
   const initialTab = Object.keys(filterColumns)[0];
   const [selectedTab, setSelectedTab] = useState(initialTab);
   const [checkedFilters, setCheckedFilters] = useState({});
-  console.log(filterColumns, "filter");
+
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
   };
@@ -27,13 +27,11 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
       }
     });
 
-    console.log("Applied Filters: ", appliedFilters);
-
     if (!isAnyCheckboxSelected) return;
     const selectedFilters = selectedProperty.filter(
       (_, index) => checkboxState[index]
     );
-    console.log("!@#$%^&*:", selectedFilters);
+
     setAnchorEl(null);
   };
 
@@ -61,7 +59,7 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
                 onChange={() => toggleFilter(filter.id || filter.name)}
               />
             }
-            label={filter.data || filter.name}
+            label={filter.Name}
             sx={{ display: "block", mb: 1 }}
           />
         );

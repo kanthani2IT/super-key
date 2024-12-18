@@ -1,23 +1,20 @@
-import React, { useRef, useState } from "react";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-  Typography,
-  IconButton,
   Box,
   Button,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import AppSkeleton from "components/AppComponents/AppSkeleton";
-import { StyledMenuItem } from "components/StyledComponents";
 import AppMenu from "components/AppComponents/AppMenu";
+import AppSkeleton from "components/AppComponents/AppSkeleton";
 import AppTaskCard from "components/AppComponents/AppTaskCard";
-import PropTypes from "prop-types";
+import { StyledMenuItem } from "components/StyledComponents";
+import { useRef, useState } from "react";
 
 const columns = [
   { field: "S.No", headerName: "S.No" },
@@ -151,7 +148,9 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
                     <TableCell sx={firstCellStyle}>{index + 1}</TableCell>
                     <TableCell>{truncateText(row.taskName, 70)}</TableCell>
                     <TableCell sx={boldTextStyle}>{row.type}</TableCell>
-                    <TableCell sx={boldTextStyle}>{row?.assignee?.name??"-"}</TableCell>
+                    <TableCell sx={boldTextStyle}>
+                      {row?.assignee?.name ?? "-"}
+                    </TableCell>
                     <TableCell>{row.dueDate}</TableCell>
                     <TableCell
                       style={{ color: getPriorityColor(row.priority) }}
