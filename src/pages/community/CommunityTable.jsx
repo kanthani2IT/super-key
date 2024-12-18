@@ -50,13 +50,13 @@ export default function CommunityTable({
   setOffboardData,
   rowSecondKey,
   offboardData,
+  cmcId,
 }) {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(false);
-
   const pageSize = 10;
 
   //   const tableData = [{
@@ -98,13 +98,27 @@ export default function CommunityTable({
       headerName: "Community Name",
       flex: 1,
     },
+
+    // {
+    //   field: `communityManagerName`,
+    //   headerName: "Community Manager",
+    // },
+    // {
+    //   field: "propertyManagerName",
+    //   headerName: "Property Manager",
+    // },
     {
-      field: `communityManagerName`,
-      headerName: "Community Manager",
+      field: `type`,
+      headerName: "Type",
+    },
+
+    {
+      field: "state",
+      headerName: "State",
     },
     {
-      field: "propertyManagerName",
-      headerName: "Property Manager",
+      field: "city",
+      headerName: "City",
     },
     //Future use
     // {
@@ -119,7 +133,9 @@ export default function CommunityTable({
       headerName: "Insured",
       renderCell: (row) => {
         return (
-          <Typography>{formatAsDollar(row?.insuredCoverage) ?? "-"}</Typography>
+          <Typography>
+            {row?.insuredCoverage ? formatAsDollar(row?.insuredCoverage) : "-"}
+          </Typography>
         );
       },
     },
@@ -142,7 +158,18 @@ export default function CommunityTable({
             </Typography>
           );
         } else {
-          return "-";
+          return (
+            <Typography
+              color={"success"}
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              gap={0.5}
+            >
+              <FiberManualRecordIcon fontSize="12px" />
+              {"Active"}
+            </Typography>
+          );
         }
       },
     },
@@ -166,11 +193,13 @@ export default function CommunityTable({
     },
   ];
 
-  const filteredRows = communityList?.content?.filter((row) =>
-    Object.values(row).some((value) =>
-      String(value).toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  const filteredRows = communityList?.length
+    ? communityList?.filter((row) =>
+        Object.values(row).some((value) =>
+          String(value).toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      )
+    : [];
 
   // Flatten the rows
   const flatRows = filteredRows?.map((row) => ({
@@ -178,6 +207,14 @@ export default function CommunityTable({
     communityManagerName: row.communityManager?.username || "",
     propertyManagerName: row.propertyManager?.username || "",
   }));
+
+  const handleUISearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
+    setPage(1);
+  };
+
+  const paginatedRows =
+    flatRows && flatRows?.slice((page - 1) * pageSize, page * pageSize);
 
   const handleSort = (e) => {
     setAnchorEl(e.currentTarget);
@@ -200,14 +237,14 @@ export default function CommunityTable({
     const payload = {
       mappings: [
         {
-          communityId: communityInfo.communityId,
-          cmcId: communityInfo.communityManager.managementCompanyId,
+          communityId: communityInfo?.communityId,
+          cmcId: cmcId,
         },
       ],
     };
-    console.log(payload);
     mutate(payload);
     setModal(!modal);
+    setMenuAnchorEl(null);
   };
 
   const renderSortComponent = () => {
@@ -260,8 +297,8 @@ export default function CommunityTable({
     <Box sx={communityStyles.container(height)}>
       <AppTableSearch
         placeholder="Search Community"
-        searchTerm={filters.search}
-        onSearchChange={handleSearch}
+        searchTerm={filters.search || searchTerm}
+        onSearchChange={handleUISearch}
         icons={[
           {
             component: <SwapVert />,
@@ -274,11 +311,11 @@ export default function CommunityTable({
         rowKey="communityId"
         isLoading={isLoading}
         columns={columns}
-        rows={flatRows || []}
+        rows={paginatedRows || []}
         getStatus={getStatus}
         onSelectionChange={onSelectionChange}
         currentPage={page}
-        totalItems={communityList?.totalElements}
+        totalItems={flatRows?.length}
         pageSize={pageSize}
         onPageChange={handleChangePage}
         selected={selectedRows}

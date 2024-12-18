@@ -53,6 +53,11 @@ export const EMAIL_VALIDATION = Yup.string()
   .max(255)
   .required("Email ID is required");
 
+export const MOBILE_VALIDATION = Yup.string()
+  .min(10, "Mobile number must be at least 10 digits.")
+  .max(15, "Mobile number cannot exceed 15 digits.")
+  .required("Mobile number is required");
+
 export const PASSWORD_NOTE =
   "Ensure the password is 8-15 characters long, containing at least one uppercase letter, one lowercase letter, one digit, and one special character.";
 

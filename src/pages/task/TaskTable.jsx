@@ -41,11 +41,6 @@ export default function TaskTable({
     useVerunaUsersQuery();
   const { data: priorityData } = useVerunaPriorityQuery();
 
-  const [selectedPriority, setSelectedPriority] = useState([
-    { name: "High", color: "#E81616" },
-    { name: "Medium", color: "#EB6C0B" },
-    { name: "Low", color: "#DEC013" },
-  ]);
   const [selectedProperty, setSelectedProperties] = useState([
     { id: 1, data: "Desert Springs", selected: false },
     { id: 2, data: "Rose Dale", selected: false },
@@ -61,7 +56,7 @@ export default function TaskTable({
     );
   };
   const pageSize = 10;
-  console.log(page, "page");
+
   const columns = [
     {
       field: "index",
@@ -237,7 +232,7 @@ export default function TaskTable({
         </Button> */}
         <FilterDrawer
           selectedProperty={assigneToData?.records || selectedProperty}
-          selectedPriority={priorityData || selectedPriority}
+          selectedPriority={priorityData}
           toggleFilter={toggleFilter}
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}

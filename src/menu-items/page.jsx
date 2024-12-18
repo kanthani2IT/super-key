@@ -68,6 +68,15 @@ const pages = {
 
       },
       {
+        id: 'task',
+        title: 'Task Management',
+        url: '/tasks',
+        icon: icons.TaskIcon,
+        type: "item",
+        disable: false,
+        badge: 2
+      },
+      {
         id: 'documents',
         title: 'Documents',
         url: '/documents',
@@ -92,14 +101,6 @@ const pages = {
         ]
       },
       {
-        id: 'task',
-        title: 'Task Management',
-        url: '/tasks',
-        icon: icons.TaskIcon,
-        type: "item",
-        disable: false,
-        badge: 2
-      }, {
         id: 'property',
         title: 'Property',
         url: '/property',

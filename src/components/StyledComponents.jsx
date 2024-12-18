@@ -135,6 +135,7 @@ export const communityStyles = {
   iconGroup: {
     display: "flex",
     gap: "16px",
+    alignItems: "center",
   },
   icon: {
     color: "#000000",
@@ -264,11 +265,12 @@ export const CenteredGrid = styled(Grid)`
   width: 100%;
 `;
 
-export const StyledMenu = styled(Menu)(({ theme, borderRadius }) => ({
+export const StyledMenu = styled(Menu)(({ theme, borderRadius, width }) => ({
   borderRadius: "0.625rem",
   boxShadow: "#00000045 0px 7px 29px 0px",
   "& .MuiPaper-root": {
     borderRadius: borderRadius ? borderRadius : "4px",
+    width: width ? width : "",
   },
 }));
 

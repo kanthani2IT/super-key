@@ -10,7 +10,7 @@ import { Formik } from 'formik';
 // project imports
 import AnimateButton from 'components/@extended/AnimateButton';
 import { FormOutLinedField } from 'components/AppComponents/FormOutLinedField';
-import { useNewPassword, useResetPassword } from 'hooks/useLogin';
+import { useNewPassword, useRequestReset, useResetPassword } from 'hooks/useLogin';
 import { useAuthCookies } from 'utils/cookie';
 import { createValidationSchema } from 'utils/loginUtils';
 
@@ -22,6 +22,7 @@ export default function ResetPassword(props) {
   const token = getCookie("t")
   const newPasswordMutation = useNewPassword();
   const resetPasswordMutation = useResetPassword();
+  const forgotPassword = useRequestReset();
   const validationSchema = createValidationSchema(fieldsConfig);
 
   const handleFormSubmit = (values, { setSubmitting }) => {
@@ -33,6 +34,8 @@ export default function ResetPassword(props) {
         newPassword: values.newPassword,
       }
       newPasswordMutation.mutate(payload);
+    } else if (id == 'forgot') {
+      forgotPassword.mutate(values?.email);
     } else {
       let payload = {
         email: values?.email,

@@ -5,7 +5,7 @@ import { api } from "api";
 export const useLocationsQuery = (input) =>
   useQuery({
     queryKey: ["allLocationList", input],
-    queryFn: () => api.common.getAllLocation({ input }),
+    queryFn: () => api.common.getAllLocation({ input, sessionToken: 12345678 }),
     keepPreviousData: true,
     onSuccess: (data) => {},
     onError: (error) => {
@@ -143,7 +143,7 @@ export const useVerunaPriorityQuery = (search) =>
     queryFn: () => api.common.getAllVerunaPriority({ search }),
     keepPreviousData: true,
     select: (data) => {
-      return data?.data?.records || [];
+      return data?.data || [];
     },
     onSuccess: (data) => {},
     onError: (error) => {

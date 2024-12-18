@@ -18,6 +18,7 @@ import { useLocation, useNavigate } from "react-router";
 import { SEVERITY } from "utils/message";
 import * as Yup from "yup";
 import { transformDocuments } from "./utils";
+import { useAuthCookies } from "utils/cookie";
 
 const bulkUploadValidationSchema = Yup.object({
   editedList: Yup.array().of(
@@ -175,6 +176,8 @@ const OnboardingIndex = ({ refetch }) => {
   const [validationSchema, setValidationSchema] = useState(
     onBoardingStepper[activeStep]?.initialValidationSchema || null
   );
+  const { getCookie } = useAuthCookies()
+  const cmcId = getCookie('cmcId')
   const finalStep = activeStep == onBoardingStepper?.length - 1;
 
   const { mutateAsync: createMultiCommunity } = useCreateMultiCommunity();
@@ -450,12 +453,12 @@ const OnboardingIndex = ({ refetch }) => {
     onSubmit: async (values) => {
       if (activeStep == onBoardingStepper?.length - 2) {
         const formData = new FormData();
-
         let payload = {
           name: values?.communityName?.name,
-          contactInfo: values?.communityAddress?.label,
+          contactInfo: values?.communityAddress?.description || "",
           propertyManagerId: values?.propertyManager?.userId,
           communityManagerId: values?.communityManager?.managerId,
+          cmcId: cmcId,
           companyId: values?.communityManager?.managementCompanyId,
           documents: transformDocuments(selectedFiles),
           status: "ACTIVE",

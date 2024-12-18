@@ -9,6 +9,7 @@ import { useDebounceFn } from "utils/helpers";
 import EditCommunity from "./edit-community";
 import OnboardingIndex from "./onboarding";
 import ConfirmationModal from "components/AppComponents/AppConfirmationModal";
+import { useAuthCookies } from "utils/cookie";
 
 const initialValue = {
   page: 1,
@@ -26,7 +27,10 @@ const CommunityOnboarding = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [filters, setFilters] = useState(initialValue);
   const [modal, setModal] = useState(false);
-  const [offboardData, setOffboardData]=useState([])
+  const [offboardData, setOffboardData] = useState([])
+  const { getCookie } = useAuthCookies()
+
+  const cmcId = getCookie('cmcId')
 
   const {
     mutate: getCommunityList,
@@ -36,7 +40,7 @@ const CommunityOnboarding = () => {
 
   const { content } = communityListData?.data ?? {};
   const handleChangePage = (event, newPage) => {
-    fetchData(filters.sort, filters.search, newPage);
+    // fetchData(filters.sort, filters.search, newPage);
     setPage(newPage);
     setFilters({ ...filters, page: newPage })
     handleSelectionChange([])
@@ -65,9 +69,8 @@ const CommunityOnboarding = () => {
     //     },
     //   ],
     // };
-console.log(offboardData,"$$$$")
 
-    const payload ={ mappings: offboardData, };
+    const payload = { mappings: offboardData, };
     mutate(payload);
     setModal(!modal);
     handleSelectionChange([])
@@ -89,14 +92,14 @@ console.log(offboardData,"$$$$")
     setPage(1)
   };
 
-  const fetchData = (sort, search, page = filters.page) => {
+  const fetchData = (sort, search, page = filters?.page) => {
     const sortData = sort === "ACTIVE" || sort === "INACTIVE" ? "" : "name";
     const orderByData =
       sort === "lowToHigh" ? "asc" : "desc";
     const statusData = sort === "ACTIVE" || sort === "INACTIVE" ? sort : "";
     const body = {
-      page: page,
-      size: filters.size,
+      page: page || 1,
+      size: filters.size || 10,
       sortBy: sortData,
       orderBy: orderByData,
       status: statusData,
@@ -171,7 +174,7 @@ console.log(offboardData,"$$$$")
 
       <AppGrid item size={{ xs: 12 }}>
         <CommunityTable
-        setOffboardData={setOffboardData}
+          setOffboardData={setOffboardData}
           height={"80vh"}
           isLoading={communityListLoading}
           communityList={communityListData?.data || []}
@@ -189,6 +192,7 @@ console.log(offboardData,"$$$$")
           setPage={setPage}
           rowSecondKey={`communityManager.managerId`}
           offboardData={offboardData}
+          cmcId={cmcId}
         />
       </AppGrid>
       <Drawer sx={{
@@ -200,6 +204,7 @@ console.log(offboardData,"$$$$")
           onClose={closeDrawer}
           communityData={communityData}
           refetch={refetch}
+          cmcId={cmcId}
         />
       </Drawer>
       <ConfirmationModal

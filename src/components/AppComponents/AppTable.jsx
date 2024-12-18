@@ -52,7 +52,8 @@ const AppTable = ({
           );
           if (community && community?.communityManager?.managerId) {
             return {
-              cmcId: community?.communityManager?.managerId || "234567",
+              cmcId:
+                community?.communityManager?.managerId || "001bn00001CitW2AAJ",
               communityId: communityId,
             };
           }
@@ -61,7 +62,6 @@ const AppTable = ({
         .filter((item) => item !== null);
       selectedData([...offboardData, ...result]);
     } else {
-      console.log("first method correction");
       const currentPageData = rows.map((row) => row[rowKey]);
       const filteredData = offboardData.filter(
         (item) => !currentPageData.includes(item.communityId)
@@ -184,7 +184,9 @@ const AppTable = ({
                           ? index + 1
                           : col.field === "status" && col.getStatus
                             ? col.getStatus(row)
-                            : row?.[col.field] || "-"}
+                            : !row?.[col.field] || row?.[col.field] == "null"
+                              ? "-"
+                              : row?.[col.field]}
                     </TableCell>
                   ))}
                 </TableRow>

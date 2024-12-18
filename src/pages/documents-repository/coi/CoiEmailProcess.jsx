@@ -8,12 +8,13 @@ import AppTextField from 'components/AppComponents/AppTextField'
 import { useFormik } from 'formik'
 import { usePropertyManagersQuery } from 'hooks/useDropDown'
 import { useState } from 'react'
-import { CREDENTIAL_ERRORS, EMAIL_VALIDATION } from 'utils/loginUtils'
+import { EMAIL_VALIDATION, MOBILE_VALIDATION } from 'utils/loginUtils'
 import * as Yup from "yup";
 
 const initialValues = {
     toPropertyManager: "yes",
     propertyManager: null,
+    name: null,
     email: "",
     sms: "yes",
     mobile: "",
@@ -25,11 +26,8 @@ const getValidationSchema = (isPropertyManagerRequired) =>
         //     ? Yup.object().required("Property Manager is required")
         //     : Yup.object().nullable(),
         name: Yup.string().min(3, "Name be at least 3 characters").required("Name is required"),
-        email: Yup.string().email("Invalid email format").required("Email is required"),
-        mobile: Yup.string()
-            .min(10, "Mobile number must be at least 10 digits.")
-            .max(15, "Mobile number cannot exceed 15 digits.")
-            .required("Mobile number is required"),
+        email: EMAIL_VALIDATION,
+        mobile: MOBILE_VALIDATION,
     });
 const CoiEmailProcess = ({ open, setOpen }) => {
     const [validationSchema, setValidationSchema] = useState(getValidationSchema(true))

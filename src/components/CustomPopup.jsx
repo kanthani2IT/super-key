@@ -37,6 +37,19 @@ const FilterDrawer = ({
     setAnchorEl(null);
   };
 
+  const colors = {
+    0: "#E81616",
+    1: "#EB6C0B",
+    2: "#DEC013",
+  };
+
+  Object.keys(selectedPriority).forEach((key) => {
+    selectedPriority[key] = {
+      ...selectedPriority[key],
+      color: colors[key],
+    };
+  });
+
   const renderComponent = () => {
     return (
       <>
@@ -66,6 +79,7 @@ const FilterDrawer = ({
                 width: "155px",
                 height: "41px",
                 borderRadius: "8px",
+                margin: "8px 7px",
                 backgroundColor:
                   selectedTab === "Priority" ? "#E0EDFF" : "transparent",
                 color: selectedTab === "Priority" ? "#2954E1" : "black",
@@ -157,6 +171,8 @@ const FilterDrawer = ({
       renderComponent={renderComponent()}
       anchorEl={anchorEl}
       handleClose={() => setAnchorEl(null)}
+      width={"500px"}
+      borderRadius={"10px"}
     />
   );
 };

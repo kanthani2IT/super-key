@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useAuthCookies } from "./cookie";
 
 export function addQueryParams(baseUrl, params = {}) {
   const filteredParams = Object.entries(params).filter(
@@ -53,15 +54,28 @@ export const compareeJson = (a, b) => {
   return JSON.stringify(a) !== JSON.stringify(b);
 };
 
-
 export const transformedRenewalData = (inputData) => {
   // Check if inputData is null, undefined, or not an object
-  if (!inputData || typeof inputData !== 'object') {
+  if (!inputData || typeof inputData !== "object") {
     return []; // Return an empty array when inputData is invalid
   }
 
   return Object.keys(inputData).map((key) => ({
     name: key?.toLowerCase(),
-    value: inputData[key]
+    value: inputData[key],
   }));
+};
+
+export const mergeCMCId = (url) => {
+  const { getCookie } = useAuthCookies();
+  const cmcId = getCookie("cmcId") || "001bn00001CitW2AAJ";
+  if (cmcId) {
+    const newUrl = url.includes("CMCID") ? url?.replace("CMCID", cmcId) : url;
+    // const [currentUrl, queries] = url?.split("?");
+    // const newUrl = queries
+    //   ? `${currentUrl}/${cmcId}?${queries}`
+    //   : `${currentUrl}/${cmcId}`;
+    return `${newUrl}`;
+  }
+  return url;
 };
