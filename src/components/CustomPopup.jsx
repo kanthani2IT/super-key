@@ -14,9 +14,9 @@ const FilterDrawer = ({
   setAnchorEl,
   filterColumns,
   setFilterData,
+  selectedTab,
+  setSelectedTab,
 }) => {
-  const initialTab = Object.keys(filterColumns)[0];
-  const [selectedTab, setSelectedTab] = useState(initialTab);
   const [checkedFilters, setCheckedFilters] = useState({});
 
   const handleTabClick = (tab) => {
@@ -32,7 +32,7 @@ const FilterDrawer = ({
       }
     });
     setFilterData(appliedFilters);
-    console.log("Applied Filters: ", appliedFilters);
+    console.log("Applied Filters: ", selectedTab, appliedFilters);
 
     // if (!isAnyCheckboxSelected) return;
     // const selectedFilters = selectedProperty.filter(
