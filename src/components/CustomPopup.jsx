@@ -18,10 +18,9 @@ const FilterDrawer = ({
   setSelectedTab,
 }) => {
   const [checkedFilters, setCheckedFilters] = useState({});
-  console.log(filterColumns, "filterColumns");
 
   const handleTabClick = (tab) => {
-    setSelectedTab(tab);
+    setSelectedTab(0);
   };
 
   const handleApply = () => {
@@ -33,7 +32,6 @@ const FilterDrawer = ({
       }
     });
     setFilterData(appliedFilters);
-    console.log("Applied Filters: ", selectedTab, appliedFilters);
 
     // if (!isAnyCheckboxSelected) return;
     // const selectedFilters = selectedProperty.filter(
@@ -62,9 +60,9 @@ const FilterDrawer = ({
   };
 
   const renderOptions = () => {
-    const currentFilters = filterColumns[selectedTab]?.data || [];
-    return currentFilters.map((filter) => {
-      const color = priorityColors[filter.name] || "#000";
+    const currentFilters = filterColumns?.[selectedTab]?.data || [];
+    return currentFilters?.map((filter) => {
+      const color = priorityColors[filter?.name] || "#000";
       if (filterColumns[selectedTab]?.checked) {
         return (
           <FormControlLabel
@@ -98,7 +96,7 @@ const FilterDrawer = ({
       <>
         <Box sx={{ display: "flex", height: "100%" }}>
           <Box sx={{ width: "100%" }}>
-            {Object.keys(filterColumns).map((tab) => (
+            {filterColumns?.map((tab) => (
               <Button
                 key={tab}
                 variant={selectedTab === tab ? "contained" : "none"}
@@ -114,7 +112,7 @@ const FilterDrawer = ({
                   color: selectedTab === tab ? "#2954E1" : "black",
                 }}
               >
-                {filterColumns[tab]?.label}
+                {tab?.label}
               </Button>
             ))}
           </Box>

@@ -172,6 +172,7 @@ function MainCard(
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
             filterColumns={filterColumns}
+            selectedTab={selectedTab}
           />
           {children}
         </CardContent>

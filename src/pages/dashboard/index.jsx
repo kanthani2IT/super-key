@@ -7,25 +7,19 @@ import MainCard from "components/MainCard";
 
 // assets
 import AppGrid from "components/AppComponents/AppGrid";
-import AppModal from "components/AppComponents/AppModal";
 import AppSkeletonWrapper from "components/AppComponents/AppSkeletonWrapper";
 import MainTabs from "components/MainTabs";
-import { useGetUsers } from "hooks/useCommunity";
 import {
   useGetActiveAndCompletedTaskByFilter,
   useGetDashboardMetrics,
 } from "hooks/useDashboard";
+import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
 import { ColorBox } from "pages/component-overview/color";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import UserTable from "../community/CommunityTable";
-import RenewalPieChart from "./RenewalPieChart";
-import TaskTable from "./TaskTable";
 import { transformedRenewalData } from "utils/helpers";
-import CustomUploadTable from "components/AppComponents/CustomUploadTable";
-import Columns from "./TaskTableDashBoard";
+import RenewalPieChart from "./RenewalPieChart";
 import TaskTableDashBoard from "./TaskTableDashBoard";
-import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 const tabs = [
@@ -36,7 +30,6 @@ const tabs = [
 export default function DashboardDefault() {
   const { data: assigneToData, isLoading: assigneToLoading } =
     useVerunaUsersQuery();
-  console.log(assigneToData, "assigneToData");
 
   const [selectedTab, setSelectedTab] = useState(tabs[0].value);
   const [page, setPage] = useState(1);
@@ -45,7 +38,7 @@ export default function DashboardDefault() {
   const filterColumns = [
     {
       label: "Assigned to",
-      data: assigneToData ?? {},
+      data: assigneToData,
       checked: true,
     },
     {
@@ -55,6 +48,7 @@ export default function DashboardDefault() {
       checked: false,
     },
   ];
+  console.log(filterColumns, "@@@@@@@@@@@@@@@@@@@@@@@@@@@");
   console.log(assigneToData, "assigneToData");
   const initialTab = Object.keys(filterColumns)[0];
   const [selectedFilter, setSelectedFilter] = useState(initialTab);
@@ -263,7 +257,7 @@ export default function DashboardDefault() {
         </MainCard>
       </AppModal> */}
       <AppGrid size={{ xs: 12 }}>
-        {/* <MainCard
+        <MainCard
           title={"Task Assigned"}
           secondary={"Full View"}
           isFilter
@@ -285,7 +279,7 @@ export default function DashboardDefault() {
             tableData={taskData?.data?.content || []}
             loading={isTaskLoading}
           ></TaskTableDashBoard>
-        </MainCard> */}
+        </MainCard>
       </AppGrid>
     </AppGrid>
   );
