@@ -10,13 +10,13 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import EmailModal from "components/AppComponents/AppEmailModal";
 import AppMenu from "components/AppComponents/AppMenu";
 import AppSkeleton from "components/AppComponents/AppSkeleton";
 import AppTaskCard from "components/AppComponents/AppTaskCard";
-import PropTypes from "prop-types";
-import EmailModal from "components/AppComponents/AppEmailModal";
 import { StyledMenuItem } from "components/StyledComponents";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router";
 
 const columns = [
   { field: "S.No", headerName: "S.No" },
@@ -68,17 +68,18 @@ const truncateText = (text, limit = 50) => {
   return text.length > limit ? `${text.slice(0, limit)}...` : text;
 };
 const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
+  const navigate = useNavigate();
   const anchorRef = useRef(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [menuRowData, setMenuRowData] = useState(null);
-  const [openEmailModal, setOpenEmailModal]=useState(false)
+  const [openEmailModal, setOpenEmailModal] = useState(false);
   const [modal, setModal] = useState(null);
   const [viewDetails, setViewDetails] = useState(null);
-  const handleSendEmail=()=>{
-    setOpenEmailModal(true)
-    setModal(null)
-    setMenuAnchorEl(null)
-  }
+  const handleSendEmail = () => {
+    setOpenEmailModal(true);
+    setModal(null);
+    setMenuAnchorEl(null);
+  };
   const renderPriorityComponent = (row, onClose) => {
     const handleOptionClick = (option) => {
       console.log(`${option} clicked:`, row);
@@ -92,22 +93,19 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
             console.log(e.currentTarget, "currentTarget");
             setModal(e.currentTarget);
             setViewDetails(row);
-            setMenuAnchorEl(null)
+            setMenuAnchorEl(null);
           }}
           ref={anchorRef}
         >
           View Details
         </StyledMenuItem>
-        <StyledMenuItem onClick={handleSendEmail}>
-          Send Email
-        </StyledMenuItem>
+        <StyledMenuItem onClick={handleSendEmail}>Send Email</StyledMenuItem>
         <StyledMenuItem onClick={() => handleOptionClick("Mark as Completed")}>
           Mark as Completed
         </StyledMenuItem>
       </>
     );
   };
-  
 
   const [showAll, setShowAll] = useState(false);
   const handleMenuOpen = (event, row) => {
@@ -121,9 +119,12 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
     setMenuAnchorEl(null);
     setMenuRowData(null);
   };
-  const onclose=()=>{
+  const onclose = () => {};
 
-  }
+  const handleRouteViewTasks = () => {
+    navigate("/tasks");
+  };
+
   return (
     <Box>
       <TableContainer>
@@ -198,7 +199,7 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
             type="GRT"
             number="+1 432 567 987"
             handleSendEmail={handleSendEmail}
-            onClose={()=>setModal(null)}
+            onClose={() => setModal(null)}
           />
         }
         borderRadius={"20px"}
@@ -214,16 +215,12 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
       />
       {tableData.length > 4 && (
         <Box display="flex" justifyContent="center" mt={2}>
-          <Button
-            variant="text"
-            color="primary"
-            onClick={() => console.log("!@#$%")}
-          >
-            See all tasks
+          <Button variant="text" color="primary" onClick={handleRouteViewTasks}>
+            See all Tasks
           </Button>
         </Box>
       )}
-      <EmailModal open={openEmailModal} setOpen={setOpenEmailModal}/>
+      <EmailModal open={openEmailModal} setOpen={setOpenEmailModal} />
     </Box>
   );
 };
