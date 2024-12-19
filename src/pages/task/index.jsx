@@ -47,7 +47,7 @@ const Task = () => {
         value: status,
       },
     ];
-
+console.log(selectedTab,"####")
     if (Array.isArray(filterData) && filterData.length > 0) {
       const additionalFilters = filterData.map((value) => ({
         column: selectedTab == 0 ? "assignedTo" : "priority",

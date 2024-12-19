@@ -9,38 +9,6 @@ import { useState } from "react";
 import AppMenu from "./AppComponents/AppMenu";
 import AppPriorityItems from "./AppPriorityComponent";
 
-const styles = {
-  button: (isSelected) => ({
-    width: "155px",
-    height: "41px",
-    margin: "8px 7px",
-    borderRadius: "8px",
-    backgroundColor: isSelected ? "#E0EDFF" : "transparent",
-    color: isSelected ? "#2954E1" : "black",
-  }),
-  dividerVertical: {
-    mx: 2,
-    marginLeft: "-20px",
-  },
-  scrollContainer: {
-    width: "100%",
-    height: "18rem",
-    overflow: "scroll",
-    padding: "8px",
-  },
-  formControlLabel: {
-    display: "block",
-    mb: 1,
-  },
-  actionButton: {
-    borderRadius: "10px",
-    fontWeight: 500,
-    fontSize: "14px",
-    textTransform: "none",
-    width: "45%",
-  },
-};
-
 const FilterDrawer = ({
   anchorEl,
   setAnchorEl,
@@ -56,19 +24,19 @@ const FilterDrawer = ({
   };
 
   const handleApply = () => {
-    const appliedFilters = [];
+    // const appliedFilters = [];
 
-    Object.keys(checkedFilters).forEach((key) => {
-      if (checkedFilters[key]) {
-        appliedFilters.push(key);
-      }
-    });
-    setFilterData(appliedFilters);
-
-    setAnchorEl(null);
+    // Object.keys(checkedFilters).forEach((key) => {
+    //   if (checkedFilters[key]) {
+    //     appliedFilters.push(key);
+    //   }
+    // });
+    // console.log(checkedFilters, appliedFilters,"$$$$ %%%")
+    // setFilterData(appliedFilters);
+    // setAnchorEl(null);
   };
 
-  const toggleFilter = (idOrName) => {
+  const toggleFilter = (idOrName,key) => {
     const updatedCheckedFilters = { ...checkedFilters };
 
     if (updatedCheckedFilters[idOrName]) {
@@ -76,36 +44,51 @@ const FilterDrawer = ({
     } else {
       updatedCheckedFilters[idOrName] = true;
     }
-
     setCheckedFilters(updatedCheckedFilters);
   };
+
+  const priorityColors = {
+    High: "#E81616",
+    Normal: "#EB6C0B",
+    Low: "#DEC013",
+  };
+
   const renderOptions = () => {
-    const currentFilters = filterColumns[selectedTab]?.data || [];
-    return currentFilters.map((filter) => {
+    const currentFilters = filterColumns?.[selectedTab]?.data || [];
+    return currentFilters?.map((filter) => {
+      const color = priorityColors[filter?.name] || "#000";
       if (filterColumns[selectedTab]?.checked) {
+        console.log(checkedFilters[filter.name],"$$$$$$$$$$$$")
         return (
           <FormControlLabel
             key={filter.Id || filter.Name}
             control={
               <Checkbox
                 checked={!!checkedFilters[filter.Name]}
-                onChange={() => toggleFilter(filter.Name)}
+                onChange={() => toggleFilter(filter.Name, filterColumns[selectedTab]?.checked)}
               />
             }
             label={filter.Name}
-            sx={{ display: "block", mb: 1 }}
+            sx={{
+              display: "flex",
+              mb: 1,
+            }}
           />
         );
       }
 
       return (
+        <>
+         { console.log(checkedFilters[filter.name],"$$$$$$$$$$$$")}
+        
         <AppPriorityItems
           key={filter.name}
           name={filter.name}
-          color={filter.color}
+          color={color}
           isSelected={!!checkedFilters[filter.name]}
-          onClick={() => toggleFilter(filter.name)}
+          onClick={() => toggleFilter(filter.name, filterColumns[selectedTab]?.checked)}
         />
+        </>
       );
     });
   };
@@ -115,23 +98,23 @@ const FilterDrawer = ({
       <>
         <Box sx={{ display: "flex", height: "100%" }}>
           <Box sx={{ width: "100%" }}>
-            {Object.keys(filterColumns).map((tab) => (
+            {filterColumns?.map((tab, index) => (
               <Button
-                key={tab}
-                variant={selectedTab === tab ? "contained" : "none"}
-                color={selectedTab === tab ? "none" : "default"}
-                onClick={() => handleTabClick(tab)}
+                key={index}
+                variant={selectedTab === index ? "contained" : "none"}
+                color={selectedTab === index ? "none" : "default"}
+                onClick={() => handleTabClick(index)}
                 sx={{
                   width: "155px",
                   height: "41px",
                   margin: "8px 7px",
                   borderRadius: "8px",
                   backgroundColor:
-                    selectedTab === tab ? "#E0EDFF" : "transparent",
-                  color: selectedTab === tab ? "#2954E1" : "black",
+                    selectedTab === index ? "#E0EDFF" : "transparent",
+                  color: selectedTab === index ? "#2954E1" : "black",
                 }}
               >
-                {filterColumns[tab]?.label}
+                {tab?.label}
               </Button>
             ))}
           </Box>
@@ -174,7 +157,7 @@ const FilterDrawer = ({
             variant="contained"
             color="primary"
             onClick={handleApply}
-            disabled={Object.keys(checkedFilters).length === 0}
+            // disabled={Object.keys(checkedFilters).length === 0}
             sx={{
               borderRadius: "10px",
               fontWeight: 500,
@@ -194,7 +177,7 @@ const FilterDrawer = ({
     <AppMenu
       renderComponent={renderComponent()}
       anchorEl={anchorEl}
-      handleClose={() => handleClose()}
+      // handleClose={() => handleClose()}
       width="500px"
       borderRadius="10px"
     />
