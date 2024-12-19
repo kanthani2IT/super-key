@@ -27,11 +27,6 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
       }
     });
 
-    if (!isAnyCheckboxSelected) return;
-    const selectedFilters = selectedProperty.filter(
-      (_, index) => checkboxState[index]
-    );
-
     setAnchorEl(null);
   };
 
@@ -52,11 +47,11 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
       if (filterColumns[selectedTab]?.checked) {
         return (
           <FormControlLabel
-            key={filter.id || filter.name}
+            key={filter.Id || filter.Name}
             control={
               <Checkbox
-                checked={!!checkedFilters[filter.id || filter.name]}
-                onChange={() => toggleFilter(filter.id || filter.name)}
+                checked={!!checkedFilters[filter.Id || filter.Name]}
+                onChange={() => toggleFilter(filter.Id || filter.Name)}
               />
             }
             label={filter.Name}
