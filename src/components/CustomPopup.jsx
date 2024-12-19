@@ -148,7 +148,7 @@ const FilterDrawer = ({
             sx={{
               width: "100%",
               height: "18rem",
-              overflow: "scroll",
+              overflowY: "scroll",
               padding: "8px",
             }}
           >

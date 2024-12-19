@@ -78,10 +78,10 @@ const EmailModal = ({ open = false, setOpen }) => {
   );
 
   return (
-    <div>
+    <>
       <AppModal
         height="75vh"
-        width="42%"
+        width="44%"
         enableCard
         open={open}
         footer={footer()}
@@ -174,7 +174,7 @@ const EmailModal = ({ open = false, setOpen }) => {
           <RichTextEditorM />
         </>
       </AppModal>
-    </div>
+    </>
   );
 };
 
