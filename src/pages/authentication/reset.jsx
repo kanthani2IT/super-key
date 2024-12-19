@@ -1,8 +1,8 @@
-import { useParams } from 'react-router-dom';
+import { Grid2 } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Grid2 } from '@mui/material';
 import Logo from 'components/logo';
+import { useParams } from 'react-router-dom';
 import { CONFIRM_PASSWORD, EMAIL_VALIDATION, PASSWORD_NOTE, PASSWORD_VALIDATION } from 'utils/loginUtils';
 import AuthWrapper from './AuthWrapper';
 import ResetPassword from './auth-forms/ResetPassword';

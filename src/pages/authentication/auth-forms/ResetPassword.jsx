@@ -1,16 +1,10 @@
-import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
-
-// material-ui
 import { Button, FormHelperText, Grid } from '@mui/material';
-
-// third party
-import { Formik } from 'formik';
-
-// project imports
 import AnimateButton from 'components/@extended/AnimateButton';
 import { FormOutLinedField } from 'components/AppComponents/FormOutLinedField';
+import { Formik } from 'formik';
 import { useNewPassword, useRequestReset, useResetPassword } from 'hooks/useLogin';
+import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
 import { useAuthCookies } from 'utils/cookie';
 import { createValidationSchema } from 'utils/loginUtils';
 
