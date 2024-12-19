@@ -12,7 +12,9 @@ import AppTaskCard from "components/AppComponents/AppTaskCard";
 import { getStatus } from "components/AppComponents/CustomField";
 import FilterDrawer from "components/CustomPopup";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
+import { getPriorityColor } from "pages/dashboard/TaskTableDashBoard";
 import { useRef, useState } from "react";
+import { dateText, truncateText } from "utils/helpers";
 
 export default function TaskTable({
   isLoading,
@@ -39,6 +41,10 @@ export default function TaskTable({
   const [openEmailModal, setOpenEmailModal] = useState(false);
 
   const pageSize = 10;
+  const boldTextStyle = {
+    fontWeight: 700,
+    color: "#323C4D",
+  };
 
   const columns = [
     {
@@ -53,54 +59,76 @@ export default function TaskTable({
       field: "taskName",
       headerName: "Task Name",
       flex: 1,
+      renderCell: (row, indx) => {
+        return <Typography>{truncateText(row?.taskName)}</Typography>;
+      },
     },
     {
       field: "type",
       headerName: "Type",
       flex: 1,
+      align: "left",
+      renderCell: (row, indx) => {
+        return (
+          <Typography sx={boldTextStyle}>{truncateText(row?.type)}</Typography>
+        );
+      },
     },
     {
       field: "assignee",
       headerName: "Assigned to",
       flex: 1,
+      align: "left",
       renderCell: (row) => {
-        return <Typography>{row?.assignee?.name}</Typography>;
+        return <Typography>{truncateText(row?.assignee?.name)}</Typography>;
       },
     },
     {
       field: "dueDate",
       headerName: "Due Date",
       flex: 1,
+      align: "left",
+      renderCell: (row) => {
+        return <Typography>{dateText(row?.dueDate)}</Typography>;
+      },
     },
     {
       field: "priority",
       headerName: "Priority",
       flex: 1,
-    },
-
-    {
-      field: "status",
-      headerName: "Status",
-      align: "center",
-      renderCell: (row) => {
-        if (row?.status != null && row?.status != "null") {
-          return (
-            <Typography
-              color={row?.status === "ACTIVE" ? "success" : "error"}
-              display={"flex"}
-              alignItems={"center"}
-              justifyContent={"center"}
-              gap={0.5}
-            >
-              {/* <FiberManualRecordIcon fontSize="12px" /> */}
-              {row?.status}
-            </Typography>
-          );
-        } else {
-          return "-";
-        }
+      align: "left",
+      renderCell: (row, indx) => {
+        return (
+          <Typography sx={{ color: getPriorityColor(row.priority) }}>
+            {row?.priority}
+          </Typography>
+        );
       },
     },
+
+    // {
+    //   field: "status",
+    //   headerName: "Status",
+    //   align: "center",
+    //   renderCell: (row) => {
+    //     if (row?.status != null && row?.status != "null") {
+    //       return (
+    //         <Typography
+    //           color={row?.status === "ACTIVE" ? "success" : "error"}
+    //           display={"flex"}
+    //           alignItems={"center"}
+    //           justifyContent={"center"}
+    //           gap={0.5}
+    //         >
+    //           {/* <FiberManualRecordIcon fontSize="12px" /> */}
+    //           {row?.status}
+    //         </Typography>
+    //       );
+    //     } else {
+    //       return "-";
+    //     }
+    //   },
+    // },
     {
       field: "action",
       headerName: "Action",
@@ -180,8 +208,12 @@ export default function TaskTable({
         >
           View details
         </StyledMenuItem>
-        <StyledMenuItem onClick={() =>{setMenuAnchorEl(null)
-         setOpenEmailModal(true)}}>
+        <StyledMenuItem
+          onClick={() => {
+            setMenuAnchorEl(null);
+            setOpenEmailModal(true);
+          }}
+        >
           Send EMail
         </StyledMenuItem>
         <StyledMenuItem onClick={() => console.log("task")}>
@@ -196,7 +228,7 @@ export default function TaskTable({
   };
   const onClose = () => {
     setModal(null);
-    setOpenEmailModal(true)
+    setOpenEmailModal(true);
   };
   return (
     <Box sx={communityStyles.container(height)}>
@@ -228,7 +260,7 @@ export default function TaskTable({
           filterData={filterData}
         />
         <AppTable
-        hasCheckBox={false}
+          hasCheckBox={false}
           rowKey="taskId"
           isLoading={isLoading}
           columns={columns}
@@ -251,14 +283,14 @@ export default function TaskTable({
             /> */}
       <AppMenu
         anchorEl={modal}
-        handleClose={()=>setModal(null)}
+        handleClose={() => setModal(null)}
         renderComponent={
           <AppTaskCard
             roleName="Richard"
             role="Property Manager Name"
             type="GRT"
             number="+1 432 567 987"
-            onClose={()=>setModal(null)}
+            onClose={() => setModal(null)}
             handleSendEmail={onClose}
           />
         }

@@ -8,10 +8,11 @@ const LOGIN = {
 
 const COMMUNITY = {
   getAll: "/api/community",
-  createCommunity:(isFileUpload)=> `/api/community/createWithFile?isFileUpload=${isFileUpload}`,
+  createCommunity: (isFileUpload) =>
+    `/api/community/createWithFile?isFileUpload=${isFileUpload}`,
   getAllCommunityList: "/api/community/pagings",
   getCommunityList: (page, size, sortBy, orderBy, status, search) =>
-    `/api/community/pagings/CMCID?page=${page}&size=${1000}`,
+    `/api/community/pagings/CMCID?page=${page}&size=${1000}&sortBy=${sortBy}&orderBy=${orderBy}`,
   getUsers: "/api/veruna/users",
   getCommunityById: (id) => `/api/community/CMCID/communities/${id}`,
   updateCommunityById: (id) => `/api/community/update/${id}`,
