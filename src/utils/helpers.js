@@ -175,7 +175,8 @@ export const updatePriorityType = (data, newValue) => {
   });
 };
 export const dateText = (dueDate) => {
-  return dueDate.split("-").join("/");
+  const [day, month, year] = dueDate.split("-");
+  return `${year}/${month}/${day}`;
 };
 export const truncateText = (text, limit = 20) => {
   if (!text) return "";
