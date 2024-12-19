@@ -145,24 +145,27 @@ export const useAuth = () => {
   return !!token;
 };
 
-
 export const transformData = (data) => {
-  return data.map(item => {
+  return data.map((item) => {
     // Determine the property based on the column value
-    const type = item.column == 0 ? "assignedTo" : item.column == 1 ? "priority" : "status";
+    const type =
+      item.column == 0
+        ? "assignedTo"
+        : item.column == 1
+          ? "priority"
+          : "status";
 
     // Return the transformed object
     return {
-      column:type,
-      value: item.name=="0"?"active":item.name, // Rename 'name' to 'value'
+      column: type,
+      value: item.name == "0" ? "active" : item.name, // Rename 'name' to 'value'
       operator: item.operator, // Keep 'operator' as-is
     };
   });
 };
 
-
 export const updatePriorityType = (data, newValue) => {
-  return data.map(item => {
+  return data.map((item) => {
     if (item.operator === "contains") {
       // Update the value for type 'priority'
       return { ...item, name: newValue };
@@ -170,4 +173,11 @@ export const updatePriorityType = (data, newValue) => {
     // Return unchanged item for other types
     return item;
   });
+};
+export const dateText = (dueDate) => {
+  return dueDate.split("-").join("/");
+};
+export const truncateText = (text, limit = 20) => {
+  if (!text) return "";
+  return text.length > limit ? `${text.slice(0, limit)}...` : text;
 };

@@ -17,6 +17,7 @@ import AppTaskCard from "components/AppComponents/AppTaskCard";
 import { StyledMenuItem } from "components/StyledComponents";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import { dateText, truncateText } from "utils/helpers";
 
 const columns = [
   { field: "S.No", headerName: "S.No" },
@@ -28,17 +29,26 @@ const columns = [
   { field: "Action", headerName: "Action" },
 ];
 
-const getPriorityColor = (priority) => {
+export const getPriorityColor = (priority) => {
+  let color;
   switch (priority) {
     case "High":
-      return "red";
-    case "Medium":
-      return "orange";
+      color = "red";
+      break;
+    case "Normal":
+      color = "orange";
+      break;
     case "Low":
-      return "green";
+      color = "green";
+      break;
     default:
-      return "black";
+      color = "black";
   }
+
+  return {
+    color,
+    fontWeight: "bold",
+  };
 };
 
 const cellStyle = {
@@ -63,10 +73,7 @@ const lastCellStyle = {
   borderTopRightRadius: "8px",
   borderBottomRightRadius: "8px",
 };
-const truncateText = (text, limit = 50) => {
-  if (!text) return "";
-  return text.length > limit ? `${text.slice(0, limit)}...` : text;
-};
+
 const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
   const navigate = useNavigate();
   const anchorRef = useRef(null);
@@ -160,15 +167,13 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
                 displayedTasks.map((row, index) => (
                   <TableRow key={row.id || index} sx={cellStyle}>
                     <TableCell sx={firstCellStyle}>{index + 1}</TableCell>
-                    <TableCell>{truncateText(row.taskName, 70)}</TableCell>
+                    <TableCell>{truncateText(row.taskName, 20)}</TableCell>
                     <TableCell sx={boldTextStyle}>{row.type}</TableCell>
-                    <TableCell sx={boldTextStyle}>
-                      {row?.assignee?.name ?? "-"}
+                    <TableCell>
+                      {truncateText(row?.assignee?.name ?? "-")}
                     </TableCell>
-                    <TableCell>{row.dueDate}</TableCell>
-                    <TableCell
-                      style={{ color: getPriorityColor(row.priority) }}
-                    >
+                    <TableCell>{dateText(row.dueDate)}</TableCell>
+                    <TableCell sx={getPriorityColor(row.priority)}>
                       {row.priority}
                     </TableCell>
                     <TableCell sx={lastCellStyle}>

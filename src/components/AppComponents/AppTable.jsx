@@ -31,7 +31,7 @@ const AppTable = ({
   rowSecondKey = "id",
   selectedData = null,
   offboardData,
-  hasCheckBox=true,
+  hasCheckBox = true,
 }) => {
   const rowCount = rows.length;
   const numSelected = selected.length;
@@ -43,7 +43,6 @@ const AppTable = ({
       : [];
 
     onSelectionChange?.(newSelected);
-
   };
 
   const handleRowClick = (id, secondId) => {
@@ -70,19 +69,23 @@ const AppTable = ({
     <TableContainer sx={{ maxHeight: "calc(100vh - 300px)" }}>
       <Table stickyHeader>
         <TableHead>
-          <TableRow>{
-            hasCheckBox&&(<TableCell padding="checkbox">
-              <Checkbox
-                color="success"
-                indeterminate={numSelected > 0 && numSelected < rowCount}
-                checked={rowCount > 0 && numSelected === rowCount}
-                onChange={onSelectAllClick}
-              />
-            </TableCell>)
-          }
-            
+          <TableRow>
+            {hasCheckBox && (
+              <TableCell padding="checkbox">
+                <Checkbox
+                  color="success"
+                  indeterminate={numSelected > 0 && numSelected < rowCount}
+                  checked={rowCount > 0 && numSelected === rowCount}
+                  onChange={onSelectAllClick}
+                />
+              </TableCell>
+            )}
+
             {columns.map((col, index) => (
-              <TableCell key={col.field} align={index > 1 ? "center" : "left"}>
+              <TableCell
+                key={col.field}
+                align={index > 1 ? (col.align ?? "center") : "left"}
+              >
                 <BoldTypographyHeader>{col.headerName}</BoldTypographyHeader>
               </TableCell>
             ))}
@@ -112,25 +115,26 @@ const AppTable = ({
                   aria-checked={isSelected}
                   selected={isSelected}
                 >
-                {hasCheckBox&&(
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      color="success"
-                      padding="0px"
-                      checked={isSelected}
-                      onClick={() =>
-                        handleRowClick(
-                          row[rowKey],
-                          // row[`communityManager`][`managerId`]
-                        )
-                      }
-                    />
-                  </TableCell>)}
+                  {hasCheckBox && (
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        color="success"
+                        padding="0px"
+                        checked={isSelected}
+                        onClick={() =>
+                          handleRowClick(
+                            row[rowKey]
+                            // row[`communityManager`][`managerId`]
+                          )
+                        }
+                      />
+                    </TableCell>
+                  )}
                   {columns.map((col, idx) => (
                     <TableCell
                       key={col.field}
                       sx={customStyles[col.field]}
-                      align={idx > 1 ? "center" : "left"}
+                      align={idx > 1 ? (col.align ?? "center") : "left"}
                     >
                       {col.renderCell
                         ? col.renderCell(row, index)
