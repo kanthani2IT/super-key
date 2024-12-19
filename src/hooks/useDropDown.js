@@ -1,5 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "api";
+import { useSnackbar } from "components/AppComponents/SnackBarProvider";
+import { MESSAGE, SEVERITY } from "utils/message";
 
 // Custom hook for Locations Query
 export const useLocationsQuery = (input) =>
@@ -150,3 +152,28 @@ export const useVerunaPriorityQuery = (search) =>
       console.error("Error fetching types:", error);
     },
   });
+
+// Mark Task as Completed
+export const useMarkTaskAsCompleted = (successHandler) => {
+  const { updateSnackbar } = useSnackbar();
+  const mutation = useMutation({
+    mutationKey: ["markTaskCompletedById"],
+    mutationFn: ({ id }) => api.task.markTaskCompletedById(id),
+    onSuccess: (data) => {
+      successHandler?.();
+      updateSnackbar({
+        message: MESSAGE.markTaskCompletedSuccess,
+        severity: SEVERITY.success,
+      });
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.token || "An error occurred.";
+      console.error("Mutation error:", errorMessage);
+      updateSnackbar({
+        message: errorMessage,
+        severity: SEVERITY.error,
+      });
+    },
+  });
+  return mutation;
+};

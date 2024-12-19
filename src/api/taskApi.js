@@ -1,4 +1,4 @@
-import { getRequest, postRequest } from "http/request";
+import { getRequest, postRequest, putRequest } from "http/request";
 import { TASK } from "utils/endpoints";
 import { addQueryParams } from "utils/helpers";
 
@@ -54,10 +54,24 @@ const createTask = async (payload) => {
   }
 };
 
+const markTaskCompletedById = async (id, body) => {
+  try {
+    const requestUrl = addQueryParams(TASK.markTaskCompletedById(id));
+
+    const response = await putRequest(requestUrl, body);
+
+    return response;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw error;
+  }
+};
+
 export const taskApi = {
   getAllStatus,
   getAllTypes,
   getAllPriorities,
   getAllContacts,
   createTask,
+  markTaskCompletedById,
 };

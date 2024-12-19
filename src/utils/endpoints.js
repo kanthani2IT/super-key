@@ -8,7 +8,8 @@ const LOGIN = {
 
 const COMMUNITY = {
   getAll: "/api/community",
-  createCommunity:(isFileUpload)=> `/api/community/createWithFile?isFileUpload=${isFileUpload}`,
+  createCommunity: (isFileUpload) =>
+    `/api/community/createWithFile?isFileUpload=${isFileUpload}`,
   getAllCommunityList: "/api/community/pagings",
   getCommunityList: (page, size, sortBy, orderBy, status, search) =>
     `/api/community/pagings/CMCID?page=${page}&size=${1000}`,
@@ -35,6 +36,7 @@ const TASK = {
   getPriority: "/api/tasks/priority",
   getContacts: "/api/tasks/contacts",
   createTask: "/api/tasks",
+  markTaskCompletedById: (id) => `/api/tasks/${id}/complete`,
 };
 const DASHBOARD = {
   getActiveTask: "/api/tasks",

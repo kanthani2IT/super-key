@@ -13,7 +13,11 @@ import {
   useGetActiveAndCompletedTaskByFilter,
   useGetDashboardMetrics,
 } from "hooks/useDashboard";
-import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
+import {
+  useMarkTaskAsCompleted,
+  useVerunaPriorityQuery,
+  useVerunaUsersQuery,
+} from "hooks/useDropDown";
 import { ColorBox } from "pages/component-overview/color";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
@@ -48,6 +52,7 @@ export default function DashboardDefault() {
       checked: false,
     },
   ];
+
   const initialTab = Object.keys(filterColumns)[0] || "Assigned to";
   const [selectedFilter, setSelectedFilter] = useState(initialTab);
   const [open, setOpen] = useState(false);
@@ -64,9 +69,6 @@ export default function DashboardDefault() {
     totalPremium,
     upcomingRenewals,
   } = dashboardData?.data ?? {};
-  console.log(dashboardData, "$$$$");
-
-  console.log("assigneToData", assigneToData);
 
   const {
     data: taskData,
@@ -140,7 +142,16 @@ export default function DashboardDefault() {
     };
     fetchActiveAndCompletedTaskByFilter(reqBody);
   };
-
+  const successHandler = () => {
+    fetchActiveAndCompletedTaskByFilter();
+  };
+  const handleTaskCompletion = (taskPayload) => {
+    updateTaskComplete({
+      id: taskPayload.taskId,
+    });
+  };
+  const { mutate: updateTaskComplete, isLoading: isCompleting } =
+    useMarkTaskAsCompleted(successHandler);
   return (
     <AppGrid container rowSpacing={3} columnSpacing={2}>
       <AppGrid size={{ xs: 12 }}>
@@ -264,8 +275,6 @@ export default function DashboardDefault() {
           isFilter
           showSecondary={false}
           secondaryAction={() => navigate("/tasks")}
-          // selectedProperty={assigneToData}
-          // selectedPriority={priorityData}
           setFilterData={setFilterData}
           filterColumns={filterColumns}
           selectedTab={selectedFilter}
@@ -279,6 +288,8 @@ export default function DashboardDefault() {
           <TaskTableDashBoard
             tableData={taskData?.data?.content || []}
             loading={isTaskLoading}
+            selectedTab={selectedTab}
+            payload={handleTaskCompletion}
           ></TaskTableDashBoard>
         </MainCard>
       </AppGrid>

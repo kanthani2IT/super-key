@@ -67,21 +67,36 @@ const truncateText = (text, limit = 50) => {
   if (!text) return "";
   return text.length > limit ? `${text.slice(0, limit)}...` : text;
 };
-const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
+const TaskTableDashBoard = ({
+  tableData = [],
+  loading = false,
+  selectedTab,
+  payload,
+}) => {
   const anchorRef = useRef(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [menuRowData, setMenuRowData] = useState(null);
-  const [openEmailModal, setOpenEmailModal]=useState(false)
+  const [openEmailModal, setOpenEmailModal] = useState(false);
   const [modal, setModal] = useState(null);
   const [viewDetails, setViewDetails] = useState(null);
-  const handleSendEmail=()=>{
-    setOpenEmailModal(true)
-    setModal(null)
-    setMenuAnchorEl(null)
-  }
+  const handleSendEmail = () => {
+    setOpenEmailModal(true);
+    setModal(null);
+    setMenuAnchorEl(null);
+  };
   const renderPriorityComponent = (row, onClose) => {
     const handleOptionClick = (option) => {
-      console.log(`${option} clicked:`, row);
+      if (option === "Mark as completed") {
+        const taskPayload = {
+          taskId: menuRowData?.taskId,
+          description: menuRowData?.taskName,
+          status: "COMPLETED",
+          priority: menuRowData?.priority?.toUpperCase(),
+          assignedTo: menuRowData?.assignee?.id,
+        };
+        console.log("!@#$%^&*:", payload);
+        payload(taskPayload);
+      }
       onClose();
     };
 
@@ -92,22 +107,22 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
             console.log(e.currentTarget, "currentTarget");
             setModal(e.currentTarget);
             setViewDetails(row);
-            setMenuAnchorEl(null)
           }}
           ref={anchorRef}
         >
-          View Details
+          View details
         </StyledMenuItem>
-        <StyledMenuItem onClick={handleSendEmail}>
-          Send Email
-        </StyledMenuItem>
-        <StyledMenuItem onClick={() => handleOptionClick("Mark as Completed")}>
-          Mark as Completed
-        </StyledMenuItem>
+        <StyledMenuItem onClick={handleSendEmail}>Send Email</StyledMenuItem>
+        {selectedTab == "active" && (
+          <StyledMenuItem
+            onClick={() => handleOptionClick("Mark as completed")}
+          >
+            Mark as completed
+          </StyledMenuItem>
+        )}
       </>
     );
   };
-  
 
   const [showAll, setShowAll] = useState(false);
   const handleMenuOpen = (event, row) => {
@@ -121,9 +136,7 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
     setMenuAnchorEl(null);
     setMenuRowData(null);
   };
-  const onclose=()=>{
-
-  }
+  const onclose = () => {};
   return (
     <Box>
       <TableContainer>
@@ -157,7 +170,7 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
             <TableBody>
               {displayedTasks.length > 0 ? (
                 displayedTasks.map((row, index) => (
-                  <TableRow key={row.id || index} sx={cellStyle}>
+                  <TableRow style={cellStyle} key={row.id || index}>
                     <TableCell sx={firstCellStyle}>{index + 1}</TableCell>
                     <TableCell>{truncateText(row.taskName, 70)}</TableCell>
                     <TableCell sx={boldTextStyle}>{row.type}</TableCell>
@@ -166,7 +179,10 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
                     </TableCell>
                     <TableCell>{row.dueDate}</TableCell>
                     <TableCell
-                      style={{ color: getPriorityColor(row.priority) }}
+                      style={{
+                        color: getPriorityColor(row.priority),
+                        fontWeight: 600,
+                      }}
                     >
                       {row.priority}
                     </TableCell>
@@ -198,7 +214,7 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
             type="GRT"
             number="+1 432 567 987"
             handleSendEmail={handleSendEmail}
-            onClose={()=>setModal(null)}
+            onClose={() => setModal(null)}
           />
         }
         borderRadius={"20px"}
@@ -223,7 +239,7 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
           </Button>
         </Box>
       )}
-      <EmailModal open={openEmailModal} setOpen={setOpenEmailModal}/>
+      <EmailModal open={openEmailModal} setOpen={setOpenEmailModal} />
     </Box>
   );
 };
