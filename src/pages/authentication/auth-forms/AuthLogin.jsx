@@ -76,11 +76,11 @@ export default function AuthLogin(props) {
             <AppGrid item size={{ xs: 12 }}>
               <Stack
                 direction="row"
-                justifyContent="space-between"
+                justifyContent="end"
                 alignItems="center"
                 spacing={2}
               >
-                <FormControlLabel
+                {/* <FormControlLabel
                   control={
                     <Checkbox
                       checked={checked}
@@ -96,7 +96,7 @@ export default function AuthLogin(props) {
                       Remember Password
                     </Typography>
                   }
-                />
+                /> */}
                 <Link
                   variant="h7"
                   component={RouterLink}
