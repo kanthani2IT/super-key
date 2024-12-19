@@ -122,15 +122,15 @@ export const useOffBoardCommunity = () => {
 
   const mutation = useMutation({
     mutationKey: ["community-offboarding"],
-    mutationFn: async (payload) => {
+    mutationFn: async ({payload, msg}) => {
       // const { communityId, cmcId } = payload;
       const response = await api.community.offBoardCommunity(payload);
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log("Community off-boarded successfully:", data);
       updateSnackbar({
-        message: MESSAGE.communityOffboardedSuccess,
+        message: typeof variables.msg === 'number' ? `You Have Off-boarded the ${variables.msg} communities successfully !` : `You Have Off-boarded the ${variables.msg} community successfully !`,
         severity: SEVERITY.success,
       });
     },
