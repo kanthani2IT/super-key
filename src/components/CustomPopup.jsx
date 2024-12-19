@@ -16,34 +16,48 @@ const FilterDrawer = ({
   setFilterData,
   selectedTab,
   setSelectedTab,
-  operator="equals",
-  filterData=[],
+  operator = "equals",
+  filterData = [],
 }) => {
   const [checkedFilters, setCheckedFilters] = useState(filterData);
-console.log(filterData,"$$$$ cilter daa")
+  const [selectedName, setSelectedName] = useState(null);
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
   };
 
   const handleApply = () => {
-    setFilterData(checkedFilters);
+    const checkingStatus = checkedFilters.map((item) => {
+      if (item?.column === "status") {
+        return filterData.find((el) => el.column === "status");
+      } else return item;
+    });
+    setFilterData(checkingStatus);
     setAnchorEl(null);
+  };
+
+  const handlePriorityColor = (name) => {
+    const colorName = selectedName === name ? null : name;
+    setSelectedName(colorName);
   };
 
   const toggleFilter = (idOrName, key) => {
     const updatedCheckedFilters = [...checkedFilters];
-  
+
     // Check if the filter already exists
     const existingIndex = updatedCheckedFilters.findIndex(
       (filter) => filter.name === idOrName
     );
-  
+
     if (existingIndex > -1) {
       // Remove the filter if it exists
       updatedCheckedFilters.splice(existingIndex, 1);
     } else {
       // Add the new filter
-      updatedCheckedFilters.push({ column: key, name: idOrName,operator:operator  });
+      updatedCheckedFilters.push({
+        column: key,
+        name: idOrName,
+        operator: operator,
+      });
     }
     setCheckedFilters(updatedCheckedFilters);
   };
@@ -54,7 +68,7 @@ console.log(filterData,"$$$$ cilter daa")
     Low: "#DEC013",
   };
 
-  console.log(selectedTab,"$$$ selected tab2")
+  console.log(selectedTab, "$$$ selected tab2");
   const renderOptions = () => {
     const currentFilters = filterColumns?.[selectedTab]?.data || [];
     return currentFilters?.map((filter) => {
@@ -65,8 +79,10 @@ console.log(filterData,"$$$$ cilter daa")
             key={filter.Id || filter.Name}
             control={
               <Checkbox
-                checked={checkedFilters.some((item) => item.name === filter.Name)}
-                onChange={() => toggleFilter(filter.Name,selectedTab)}
+                checked={checkedFilters.some(
+                  (item) => item.name === filter.Name
+                )}
+                onChange={() => toggleFilter(filter.Name, selectedTab)}
               />
             }
             label={filter.Name}
@@ -80,17 +96,24 @@ console.log(filterData,"$$$$ cilter daa")
 
       return (
         <>
-        <AppPriorityItems
-          key={filter.name}
-          name={filter.name}
-          color={color}
-          isSelected={checkedFilters.some((item) => item.name === filter.name)}
-          onClick={() => toggleFilter(filter.name, selectedTab)}
-        />
+          <AppPriorityItems
+            key={filter.name}
+            name={filter.name}
+            color={color}
+            isSelected={checkedFilters.some(
+              (item) => item.name === filter.name
+            )}
+            selectedName={selectedName}
+            onClick={() => {
+              toggleFilter(filter.name, selectedTab);
+              handlePriorityColor(filter.name);
+            }}
+          />
         </>
       );
     });
   };
+
   const renderComponent = () => {
     return (
       <>
