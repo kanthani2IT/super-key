@@ -125,7 +125,7 @@ console.log(filterData,"$$$$ cilter daa")
             sx={{
               width: "100%",
               height: "18rem",
-              overflow: "scroll",
+              overflowY: "scroll",
               padding: "8px",
             }}
           >
