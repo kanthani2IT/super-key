@@ -48,9 +48,7 @@ export default function DashboardDefault() {
       checked: false,
     },
   ];
-  console.log(filterColumns, "@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-  console.log(assigneToData, "assigneToData");
-  const initialTab = Object.keys(filterColumns)[0];
+  const initialTab = Object.keys(filterColumns)[0] || "Assigned to";
   const [selectedFilter, setSelectedFilter] = useState(initialTab);
   const [open, setOpen] = useState(false);
   const [filterData, setFilterData] = useState("equal");
@@ -102,6 +100,9 @@ export default function DashboardDefault() {
   };
   useEffect(() => {
     fetchTaskData();
+    if (filterColumns?.length > 0) {
+      setSelectedFilter(0);
+    }
   }, [page, filterData]);
   console.log(selectedFilter, "filterDara");
   const fetchTaskData = () => {
@@ -122,11 +123,11 @@ export default function DashboardDefault() {
     };
     fetchActiveAndCompletedTaskByFilter(reqBody);
   };
+
   const fetchData = (status) => {
     let reqBody = {
       sort: "createdAt",
       orderBy: "desc",
-      id: "0017x00000kF1kTAAS",
       page: 1,
       size: 10,
       data: [

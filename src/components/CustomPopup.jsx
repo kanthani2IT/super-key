@@ -20,7 +20,7 @@ const FilterDrawer = ({
   const [checkedFilters, setCheckedFilters] = useState({});
 
   const handleTabClick = (tab) => {
-    setSelectedTab(0);
+    setSelectedTab(tab);
   };
 
   const handleApply = () => {
@@ -32,12 +32,6 @@ const FilterDrawer = ({
       }
     });
     setFilterData(appliedFilters);
-
-    // if (!isAnyCheckboxSelected) return;
-    // const selectedFilters = selectedProperty.filter(
-    //   (_, index) => checkboxState[index]
-    // );
-
     setAnchorEl(null);
   };
 
@@ -74,7 +68,10 @@ const FilterDrawer = ({
               />
             }
             label={filter.Name}
-            sx={{ display: "block", mb: 1 }}
+            sx={{
+              display: "flex",
+              mb: 1,
+            }}
           />
         );
       }
@@ -96,20 +93,20 @@ const FilterDrawer = ({
       <>
         <Box sx={{ display: "flex", height: "100%" }}>
           <Box sx={{ width: "100%" }}>
-            {filterColumns?.map((tab) => (
+            {filterColumns?.map((tab, index) => (
               <Button
-                key={tab}
-                variant={selectedTab === tab ? "contained" : "none"}
-                color={selectedTab === tab ? "none" : "default"}
-                onClick={() => handleTabClick(tab)}
+                key={index}
+                variant={selectedTab === index ? "contained" : "none"}
+                color={selectedTab === index ? "none" : "default"}
+                onClick={() => handleTabClick(index)}
                 sx={{
                   width: "155px",
                   height: "41px",
                   margin: "8px 7px",
                   borderRadius: "8px",
                   backgroundColor:
-                    selectedTab === tab ? "#E0EDFF" : "transparent",
-                  color: selectedTab === tab ? "#2954E1" : "black",
+                    selectedTab === index ? "#E0EDFF" : "transparent",
+                  color: selectedTab === index ? "#2954E1" : "black",
                 }}
               >
                 {tab?.label}
@@ -155,7 +152,7 @@ const FilterDrawer = ({
             variant="contained"
             color="primary"
             onClick={handleApply}
-            disabled={Object.keys(checkedFilters).length === 0}
+            // disabled={Object.keys(checkedFilters).length === 0}
             sx={{
               borderRadius: "10px",
               fontWeight: 500,

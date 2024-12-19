@@ -173,6 +173,8 @@ function MainCard(
             setAnchorEl={setAnchorEl}
             filterColumns={filterColumns}
             selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
+            setFilterData={setFilterData}
           />
           {children}
         </CardContent>
