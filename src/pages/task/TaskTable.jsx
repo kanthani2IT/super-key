@@ -39,6 +39,7 @@ export default function TaskTable({
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(null);
   const [openEmailModal, setOpenEmailModal] = useState(false);
+  const [row, setRow] = useState({});
 
   const pageSize = 10;
   const boldTextStyle = {
@@ -143,7 +144,9 @@ export default function TaskTable({
             // }}
             onClick={(e) => {
               e.stopPropagation();
+
               setMenuAnchorEl(e.currentTarget);
+              setRow(row);
             }}
             color="secondary"
           />
@@ -195,8 +198,10 @@ export default function TaskTable({
       </>
     );
   };
-
-  const renderPriorityComponent = (e) => {
+  const onHandleComplete = () => {
+    console.log(row, "row");
+  };
+  const renderPriorityComponent = (e, row) => {
     return (
       <>
         <StyledMenuItem
@@ -216,7 +221,7 @@ export default function TaskTable({
         >
           Send EMail
         </StyledMenuItem>
-        <StyledMenuItem onClick={() => console.log("task")}>
+        <StyledMenuItem onClick={onHandleComplete}>
           Mark as completed
         </StyledMenuItem>
       </>
@@ -286,9 +291,9 @@ export default function TaskTable({
         handleClose={() => setModal(null)}
         renderComponent={
           <AppTaskCard
-            roleName="Richard"
+            roleName={row?.taskName}
             role="Property Manager Name"
-            type="GRT"
+            type={row?.community?.name}
             number="+1 432 567 987"
             onClose={() => setModal(null)}
             handleSendEmail={onClose}
