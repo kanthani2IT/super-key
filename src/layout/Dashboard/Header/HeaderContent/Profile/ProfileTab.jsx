@@ -15,11 +15,7 @@ import { logoutUser } from 'utils/helpers';
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
 export default function ProfileTab() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  
-  const handleListItemClick = (index) => {
-    setSelectedIndex(index);
-  };
+
   const handleLogout = () => {
     logoutUser()
 
@@ -32,13 +28,13 @@ export default function ProfileTab() {
 
   return (
     <List component="nav" sx={{ p: 0, '& .MuiListItemIcon-root': { minWidth: 32 } }}>
-      <ListItemButton selected={selectedIndex === 0} onClick={handleReset}>
+      <ListItemButton onClick={handleReset}>
         <ListItemIcon>
           <EditOutlined />
         </ListItemIcon>
         <ListItemText primary="Reset Password" />
       </ListItemButton>
-      <ListItemButton selected={selectedIndex === 2} onClick={handleLogout}>
+      <ListItemButton onClick={handleLogout}>
         <ListItemIcon>
           <LogoutOutlined />
         </ListItemIcon>
