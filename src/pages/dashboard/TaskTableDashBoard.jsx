@@ -180,7 +180,7 @@ const TaskTableDashBoard = ({ tableData = [], loading = false }) => {
         handleClose={() => setModal(null)}
         renderComponent={
           <AppTaskCard
-            roleName={viewDetails?.assignTo}
+            roleName={viewDetails?.assignee?.name}
             role="Property Manager Name"
             type="GRT"
             number="+1 432 567 987"

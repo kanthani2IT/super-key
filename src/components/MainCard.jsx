@@ -36,9 +36,13 @@ function MainCard(
     isFilter,
     noStyles = false,
     onFilterClick,
-    selectedProperty,
-    selectedPriority,
+    // selectedProperty,
+    // selectedPriority,
     setSelectedProperties,
+    filterColumns,
+    setFilterData,
+    selectedTab,
+    setSelectedTab,
     ...others
   },
   ref
@@ -47,32 +51,9 @@ function MainCard(
   boxShadow = theme.palette.mode === "dark" ? boxShadow || true : boxShadow;
   const [openFilter, setOpenFilter] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  console.log(selectedPriority, selectedProperty, "selectd");
-  // const colors = {
-  //   0: "#E81616",
-  //   1: "#EB6C0B",
-  //   2: "#DEC013",
-  // };
 
-  // Object.keys(selectedPriority).forEach((key) => {
-  //   selectedPriority[key] = {
-  //     ...selectedPriority[key],
-  //     color: colors[key],
-  //   };
-  // });
-  const filterColumns = [
-    {
-      label: "Properties",
+  console.log(filterColumns, "!@#$%^&*(");
 
-      data: selectedProperty,
-      checked: true,
-    },
-    {
-      label: "Priority",
-      data: selectedPriority,
-      checked: false,
-    },
-  ];
   const handleFilterButtonClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -191,6 +172,9 @@ function MainCard(
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
             filterColumns={filterColumns}
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
+            setFilterData={setFilterData}
           />
           {children}
         </CardContent>

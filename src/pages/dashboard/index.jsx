@@ -7,25 +7,19 @@ import MainCard from "components/MainCard";
 
 // assets
 import AppGrid from "components/AppComponents/AppGrid";
-import AppModal from "components/AppComponents/AppModal";
 import AppSkeletonWrapper from "components/AppComponents/AppSkeletonWrapper";
 import MainTabs from "components/MainTabs";
-import { useGetUsers } from "hooks/useCommunity";
 import {
   useGetActiveAndCompletedTaskByFilter,
   useGetDashboardMetrics,
 } from "hooks/useDashboard";
+import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
 import { ColorBox } from "pages/component-overview/color";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import UserTable from "../community/CommunityTable";
-import RenewalPieChart from "./RenewalPieChart";
-import TaskTable from "./TaskTable";
 import { transformedRenewalData } from "utils/helpers";
-import CustomUploadTable from "components/AppComponents/CustomUploadTable";
-import Columns from "./TaskTableDashBoard";
+import RenewalPieChart from "./RenewalPieChart";
 import TaskTableDashBoard from "./TaskTableDashBoard";
-import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 const tabs = [
@@ -34,8 +28,30 @@ const tabs = [
 ];
 
 export default function DashboardDefault() {
+  const { data: assigneToData, isLoading: assigneToLoading } =
+    useVerunaUsersQuery();
+
   const [selectedTab, setSelectedTab] = useState(tabs[0].value);
+  const [page, setPage] = useState(1);
+
+  const { data: priorityData } = useVerunaPriorityQuery();
+  const filterColumns = [
+    {
+      label: "Assigned to",
+      data: assigneToData,
+      checked: true,
+    },
+    {
+      label: "Priority",
+
+      data: priorityData,
+      checked: false,
+    },
+  ];
+  const initialTab = Object.keys(filterColumns)[0] || "Assigned to";
+  const [selectedFilter, setSelectedFilter] = useState(initialTab);
   const [open, setOpen] = useState(false);
+  const [filterData, setFilterData] = useState("equal");
   const navigate = useNavigate();
   //Todo Users
   // const { data, isLoading } = useGetUsers();
@@ -48,10 +64,8 @@ export default function DashboardDefault() {
     totalPremium,
     upcomingRenewals,
   } = dashboardData?.data ?? {};
-  console.log(dashboardData, "$$$$")
-  const { data: assigneToData, isLoading: assigneToLoading } =
-    useVerunaUsersQuery();
-  const { data: priorityData } = useVerunaPriorityQuery();
+  console.log(dashboardData, "$$$$");
+
   console.log("assigneToData", assigneToData);
 
   const {
@@ -84,12 +98,36 @@ export default function DashboardDefault() {
       return updatedList;
     });
   };
+  useEffect(() => {
+    fetchTaskData();
+    if (filterColumns?.length > 0) {
+      setSelectedFilter(0);
+    }
+  }, [page, filterData]);
+  console.log(selectedFilter, "filterDara");
+  const fetchTaskData = () => {
+    const dataFilters = Array.isArray(filterData)
+      ? filterData.map((value) => ({
+          column: selectedFilter === 0 ? "status" : "assignedTo",
+          operator: "equals",
+          value: value,
+        }))
+      : [];
+
+    let reqBody = {
+      sort: "createdAt",
+      orderBy: "desc",
+      page: page,
+      size: 10,
+      data: dataFilters,
+    };
+    fetchActiveAndCompletedTaskByFilter(reqBody);
+  };
 
   const fetchData = (status) => {
     let reqBody = {
       sort: "createdAt",
       orderBy: "desc",
-      id: "0017x00000kF1kTAAS",
       page: 1,
       size: 10,
       data: [
@@ -199,7 +237,9 @@ export default function DashboardDefault() {
         <AppSkeletonWrapper loading={isWidgetLoading} height={"370px"}>
           <MainCard title={"Upcoming Renewals"}>
             <AppGrid size={{ xs: 12 }} justifyItems={"center"}>
-              <RenewalPieChart chartData={transformedRenewalData(upcomingRenewals) ?? []} />
+              <RenewalPieChart
+                chartData={transformedRenewalData(upcomingRenewals) ?? []}
+              />
             </AppGrid>
           </MainCard>
         </AppSkeletonWrapper>
@@ -224,8 +264,12 @@ export default function DashboardDefault() {
           isFilter
           showSecondary={false}
           secondaryAction={() => navigate("/tasks")}
-          selectedProperty={assigneToData}
-          selectedPriority={priorityData}
+          // selectedProperty={assigneToData}
+          // selectedPriority={priorityData}
+          setFilterData={setFilterData}
+          filterColumns={filterColumns}
+          selectedTab={selectedFilter}
+          setSelectedTab={setSelectedFilter}
         >
           <MainTabs
             handleChange={handleChange}

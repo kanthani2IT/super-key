@@ -9,9 +9,14 @@ import { useState } from "react";
 import AppMenu from "./AppComponents/AppMenu";
 import AppPriorityItems from "./AppPriorityComponent";
 
-const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
-  const initialTab = Object.keys(filterColumns)[0];
-  const [selectedTab, setSelectedTab] = useState(initialTab);
+const FilterDrawer = ({
+  anchorEl,
+  setAnchorEl,
+  filterColumns,
+  setFilterData,
+  selectedTab,
+  setSelectedTab,
+}) => {
   const [checkedFilters, setCheckedFilters] = useState({});
 
   const handleTabClick = (tab) => {
@@ -26,7 +31,7 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
         appliedFilters.push(key);
       }
     });
-
+    setFilterData(appliedFilters);
     setAnchorEl(null);
   };
 
@@ -41,21 +46,32 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
 
     setCheckedFilters(updatedCheckedFilters);
   };
+
+  const priorityColors = {
+    High: "#E81616",
+    Normal: "#EB6C0B",
+    Low: "#DEC013",
+  };
+
   const renderOptions = () => {
-    const currentFilters = filterColumns[selectedTab]?.data || [];
-    return currentFilters.map((filter) => {
+    const currentFilters = filterColumns?.[selectedTab]?.data || [];
+    return currentFilters?.map((filter) => {
+      const color = priorityColors[filter?.name] || "#000";
       if (filterColumns[selectedTab]?.checked) {
         return (
           <FormControlLabel
             key={filter.Id || filter.Name}
             control={
               <Checkbox
-                checked={!!checkedFilters[filter.Id || filter.Name]}
-                onChange={() => toggleFilter(filter.Id || filter.Name)}
+                checked={!!checkedFilters[filter.Name]}
+                onChange={() => toggleFilter(filter.Name)}
               />
             }
             label={filter.Name}
-            sx={{ display: "block", mb: 1 }}
+            sx={{
+              display: "flex",
+              mb: 1,
+            }}
           />
         );
       }
@@ -64,7 +80,7 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
         <AppPriorityItems
           key={filter.name}
           name={filter.name}
-          color={filter.color}
+          color={color}
           isSelected={!!checkedFilters[filter.name]}
           onClick={() => toggleFilter(filter.name)}
         />
@@ -77,23 +93,23 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
       <>
         <Box sx={{ display: "flex", height: "100%" }}>
           <Box sx={{ width: "100%" }}>
-            {Object.keys(filterColumns).map((tab) => (
+            {filterColumns?.map((tab, index) => (
               <Button
-                key={tab}
-                variant={selectedTab === tab ? "contained" : "none"}
-                color={selectedTab === tab ? "none" : "default"}
-                onClick={() => handleTabClick(tab)}
+                key={index}
+                variant={selectedTab === index ? "contained" : "none"}
+                color={selectedTab === index ? "none" : "default"}
+                onClick={() => handleTabClick(index)}
                 sx={{
                   width: "155px",
                   height: "41px",
                   margin: "8px 7px",
                   borderRadius: "8px",
                   backgroundColor:
-                    selectedTab === tab ? "#E0EDFF" : "transparent",
-                  color: selectedTab === tab ? "#2954E1" : "black",
+                    selectedTab === index ? "#E0EDFF" : "transparent",
+                  color: selectedTab === index ? "#2954E1" : "black",
                 }}
               >
-                {filterColumns[tab]?.label}
+                {tab?.label}
               </Button>
             ))}
           </Box>
@@ -136,7 +152,7 @@ const FilterDrawer = ({ anchorEl, setAnchorEl, filterColumns }) => {
             variant="contained"
             color="primary"
             onClick={handleApply}
-            disabled={Object.keys(checkedFilters).length === 0}
+            // disabled={Object.keys(checkedFilters).length === 0}
             sx={{
               borderRadius: "10px",
               fontWeight: 500,

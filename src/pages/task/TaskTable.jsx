@@ -11,7 +11,6 @@ import AppTaskCard from "components/AppComponents/AppTaskCard";
 import { getStatus } from "components/AppComponents/CustomField";
 import FilterDrawer from "components/CustomPopup";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
-import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
 import { useRef, useState } from "react";
 const options = [
   { value: "ACTIVE", label: "Status: Active" },
@@ -30,6 +29,10 @@ export default function TaskTable({
   handleChangePage,
   page,
   selectedRows = [],
+  setFilterData,
+  filterColumns,
+  selectedTab,
+  setSelectedTab,
 }) {
   const anchorRef = useRef(null);
   const theme = useTheme();
@@ -37,32 +40,24 @@ export default function TaskTable({
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(null);
-  const { data: assigneToData, isLoading: assigneToLoading } =
-    useVerunaUsersQuery();
-  const { data: priorityData } = useVerunaPriorityQuery();
+  // const { data: assigneToData, isLoading: assigneToLoading } =
+  //   useVerunaUsersQuery();
+  // const { data: priorityData } = useVerunaPriorityQuery();
 
-  const filterColumns = [
-    {
-      label: "Properties",
-      data: [
-        { id: 1, data: "Desert Springs" },
-        { id: 2, data: "Rose Dale" },
-        { id: 3, data: "Rose Dal" },
-        { id: 4, data: "Oak Ridge Estates" },
-        { id: 5, data: "Mountain Vista" },
-      ],
-      checked: true,
-    },
-    {
-      label: "Priority",
-      data: [
-        { name: "High", color: "#E81616" },
-        { name: "Medium", color: "#EB6C0B" },
-        { name: "Low", color: "#DEC013" },
-      ],
-      checked: false,
-    },
-  ];
+  // const filterColumns = [
+  //   {
+  //     label: "Properties",
+  //     data: assigneToData,
+  //     checked: true,
+  //   },
+  //   {
+  //     label: "Priority",
+
+  //     data: priorityData,
+  //     checked: false,
+  //   },
+  // ];
+
   const pageSize = 10;
 
   const columns = [
@@ -85,9 +80,12 @@ export default function TaskTable({
       flex: 1,
     },
     {
-      field: "assignee.name",
+      field: "assignee",
       headerName: "Assigned to",
       flex: 1,
+      renderCell: (row) => {
+        return <Typography>{row?.assignee?.name}</Typography>;
+      },
     },
     {
       field: "dueDate",
@@ -193,7 +191,13 @@ export default function TaskTable({
   const renderPriorityComponent = (e) => {
     return (
       <>
-        <StyledMenuItem onClick={() => console.log("task")}>
+        <StyledMenuItem
+          onClick={(e) => {
+            setModal(e.currentTarget);
+            setMenuAnchorEl(null);
+          }}
+          ref={anchorRef}
+        >
           View details
         </StyledMenuItem>
         <StyledMenuItem onClick={() => console.log("task")}>
@@ -231,19 +235,14 @@ export default function TaskTable({
             },
           ]}
         />
-        {/* <Button
-          onClick={(e) => {
-            console.log(e.currentTarget, "currentTarget");
-            setModal(e.currentTarget);
-          }}
-          ref={anchorRef}
-        >
-          View Details
-        </Button> */}
+
         <FilterDrawer
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
           filterColumns={filterColumns}
+          setFilterData={setFilterData}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
         />
         <AppTable
           rowKey="taskId"
