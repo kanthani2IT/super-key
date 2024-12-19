@@ -12,6 +12,7 @@ import AppTaskCard from "components/AppComponents/AppTaskCard";
 import { getStatus } from "components/AppComponents/CustomField";
 import FilterDrawer from "components/CustomPopup";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
+import { useMarkTaskAsCompleted } from "hooks/useDropDown";
 import { getPriorityColor } from "pages/dashboard/TaskTableDashBoard";
 import { useRef, useState } from "react";
 import { dateText, truncateText } from "utils/helpers";
@@ -31,6 +32,8 @@ export default function TaskTable({
   selectedTab,
   setSelectedTab,
   filterData,
+  fetchTaskData,
+  status,
 }) {
   const anchorRef = useRef(null);
   const theme = useTheme();
@@ -40,13 +43,18 @@ export default function TaskTable({
   const [modal, setModal] = useState(null);
   const [openEmailModal, setOpenEmailModal] = useState(false);
   const [row, setRow] = useState({});
+  const successHandler = () => {
+    fetchTaskData();
+  };
+  const { mutate: updateTaskComplete, isLoading: isCompleting } =
+    useMarkTaskAsCompleted(successHandler);
 
   const pageSize = 10;
   const boldTextStyle = {
     fontWeight: 700,
     color: "#323C4D",
   };
-
+  console.log(status, "status");
   const columns = [
     {
       field: "index",
@@ -198,8 +206,11 @@ export default function TaskTable({
       </>
     );
   };
+
   const onHandleComplete = () => {
-    console.log(row, "row");
+    updateTaskComplete({
+      id: row.taskId,
+    });
   };
   const renderPriorityComponent = (e, row) => {
     return (
@@ -207,7 +218,7 @@ export default function TaskTable({
         <StyledMenuItem
           onClick={(e) => {
             setModal(e.currentTarget);
-            setMenuAnchorEl(null);
+            // setMenuAnchorEl(null);
           }}
           ref={anchorRef}
         >
@@ -221,9 +232,11 @@ export default function TaskTable({
         >
           Send EMail
         </StyledMenuItem>
-        <StyledMenuItem onClick={onHandleComplete}>
-          Mark as completed
-        </StyledMenuItem>
+        {status == "active" && (
+          <StyledMenuItem onClick={onHandleComplete}>
+            Mark as completed
+          </StyledMenuItem>
+        )}
       </>
     );
   };
@@ -291,7 +304,7 @@ export default function TaskTable({
         handleClose={() => setModal(null)}
         renderComponent={
           <AppTaskCard
-            roleName={row?.taskName}
+            roleName={row?.assignee?.name}
             role="Property Manager Name"
             type={row?.community?.name}
             number="+1 432 567 987"
