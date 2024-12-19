@@ -16,33 +16,34 @@ const FilterDrawer = ({
   setFilterData,
   selectedTab,
   setSelectedTab,
+  operator="equals",
+  filterData=[],
 }) => {
-  const [checkedFilters, setCheckedFilters] = useState({});
-
+  const [checkedFilters, setCheckedFilters] = useState(filterData);
+console.log(filterData,"$$$$ cilter daa")
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
   };
 
   const handleApply = () => {
-    // const appliedFilters = [];
-
-    // Object.keys(checkedFilters).forEach((key) => {
-    //   if (checkedFilters[key]) {
-    //     appliedFilters.push(key);
-    //   }
-    // });
-    // console.log(checkedFilters, appliedFilters,"$$$$ %%%")
-    // setFilterData(appliedFilters);
-    // setAnchorEl(null);
+    setFilterData(checkedFilters);
+    setAnchorEl(null);
   };
 
-  const toggleFilter = (idOrName,key) => {
-    const updatedCheckedFilters = { ...checkedFilters };
-
-    if (updatedCheckedFilters[idOrName]) {
-      delete updatedCheckedFilters[idOrName];
+  const toggleFilter = (idOrName, key) => {
+    const updatedCheckedFilters = [...checkedFilters];
+  
+    // Check if the filter already exists
+    const existingIndex = updatedCheckedFilters.findIndex(
+      (filter) => filter.name === idOrName
+    );
+  
+    if (existingIndex > -1) {
+      // Remove the filter if it exists
+      updatedCheckedFilters.splice(existingIndex, 1);
     } else {
-      updatedCheckedFilters[idOrName] = true;
+      // Add the new filter
+      updatedCheckedFilters.push({ column: key, name: idOrName,operator:operator  });
     }
     setCheckedFilters(updatedCheckedFilters);
   };
@@ -53,19 +54,19 @@ const FilterDrawer = ({
     Low: "#DEC013",
   };
 
+  console.log(selectedTab,"$$$ selected tab2")
   const renderOptions = () => {
     const currentFilters = filterColumns?.[selectedTab]?.data || [];
     return currentFilters?.map((filter) => {
       const color = priorityColors[filter?.name] || "#000";
       if (filterColumns[selectedTab]?.checked) {
-        console.log(checkedFilters[filter.name],"$$$$$$$$$$$$")
         return (
           <FormControlLabel
             key={filter.Id || filter.Name}
             control={
               <Checkbox
-                checked={!!checkedFilters[filter.Name]}
-                onChange={() => toggleFilter(filter.Name, filterColumns[selectedTab]?.checked)}
+                checked={checkedFilters.some((item) => item.name === filter.Name)}
+                onChange={() => toggleFilter(filter.Name,selectedTab)}
               />
             }
             label={filter.Name}
@@ -79,20 +80,17 @@ const FilterDrawer = ({
 
       return (
         <>
-         { console.log(checkedFilters[filter.name],"$$$$$$$$$$$$")}
-        
         <AppPriorityItems
           key={filter.name}
           name={filter.name}
           color={color}
-          isSelected={!!checkedFilters[filter.name]}
-          onClick={() => toggleFilter(filter.name, filterColumns[selectedTab]?.checked)}
+          isSelected={checkedFilters.some((item) => item.name === filter.name)}
+          onClick={() => toggleFilter(filter.name, selectedTab)}
         />
         </>
       );
     });
   };
-
   const renderComponent = () => {
     return (
       <>
@@ -101,8 +99,8 @@ const FilterDrawer = ({
             {filterColumns?.map((tab, index) => (
               <Button
                 key={index}
-                variant={selectedTab === index ? "contained" : "none"}
-                color={selectedTab === index ? "none" : "default"}
+                variant={Number(selectedTab) === index ? "contained" : "none"}
+                color={Number(selectedTab) === index ? "none" : "default"}
                 onClick={() => handleTabClick(index)}
                 sx={{
                   width: "155px",
@@ -110,8 +108,8 @@ const FilterDrawer = ({
                   margin: "8px 7px",
                   borderRadius: "8px",
                   backgroundColor:
-                    selectedTab === index ? "#E0EDFF" : "transparent",
-                  color: selectedTab === index ? "#2954E1" : "black",
+                    Number(selectedTab) === index ? "#E0EDFF" : "transparent",
+                  color: Number(selectedTab) === index ? "#2954E1" : "black",
                 }}
               >
                 {tab?.label}
@@ -157,7 +155,6 @@ const FilterDrawer = ({
             variant="contained"
             color="primary"
             onClick={handleApply}
-            // disabled={Object.keys(checkedFilters).length === 0}
             sx={{
               borderRadius: "10px",
               fontWeight: 500,

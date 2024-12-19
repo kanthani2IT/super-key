@@ -13,12 +13,6 @@ import { getStatus } from "components/AppComponents/CustomField";
 import FilterDrawer from "components/CustomPopup";
 import { communityStyles, StyledMenuItem } from "components/StyledComponents";
 import { useRef, useState } from "react";
-const options = [
-  { value: "ACTIVE", label: "Status: Active" },
-  { value: "INACTIVE", label: "Status: Inactive" },
-  { value: "highToLow", label: "Insured Value: High to Low" },
-  { value: "lowToHigh", label: "Insured value: Low to High" },
-];
 
 export default function TaskTable({
   isLoading,
@@ -34,6 +28,7 @@ export default function TaskTable({
   filterColumns,
   selectedTab,
   setSelectedTab,
+  filterData,
 }) {
   const anchorRef = useRef(null);
   const theme = useTheme();
@@ -230,6 +225,7 @@ export default function TaskTable({
           setFilterData={setFilterData}
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}
+          filterData={filterData}
         />
         <AppTable
         hasCheckBox={false}

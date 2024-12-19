@@ -144,3 +144,30 @@ export const useAuth = () => {
   const token = getCookie("token");
   return !!token;
 };
+
+
+export const transformData = (data) => {
+  return data.map(item => {
+    // Determine the property based on the column value
+    const type = item.column == 0 ? "assignedTo" : item.column == 1 ? "priority" : "status";
+
+    // Return the transformed object
+    return {
+      column:type,
+      value: item.name=="0"?"active":item.name, // Rename 'name' to 'value'
+      operator: item.operator, // Keep 'operator' as-is
+    };
+  });
+};
+
+
+export const updatePriorityType = (data, newValue) => {
+  return data.map(item => {
+    if (item.operator === "contains") {
+      // Update the value for type 'priority'
+      return { ...item, name: newValue };
+    }
+    // Return unchanged item for other types
+    return item;
+  });
+};
