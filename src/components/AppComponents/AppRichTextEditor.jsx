@@ -75,15 +75,12 @@ const EditorContent = styled(RichTextField)`
 `;
 
 const EditorFooter = styled.div`
-  ${'' /* position: absolute; */}
-  bottom: 0;
-  left: 0;
   width: 100%;
   background-color: #f5f5f5;
   padding: 10px;
   display: flex;
   justify-content: center;
-  ${'' /* border-top: 1px solid #ccc; */}
+  border-radius:0.5rem;
 `;
 
 const RichTextFieldWrapper = styled.div`
@@ -148,18 +145,18 @@ const AppRichTextEditor = () => {
     <RichTextEditorProvider editor={editor}>
       <EditorContainer>
         <EditorContent
-                placeholder="Type your text here..."  // Set the placeholder text
-isEmpty={true}
+          placeholder="Type here..."  // Set the placeholder text
+          isEmpty={true}
           controls={null} // Content area, toolbar is outside
         />
         <EditorFooter>
           <MenuControlsContainer>
             {/* Undo/Redo */}
             <IconButton onClick={() => editor?.chain().undo().run()}>
-              <Undo />
+              <Undo fontSize="small"/>
             </IconButton>
             <IconButton onClick={() => editor?.chain().redo().run()}>
-              <Redo />
+              <Redo  fontSize="small"/>
             </IconButton>
             <Divider orientation="vertical" flexItem />
 
@@ -169,22 +166,22 @@ isEmpty={true}
 
             {/* Formatting */}
             <IconButton onClick={() => editor?.chain().focus().toggleBold().run()}>
-              <FormatBold />
+              <FormatBold  fontSize="small"/>
             </IconButton>
             <IconButton onClick={() => editor?.chain().focus().toggleItalic().run()}>
-              <FormatItalic />
+              <FormatItalic  fontSize="small"/>
             </IconButton>
             <IconButton onClick={() => editor?.chain().focus().toggleUnderline().run()}>
-              <FormatUnderlined />
+              <FormatUnderlined  fontSize="small"/>
             </IconButton>
             <IconButton onClick={() => editor?.chain().focus().toggleStrike().run()}>
-              <FormatStrikethrough />
+              <FormatStrikethrough  fontSize="small"/>
             </IconButton>
             <Divider orientation="vertical" flexItem />
 
             {/* Font Color */}
             <IconButton onClick={openMenu}>
-              <FormatColorText />
+              <FormatColorText  fontSize="small"/>
             </IconButton>
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
               <MenuItem onClick={() => handleFontColorChange("#FF0000")}>Red</MenuItem>
@@ -199,7 +196,7 @@ isEmpty={true}
                 if (url) editor?.chain().focus().setLink({ href: url }).run();
               }}
             >
-              <LinkIcon />
+              <LinkIcon  fontSize="small"/>
             </IconButton>
 
             {/* Image */}
@@ -209,28 +206,28 @@ isEmpty={true}
                 if (url) editor?.chain().focus().setImage({ src: url }).run();
               }}
             >
-              <InsertPhoto />
+              <InsertPhoto  fontSize="small"/>
             </IconButton>
             <Divider orientation="vertical" flexItem />
 
             {/* Lists */}
             <IconButton onClick={() => editor?.chain().focus().toggleBulletList().run()}>
-              <FormatListBulleted />
+              <FormatListBulleted  fontSize="small"/>
             </IconButton>
             <IconButton onClick={() => editor?.chain().focus().toggleOrderedList().run()}>
-              <FormatListNumbered />
+              <FormatListNumbered  fontSize="small"/>
             </IconButton>
             <Divider orientation="vertical" flexItem />
 
             {/* Alignments */}
             <IconButton onClick={() => editor?.chain().focus().setTextAlign("left").run()}>
-              <FormatAlignLeft />
+              <FormatAlignLeft  fontSize="small"/>
             </IconButton>
             <IconButton onClick={() => editor?.chain().focus().setTextAlign("center").run()}>
-              <FormatAlignCenter />
+              <FormatAlignCenter  fontSize="small"/>
             </IconButton>
             <IconButton onClick={() => editor?.chain().focus().setTextAlign("right").run()}>
-              <FormatAlignRight />
+              <FormatAlignRight  fontSize="small"/>
             </IconButton>
           </MenuControlsContainer>
         </EditorFooter>

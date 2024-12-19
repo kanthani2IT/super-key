@@ -43,6 +43,7 @@ function MainCard(
     setFilterData,
     selectedTab,
     setSelectedTab,
+    filterData,
     ...others
   },
   ref
@@ -175,6 +176,7 @@ function MainCard(
             selectedTab={selectedTab}
             setSelectedTab={setSelectedTab}
             setFilterData={setFilterData}
+            filterData={filterData}
           />
           {children}
         </CardContent>

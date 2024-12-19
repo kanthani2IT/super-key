@@ -19,9 +19,13 @@ import {
   useVerunaUsersQuery,
 } from "hooks/useDropDown";
 import { ColorBox } from "pages/component-overview/color";
-import React, { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { transformedRenewalData } from "utils/helpers";
+import {
+  transformData,
+  transformedRenewalData,
+  updatePriorityType,
+} from "utils/helpers";
 import RenewalPieChart from "./RenewalPieChart";
 import TaskTableDashBoard from "./TaskTableDashBoard";
 
@@ -32,12 +36,12 @@ const tabs = [
 ];
 
 export default function DashboardDefault() {
-  const { data: assigneToData, isLoading: assigneToLoading } =
-    useVerunaUsersQuery();
-
+  const { data: assigneToData } = useVerunaUsersQuery();
   const [selectedTab, setSelectedTab] = useState(tabs[0].value);
-  const [page, setPage] = useState(1);
-
+  const [filterData, setFilterData] = useState([
+    { operator: "contains", name: selectedTab, column: "status" },
+  ]);
+  const navigate = useNavigate();
   const { data: priorityData } = useVerunaPriorityQuery();
   const filterColumns = [
     {
@@ -47,7 +51,6 @@ export default function DashboardDefault() {
     },
     {
       label: "Priority",
-
       data: priorityData,
       checked: false,
     },
@@ -55,13 +58,12 @@ export default function DashboardDefault() {
 
   const initialTab = Object.keys(filterColumns)[0] || "Assigned to";
   const [selectedFilter, setSelectedFilter] = useState(initialTab);
-  const [open, setOpen] = useState(false);
-  const [filterData, setFilterData] = useState("equal");
-  const navigate = useNavigate();
+
   //Todo Users
   // const { data, isLoading } = useGetUsers();
   const { data: dashboardData, isLoading: isWidgetLoading } =
     useGetDashboardMetrics();
+
   const {
     insuredCommunities,
     totalCommunities,
@@ -78,70 +80,20 @@ export default function DashboardDefault() {
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
-    fetchData(newValue);
-  };
-  const handleClose = () => {
-    setOpen(false);
+    setFilterData(updatePriorityType(filterData, newValue));
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const [editedList, setEditedList] = React.useState([]);
-
-  const handleChanges = (value, field, index) => {
-    setEditedList((prevList) => {
-      const updatedList = [...prevList];
-      updatedList[index] = {
-        ...updatedList[index],
-        [field]: value,
-      };
-      return updatedList;
-    });
-  };
-  useEffect(() => {
-    fetchTaskData();
-    if (filterColumns?.length > 0) {
-      setSelectedFilter(0);
-    }
-  }, [page, filterData]);
-  console.log(filterData, "filterDara");
-  const fetchTaskData = () => {
-    const dataFilters = Array.isArray(filterData)
-      ? filterData.map((value) => ({
-          column: selectedFilter === 0 ? "assignedTo" : "priority",
-          operator: "equals",
-          value: value,
-        }))
-      : [];
-
-    let reqBody = {
-      sort: "createdAt",
-      orderBy: "desc",
-      page: page,
-      size: 10,
-      data: dataFilters,
-    };
-    fetchActiveAndCompletedTaskByFilter(reqBody);
-  };
-
-  const fetchData = (status) => {
+  const fetchTaskData = useCallback(() => {
     let reqBody = {
       sort: "createdAt",
       orderBy: "desc",
       page: 1,
       size: 10,
-      data: [
-        {
-          column: "status",
-          operator: "contains",
-          value: status ?? selectedTab,
-        },
-      ],
+      data: transformData(filterData),
     };
+
     fetchActiveAndCompletedTaskByFilter(reqBody);
-  };
+  }, [filterData, fetchActiveAndCompletedTaskByFilter]);
   const successHandler = () => {
     fetchActiveAndCompletedTaskByFilter();
   };
@@ -152,6 +104,13 @@ export default function DashboardDefault() {
   };
   const { mutate: updateTaskComplete, isLoading: isCompleting } =
     useMarkTaskAsCompleted(successHandler);
+
+  useEffect(() => {
+    if (!!selectedTab) {
+      fetchTaskData();
+    }
+  }, [selectedTab, fetchTaskData]);
+
   return (
     <AppGrid container rowSpacing={3} columnSpacing={2}>
       <AppGrid size={{ xs: 12 }}>
@@ -255,19 +214,6 @@ export default function DashboardDefault() {
           </MainCard>
         </AppSkeletonWrapper>
       </AppGrid>
-      {/* {Todo Users} */}
-      {/* <AppModal open={open} onClose={handleClose} height="auto" width="70%">
-        <MainCard
-          noStyles={true}
-          title={"Community Users"}
-          count={data?.data?.totalSize ?? data?.data?.length}
-        >
-          <UserTable
-            tableData={data?.data?.records ?? data?.data}
-            isLoading={isLoading}
-          />
-        </MainCard>
-      </AppModal> */}
       <AppGrid size={{ xs: 12 }}>
         <MainCard
           title={"Task Assigned"}
@@ -279,6 +225,7 @@ export default function DashboardDefault() {
           filterColumns={filterColumns}
           selectedTab={selectedFilter}
           setSelectedTab={setSelectedFilter}
+          filterData={filterData}
         >
           <MainTabs
             handleChange={handleChange}

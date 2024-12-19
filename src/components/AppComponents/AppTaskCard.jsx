@@ -13,10 +13,16 @@ import PhoneIcon from "assets/images/icons/PhoneIcon";
 import avatar1 from "assets/images/users/avatar-1.png";
 import { useState } from "react";
 import AppCard from "./AppCard";
-import EmailModal from "./AppEmailModal";
 import AppGrid from "./AppGrid";
 
-const AppTaskCard = ({ roleName, role, type, number, onClose, handleSendEmail }) => {
+const AppTaskCard = ({
+  roleName,
+  role,
+  type,
+  number,
+  onClose,
+  handleSendEmail,
+}) => {
   const [isCopied, setIsCopied] = useState(false);
   const [isPhoneCopied, setIsPhoneCopied] = useState(false);
   const handleCopy = () => {
@@ -73,7 +79,7 @@ const AppTaskCard = ({ roleName, role, type, number, onClose, handleSendEmail })
     <AppCard
       height={"auto"}
       footer={<Footer />}
-      width="600px"
+      // width="600px"
       custom
       onClose={onClose}
     >
@@ -139,7 +145,6 @@ const AppTaskCard = ({ roleName, role, type, number, onClose, handleSendEmail })
           </Tooltip>
         </AppGrid>
       </AppGrid>
-    
     </AppCard>
   );
 };

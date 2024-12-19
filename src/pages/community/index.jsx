@@ -67,7 +67,8 @@ const CommunityOnboarding = () => {
       cmcId: cmcId,
   }));
     const payload = { mappings: formattedData };
-    mutate(payload);
+    const msg = payload.mappings.length;
+    mutate({payload, msg});
     setModal(!modal);
     handleSelectionChange([]);
     setOffboardData([]);

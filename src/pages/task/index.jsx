@@ -5,10 +5,10 @@ import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
 import { useEffect, useState } from "react";
 import TaskTable from "./TaskTable";
 import TaskCreation from "./create";
+import { transformData, updatePriorityType } from "utils/helpers";
 //Need to check
 const Task = () => {
   const [page, setPage] = useState(1);
-  const [filterData, setFilterData] = useState("");
   const {
     data: taskData,
     mutate: fetchActiveAndCompletedTaskByFilter,
@@ -17,7 +17,7 @@ const Task = () => {
   const { data: assigneToData, isLoading: assigneToLoading } =
     useVerunaUsersQuery();
   const { data: priorityData } = useVerunaPriorityQuery();
-
+  
   const filterColumns = [
     {
       label: "Assigned to",
@@ -34,50 +34,42 @@ const Task = () => {
   const initialTab = Object.keys(filterColumns)[0];
   const [selectedTab, setSelectedTab] = useState(initialTab);
   const [status, setStatus] = useState("active");
+  const [filterData, setFilterData] = useState([{operator:"contains", name:status, column:"status"}]);
+
+
+
+  
+  
 
   useEffect(() => {
-    fetchTaskData();
-  }, [page, filterData, status]);
-  console.log(selectedTab, "selectedTab");
-  const fetchTaskData = () => {
-    let dataFilters = [
-      {
-        column: "status",
-        operator: "contains",
-        value: status,
-      },
-    ];
-console.log(selectedTab,"####")
-    if (Array.isArray(filterData) && filterData.length > 0) {
-      const additionalFilters = filterData.map((value) => ({
-        column: selectedTab == 0 ? "assignedTo" : "priority",
-        operator: "equals",
-        value: value,
-      }));
-      dataFilters = [...dataFilters, ...additionalFilters];
+    if(status&&page){
+      fetchTaskData();
     }
+  }, [page, filterData, status]);
+
+  const fetchTaskData = () => {
 
     let reqBody = {
       sort: "createdAt",
       orderBy: "desc",
       page: page,
       size: 10,
-      data: dataFilters,
+      data: transformData(filterData),
     };
     fetchActiveAndCompletedTaskByFilter(reqBody);
   };
-  {
-    console.log(selectedTab, "tab");
-  }
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
   const handleToggleStatus = (newStatus) => {
     setStatus(newStatus);
-    setFilterData([]);
+    console.log(newStatus,"$$$$ ###")
+    setFilterData(updatePriorityType(filterData,newStatus))
     setPage(1);
   };
-  console.log(status, "status");
+
   return (
     <AppGrid container spacing={4}>
       <AppGrid
@@ -105,7 +97,6 @@ console.log(selectedTab,"####")
           >
             Completed
           </RadiusStyledButton>
-          {/* <RadiusStyledButton variant="contained">Over Due</RadiusStyledButton> */}
         </ButtonGroup>
         <ButtonGroup>
           <TaskCreation refetch={fetchTaskData} />
@@ -123,6 +114,7 @@ console.log(selectedTab,"####")
           filterColumns={filterColumns}
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}
+          filterData={filterData}
         />
       </AppGrid>
     </AppGrid>

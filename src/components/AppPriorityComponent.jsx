@@ -1,7 +1,13 @@
-import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
+import { useState } from "react";
 
-const AppPriorityItems = ({ name, color, isSelected, onClick }) => {
+const AppPriorityItems = ({
+  name,
+  color,
+  isSelected,
+  onClick,
+  selectedName,
+}) => {
   const [selectedPriorityTab, setSelectedPriorityTab] = useState("High");
   return (
     <Box
@@ -12,7 +18,7 @@ const AppPriorityItems = ({ name, color, isSelected, onClick }) => {
         width: "221px",
         height: "37px",
         borderRadius: "6px",
-        backgroundColor: isSelected ? "#E0EDFF" : "#FFF",
+        backgroundColor: selectedName === name ? "#E0EDFF" : "#FFF",
         padding: "0 8px",
         marginBottom: "8px",
         cursor: "pointer",
