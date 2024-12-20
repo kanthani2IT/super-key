@@ -1,7 +1,6 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   Box,
-  Button,
   IconButton,
   Table,
   TableBody,
@@ -9,6 +8,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import EmailModal from "components/AppComponents/AppEmailModal";
 import AppMenu from "components/AppComponents/AppMenu";
@@ -239,9 +239,14 @@ const TaskTableDashBoard = ({
       />
       {tableData.length > 4 && (
         <Box display="flex" justifyContent="center" mt={2}>
-          <Button variant="text" color="primary" onClick={handleRouteViewTasks}>
-            See all Tasks
-          </Button>
+          <Typography
+            color="primary"
+            onClick={handleRouteViewTasks}
+            variant="h5"
+            sx={{ cursor: "pointer" }}
+          >
+            See all tasks
+          </Typography>
         </Box>
       )}
       <EmailModal open={openEmailModal} setOpen={setOpenEmailModal} />
