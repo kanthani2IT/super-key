@@ -1,4 +1,4 @@
-import { MoreVert, SwapVert } from "@mui/icons-material";
+import { MoreVert } from "@mui/icons-material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 import { Button, IconButton, Typography } from "@mui/material";
@@ -261,10 +261,10 @@ export default function TaskTable({
               onClick: (e) => handleClick(e),
               IconButton: true,
             },
-            {
-              component: <SwapVert />,
-              onClick: (e) => handleSort(e),
-            },
+            // {
+            //   component: <SwapVert />,
+            //   onClick: (e) => handleSort(e),
+            // },
           ]}
         />
 

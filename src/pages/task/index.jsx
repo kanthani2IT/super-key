@@ -3,6 +3,7 @@ import { ButtonGroup, RadiusStyledButton } from "components/StyledComponents";
 import { useGetActiveAndCompletedTaskByFilter } from "hooks/useDashboard";
 import { useVerunaPriorityQuery, useVerunaUsersQuery } from "hooks/useDropDown";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { transformData, updatePriorityType } from "utils/helpers";
 import TaskTable from "./TaskTable";
 import TaskCreation from "./create";
@@ -17,7 +18,8 @@ const Task = () => {
   const { data: assigneToData, isLoading: assigneToLoading } =
     useVerunaUsersQuery();
   const { data: priorityData } = useVerunaPriorityQuery();
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const filterColumns = [
     {
       label: "Assigned to",
@@ -33,7 +35,9 @@ const Task = () => {
   ];
   const initialTab = Object.keys(filterColumns)[0];
   const [selectedTab, setSelectedTab] = useState(initialTab);
-  const [status, setStatus] = useState("active");
+  const searchParams = new URLSearchParams(location.search);
+  const taskValue = searchParams.get("task");
+  const [status, setStatus] = useState(taskValue || "active");
   const [filterData, setFilterData] = useState([
     { operator: "contains", name: status, column: "status" },
   ]);
@@ -41,6 +45,10 @@ const Task = () => {
   useEffect(() => {
     if (status && page) {
       fetchTaskData();
+      navigate({
+        pathname: location.pathname,
+        search: `?task=${status}`,
+      });
     }
   }, [page, filterData, status]);
 
@@ -61,7 +69,6 @@ const Task = () => {
 
   const handleToggleStatus = (newStatus) => {
     setStatus(newStatus);
-    console.log(newStatus, "$$$$ ###");
     setFilterData(updatePriorityType(filterData, newStatus));
     setPage(1);
   };
