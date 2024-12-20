@@ -13,7 +13,7 @@ import OnboardingIndex from "./onboarding";
 
 const initialValue = {
   page: 1,
-  size: 10,
+  size: 1000,
   sort: "",
   order: "",
   status: "",
@@ -62,13 +62,13 @@ const CommunityOnboarding = () => {
 
   const { mutate } = useOffBoardCommunity();
   const handleOffBoard = () => {
-    const formattedData = selectedRows.map(id => ({ 
-      communityId: id, 
+    const formattedData = selectedRows.map((id) => ({
+      communityId: id,
       cmcId: cmcId,
-  }));
+    }));
     const payload = { mappings: formattedData };
     const msg = payload.mappings.length;
-    mutate({payload, msg});
+    mutate({ payload, msg });
     setModal(!modal);
     handleSelectionChange([]);
     setOffboardData([]);
@@ -90,8 +90,9 @@ const CommunityOnboarding = () => {
   };
 
   const fetchData = (sort, search, page = filters?.page) => {
-    const sortData = sort === "ACTIVE" || sort === "INACTIVE" ? "" : "name";
-    const orderByData = sort === "lowToHigh" ? "asc" : "desc";
+    const sortData = sort === "ACTIVE" || sort === "INACTIVE" ? "name" : "";
+    const orderByData =
+      sort === "lowToHigh" ? "asc" : sort === "highToLow" ? "desc" : "";
     const statusData = sort === "ACTIVE" || sort === "INACTIVE" ? sort : "";
     const body = {
       page: page || 1,

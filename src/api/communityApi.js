@@ -33,10 +33,12 @@ const updateCommunityById = async (id, body) => {
   }
 };
 
-const createCommunity = async (isFileUpload,payload) => {
+const createCommunity = async (isFileUpload, payload) => {
   try {
-    console.log(payload,"####")
-    const reponse = await postFormRequest(COMMUNITY.createCommunity(isFileUpload), payload);
+    const reponse = await postFormRequest(
+      COMMUNITY.createCommunity(isFileUpload),
+      payload
+    );
     return reponse;
   } catch (error) {
     console.error("Error fetching locations:", error);
@@ -68,20 +70,15 @@ const getAllCommunityList = async (queries) => {
   }
 };
 
-const getCommunityList = async (body) => {
-  const { page, size, sortBy, orderBy, status, search } = body;
-  const response = await http({
-    method: "GET",
-    url: COMMUNITY.getCommunityList(
-      page,
-      size,
-      sortBy,
-      orderBy,
-      status,
-      search
-    ),
-  });
-  return response;
+const getCommunityList = async (queries) => {
+  try {
+    const requestUrl = addQueryParams(COMMUNITY.getCommunityList, queries);
+    const response = await getRequest(requestUrl);
+    return response;
+  } catch (error) {
+    console.error("Error fetching community list:", error);
+    throw error;
+  }
 };
 
 const downloadOnboardingTemplate = async () => {
