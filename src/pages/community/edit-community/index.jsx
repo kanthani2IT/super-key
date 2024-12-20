@@ -21,7 +21,7 @@ import {
 import { useEffect, useState } from "react";
 
 import AppTextField from "components/AppComponents/AppTextField";
-import { countryPhoneCodes, insuranceOptions } from "utils/constants";
+import { countryPhoneCodes } from "utils/constants";
 import { useDebounceFn } from "utils/helpers";
 import * as Yup from "yup";
 import { getContactInfo, removeExtraSpaces } from "../onboarding/utils";
@@ -48,7 +48,7 @@ const initialValues = {
     email: "",
   },
   insuranceDetails: {
-    premiumAmount: null,
+    premiumAmount: "",
     insuredCoverage: "",
   },
 };
@@ -77,7 +77,7 @@ const initialValidationSchema = {
       .required("Email is required"),
   }),
   insuranceDetails: Yup.object().shape({
-    premiumAmount: Yup.object().required("Insurance Value is required"),
+    premiumAmount: Yup.string().required("Insurance Value is required"),
     insuredCoverage: Yup.string().required("Insurance Coverage is required"),
   }),
 };
@@ -120,7 +120,7 @@ const EditCommunity = ({ onClose, communityData, refetch, cmcId }) => {
         companyId: values?.communityManager?.managementCompanyId,
         propertyManagerId: values?.propertyManager?.userId,
         insuredCoverage: values?.insuranceDetails?.insuredCoverage,
-        premiumAmount: values?.insuranceDetails?.premiumAmount.name,
+        premiumAmount: values?.insuranceDetails?.premiumAmount,
         status: "ACTIVE",
       };
 
@@ -224,10 +224,8 @@ const EditCommunity = ({ onClose, communityData, refetch, cmcId }) => {
         code: data?.propertyManager?.region ?? "+1",
       },
       insuranceDetails: {
-        premiumAmount: data?.premiumAmount
-          ? { id: data?.premiumAmount, name: data?.premiumAmount?.toString() }
-          : "",
-        insuredCoverage: data?.insuredCoverage || 10000000,
+        premiumAmount: data?.premiumAmount || "",
+        insuredCoverage: data?.insuredCoverage || "",
       },
     }));
   };
@@ -256,7 +254,7 @@ const EditCommunity = ({ onClose, communityData, refetch, cmcId }) => {
       ],
     };
     const msg = communityData?.name;
-    mutate({payload, msg});
+    mutate({ payload, msg });
     setModal(false);
     successHandler();
   };
@@ -443,7 +441,7 @@ const EditCommunity = ({ onClose, communityData, refetch, cmcId }) => {
                 disabled={!enableEdit}
                 error={Boolean(
                   touched.addressDetails?.zipcode &&
-                  errors.addressDetails?.zipcode
+                    errors.addressDetails?.zipcode
                 )}
                 helperText={
                   touched.addressDetails?.zipcode &&
@@ -500,7 +498,7 @@ const EditCommunity = ({ onClose, communityData, refetch, cmcId }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.communityManager?.email &&
-                    errors.communityManager?.email
+                      errors.communityManager?.email
                   )}
                   helperText={
                     touched.communityManager?.email &&
@@ -544,7 +542,7 @@ const EditCommunity = ({ onClose, communityData, refetch, cmcId }) => {
                     disabled={!enableEdit}
                     error={Boolean(
                       touched.communityManager?.phone &&
-                      errors.communityManager?.phone
+                        errors.communityManager?.phone
                     )}
                     helperText={
                       touched.communityManager?.phone &&
@@ -603,7 +601,7 @@ const EditCommunity = ({ onClose, communityData, refetch, cmcId }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.propertyManager?.email &&
-                    errors.propertyManager?.email
+                      errors.propertyManager?.email
                   )}
                   helperText={
                     touched.propertyManager?.email &&
@@ -647,7 +645,7 @@ const EditCommunity = ({ onClose, communityData, refetch, cmcId }) => {
                     disabled={!enableEdit}
                     error={Boolean(
                       touched.propertyManager?.phone &&
-                      errors.propertyManager?.phone
+                        errors.propertyManager?.phone
                     )}
                     helperText={
                       touched.propertyManager?.phone &&
@@ -679,20 +677,22 @@ const EditCommunity = ({ onClose, communityData, refetch, cmcId }) => {
                 color={"secondary"}
                 variant="body2"
               >
-                <AppAutoComplete
+                <AppTextField
                   name="insuranceDetails.premiumAmount"
-                  freeSolo={false}
                   disabled={!enableEdit}
                   error={
                     touched.insuranceDetails?.premiumAmount &&
                     errors.insuranceDetails?.premiumAmount
                   }
-                  onChange={onChange}
-                  onBlur={handleBlur}
-                  nameParam="name"
+                  helperText={
+                    touched.insuranceDetails?.premiumAmount &&
+                    errors.insuranceDetails?.premiumAmount
+                  }
+                  onChange={handleChange}
+                  // onBlur={handleBlur}
                   value={values?.insuranceDetails?.premiumAmount || null}
-                  options={insuranceOptions}
-                  placeholder="Select Insurance Value"
+                  placeholder="Eg : 1,500,000"
+                  fullWidth
                 />
               </AppLabelComponent>
             </AppGrid>
@@ -711,7 +711,7 @@ const EditCommunity = ({ onClose, communityData, refetch, cmcId }) => {
                   disabled={!enableEdit}
                   error={Boolean(
                     touched.insuranceDetails?.insuredCoverage &&
-                    errors.insuranceDetails?.insuredCoverage
+                      errors.insuranceDetails?.insuredCoverage
                   )}
                   helperText={
                     touched.insuranceDetails?.insuredCoverage &&
