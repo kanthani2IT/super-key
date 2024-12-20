@@ -165,11 +165,18 @@ export default function TaskTable({
     },
   ];
 
-  const filteredRows = taskList?.content?.filter((row) =>
-    Object.values(row).some((value) =>
-      String(value).toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  const filteredRows = taskList?.content?.length
+    ? taskList?.content?.filter((row) =>
+        Object.values(row).some((value) =>
+          String(value).toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      )
+    : [];
+  const flatRows = filteredRows?.map((row) => ({
+    ...row,
+  }));
+  const paginatedRows =
+    flatRows && flatRows?.slice((page - 1) * pageSize, page * pageSize);
 
   const handleMenuAnchorClose = () => {
     setMenuAnchorEl(null);
@@ -211,7 +218,7 @@ export default function TaskTable({
 
   const onHandleComplete = () => {
     updateTaskComplete({
-      id: row.taskId,
+      id: row?.taskId,
     });
   };
   const renderPriorityComponent = (e, row) => {
@@ -255,7 +262,7 @@ export default function TaskTable({
       <>
         <AppTableSearch
           placeholder="Search Task"
-          searchTerm={filters?.search}
+          searchTerm={searchTerm}
           onSearchChange={handleSearch}
           icons={[
             {
@@ -284,11 +291,11 @@ export default function TaskTable({
           rowKey="taskId"
           isLoading={isLoading}
           columns={columns}
-          rows={filteredRows || []}
+          rows={paginatedRows || []}
           getStatus={getStatus}
           onSelectionChange={onSelectionChange}
           currentPage={page}
-          totalItems={taskList?.totalElements}
+          totalItems={flatRows?.length}
           pageSize={pageSize}
           onPageChange={handleChangePage}
           selected={selectedRows}

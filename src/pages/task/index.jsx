@@ -51,14 +51,14 @@ const Task = () => {
         search: `?task=${status}`,
       });
     }
-  }, [page, filterData, status]);
+  }, [filterData, status]);
 
   const fetchTaskData = () => {
     let reqBody = {
       sort: "createdAt",
       orderBy: "desc",
       page: page,
-      size: 10,
+      size: 1000,
       data: transformData(filterData),
     };
     fetchActiveAndCompletedTaskByFilter(reqBody);
@@ -70,6 +70,7 @@ const Task = () => {
 
   const handleToggleStatus = (newStatus) => {
     setStatus(newStatus);
+    setSearchTerm("");
     setFilterData(updatePriorityType(filterData, newStatus));
     setPage(1);
   };
