@@ -102,7 +102,7 @@ const TaskTableDashBoard = ({
           priority: menuRowData?.priority?.toUpperCase(),
           assignedTo: menuRowData?.assignee?.id,
         };
-        console.log("!@#$%^&*:", payload);
+
         payload(taskPayload);
       }
       onClose();

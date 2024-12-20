@@ -38,6 +38,7 @@ const Task = () => {
   const searchParams = new URLSearchParams(location.search);
   const taskValue = searchParams.get("task");
   const [status, setStatus] = useState(taskValue || "active");
+  const [searchTerm, setSearchTerm] = useState("");
   const [filterData, setFilterData] = useState([
     { operator: "contains", name: status, column: "status" },
   ]);
@@ -72,7 +73,9 @@ const Task = () => {
     setFilterData(updatePriorityType(filterData, newStatus));
     setPage(1);
   };
-
+  const handleSearch = (newValue) => {
+    setSearchTerm(newValue);
+  };
   return (
     <AppGrid container spacing={4}>
       <AppGrid
@@ -120,6 +123,9 @@ const Task = () => {
           filterData={filterData}
           fetchTaskData={fetchTaskData}
           status={status}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          handleSearch={handleSearch}
         />
       </AppGrid>
     </AppGrid>

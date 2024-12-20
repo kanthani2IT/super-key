@@ -34,12 +34,14 @@ export default function TaskTable({
   filterData,
   fetchTaskData,
   status,
+  searchTerm,
+  setSearchTerm,
 }) {
   const anchorRef = useRef(null);
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+
   const [modal, setModal] = useState(null);
   const [openEmailModal, setOpenEmailModal] = useState(false);
   const [row, setRow] = useState({});
@@ -54,7 +56,7 @@ export default function TaskTable({
     fontWeight: 700,
     color: "#323C4D",
   };
-  console.log(status, "status");
+
   const columns = [
     {
       field: "index",

@@ -68,7 +68,6 @@ const FilterDrawer = ({
     Low: "#DEC013",
   };
 
-  console.log(selectedTab, "$$$ selected tab2");
   const renderOptions = () => {
     const currentFilters = filterColumns?.[selectedTab]?.data || [];
     return currentFilters?.map((filter) => {
