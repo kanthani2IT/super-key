@@ -5,7 +5,7 @@ import {
   Divider,
   FormControlLabel,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppMenu from "./AppComponents/AppMenu";
 import AppPriorityItems from "./AppPriorityComponent";
 
@@ -25,12 +25,20 @@ const FilterDrawer = ({
     setSelectedTab(tab);
   };
 
+  useEffect(() => {
+    if (filterData.length === 1) {
+      setCheckedFilters(filterData);
+      setSelectedName("");
+    }
+  }, [filterData]);
+
   const handleApply = () => {
     const checkingStatus = checkedFilters.map((item) => {
       if (item?.column === "status") {
         return filterData.find((el) => el.column === "status");
       } else return item;
     });
+
     setFilterData(checkingStatus);
     setAnchorEl(null);
   };
@@ -40,26 +48,39 @@ const FilterDrawer = ({
     setSelectedName(colorName);
   };
 
-  const toggleFilter = (idOrName, key) => {
-    const updatedCheckedFilters = [...checkedFilters];
+  const toggleFilter = (idOrName, key, checked) => {
+    if (checked) {
+      const updatedCheckedFilters = [...checkedFilters];
 
-    // Check if the filter already exists
-    const existingIndex = updatedCheckedFilters.findIndex(
-      (filter) => filter.name === idOrName
-    );
+      // Check if the filter already exists
+      const existingIndex = updatedCheckedFilters.findIndex(
+        (filter) => filter.name === idOrName
+      );
 
-    if (existingIndex > -1) {
-      // Remove the filter if it exists
-      updatedCheckedFilters.splice(existingIndex, 1);
+      if (existingIndex > -1) {
+        // Remove the filter if it exists
+        updatedCheckedFilters.splice(existingIndex, 1);
+      } else {
+        // Add the new filter
+        updatedCheckedFilters.push({
+          column: key,
+          name: idOrName,
+          operator: operator,
+        });
+      }
+      setCheckedFilters(updatedCheckedFilters);
     } else {
-      // Add the new filter
-      updatedCheckedFilters.push({
-        column: key,
-        name: idOrName,
-        operator: operator,
-      });
+      const updatedCheckedFilters = [
+        ...checkedFilters.filter((filter) => filter.column !== key), // Remove existing filters for the same key
+        {
+          column: key,
+          name: idOrName,
+          operator: operator,
+        }, // Add the new filter
+      ];
+
+      setCheckedFilters(updatedCheckedFilters);
     }
-    setCheckedFilters(updatedCheckedFilters);
   };
 
   const priorityColors = {
@@ -81,7 +102,13 @@ const FilterDrawer = ({
                 checked={checkedFilters.some(
                   (item) => item.name === filter.Name
                 )}
-                onChange={() => toggleFilter(filter.Name, selectedTab)}
+                onChange={() =>
+                  toggleFilter(
+                    filter.Name,
+                    selectedTab,
+                    filterColumns[selectedTab]?.checked
+                  )
+                }
               />
             }
             label={filter.Name}
@@ -104,7 +131,11 @@ const FilterDrawer = ({
             )}
             selectedName={selectedName}
             onClick={() => {
-              toggleFilter(filter.name, selectedTab);
+              toggleFilter(
+                filter.name,
+                Number(selectedTab),
+                filterColumns[selectedTab]?.checked
+              );
               handlePriorityColor(filter.name);
             }}
           />

@@ -165,15 +165,14 @@ export const transformData = (data) => {
 };
 
 export const updatePriorityType = (data, newValue) => {
-  return data.map((item) => {
-    if (item.operator === "contains") {
-      // Update the value for type 'priority'
-      return { ...item, name: newValue };
-    }
-    // Return unchanged item for other types
-    return item;
-  });
+  return data
+    .filter((item) => item.operator === "contains") // Keep only items with operator 'contains'
+    .map((item) => ({
+      ...item,
+      name: newValue, // Update the 'name' for filtered items
+    }));
 };
+
 export const dateText = (dueDate) => {
   const [day, month, year] = dueDate.split("-");
   return `${year}/${month}/${day}`;
