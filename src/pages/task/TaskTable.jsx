@@ -316,9 +316,10 @@ export default function TaskTable({
             roleName={row?.assignee?.name}
             role="Property Manager Name"
             type={row?.community?.name}
-            number="+1 432 567 987"
+            number= {row?.assignee?.phone || "1234567890"}
             onClose={() => setModal(null)}
             handleSendEmail={onClose}
+            thisEmail={row?.assignee?.email || "example@example.com"}
           />
         }
         borderRadius={"20px"}

@@ -221,9 +221,10 @@ const TaskTableDashBoard = ({
             roleName={viewDetails?.assignee?.name}
             role="Property Manager Name"
             type="GRT"
-            number="+1 432 567 987"
+            number={viewDetails?.assignee?.phone || "1234567890"}
             handleSendEmail={handleSendEmail}
             onClose={() => setModal(null)}
+            thisEmail={viewDetails?.assignee?.email || "example@example.com"}
           />
         }
         borderRadius={"20px"}
