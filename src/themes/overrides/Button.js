@@ -112,8 +112,8 @@ export default function Button(theme) {
         disableElevation: true,
       },
       styleOverrides: {
-        root: {
-          fontWeight: "700",
+        root: (props) => ({
+          fontWeight: props.fontWeight || "700",
           padding: "2",
           borderRadius: "10px",
           "&::after": {
@@ -135,7 +135,7 @@ export default function Button(theme) {
             opacity: 1,
             transition: "0s",
           },
-        },
+        }),
         contained: {
           ...disabledStyle,
         },

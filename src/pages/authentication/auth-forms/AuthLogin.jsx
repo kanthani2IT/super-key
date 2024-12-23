@@ -5,13 +5,10 @@ import { Link as RouterLink } from "react-router-dom";
 // material-ui
 import {
   Button,
-  Checkbox,
-  FormControlLabel,
   FormHelperText,
 
   Link,
-  Stack,
-  Typography,
+  Stack
 } from "@mui/material";
 
 // third party
@@ -19,11 +16,11 @@ import { Formik } from "formik";
 
 // project imports
 import AnimateButton from "components/@extended/AnimateButton";
+import AppGrid from "components/AppComponents/AppGrid";
 import { FormOutLinedField } from "components/AppComponents/FormOutLinedField";
 import { useLoginUser } from "hooks/useLogin";
 import { useAuthCookies } from "utils/cookie";
 import { createValidationSchema } from "utils/loginUtils";
-import AppGrid from "components/AppComponents/AppGrid";
 
 export default function AuthLogin(props) {
   const { fieldsConfig } = props;

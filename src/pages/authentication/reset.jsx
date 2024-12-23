@@ -1,16 +1,18 @@
-import { useParams } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Grid2 } from '@mui/material';
+import AppGrid from 'components/AppComponents/AppGrid';
 import Logo from 'components/logo';
-import { CONFIRM_PASSWORD, EMAIL_VALIDATION, PASSWORD_NOTE, PASSWORD_VALIDATION } from 'utils/loginUtils';
+import { useParams } from 'react-router-dom';
+import { useAuthCookies } from 'utils/cookie';
+import { CONFIRM_PASSWORD, EMAIL_VALIDATION, OTP_VALIDATION, PASSWORD_VALIDATION } from 'utils/loginUtils';
 import AuthWrapper from './AuthWrapper';
 import ResetPassword from './auth-forms/ResetPassword';
 
 
 export default function Reset() {
   const { id } = useParams();
-
+  const { getCookie } = useAuthCookies()
+  const user = getCookie("superkey")
   const resetConfig = [
     {
       id: 'email-login',
@@ -18,8 +20,16 @@ export default function Reset() {
       type: 'email',
       label: 'Email ID',
       placeholder: 'Enter Your Email ID',
-      // hide: id === "forgot",
+      hide: id !== "sendEmail",
       validation: EMAIL_VALIDATION,
+    },
+    {
+      id: 'otp',
+      name: 'otp',
+      type: 'otp',
+      label: 'OTP',
+      hide: id !== "otp",
+      validation: OTP_VALIDATION,
     },
     {
       id: 'password-reset',
@@ -28,7 +38,7 @@ export default function Reset() {
       label: 'Current Password',
       placeholder: 'Enter Current password',
       validation: PASSWORD_VALIDATION({ name: "Current " }),
-      hide: id === "forgot",
+      hide: true,
     },
     {
       id: 'newPassword-reset',
@@ -37,7 +47,7 @@ export default function Reset() {
       label: 'New Password',
       placeholder: 'Enter new password',
       validation: PASSWORD_VALIDATION({ name: "New " }),
-      hide: id === "forgot",
+      hide: true,
 
     },
     {
@@ -47,27 +57,43 @@ export default function Reset() {
       label: 'Confirm Password',
       placeholder: 'Confirm new password',
       validation: CONFIRM_PASSWORD,
-      hide: id === "forgot",
+      hide: true,
 
     }
   ].filter(items => !items.hide);
 
+  const getTitle = (id) => {
+    if (id == 'sendEmail') {
+      return 'Enter your email to reset password'
+    } else if (id == 'otp') {
+      return `We have send a 6 digit code to your email - ${user?.email}`
+    }
+  }
+
+  const getButtonText = (id) => {
+    if (id == 'sendEmail') {
+      return 'Send code to email'
+    } else if (id == 'otp') {
+      return `Next`
+    }
+  }
+
   return (
     <AuthWrapper>
-      <Grid2 container spacing={3}>
-        <Grid2 item xs={12} justifyContent={"center"} display={"flex"}>
+      <AppGrid container spacing={3}>
+        <AppGrid item xs={12} justifyContent={"center"} display={"flex"} textAlign={'center'}>
           <Stack direction="column" justifyContent="center" alignItems="center" width="100vw" sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
             <Logo />
-            <Typography variant="h6" color="#5B738B" fontSize={"0.8rem"} fontWeight={700}>Reset your password</Typography>
+            <Typography variant="h5" color='success' >{getTitle(id)}</Typography>
           </Stack>
-        </Grid2>
-        <Grid2 item xs={12}>
-          <ResetPassword fieldsConfig={resetConfig} />
-        </Grid2>
-        <Stack direction="column" justifyContent="center" alignItems="center" width="100vw" sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
+        </AppGrid>
+        <AppGrid item xs={12}>
+          <ResetPassword fieldsConfig={resetConfig} buttonText={getButtonText(id)} id={id} />
+        </AppGrid>
+        {/* <Stack direction="column" justifyContent="center" alignItems="center" width="100vw" sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
           <Typography fontSize={'0.6rem'} color='#5B738B'>{PASSWORD_NOTE}</Typography>
-        </Stack>
-      </Grid2>
+        </Stack> */}
+      </AppGrid>
     </AuthWrapper>
   );
 }

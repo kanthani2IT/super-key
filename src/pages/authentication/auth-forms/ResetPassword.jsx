@@ -1,22 +1,24 @@
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // material-ui
-import { Button, FormHelperText, Grid } from '@mui/material';
+import { Button, FormHelperText, Link } from '@mui/material';
 
 // third party
 import { Formik } from 'formik';
+import { Link as RouterLink } from "react-router-dom";
 
 // project imports
-import AnimateButton from 'components/@extended/AnimateButton';
+import AppGrid from 'components/AppComponents/AppGrid';
 import { FormOutLinedField } from 'components/AppComponents/FormOutLinedField';
+import AppOtpInput from 'components/AppOtpInput';
 import { useNewPassword, useRequestReset, useResetPassword } from 'hooks/useLogin';
 import { useAuthCookies } from 'utils/cookie';
 import { createValidationSchema } from 'utils/loginUtils';
 
 export default function ResetPassword(props) {
-  const { fieldsConfig } = props
-  const { id } = useParams();
+  const { fieldsConfig, buttonText = 'Reset Password', id } = props
+  const navigate = useNavigate()
   const { getCookie, setAuthCookie } = useAuthCookies()
   const user = getCookie("superkey")
   const token = getCookie("t")
@@ -27,7 +29,10 @@ export default function ResetPassword(props) {
 
   const handleFormSubmit = (values, { setSubmitting }) => {
     setSubmitting(false);
-    if (id == "change") {
+    if (id == 'sendEmail') {
+      console.log(values)
+      navigate('/reset/otp')
+    } else if (id == "change") {
       let payload = {
         email: values?.email,
         password: values.password,
@@ -45,10 +50,14 @@ export default function ResetPassword(props) {
 
       };
       resetPasswordMutation.mutate(payload);
+      values?.email && setAuthCookie("superkey", { email: values.email });
     }
-    setAuthCookie("superkey", { email: values.email });
-
   };
+
+  const handleOtpChange = (key, value) => {
+    console.log(key, value)
+  }
+  { console.log(id) }
 
   return (
     <Formik
@@ -59,44 +68,52 @@ export default function ResetPassword(props) {
         confirmPassword: '',
       }}
       validationSchema={validationSchema}
-      validateOnChange={false}  // Disable validation on field change
-      validateOnBlur={false}    // Disable validation on field blur
+      validateOnChange={false}
       onSubmit={handleFormSubmit}
     >
       {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, values }) => (
         <form noValidate onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
+          <AppGrid container spacing={3} >
             {fieldsConfig.map((field) => (
-              <Grid item xs={12} key={field.name}>
-                <FormOutLinedField
-                  id={field.id}
-                  type={field.type}
-                  name={field.name}
-                  value={values[field.name]}
-                  handleBlur={handleBlur}
-                  handleChange={handleChange}
-                  placeholder={field.placeholder}
-                  label={field.label}
-                  error={errors[field.name]}
-                />
-              </Grid>
+              <AppGrid item size={{ xs: 12 }} key={field.name}>
+                {id == 'otp' ? <AppOtpInput onComplete={handleOtpChange} name={field.name} error={errors[field.name]} /> :
+                  <FormOutLinedField
+                    id={field.id}
+                    type={field.type}
+                    name={field.name}
+                    value={values[field.name]}
+                    handleBlur={handleBlur}
+                    handleChange={handleChange}
+                    placeholder={field.placeholder}
+                    label={field.label}
+                    error={errors[field.name]}
+                  />}
+              </AppGrid>
             ))}
 
             {errors.submit && (
-              <Grid item xs={12}>
+              <AppGrid item size={{ xs: 12 }}>
                 <FormHelperText error>{errors.submit}</FormHelperText>
-              </Grid>
+              </AppGrid>
             )}
 
-            <Grid item xs={12}>
-              {/* <AnimateButton> */}
-
-              <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="info">
-                Reset Password
+            <AppGrid item size={{ xs: 12 }}>
+              <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="info" fontWeight={500}>
+                {buttonText}
               </Button>
-              {/* </AnimateButton> */}
-            </Grid>
-          </Grid>
+            </AppGrid>
+            <AppGrid item size={{ xs: 12 }} textAlign='center'>
+              <Link variant="h7"
+
+                component={RouterLink}
+                fontWeight={600}
+                underline=""
+                to="/login"
+                color="info">
+                Back to login
+              </Link>
+            </AppGrid>
+          </AppGrid>
         </form>
       )}
     </Formik>
