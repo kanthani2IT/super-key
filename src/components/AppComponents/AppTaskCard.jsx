@@ -22,11 +22,12 @@ const AppTaskCard = ({
   number,
   onClose,
   handleSendEmail,
+  thisEmail,
 }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [isPhoneCopied, setIsPhoneCopied] = useState(false);
   const handleCopy = () => {
-    const email = "example@example.com";
+    const email = thisEmail;
     navigator.clipboard.writeText(email).then(() => {
       setIsCopied(true);
       setIsPhoneCopied(false);
