@@ -11,6 +11,7 @@ export const cManagers = [
   { managerId: "vishal", username: "Vishal" },
 ];
 export const hundredMbValidation = 100 * 1024 * 1024;
+export const tenMbValidation = 10 * 1024 * 1024;
 
 export const pManagers = [
   { managerId: "priya", username: "Priya" },

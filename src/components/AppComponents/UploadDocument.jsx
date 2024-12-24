@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import UploadIcon from "assets/images/icons/NavIcons/UploadIcon";
 import FileUploadButton from "components/AppComponents/FileUploadButton"; // Importing the common button component
 import { useState } from "react";
-import { hundredMbValidation } from "utils/constants";
+import { hundredMbValidation, tenMbValidation } from "utils/constants";
 import { SEVERITY } from "utils/message";
 import { importPolicyData } from "../../pages/community/onboarding/utils"; // Importing the data
 import { useSnackbar } from "./SnackBarProvider";
@@ -31,11 +31,12 @@ const InsuranceDocument = ({
         (file) =>
           allowedExtensions.some((ext) =>
             file.name.toLowerCase().endsWith(ext.toLowerCase())
-          ) && file.size <= hundredMbValidation
+          ) && file.size <= tenMbValidation
       );
+      const totalSize = validFiles.reduce((sum, file) => sum + file.size, 0);
 
       const invalidSizeFiles = fileList.filter(
-        (file) => file.size > hundredMbValidation
+        (file) => file.size > tenMbValidation
       );
       const invalidFormatFiles = fileList.filter(
         (file) =>
@@ -47,7 +48,7 @@ const InsuranceDocument = ({
       // Show error for files exceeding size limit
       if (invalidSizeFiles.length > 0) {
         updateSnackbar({
-          message: "One or more files exceed the maximum size of 100 MB.",
+          message: "Selected file exceed the maximum size of 10 MB.",
           severity: SEVERITY.error,
         });
       }
@@ -75,12 +76,18 @@ const InsuranceDocument = ({
             message: "You can only upload a maximum of 20 files.",
             severity: SEVERITY.error,
           });
+        } else if (totalSize > hundredMbValidation) {
+          updateSnackbar({
+            message: "You can only upload a under 100mb.",
+            severity: SEVERITY.error,
+          });
         } else {
           setSelectedFiles([...selectedFiles, ...filesArray]);
         }
       }
     }
   };
+
   const handleFileUpload = (files) => {
     handleFileValidation(Array.from(files));
   };
