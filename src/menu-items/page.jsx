@@ -81,7 +81,6 @@ const pages = {
         url: '/documents',
         icon: icons.DocumentIcon,
         type: "collapse",
-        disable: true,
 
         children: [{
           id: 'repository',
