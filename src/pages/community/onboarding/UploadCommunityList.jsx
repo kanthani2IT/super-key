@@ -305,6 +305,9 @@ const UploadCommunityList = ({
   };
 
   const checkManualValidation = (value) => {
+    const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    const newTest = regex.test(value?.communityEmail);
+    if (!newTest) return newTest;
     if (
       value?.communityName === null ||
       value?.communityEmail === null ||

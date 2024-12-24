@@ -42,70 +42,86 @@ const UploadCommunity = ({
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const json = XLSX.utils.sheet_to_json(worksheet); // USING  XLSX PACKAGE TO GET JSON DATA
-        const header = Object.keys(json[0]);
-        const isIncludedAllRequiredColumns = validHeaders.every((col) =>
-          header.includes(col)
-        );
-        if (isIncludedAllRequiredColumns) {
-          const fileData = [];
-          const draftData = [];
-          json?.map((item) => {
-            const isValid = checkManualEmptyValue(item);
-            const communityManagerName =
-              communityManagerList?.data?.find(
-                (el) => el?.username === item?.CommunityManagerName
-              ) || null;
+        if (json.length > 0) {
+          // CHECKING WHILE THE SHEET IS EMPTY OR NOT
+          const header = Object.keys(json[0]);
+          const isIncludedAllRequiredColumns = validHeaders.every((col) =>
+            header.includes(col)
+          );
+          if (isIncludedAllRequiredColumns) {
+            const fileData = [];
+            const draftData = [];
+            json?.map((item) => {
+              const isValid = checkManualEmptyValue(item);
+              const communityManagerName =
+                communityManagerList?.data?.find(
+                  (el) => el?.username === item?.CommunityManagerName
+                ) || null;
 
-            const propertyManagerName =
-              propertyManagerList?.data?.find(
-                (el) => el?.username === item?.PropertyManagerName
-              ) || null;
+              const propertyManagerName =
+                propertyManagerList?.data?.find(
+                  (el) => el?.username === item?.PropertyManagerName
+                ) || null;
 
-            const obj = {
-              documentId: generateUniqueId() || null,
-              communityName: item?.CommunityName || null,
-              communityEmail: item?.CommunityEmail || null,
-              communityManagerName: communityManagerName,
-              propertyManagerName: propertyManagerName,
-              address:
-                item?.["Address(Street, City, StateCode, ZipCode, Country)"] ||
-                null,
-              isEdit: false,
+              const obj = {
+                documentId: generateUniqueId() || null,
+                communityName: item?.CommunityName || null,
+                communityEmail: item?.CommunityEmail || null,
+                communityManagerName: communityManagerName,
+                propertyManagerName: propertyManagerName,
+                address:
+                  item?.[
+                    "Address(Street, City, StateCode, ZipCode, Country)"
+                  ] || null,
+                isEdit: false,
+              };
+              // IF ANY FIELD EMPTY MEANS TO SET THE DRAFT DATA OTHERWISE SET FILE DATA
+
+              if (isValid && propertyManagerName && communityManagerName) {
+                fileData.push(obj);
+              } else {
+                draftData.push(obj);
+              }
+            });
+            const count = {
+              uploadDataCount: fileData.length,
+              draftDataCount: draftData.length,
             };
-            // IF ANY FIELD EMPTY MEANS TO SET THE DRAFT DATA OTHERWISE SET FILE DATA
-            if (isValid && propertyManagerName && communityManagerName) {
-              fileData.push(obj);
+            if (fileData.length === 0) {
+              const mapFileData = handleApplyAutoValidation(draftData);
+              setBulkUploadValues((prev) => ({
+                ...prev,
+                fileData: mapFileData,
+                draftData: [],
+                editedList: draftData,
+                fileCount: count,
+                isPagination: false,
+              }));
             } else {
-              draftData.push(obj);
+              setBulkUploadValues((prev) => ({
+                ...prev,
+                fileData: fileData,
+                draftData: draftData,
+                fileCount: count,
+                isPagination: true,
+              }));
             }
-          });
-          const count = {
-            uploadDataCount: fileData.length,
-            draftDataCount: draftData.length,
-          };
-          if (fileData.length === 0) {
-            const mapFileData = handleApplyAutoValidation(draftData);
-            setBulkUploadValues((prev) => ({
-              ...prev,
-              fileData: mapFileData,
-              draftData: [],
-              editedList: draftData,
-              fileCount: count,
-              isPagination: false,
-            }));
+            updateSnackbar({
+              // THRO VALIDATION
+              message: "Template Upload Successfully",
+              severity: SEVERITY.success,
+            });
           } else {
-            setBulkUploadValues((prev) => ({
-              ...prev,
-              fileData: fileData,
-              draftData: draftData,
-              fileCount: count,
-              isPagination: true,
-            }));
+            updateSnackbar({
+              // THRO VALIDATION
+              message: "Invalid Column Name",
+              severity: SEVERITY.error,
+            });
           }
         } else {
           updateSnackbar({
             // THRO VALIDATION
-            message: "Invalid Column Name",
+            message: "No content has been added to the template yet.",
             severity: SEVERITY.error,
           });
         }
@@ -190,7 +206,13 @@ const UploadCommunity = ({
           </Typography>
         </AppGrid>
         <AppGrid size={{ xl: 12 }}>
-          <InsuranceDocument readData={true} handleFile={handleFileUpload} />
+          <InsuranceDocument
+            readData={true}
+            handleFile={handleFileUpload}
+            isInstructions
+            isReadMore={false}
+            fileTypes={[".xlsx"]}
+          />
         </AppGrid>
       </AppGrid>
     </>

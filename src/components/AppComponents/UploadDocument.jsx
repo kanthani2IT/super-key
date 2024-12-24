@@ -15,6 +15,9 @@ const InsuranceDocument = ({
   handleFile,
   isMultiple,
   readData,
+  isInstructions = false,
+  fileTypes,
+  isReadMore = true,
 }) => {
   const { updateSnackbar } = useSnackbar();
   const [isDragging, setIsDragging] = useState(false);
@@ -135,18 +138,20 @@ const InsuranceDocument = ({
       </Typography>
 
       {/* Instructions */}
-      {enable && (
+      {enable ? (
         <Typography variant="body2" color="textSecondary" gutterBottom>
-          {importPolicyData.instructions}
+          {isInstructions
+            ? "Select here.Can upload document"
+            : importPolicyData.instructions}
         </Typography>
-      )}
+      ) : null}
 
       {/* Import Button */}
       {enable && (
         <div>
           <FileUploadButton
             onFileChange={(event) => handleFileUpload(event.target.files)}
-            fileTypes={importPolicyData.fileTypes}
+            fileTypes={fileTypes ?? importPolicyData.fileTypes}
             isMultiple={isMultiple}
           />
         </div>
@@ -162,11 +167,13 @@ const InsuranceDocument = ({
         )} */}
 
       {/* Footer Text */}
-      <Typography variant="caption" color="textSecondary">
-        {readData
-          ? "Support file under 100 MB. Import files in  XLSX "
-          : importPolicyData.footerText}
-      </Typography>
+      {isReadMore ? (
+        <Typography variant="caption" color="textSecondary">
+          {readData
+            ? "Support file under 100 MB. Import files in  XLSX "
+            : importPolicyData.footerText}
+        </Typography>
+      ) : null}
     </Box>
   );
 };

@@ -27,6 +27,10 @@ const bulkUploadValidationSchema = Yup.object({
       communityName: Yup.string().trim().required("Community Name is required"),
       communityEmail: Yup.string()
         .trim()
+        .test("valid-email", "Enter a Valid  Email", (value) =>
+          /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)
+        )
+        .email("Enter a Valid  Email")
         .required("Community Email is required"),
       communityManagerName: Yup.object().required(
         "Community Manager Name is required"
@@ -526,8 +530,8 @@ const OnboardingIndex = ({ refetch }) => {
         };
         formData.append("community", JSON.stringify(payload));
         selectedFiles.forEach((item) => formData.append("file", item.file));
-        const isFileUpload=selectedFiles.length>0?true:false
-        mutate({isFileUpload,payload:formData});
+        const isFileUpload = selectedFiles.length > 0 ? true : false;
+        mutate({ isFileUpload, payload: formData });
       } else {
         if (onBoardingType === "multiple") {
           searchParams.set("type", onBoardingType);
