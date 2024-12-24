@@ -79,8 +79,18 @@ const FilterDrawer = ({
           operator: operator,
         }, // Add the new filter
       ];
-
-      setCheckedFilters(updatedCheckedFilters);
+      const finalUpdatedCheckedFilters = checkedFilters.some((item) => 
+        item.column === key && 
+        item.name === idOrName && 
+        item.operator === operator
+      ) 
+        ? updatedCheckedFilters.filter(item => 
+            !(item.column === key && 
+              item.name === idOrName && 
+              item.operator === operator)
+          ) 
+        : [...updatedCheckedFilters];
+      setCheckedFilters(finalUpdatedCheckedFilters);
     }
   };
 
