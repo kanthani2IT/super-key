@@ -11,15 +11,15 @@ export default function OutlinedInput(theme) {
           borderColor: theme.palette.grey[300],
         },
         root: {
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: theme.palette.info.light,
-          },
-          "&.Mui-focused": {
-            // boxShadow: `0 0 0 2px ${alpha(theme.palette.info.main, 0.2)}`,
-            "& .MuiOutlinedInput-notchedOutline": {
-              border: `1px solid ${theme.palette.info.light}`,
-            },
-          },
+          // "&:hover .MuiOutlinedInput-notchedOutline": {
+          //   borderColor: theme.palette.info.light,
+          // },
+          // "&.Mui-focused": {
+          //   // boxShadow: `0 0 0 2px ${alpha(theme.palette.info.main, 0.2)}`,
+          //   "& .MuiOutlinedInput-notchedOutline": {
+          //     border: `1px solid ${theme.palette.info.light}`,
+          //   },
+          // },
           "&.Mui-error": {
             "&:hover .MuiOutlinedInput-notchedOutline": {
               borderColor: theme.palette.error.light,
