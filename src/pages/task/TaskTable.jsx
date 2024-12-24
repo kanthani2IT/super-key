@@ -26,6 +26,7 @@ export default function TaskTable({
   handleSearch,
   handleChangePage,
   page,
+  setPage,
   selectedRows = [],
   setFilterData,
   filterColumns,
@@ -172,12 +173,13 @@ export default function TaskTable({
         )
       )
     : [];
+
   const flatRows = filteredRows?.map((row) => ({
     ...row,
   }));
   const paginatedRows =
     flatRows && flatRows?.slice((page - 1) * pageSize, page * pageSize);
-
+  console.log(taskList, flatRows, paginatedRows, page, pageSize, "tableData");
   const handleMenuAnchorClose = () => {
     setMenuAnchorEl(null);
   };
@@ -285,6 +287,7 @@ export default function TaskTable({
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}
           filterData={filterData}
+          setPage={setPage}
         />
         <AppTable
           hasCheckBox={false}
@@ -316,7 +319,7 @@ export default function TaskTable({
             roleName={row?.assignee?.name}
             role="Property Manager Name"
             type={row?.community?.name}
-            number= {row?.assignee?.phone || "1234567890"}
+            number={row?.assignee?.phone || "1234567890"}
             onClose={() => setModal(null)}
             handleSendEmail={onClose}
             thisEmail={row?.assignee?.email || "example@example.com"}

@@ -18,6 +18,7 @@ const FilterDrawer = ({
   setSelectedTab,
   operator = "equals",
   filterData = [],
+  setPage,
 }) => {
   const [checkedFilters, setCheckedFilters] = useState(filterData);
   const [selectedName, setSelectedName] = useState(null);
@@ -38,7 +39,7 @@ const FilterDrawer = ({
         return filterData.find((el) => el.column === "status");
       } else return item;
     });
-
+    setPage(1);
     setFilterData(checkingStatus);
     setAnchorEl(null);
   };

@@ -57,7 +57,7 @@ const Task = () => {
     let reqBody = {
       sort: "createdAt",
       orderBy: "desc",
-      page: page,
+      page: filterData > 1 ? page : 1,
       size: 1000,
       data: transformData(filterData),
     };
