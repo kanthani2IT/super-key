@@ -345,13 +345,13 @@ const InsuranceUpload = ({
                       <EllipsisCell></EllipsisCell>
                       <EllipsisCell colSpan={1}>
                         {" "}
-                        <DocumentTypeDropdown
+                        {/* <DocumentTypeDropdown
                           value={docType}
                           documentTypesData={documentTypesData?.data}
                           onChange={({ target }, data) =>
                             handleTypeChange("all", target.value)
                           }
-                        />
+                        /> */}
                       </EllipsisCell>
                       <EllipsisCell></EllipsisCell>
                       <EllipsisCell>
