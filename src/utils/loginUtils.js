@@ -53,6 +53,11 @@ export const EMAIL_VALIDATION = Yup.string()
   .max(255)
   .required("Email ID is required");
 
+export const OTP_VALIDATION = Yup.string()
+  .max(6, "Must be a valid OTP")
+  .min(6, "Must be a valid OTP")
+  .required("OTP is required");
+
 export const MOBILE_VALIDATION = Yup.string()
   .min(10, "Mobile number must be at least 10 digits.")
   .max(15, "Mobile number cannot exceed 15 digits.")
