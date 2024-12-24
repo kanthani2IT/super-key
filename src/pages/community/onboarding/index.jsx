@@ -53,7 +53,7 @@ const onBoardingStepper = [
     title: "Community Address",
     component: CommunityAddress,
     initialValidationSchema: {
-      communityAddress: Yup.object().required("Community Address is required"),
+      communityAddress: Yup.string().required("Please enter Name"),
     },
     height: "60vh",
   },
@@ -516,7 +516,7 @@ const OnboardingIndex = ({ refetch }) => {
         const formData = new FormData();
         let payload = {
           name: values?.communityName?.name,
-          contactInfo: values?.communityAddress?.description || "",
+          contactInfo: values?.communityAddress||"",
           propertyManagerId: values?.propertyManager?.userId,
           communityManagerId: values?.communityManager?.managerId,
           cmcId: cmcId,

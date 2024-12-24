@@ -8,7 +8,11 @@
     <meta name="description" content="SuperKey build using Vite" />
     <link rel="apple-touch-icon" href="/favicon.png" />
     <title>SuperKey</title>
-
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxCZcc3YWVt5QTMAoYC6Hi1-4ko9Oe4Mc&libraries=places"
+    async
+    defer
+  ></script>
     <!-- this is to resolve issue in old safari browser in tablet -->
     <script src="https://cdn.jsdelivr.net/npm/resize-observer-polyfill@1.5.1/dist/ResizeObserver.min.js"></script>
   </head>
@@ -26,5 +30,6 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
     <script type="module" src="/src/index.jsx"></script>
+    
   </body>
 </html>
