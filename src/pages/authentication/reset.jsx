@@ -47,7 +47,7 @@ export default function Reset() {
       label: 'New Password',
       placeholder: 'Enter new password',
       validation: PASSWORD_VALIDATION({ name: "New " }),
-      hide: true,
+      hide: id !== 'changePassword',
 
     },
     {
@@ -57,7 +57,7 @@ export default function Reset() {
       label: 'Confirm Password',
       placeholder: 'Confirm new password',
       validation: CONFIRM_PASSWORD,
-      hide: true,
+      hide: id !== 'changePassword',
 
     }
   ].filter(items => !items.hide);
@@ -70,13 +70,7 @@ export default function Reset() {
     }
   }
 
-  const getButtonText = (id) => {
-    if (id == 'sendEmail') {
-      return 'Send code to email'
-    } else if (id == 'otp') {
-      return `Next`
-    }
-  }
+
 
   return (
     <AuthWrapper>
@@ -88,7 +82,7 @@ export default function Reset() {
           </Stack>
         </AppGrid>
         <AppGrid item xs={12}>
-          <ResetPassword fieldsConfig={resetConfig} buttonText={getButtonText(id)} id={id} />
+          <ResetPassword fieldsConfig={resetConfig} id={id} />
         </AppGrid>
         {/* <Stack direction="column" justifyContent="center" alignItems="center" width="100vw" sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
           <Typography fontSize={'0.6rem'} color='#5B738B'>{PASSWORD_NOTE}</Typography>

@@ -19,7 +19,7 @@ const AppOtpInput = ({ length = 6, onComplete, name, error }) => {
         }
 
         // if ( newOtp.join('').length === length) {
-        onComplete?.(name, newOtp.join('')); // Trigger callback if complete
+        onComplete?.({ target: { name, value: newOtp?.join('') } }); // Trigger callback if complete
         // }
     };
 
@@ -47,7 +47,7 @@ const AppOtpInput = ({ length = 6, onComplete, name, error }) => {
 
         // Trigger callback if complete
         if (pasteData.length === length) {
-            onComplete?.(name, pasteData);
+            onComplete?.({ target: { name, value: pasteData } }); // Trigger callback if complete
         }
     };
 

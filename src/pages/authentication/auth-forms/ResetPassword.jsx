@@ -17,11 +17,10 @@ import { useAuthCookies } from 'utils/cookie';
 import { createValidationSchema } from 'utils/loginUtils';
 
 export default function ResetPassword(props) {
-  const { fieldsConfig, buttonText = 'Reset Password', id } = props
+  const { fieldsConfig, id } = props
   const navigate = useNavigate()
   const { getCookie, setAuthCookie } = useAuthCookies()
   const user = getCookie("superkey")
-  const token = getCookie("t")
   const newPasswordMutation = useNewPassword();
   const resetPasswordMutation = useResetPassword();
   const forgotPassword = useRequestReset();
@@ -32,7 +31,15 @@ export default function ResetPassword(props) {
     if (id == 'sendEmail') {
       console.log(values)
       navigate('/reset/otp')
-    } else if (id == "change") {
+    } else if (id == 'otp') {
+      let payload = {
+        email: user?.email,
+        otp: values.otp,
+      }
+      navigate('/reset/changePassword')
+
+    }
+    else if (id == "change") {
       let payload = {
         email: values?.email,
         password: values.password,
@@ -54,11 +61,17 @@ export default function ResetPassword(props) {
     }
   };
 
-  const handleOtpChange = (key, value) => {
-    console.log(key, value)
-  }
-  { console.log(id) }
 
+
+  const getButtonText = (id) => {
+    if (id == 'sendEmail') {
+      return 'Send code to email'
+    } else if (id == 'otp') {
+      return `Next`
+    } else {
+      return 'Reset Password'
+    }
+  }
   return (
     <Formik
       initialValues={{
@@ -73,10 +86,14 @@ export default function ResetPassword(props) {
     >
       {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, values }) => (
         <form noValidate onSubmit={handleSubmit}>
+          {
+            console.log(values)
+
+          }
           <AppGrid container spacing={3} >
             {fieldsConfig.map((field) => (
               <AppGrid item size={{ xs: 12 }} key={field.name}>
-                {id == 'otp' ? <AppOtpInput onComplete={handleOtpChange} name={field.name} error={errors[field.name]} /> :
+                {id == 'otp' ? <AppOtpInput onComplete={handleChange} name={field.name} error={errors[field.name]} /> :
                   <FormOutLinedField
                     id={field.id}
                     type={field.type}
@@ -99,12 +116,11 @@ export default function ResetPassword(props) {
 
             <AppGrid item size={{ xs: 12 }}>
               <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="info" fontWeight={500}>
-                {buttonText}
+                {getButtonText(id)}
               </Button>
             </AppGrid>
             <AppGrid item size={{ xs: 12 }} textAlign='center'>
               <Link variant="h7"
-
                 component={RouterLink}
                 fontWeight={600}
                 underline=""
