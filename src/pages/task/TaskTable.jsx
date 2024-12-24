@@ -179,7 +179,7 @@ export default function TaskTable({
   }));
   const paginatedRows =
     flatRows && flatRows?.slice((page - 1) * pageSize, page * pageSize);
-  console.log(taskList, flatRows, paginatedRows, page, pageSize, "tableData");
+
   const handleMenuAnchorClose = () => {
     setMenuAnchorEl(null);
   };

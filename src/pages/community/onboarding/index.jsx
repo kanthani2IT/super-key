@@ -471,12 +471,12 @@ const OnboardingIndex = ({ refetch }) => {
       );
     }
   };
-
+  console.log(activeStep, finalStep, "backButton");
   const footer = () => {
     return (
       <AppRowBox>
         <AppGrid item size={{ xs: 2 }}>
-          {activeStep && !finalStep ? (
+          {activeStep ? (
             <Button
               fullWidth
               color="secondary"
