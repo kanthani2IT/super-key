@@ -47,6 +47,7 @@ export default function TaskTable({
   const [openEmailModal, setOpenEmailModal] = useState(false);
   const [row, setRow] = useState({});
   const successHandler = () => {
+    setMenuAnchorEl(null);
     fetchTaskData();
   };
   const { mutate: updateTaskComplete, isLoading: isCompleting } =

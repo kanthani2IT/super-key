@@ -6,6 +6,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { updatePriorityType } from "utils/helpers";
 import AppMenu from "./AppComponents/AppMenu";
 import AppPriorityItems from "./AppPriorityComponent";
 
@@ -39,7 +40,7 @@ const FilterDrawer = ({
         return filterData.find((el) => el.column === "status");
       } else return item;
     });
-    setPage(1);
+    setPage?.(1);
     setFilterData(checkingStatus);
     setAnchorEl(null);
   };
@@ -47,6 +48,12 @@ const FilterDrawer = ({
   const handlePriorityColor = (name) => {
     const colorName = selectedName === name ? null : name;
     setSelectedName(colorName);
+  };
+  const handleReset = () => {
+    setAnchorEl(null);
+    setFilterData(updatePriorityType);
+    const initialTab = Object.keys(filterColumns)[0];
+    setSelectedTab(initialTab);
   };
 
   const toggleFilter = (idOrName, key, checked) => {
@@ -79,16 +86,20 @@ const FilterDrawer = ({
           operator: operator,
         }, // Add the new filter
       ];
-      const finalUpdatedCheckedFilters = checkedFilters.some((item) => 
-        item.column === key && 
-        item.name === idOrName && 
-        item.operator === operator
-      ) 
-        ? updatedCheckedFilters.filter(item => 
-            !(item.column === key && 
-              item.name === idOrName && 
-              item.operator === operator)
-          ) 
+      const finalUpdatedCheckedFilters = checkedFilters.some(
+        (item) =>
+          item.column === key &&
+          item.name === idOrName &&
+          item.operator === operator
+      )
+        ? updatedCheckedFilters.filter(
+            (item) =>
+              !(
+                item.column === key &&
+                item.name === idOrName &&
+                item.operator === operator
+              )
+          )
         : [...updatedCheckedFilters];
       setCheckedFilters(finalUpdatedCheckedFilters);
     }
@@ -204,7 +215,7 @@ const FilterDrawer = ({
         >
           <Button
             variant="outlined"
-            onClick={() => setAnchorEl(null)}
+            onClick={() => handleReset()}
             sx={{
               borderRadius: "10px",
               fontWeight: 500,

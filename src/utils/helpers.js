@@ -165,11 +165,12 @@ export const transformData = (data) => {
 };
 
 export const updatePriorityType = (data, newValue) => {
+  console.log(data);
   return data
     .filter((item) => item.operator === "contains") // Keep only items with operator 'contains'
     .map((item) => ({
       ...item,
-      name: newValue, // Update the 'name' for filtered items
+      name: newValue ? newValue : item?.name,
     }));
 };
 
