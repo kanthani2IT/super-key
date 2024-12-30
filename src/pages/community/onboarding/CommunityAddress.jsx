@@ -9,7 +9,7 @@ import AppLabelComponent from "components/AppComponents/AppLabelComponent";
 import { useEffect, useRef, useState } from 'react';
 import "./style.css";
 
-const API_KEY = "AIzaSyCxCZcc3YWVt5QTMAoYC6Hi1-4ko9Oe4Mc";
+const API_KEY =import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const CommunityAddress = ({ handleChange, formValues, touched, errors,setFieldValue }) => {
   return (
